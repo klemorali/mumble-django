@@ -1,0 +1,26 @@
+td.mumble img {
+	padding: 0px;
+	margin:  0px;
+	}
+
+a.dingen:link, a.dingen:visited, a.dingen:hover, a.dingen:active {
+	font-weight:     bold;
+	font-size:       8pt;
+	color:           #283E53;
+	text-decoration: none;
+	}
+
+td.mumble {
+	height:  20px;
+	padding:  0px;
+	margin:   0px;
+	line-height: 6px;
+	}
+
+div.rahmen {
+	background-color: #CCCCCC;
+	color:            #283E53;
+	padding:          10px;
+	margin-top:       20px;
+	margin-bottom:    20px;
+	}
