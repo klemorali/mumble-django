@@ -1,6 +1,6 @@
 """ This file is part of the mumble-django application.
     
-    Copyright (C) 2009, Michael Svedrin Ziegler <diese-addy@funzt-halt.net>
+    Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  
     All rights reserved.
  

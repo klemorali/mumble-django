@@ -1,6 +1,6 @@
 """ This file is part of the mumble-django application.
     
-    Copyright (C) 2009, Michael Svedrin Ziegler <diese-addy@funzt-halt.net>
+    Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  
     All rights reserved.
  
@@ -94,6 +94,13 @@ class mmServer( object ):
 		None
 		);
 	
+	def is_server( self ):
+		return True;
+	def is_channel( self ):
+		return False;
+	def is_player( self ):
+		return False;
+	
 	def __str__( self ):
 		return '<Server "%s" (%d)>' % ( self.rootName, self.id );
 	
@@ -127,9 +134,16 @@ class mmChannel( object ):
 			self.parent.subchans.append( self );
 	
 	def parentChannels( self ):
-		if self.parent is None or isinstance( self.parent, mmServer ):
+		if self.parent is None or self.parent.is_server() or self.parent.id == 0:
 			return [];
 		return self.parent.parentChannels() + [self.parent.name];
+	
+	def is_server( self ):
+		return False;
+	def is_channel( self ):
+		return True;
+	def is_player( self ):
+		return False;
 	
 	playerCount = property(
 		lambda self: len( self.players ) + sum( [ chan.playerCount for chan in self.subchans ] ),
@@ -174,6 +188,13 @@ class mmPlayer( object ):
 	
 	def isAuthed( self ):
 		return self.dbaseid != -1;
+	
+	def is_server( self ):
+		return False;
+	def is_channel( self ):
+		return False;
+	def is_player( self ):
+		return True;
 	
 	# kept for compatibility to mmChannel (useful for traversal funcs)
 	playerCount = property(
