@@ -7,8 +7,6 @@ from django.contrib.auth.decorators	import login_required
 from models	import Mumble, MumbleUser
 from mmobjects	import mmServer, mmChannel
 
-import dingenskirchen;
-
 class Storage( object ):
 	s = list();
 	r = None;

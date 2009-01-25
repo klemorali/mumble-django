@@ -1,4 +1,4 @@
-from dingenskirchen.mumble.models import *
+from models import *
 from django.contrib import admin
 
 class MumbleAdmin(admin.ModelAdmin):
