@@ -54,7 +54,7 @@ class Mumble( models.Model ):
 		murmur.setConf( srvid,     'registerName',        self.name );
 		murmur.setConf( srvid,     'registerUrl',         self.url );
 		murmur.setConf( srvid,     'welcometext',         self.motd );
-		murmur.setConf( srvid,     'serverpassword',      self.passwd );
+		murmur.setConf( srvid,     'password',            self.passwd );
 		murmur.setConf( srvid,     'sslCert',             self.sslcrt );
 		murmur.setConf( srvid,     'sslKey',              self.sslkey );
 		
