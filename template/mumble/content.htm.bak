@@ -1,0 +1,47 @@
+{% load mumble_extras %}
+<div class="rahmen">
+  <div class="mumble">
+    <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
+    {{ ServerObject.rootName }}
+  </div>
+  {% for item in ChannelTable %}
+    <div class="mumble">
+      {% spaceless %}
+        {% for num in item.0|mrange %}
+          <img src="/static/mumble/linie_v_trans.png" alt="|" />
+        {% endfor %}
+        <img src="/static/mumble/knoten_v_trans.png" alt="+-"  />
+      {% endspaceless %}
+      {% if item.1.userid %}
+        <img src="/static/mumble/talking_off.png" alt="player" title="Player" />
+        <span title="Online since {{item.1.onlinesince|time:"H:i"}}">{{ item.1.name }}</span>
+      {% else %}
+        {% if item.1.linked %}
+          <img src="/static/mumble/channel_linked.png" alt="linked channel" title="Channel with links" />
+        {% else %}
+          <img src="/static/mumble/channel.png" alt="channel" title="Channel" />
+        {% endif %}
+        <a href="mumble://{{ DBaseObject.addr }}" class="dingen">{{ item.1.name }}</a>
+      {% endif %}
+      <span class="dingen">
+        {% if item.1.userid %}
+          {% if item.1.isAuthed %}
+            <img src="/static/mumble/authenticated.png" alt="authed" title="Authenticated" />
+          {% endif %}
+          {% if item.1.muted %}
+            <img src="/static/mumble/muted_server.png" alt="muted" title="Muted by server" />
+          {% endif %}
+          {% if item.1.deafened %}
+            <img src="/static/mumble/deafened_server.png" alt="deafened" title="Deafened by server" />
+          {% endif %}
+          {% if item.1.selfmuted %}
+            <img src="/static/mumble/muted_self.png" alt="self-muted" title="Muted by themselves" />
+          {% endif %}
+          {% if item.1.selfdeafened %}
+            <img src="/static/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
+          {% endif %}
+        {% endif %}
+      </span>
+    </div>
+  {% endfor %}
+</div>
