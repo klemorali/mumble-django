@@ -35,6 +35,7 @@ import dbus
 import datetime
 from time import time
 
+
 # base = ice.stringToProxy( "Meta:tcp -h 127.0.0.1 -p 6502" );
 # srv = Murmur.ServerPrx.checkedCast( base );
 # met = Murmur.MetaPrx.checkedCast( base );
@@ -46,7 +47,7 @@ class mmServer( object ):
 	# rootName    = str();
 	
 	def __init__( self, serverID, serverObj, rootName = '' ):
-		if not isinstance( serverObj, dbus.ProxyObject ):
+		if not isinstance( serverObj, dbus.proxies.ProxyObject ):
 			raise Exception, "mmServer: I need the object returned by dbus.get_object!"
 		
 		self.dbusObj  = serverObj;
@@ -65,6 +66,8 @@ class mmServer( object ):
 				self.channels[theChan[0]] = mmChannel( theChan );
 			else:
 				self.channels[theChan[0]] = mmChannel( theChan, self.channels[theChan[2]] );
+			
+			self.channels[theChan[0]].serverId = self.id;
 			
 			# process links - if the linked channels are known, link; else save their ids to link later
 			for linked in theChan[3]:
@@ -132,6 +135,7 @@ class mmChannel( object ):
 		self.parent = parentChan;
 		if self.parent is not None:
 			self.parent.subchans.append( self );
+			self.serverId = self.parent.serverId;
 	
 	def parentChannels( self ):
 		if self.parent is None or self.parent.is_server() or self.parent.id == 0:
@@ -177,11 +181,23 @@ class mmPlayer( object ):
 	# onlinesince  = time();
 	# bytesPerSec  = int();
 	
+	# mumbleuser   = models.MumbleUser();
+	
 	def __init__( self, playerObj, playerChan ):
 		( self.userid, self.muted, self.deafened, self.suppressed, self.selfmuted, self.selfdeafened, chanID, self.dbaseid, self.name, onlinetime, self.bytesPerSec ) = playerObj;
 		self.onlinesince = datetime.datetime.fromtimestamp( float( time() - onlinetime ) );
 		self.channel = playerChan;
 		self.channel.players.append( self );
+		
+		if self.isAuthed():
+			from models import Mumble, MumbleUser
+			srvInstance     = Mumble.objects.get( srvid=self.channel.serverId );
+			try:
+				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.dbaseid, server=srvInstance );
+			except MumbleUser.DoesNotExist:
+				self.mumbleuser = None;
+		else:
+			self.mumbleuser = None;
 	
 	def __str__( self ):
 		return '<Player "%s" (%d, %d)>' % ( self.name, self.userid, self.dbaseid );
