@@ -47,6 +47,7 @@ class Mumble( models.Model ):
 	url    = models.CharField(    'Website URL',     max_length = 200, blank = True );
 	motd   = models.TextField(    'Welcome Message',                   blank = True );
 	passwd = models.CharField(    'Server Password', max_length = 200, blank = True );
+	supw   = models.CharField(    'Superuser Password', max_length = 200, blank = True );
 	users  = models.IntegerField( 'Max. Users',                        blank = True, null = True );
 	bwidth = models.IntegerField( 'Bandwidth [Bps]',                   blank = True, null = True );
 	sslcrt = models.CharField(    'SSL Certificate', max_length = 200, blank = True );
@@ -110,6 +111,9 @@ class Mumble( models.Model ):
 			murmur.setConf( srvid, 'registerHostname',    "%s:%d" % ( self.addr, self.port ) );
 		else:
 			murmur.setConf( srvid, 'registerHostname',    self.addr );
+		
+		if self.supw:
+			murmur.setSuperUserPassword( srvid, self.supw );
 		
 		if self.booted != murmur.isBooted( dbus.Int32(self.srvid) ):
 			if self.booted:
