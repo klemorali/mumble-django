@@ -47,9 +47,6 @@ class mmServer( object ):
 	# rootName    = str();
 	
 	def __init__( self, serverID, serverObj, rootName = '' ):
-		if not isinstance( serverObj, dbus.proxies.ProxyObject ):
-			raise Exception, "mmServer: I need the object returned by dbus.get_object!"
-		
 		self.dbusObj  = serverObj;
 		self.channels = dict();
 		self.players  = dict();
@@ -221,23 +218,3 @@ class mmPlayer( object ):
 	def visit( self, callback, lvl = 0 ):
 		callback( self, lvl );
 
-
-if __name__ == '__main__':
-	# connect to dbus
-	bus = dbus.SystemBus();
-	
-	# get our murmur servers
-	dbus_base = 'net.sourceforge.mumble.murmur';
-	murmur = dbus.Interface( bus.get_object( dbus_base, '/' ), 'net.sourceforge.mumble.Meta')
-	
-	# example callback
-	def travrz( obj, lvl ):
-		print lvl*'-', str(obj);
-	
-	# show each server
-	for srv in murmur.getBootedServers():
-		theSrv = dbus.Interface( bus.get_object( dbus_base, '/%d' % self.srvid ), 'net.sourceforge.mumble.Murmur' );
-		
-		srvobj = mmServer( srv, theSrv, 'teh %d srvz root' % srv );
-		srvobj.visit( travrz );
-	
