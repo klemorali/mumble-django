@@ -228,7 +228,7 @@ if __name__ == '__main__':
 	
 	# get our murmur servers
 	dbus_base = 'net.sourceforge.mumble.murmur';
-	murmur = bus.get_object( dbus_base, '/' );
+	murmur = dbus.Interface( bus.get_object( dbus_base, '/' ), 'net.sourceforge.mumble.Meta')
 	
 	# example callback
 	def travrz( obj, lvl ):
@@ -236,7 +236,7 @@ if __name__ == '__main__':
 	
 	# show each server
 	for srv in murmur.getBootedServers():
-		theSrv = bus.get_object( dbus_base, '/%d' % srv );
+		theSrv = dbus.Interface( bus.get_object( dbus_base, '/%d' % self.srvid ), 'net.sourceforge.mumble.Murmur' );
 		
 		srvobj = mmServer( srv, theSrv, 'teh %d srvz root' % srv );
 		srvobj.visit( travrz );

@@ -55,17 +55,17 @@ class Mumble( models.Model ):
 	booted = models.BooleanField( 'Boot Server',     default = True );
 	
 	def getDbusMeta( self ):
-		return dbus.SystemBus().get_object( self.dbus, '/' );
+		return dbus.Interface( dbus.SystemBus().get_object( self.dbus, '/' ), 'net.sourceforge.mumble.Meta' );
 	
 	def getDbusObject( self ):
 		"Connects to DBus and returns an mmServer object representing this Murmur instance."
 		bus    = dbus.SystemBus();
-		murmur = bus.get_object( self.dbus, '/' );
+		murmur = dbus.Interface( bus.get_object( self.dbus, '/' ), 'net.sourceforge.mumble.Meta')
 		
 		if self.srvid not in murmur.getBootedServers():
 			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( self.srvid, self.dbus );
 		
-		return bus.get_object( self.dbus, '/%d' % self.srvid );
+		return dbus.Interface( bus.get_object( self.dbus, '/%d' % self.srvid ), 'net.sourceforge.mumble.Murmur' );
 	
 	def getServerObject( self ):
 		return mmServer( self.srvid, self.getDbusObject(), self.name );
