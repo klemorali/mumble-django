@@ -30,9 +30,9 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from django.shortcuts				import render_to_response, get_object_or_404, get_list_or_404
-from django.template				import RequestContext
-from django.http					import HttpResponseRedirect
+from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
+from django.template			import RequestContext
+from django.http			import HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 
@@ -110,7 +110,10 @@ def register( request, server ):
 	srv = Mumble.objects.get( id=server );
 	
 	if request.user.is_authenticated():
-		reg = MumbleUser.objects.get( server=srv, owner=request.user );
+		try:
+			reg = MumbleUser.objects.get( server=srv, owner=request.user );
+		except MumbleUser.DoesNotExist:
+			reg = None;
 	else:
 		reg = None;
 	
@@ -126,7 +129,10 @@ def savereg( request ):
 	#	raise Exception, "You need to be logged in to register yourself with Mumble.";
 	
 	srv = Mumble.objects.get( id=request.POST['id'] );
-	reg = MumbleUser.objects.get( server=srv, owner=request.user );
+	try:
+		reg = MumbleUser.objects.get( server=srv, owner=request.user );
+	except MumbleUser.DoesNotExist:
+		reg = None;
 	
 	if reg is None:
 		reg = MumbleUser( name=request.POST['username'], password=request.POST['password'], server=srv, owner=request.user );
