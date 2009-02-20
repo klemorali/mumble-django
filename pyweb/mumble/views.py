@@ -44,6 +44,14 @@ class Storage( object ):
 	r = None;
 
 
+def mumbles( request ):
+	"Displays a list of all configured Mumble servers."
+	return render_to_response(
+		'mumble/list.htm',
+		{ 'MumbleObjects': get_list_or_404( Mumble ) },
+		context_instance = RequestContext(request)
+		);
+
 def show( request, server ):
 	"Displays the channel list for the given Server ID."
 	srv, o = createChannelList( server );

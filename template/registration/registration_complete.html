@@ -1,0 +1,14 @@
+{% extends "base.htm" %}
+{% load i18n %}
+
+{% block title %}Activate account{% endblock %}
+
+{% block content %}
+<h2>Activate your account</h2>
+<p>Thank you for registering.
+{% if verify %}
+In order to prohibit misuse, you need to activate your account before you can use it. We sent an EMail with further instructions to the address you specified, please follow the link in that email to activate your account.
+{% endif %}
+</p>
+{% endblock %}
+

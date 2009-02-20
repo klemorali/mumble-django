@@ -1,8 +1,8 @@
 {% extends "base.htm" %}
 {% block content %}
 {% if user.is_authenticated %}
-<h2>Mumble-Benutzerdaten festlegen</h2>
-<p>Diese Logindaten musst du angeben, um als authentifizierter Benutzer zu Mumble zu verbinden. Gib hier bitte deinen gewünschten Benutzernamen und dein gewünschtes Passwort an.</p>
+<h2>Set credentials for Mumble</h2>
+<p>Here you can set the credentials that you want to use to login to Mumble.</p>
 <form action="/mumble/savereg" method="post">
   <input type="hidden" name="id" value="{{Mumble.id}}" />
   <table>
@@ -11,11 +11,11 @@
       <td>{{Mumble.name}}</td>
     </tr>
     <tr>
-      <td>Benutzername/Login</td>
+      <td>Username/Login</td>
       <td><input name="username" {% if Reg %}value="{{Reg.name}}"{% endif %} /></td>
     </tr>
     <tr>
-      <td>Passwort</td>
+      <td>Password</td>
       <td><input name="password" type="password" /></td>
     </tr>
     <tr>
@@ -24,6 +24,6 @@
   </table>
 </form>
 {% else %}
-  <p>Dieses Privileg steht nur den Mitgliedern des Hohen Rates zu.</p>
+  <p>Only registered users can use this feature.</p>
 {% endif %}
 {% endblock %}

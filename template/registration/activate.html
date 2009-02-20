@@ -1,0 +1,20 @@
+{% extends "base.htm" %}
+{% load i18n %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<h2>Account successfully activated</h2>
+
+{% if account %}
+    <p>{% with account.username as username %}
+    Thank you for registering!<br />
+    From now on, you can login with your username ({{ username }}).
+    {% endwith %}
+    </p>
+{% else %}
+    <p>Either the link was invalid, or you didn't activate your account within {{ expiration_days }} days after the registration. Please register again.</p>
+{% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>{% block title %}Dingenskirchen{% endblock %}</title>
+    <link rel="stylesheet" media="screen" type="text/css" href="/static/layout.css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="/static/mumble/style.css" />
+    <style type="text/css" media="screen">
+      {% block modelstyle %}{% endblock %}
+    </style>
+    {% block headtags %}{% endblock %}
+  </head>
+  <body>
+    <div id="mm">
+      <div class="navibg">
+        <div class="navipos">
+          .
+          <a href="/accounts/login/"   class="navi">Login</a> .
+          <a href="/admin/"            class="navi">Admin</a> .
+          <a href="/accounts/profile/" class="navi">Profile</a> .
+        </div>
+      </div>
+      <div id="cont">
+        <div class="conx" style="min-height:400px">
+          {% block content %}
+            <p>No content found :(</p>
+          {% endblock %}
+        </div>
+      </div>
+      <div class="footerbg">
+        <div class="footer">template by www.madart25.com</div>
+      </div>
+    </div>
+  </body>
+</html>
