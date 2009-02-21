@@ -1,0 +1,11 @@
+=======================
+mumble-django changelog
+=======================
+
+
+Version 0.1, 21 February 2009:
+------------------------------
+
+* Set up a Django project that uses the Mumble application to make use
+  easier for Django inexperienced users
+* First official Release

@@ -1,0 +1,21 @@
+Thanks for downloading mumble-django.
+
+To install the fully functional version, extract it to wherever you would
+like it to reside. Alter settings.py to fit your needs (the most important
+parts are the Database config and the TEMPLATE_DIRS), and then run:
+
+    python manage.py syncdb
+
+If you need instructions on how to configure your web server in order to
+serve this application, you can have a look at the Wiki at
+<http://bitbucket.org/Svedrin/mumble-django/wiki/Webserver_Setup>. The wsgi
+config file is already included as mumble-django.wsgi, but you will have to
+alter the paths in this file.
+
+Note that there is no need to use the same Database that Murmur itself uses,
+as mumble-django exclusively uses DBus to connect to Murmur and does not
+access Murmur's database directly.
+
+Also note that this application requires Python 2.3 or later, and a
+functional installation of Django 1.0 or newer. You can obtain Python
+from http://www.python.org/ and Django from http://www.djangoproject.com/.
