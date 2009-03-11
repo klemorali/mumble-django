@@ -53,7 +53,20 @@ def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 
 def find_existing_instances( **kwargs ):
 	bus = dbus.SystemBus();
-	murmur = dbus.Interface( bus.get_object( 'net.sourceforge.mumble.murmur', '/' ), 'net.sourceforge.mumble.Meta');
+	
+	dbusName = 'net.sourceforge.mumble.murmur';
+	online = False;
+	while not online:
+		try:
+			murmur = dbus.Interface( bus.get_object( dbusName, '/' ), 'net.sourceforge.mumble.Meta');
+		except dbus.exceptions.DBusException:
+			print "Unable to connect to DBus using name %s. Is Murmur even running!?" % dbusName;
+			dbusName = raw_input( "DBus Service name (or empty to skip Servers/Players detection): " );
+			if not dbusName:
+				print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
+				return False;
+		else:
+			online = True;
 	
 	default = murmur.getDefaultConf();
 	
@@ -72,6 +85,7 @@ def find_existing_instances( **kwargs ):
 			values = {
 				"name":    find_in_dicts( "registerName",                conf, default, "noname" ),
 				"srvid":   id,
+				"dbus":    dbusName,
 				"addr":    find_in_dicts( ( "registerHostame", "host" ), conf, default, "0.0.0.0" ),
 				"port":    find_in_dicts( "port",                        conf, default ),
 				"url":     find_in_dicts( "registerUrl",                 conf, default ),
@@ -120,7 +134,8 @@ def find_existing_instances( **kwargs ):
 						owner    = None
 						);
 					playerinstance.save( dontConfigureMurmur=True );
-			
+	
+	return True;
 
 
 signals.post_syncdb.connect( find_existing_instances, sender=models );
