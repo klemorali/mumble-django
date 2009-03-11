@@ -39,20 +39,20 @@ import dbus
 import socket
 
 class Mumble( models.Model ):
-	name   = models.CharField(    'Server Name',     max_length = 200 );
-	dbus   = models.CharField(    'DBus base',       max_length = 200, default = 'net.sourceforge.mumble.murmur' );
-	srvid  = models.IntegerField( 'Server ID',       editable = False );
-	addr   = models.CharField(    'Server Address',  max_length = 200 );
-	port   = models.IntegerField( 'Server Port',                       blank = True, null = True  );
-	url    = models.CharField(    'Website URL',     max_length = 200, blank = True );
-	motd   = models.TextField(    'Welcome Message',                   blank = True );
-	passwd = models.CharField(    'Server Password', max_length = 200, blank = True );
+	name   = models.CharField(    'Server Name',        max_length = 200 );
+	dbus   = models.CharField(    'DBus base',          max_length = 200, default = 'net.sourceforge.mumble.murmur' );
+	srvid  = models.IntegerField( 'Server ID',          editable = False );
+	addr   = models.CharField(    'Server Address',     max_length = 200 );
+	port   = models.IntegerField( 'Server Port',                          blank = True, null = True  );
+	url    = models.CharField(    'Website URL',        max_length = 200, blank = True );
+	motd   = models.TextField(    'Welcome Message',                      blank = True );
+	passwd = models.CharField(    'Server Password',    max_length = 200, blank = True );
 	supw   = models.CharField(    'Superuser Password', max_length = 200, blank = True );
-	users  = models.IntegerField( 'Max. Users',                        blank = True, null = True );
-	bwidth = models.IntegerField( 'Bandwidth [Bps]',                   blank = True, null = True );
-	sslcrt = models.CharField(    'SSL Certificate', max_length = 200, blank = True );
-	sslkey = models.CharField(    'SSL Key',         max_length = 200, blank = True );
-	booted = models.BooleanField( 'Boot Server',     default = True );
+	users  = models.IntegerField( 'Max. Users',                           blank = True, null = True );
+	bwidth = models.IntegerField( 'Bandwidth [Bps]',                      blank = True, null = True );
+	sslcrt = models.TextField(    'SSL Certificate',                      blank = True   );
+	sslkey = models.TextField(    'SSL Key',            blank = True   );
+	booted = models.BooleanField( 'Boot Server',        default = True );
 	
 	def getDbusMeta( self ):
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus, '/' ), 'net.sourceforge.mumble.Meta' );
@@ -60,7 +60,7 @@ class Mumble( models.Model ):
 	def getDbusObject( self ):
 		"Connects to DBus and returns an mmServer object representing this Murmur instance."
 		bus    = dbus.SystemBus();
-		murmur = dbus.Interface( bus.get_object( self.dbus, '/' ), 'net.sourceforge.mumble.Meta')
+		murmur = dbus.Interface( bus.get_object( self.dbus, '/' ), 'net.sourceforge.mumble.Meta');
 		
 		if self.srvid not in murmur.getBootedServers():
 			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( self.srvid, self.dbus );
@@ -73,7 +73,11 @@ class Mumble( models.Model ):
 	def __unicode__( self ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
 	
-	def save( self ):
+	def save( self, dontConfigureMurmur=False ):
+		if dontConfigureMurmur:
+			# skip murmur configuration, e.g. because we're inserting models for existing servers.
+			return models.Model.save( self );
+		
 		# Prior to saving the model, connect to murmur via dbus and update its settings.
 		murmur = self.getDbusMeta();
 		
@@ -88,8 +92,8 @@ class Mumble( models.Model ):
 		murmur.setConf( srvid,     'registerUrl',         self.url );
 		murmur.setConf( srvid,     'welcometext',         self.motd );
 		murmur.setConf( srvid,     'password',            self.passwd );
-		murmur.setConf( srvid,     'sslCert',             self.sslcrt );
-		murmur.setConf( srvid,     'sslKey',              self.sslkey );
+		murmur.setConf( srvid,     'certificate',         self.sslcrt );
+		murmur.setConf( srvid,     'key',                 self.sslkey );
 		
 		if self.port is not None:
 			murmur.setConf( srvid, 'port',                str(self.port) );
@@ -102,7 +106,7 @@ class Mumble( models.Model ):
 			murmur.setConf( srvid, 'users',               '' );
 		
 		if self.bwidth is not None:
-			murmur.setConf( srvid, 'bandwidth',           str(self.port) );
+			murmur.setConf( srvid, 'bandwidth',           str(self.bwidth) );
 		else:
 			murmur.setConf( srvid, 'bandwidth',           '' );
 		
@@ -114,6 +118,7 @@ class Mumble( models.Model ):
 		
 		if self.supw:
 			murmur.setSuperUserPassword( srvid, self.supw );
+			self.supw = '';
 		
 		if self.booted != murmur.isBooted( dbus.Int32(self.srvid) ):
 			if self.booted:
@@ -129,7 +134,7 @@ class Mumble( models.Model ):
 		murmur = self.getDbusMeta();
 		if murmur.isBooted( srvid ):
 			murmur.stop( srvid );
-		murmur.deleteServer( srvid );		
+		murmur.deleteServer( srvid );
 	
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
@@ -149,7 +154,11 @@ class MumbleUser( models.Model ):
 	def __unicode__( self ):
 		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );
 	
-	def save( self ):
+	def save( self, dontConfigureMurmur=False ):
+		if dontConfigureMurmur:
+			# skip murmur configuration, e.g. because we're inserting models for existing players.
+			return models.Model.save( self );
+		
 		# Before the record set is saved, update Murmur via dbus.
 		murmur = self.server.getDbusObject();
 		
@@ -159,10 +168,10 @@ class MumbleUser( models.Model ):
 		
 		# Update user's registration
 		murmur.setRegistration(
-			dbus.Int32(  self.mumbleid ),
-			dbus.String( self.name ),
+			dbus.Int32(  self.mumbleid    ),
+			dbus.String( self.name        ),
 			dbus.String( self.owner.email ),
-			dbus.String( self.password )
+			dbus.String( self.password    )
 			);
 		
 		# Don't save the users' passwords, we don't need them anyway
