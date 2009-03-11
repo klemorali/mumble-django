@@ -149,7 +149,7 @@ class MumbleUser( models.Model ):
 	name     = models.CharField(    'User name and Login', max_length = 200 );
 	password = models.CharField(    'Login password',      max_length = 200 );
 	server   = models.ForeignKey(   Mumble );
-	owner    = models.ForeignKey(   User   );
+	owner    = models.ForeignKey(   User, null=True, blank=True   );
 	
 	def __unicode__( self ):
 		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );

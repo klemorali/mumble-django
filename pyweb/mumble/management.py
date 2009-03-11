@@ -52,8 +52,6 @@ def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 
 
 def find_existing_instances( **kwargs ):
-	print "Searching DBus for existing murmur instances. Hope Murmur is running.";
-	
 	bus = dbus.SystemBus();
 	murmur = dbus.Interface( bus.get_object( 'net.sourceforge.mumble.murmur', '/' ), 'net.sourceforge.mumble.Meta');
 	
@@ -63,36 +61,66 @@ def find_existing_instances( **kwargs ):
 	bootedIDs = murmur.getBootedServers();
 	
 	for id in servIDs:
-		conf = murmur.getAllConf( dbus.Int32( id ) );
-		# We need at least:
-		# name srvid addr
+		# first check that the server has not yet been inserted into the DB
+		try:
+			instance = models.Mumble.objects.get( srvid=id );
+		except models.Mumble.DoesNotExist:
+			conf = murmur.getAllConf( dbus.Int32( id ) );
+			# We need at least:
+			# name srvid addr
+			
+			values = {
+				"name":    find_in_dicts( "registerName",                conf, default, "noname" ),
+				"srvid":   id,
+				"addr":    find_in_dicts( ( "registerHostame", "host" ), conf, default, "0.0.0.0" ),
+				"port":    find_in_dicts( "port",                        conf, default ),
+				"url":     find_in_dicts( "registerUrl",                 conf, default ),
+				"motd":    find_in_dicts( "welcometext",                 conf, default ),
+				"passwd":  find_in_dicts( "password",                    conf, default ),
+				"supw":    '',
+				"users":   find_in_dicts( "users",                       conf, default ),
+				"bwidth":  find_in_dicts( "bandwidth",                   conf, default ),
+				"sslcrt":  find_in_dicts( "certificate",                 conf, default ),
+				"sslkey":  find_in_dicts( "key",                         conf, default ),
+				"booted":  ( id in bootedIDs ),
+				}
+			
+			if values['addr'].find( ':' ) != -1:
+				# The addr is a hostname which actually contains a port number, but we already got that from
+				# the port field, so we can simply drop it.
+				values['addr'] = values['addr'].split(':')[0];
+			
+			print 'Found Murmur "%s" running on %s:%s.' % ( values['name'], values['addr'], values['port'] );
+			
+			# now create a model for the record set.
+			instance = models.Mumble( **values );
+			instance.save( dontConfigureMurmur=True );
 		
-		values = {
-			"name":    find_in_dicts( "registerName",                conf, default, "noname" ),
-			"srvid":   id,
-			"addr":    find_in_dicts( ( "registerHostame", "host" ), conf, default, "0.0.0.0" ),
-			"port":    find_in_dicts( "port",                        conf, default ),
-			"url":     find_in_dicts( "registerUrl",                 conf, default ),
-			"motd":    find_in_dicts( "welcometext",                 conf, default ),
-			"passwd":  find_in_dicts( "password",                    conf, default ),
-			"supw":    '',
-			"users":   find_in_dicts( "users",                       conf, default ),
-			"bwidth":  find_in_dicts( "bandwidth",                   conf, default ),
-			"sslcrt":  find_in_dicts( "certificate",                 conf, default ),
-			"sslkey":  find_in_dicts( "key",                         conf, default ),
-			"booted":  ( id in bootedIDs ),
-			}
-		
-		if values['addr'].find( ':' ) != -1:
-			# The addr is a hostname which actually contains a port number, but we already got that from
-			# the port field, so we can simply drop it.
-			values['addr'] = values['addr'].split(':')[0];
-		
-		print 'Found Murmur "%s" running on %s:%s.' % ( values['name'], values['addr'], values['port'] );
-		
-		# now create a model for the record set.
-		instance = models.Mumble( **values );
-		instance.save( dontConfigureMurmur=True );
+		# Now search for players on this server that have not yet been registered
+		if id in bootedIDs:
+			murmurinstance = dbus.Interface(
+				bus.get_object( 'net.sourceforge.mumble.murmur', '/%d'%id ),
+				'net.sourceforge.mumble.Murmur'
+				);
+			
+			players = murmurinstance.getRegisteredPlayers('');
+			
+			for playerdata in players:
+				if playerdata[0] == 0:
+					continue;
+				try:
+					models.MumbleUser.objects.get( mumbleid=playerdata[0] );
+				except models.MumbleUser.DoesNotExist:
+					print 'Found Player "%s"' % playerdata[1];
+					playerinstance = models.MumbleUser(
+						mumbleid = playerdata[0],
+						name     = playerdata[1],
+						password = '',
+						server   = instance,
+						owner    = None
+						);
+					playerinstance.save( dontConfigureMurmur=True );
+			
 
 
 signals.post_syncdb.connect( find_existing_instances, sender=models );
