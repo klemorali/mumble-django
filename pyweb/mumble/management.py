@@ -54,19 +54,31 @@ def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 def find_existing_instances( **kwargs ):
 	bus = dbus.SystemBus();
 	
+	if "verbosity" in kwargs:
+		v = kwargs['verbosity'];
+	else:
+		v = 1;
+	
+	if v > 1:
+		print "Starting Mumble servers and players detection now.";
+	
 	dbusName = 'net.sourceforge.mumble.murmur';
 	online = False;
 	while not online:
 		try:
-			murmur = dbus.Interface( bus.get_object( dbusName, '/' ), 'net.sourceforge.mumble.Meta');
+			murmur = dbus.Interface( bus.get_object( dbusName, '/' ), 'net.sourceforge.mumble.Meta' );
 		except dbus.exceptions.DBusException:
-			print "Unable to connect to DBus using name %s. Is Murmur even running!?" % dbusName;
+			if v:
+				print "Unable to connect to DBus using name %s. Is Murmur even running!?" % dbusName;
 			dbusName = raw_input( "DBus Service name (or empty to skip Servers/Players detection): " );
 			if not dbusName:
-				print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
+				if v:
+					print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
 				return False;
 		else:
 			online = True;
+			if v > 1:
+				print "Successfully connected to Murmur via DBus (%s)." % dbusName;
 	
 	default = murmur.getDefaultConf();
 	
@@ -74,14 +86,13 @@ def find_existing_instances( **kwargs ):
 	bootedIDs = murmur.getBootedServers();
 	
 	for id in servIDs:
+		if v > 1:
+			print "Checking Murmur instance with id %d." % id;
 		# first check that the server has not yet been inserted into the DB
 		try:
 			instance = models.Mumble.objects.get( srvid=id );
 		except models.Mumble.DoesNotExist:
-			conf = murmur.getAllConf( dbus.Int32( id ) );
-			# We need at least:
-			# name srvid addr
-			
+			conf   = murmur.getAllConf( dbus.Int32( id ) );
 			values = {
 				"name":    find_in_dicts( "registerName",                conf, default, "noname" ),
 				"srvid":   id,
@@ -104,13 +115,19 @@ def find_existing_instances( **kwargs ):
 				# the port field, so we can simply drop it.
 				values['addr'] = values['addr'].split(':')[0];
 			
-			print 'Found Murmur "%s" running on %s:%s.' % ( values['name'], values['addr'], values['port'] );
+			if v:
+				print 'Found new Murmur "%s" running on %s:%s.' % ( values['name'], values['addr'], values['port'] );
 			
 			# now create a model for the record set.
 			instance = models.Mumble( **values );
 			instance.save( dontConfigureMurmur=True );
+		else:
+			if v > 1:
+				print "This instance is already listed in the database.";
 		
 		# Now search for players on this server that have not yet been registered
+		if v > 1:
+			print "Looking for registered Players on Server id %d." % id;
 		if id in bootedIDs:
 			murmurinstance = dbus.Interface(
 				bus.get_object( 'net.sourceforge.mumble.murmur', '/%d'%id ),
@@ -122,10 +139,13 @@ def find_existing_instances( **kwargs ):
 			for playerdata in players:
 				if playerdata[0] == 0:
 					continue;
+				if v > 1:
+					print "Checking Player with id %d and name '%s'." % playerdata[:2];
 				try:
 					models.MumbleUser.objects.get( mumbleid=playerdata[0] );
 				except models.MumbleUser.DoesNotExist:
-					print 'Found Player "%s"' % playerdata[1];
+					if v:
+						print 'Found new Player "%s".' % playerdata[1];
 					playerinstance = models.MumbleUser(
 						mumbleid = playerdata[0],
 						name     = playerdata[1],
@@ -134,7 +154,12 @@ def find_existing_instances( **kwargs ):
 						owner    = None
 						);
 					playerinstance.save( dontConfigureMurmur=True );
+				else:
+					if v > 1:
+						print "This player is already listed in the database.";
 	
+	if v > 1:
+		print "Successfully finished Servers and Players detection.";
 	return True;
 
 

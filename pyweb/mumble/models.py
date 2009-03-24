@@ -120,7 +120,7 @@ class Mumble( models.Model ):
 			murmur.setSuperUserPassword( srvid, self.supw );
 			self.supw = '';
 		
-		if self.booted != murmur.isBooted( dbus.Int32(self.srvid) ):
+		if self.booted != murmur.isBooted( srvid ):
 			if self.booted:
 				murmur.start( srvid );
 			else:
