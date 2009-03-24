@@ -26,6 +26,7 @@ urlpatterns = patterns('',
 # Development stuff
 if settings.DEBUG:
         urlpatterns += patterns('',
-                (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+                (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
+		(r'^/?$',                  'django.views.generic.simple.redirect_to', { 'url': '/mumble/' } ),
         )
 
