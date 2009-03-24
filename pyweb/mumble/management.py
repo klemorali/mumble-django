@@ -153,6 +153,7 @@ def find_existing_instances( **kwargs ):
 						server   = instance,
 						owner    = None
 						);
+					playerinstance.isAdmin = playerinstance.getAdmin();
 					playerinstance.save( dontConfigureMurmur=True );
 				else:
 					if v > 1:

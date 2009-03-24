@@ -150,6 +150,7 @@ class MumbleUser( models.Model ):
 	password = models.CharField(    'Login password',      max_length = 200 );
 	server   = models.ForeignKey(   Mumble );
 	owner    = models.ForeignKey(   User, null=True, blank=True   );
+	isAdmin  = models.BooleanField( 'Admin on root channel', default = False );
 	
 	def __unicode__( self ):
 		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );
@@ -177,8 +178,38 @@ class MumbleUser( models.Model ):
 		# Don't save the users' passwords, we don't need them anyway
 		self.password = '';
 		
+		self.setAdmin( self.isAdmin );
+		
 		# Now allow django to save the record set
 		return models.Model.save( self );
+	
+	
+	def getAdmin( self ):
+		# Get ACL of root Channel, get the admin group and see if I'm in it
+		bus = self.server.getDbusObject();
+		aclinfo, groupinfo, inherit = bus.getACL(0);
+		
+		for grp in groupinfo:
+			if grp[0] == 'admin':
+				return self.mumbleid in grp[4];
+		return False;
+	
+	def setAdmin( self, value ):
+		# Get ACL of root Channel, get the admin group and see if I'm in it
+		bus = self.server.getDbusObject();
+		aclinfo, groupinfo, inherit = bus.getACL(0);
+		
+		for grp in groupinfo:
+			if grp[0] == 'admin':
+				if value != ( self.mumbleid in grp[4] ):
+					if value:
+						grp[4].append( self.mumbleid );
+					else:
+						grp[4].remove( self.mumbleid );
+				break;
+		bus.setACL( 0, aclinfo, groupinfo, inherit );
+		return value;
+	
 	
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
