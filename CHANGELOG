@@ -2,6 +2,15 @@
 mumble-django changelog
 =======================
 
+Version 0.2, 24 March 2009:
+------------------------------
+
+* Reorganized settings.py, so only one single line needs to be edited in
+  order to configure everything.
+* Added a syncdb hook that looks for already configured Murmur instances
+  whenever syncdb is run, and writes found instances and users into the
+  database.
+* Various minor bug fixes.
 
 Version 0.1, 21 February 2009:
 ------------------------------
