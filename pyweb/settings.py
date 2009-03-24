@@ -1,16 +1,23 @@
 # Django settings for mumble_django project.
 
-# ***************************************************************
-# *  The only setting you normally need to alter is this path.  *
-# *  Set this to the path where you extracted mumble-django.    *
-MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django/hgrep';
-# *  For a basic installation, this is all you need to edit in  *
-# *  this file, the rest will be handled automatically!         *
-# *                                                             *
-# *  DO NOT CHANGE ANYTHING ELSE IN THIS FILE UNLESS YOU KNOW   *
-# *  WHAT YOU ARE DOING!                                        *
-# *                                                             *
-# ***************************************************************
+#################################################################
+#################################################################
+##                                                             ##
+##  The only setting you normally need to alter is this path.  ##
+##  Set this to the path where you extracted mumble-django.    ##
+##                                                             ##
+MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django/hgrep';     ##
+##                                                             ##
+##  For a basic installation, this is all you need to edit in  ##
+##  this file, the rest will be handled automatically!         ##
+##                                                             ##
+#################################################################
+##                                                             ##
+##  DO NOT CHANGE ANYTHING ELSE IN THIS FILE UNLESS YOU KNOW   ##
+##  WHAT YOU ARE DOING!                                        ##
+##                                                             ##
+#################################################################
+#################################################################
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
