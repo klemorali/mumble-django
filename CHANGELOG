@@ -2,6 +2,13 @@
 mumble-django changelog
 =======================
 
+Version 0.3, 25 March 2009:
+------------------------------
+* added basepath autodetection.
+* added "Admin on root channel" field that allows editing the ACL of the
+  root channel, to grant or revoke membership in the "admins" group,
+  thereby granting/revoking Administrator privileges.
+
 Version 0.2, 24 March 2009:
 ------------------------------
 

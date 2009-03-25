@@ -1,7 +1,8 @@
-The primary author of mumble-django is Michael Ziegler
+The primary author of mumble-django is Michael "Svedrin" Ziegler
 <diese-addy@funzt-halt.net>.
 
 
 Others who have contributed to the application:
 
-* Thorvald Natvig (helped a million with the Debian packaging)
+* Thorvald "slicer" Natvig (helped a million with the Debian packaging)
+* Philipp "nethead" Wollermann (base path autodetection)
