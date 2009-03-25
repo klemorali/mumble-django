@@ -6,7 +6,7 @@
 ##  The only setting you normally need to alter is this path.  ##
 ##  Set this to the path where you extracted mumble-django.    ##
 ##                                                             ##
-MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django/hgrep';     ##
+MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';           ##
 ##                                                             ##
 ##  For a basic installation, this is all you need to edit in  ##
 ##  this file, the rest will be handled automatically!         ##

@@ -33,7 +33,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from mmobjects import mmServer
+from mmobjects import mmServer, mmACL
 
 import dbus
 import socket
@@ -187,27 +187,27 @@ class MumbleUser( models.Model ):
 	def getAdmin( self ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
 		bus = self.server.getDbusObject();
-		aclinfo, groupinfo, inherit = bus.getACL(0);
+		acl = mmACL( bus.getACL(0) );
 		
-		for grp in groupinfo:
-			if grp[0] == 'admin':
-				return self.mumbleid in grp[4];
-		return False;
+		if not hasattr( acl, "admingroup" ):
+			raise ValueError( "The admin group was not found in the ACL's groups list!" );
+		return self.mumbleid in acl.admingroup['add'];
 	
 	def setAdmin( self, value ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
 		bus = self.server.getDbusObject();
-		aclinfo, groupinfo, inherit = bus.getACL(0);
+		acl = mmACL( 0, bus.getACL(0) );
 		
-		for grp in groupinfo:
-			if grp[0] == 'admin':
-				if value != ( self.mumbleid in grp[4] ):
-					if value:
-						grp[4].append( self.mumbleid );
-					else:
-						grp[4].remove( self.mumbleid );
-				break;
-		bus.setACL( 0, aclinfo, groupinfo, inherit );
+		if not hasattr( acl, "admingroup" ):
+			raise ValueError( "The admin group was not found in the ACL's groups list!" );
+		
+		if value != ( self.mumbleid in acl.admingroup['add'] ):
+			if value:
+				acl.admingroup['add'].append( dbus.Int32(self.mumbleid) );
+			else:
+				acl.admingroup['add'].remove( self.mumbleid );
+		
+		bus.setACL( *acl.pack() );
 		return value;
 	
 	

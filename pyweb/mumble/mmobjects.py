@@ -218,3 +218,37 @@ class mmPlayer( object ):
 	def visit( self, callback, lvl = 0 ):
 		callback( self, lvl );
 
+
+
+class mmACL:
+	def __init__( self, channelId, aclObj ):
+		aclsrc, groupsrc, inherit = aclObj;
+		
+		self.channelId = channelId;
+		
+		self.acls = [];
+		for line in aclsrc:
+			acl = {};
+			acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] = line;
+			self.acls.append( acl );
+		
+		self.groups = [];
+		for line in groupsrc:
+			group = {};
+			group['name'], group['inherited'], group['inherit'], group['inheritable'], group['add'], group['remove'], group['members'] = line;
+			self.groups.append( group );
+			if group['name'] == "admin":
+				self.admingroup = group;
+		
+		self.inherit = inherit;
+	
+	def pack( self ):
+		return (
+			self.channelId,
+			[( acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] ) for acl in self.acls ],
+			[( group['name'], group['inherited'], group['inherit'], group['inheritable'], group['add'], group['remove'], group['members'] ) for group in self.groups ],
+			self.inherit
+			);
+
+
+
