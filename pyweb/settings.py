@@ -3,10 +3,13 @@
 #################################################################
 #################################################################
 ##                                                             ##
-##  The only setting you normally need to alter is this path.  ##
-##  Set this to the path where you extracted mumble-django.    ##
+##  The only setting you should alter is this path.            ##
+##  Mumble-Django will try to auto-detect this value if it     ##
+##  isn't set, which is the default. However, if this should   ##
+##  not work as expected, et this to the path where you        ##
+##  extracted Mumble-Django.                                   ##
 ##                                                             ##
-MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';           ##
+MUMBLE_DJANGO_ROOT = None;                                     ##
 ##                                                             ##
 ##  For a basic installation, this is all you need to edit in  ##
 ##  this file, the rest will be handled automatically!         ##
@@ -19,6 +22,12 @@ MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';           ##
 #################################################################
 #################################################################
 
+
+from os.path import join, dirname, abspath
+
+if not MUMBLE_DJANGO_ROOT:
+	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -28,12 +37,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'                              # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = MUMBLE_DJANGO_ROOT+'/mumble-django.db3'  # Or path to database file if using sqlite3.
-DATABASE_USER = ''                                       # Not used with sqlite3.
-DATABASE_PASSWORD = ''                                   # Not used with sqlite3.
-DATABASE_HOST = ''                                       # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''                                       # Set to empty string for default. Not used with sqlite3.
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'mumble-django.db3' )
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
+DATABASE_HOST = ''
+DATABASE_PORT = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -54,7 +63,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = MUMBLE_DJANGO_ROOT+'/htdocs'
+MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -88,7 +97,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    MUMBLE_DJANGO_ROOT+'/template',
+    join( MUMBLE_DJANGO_ROOT, 'template' ),
 )
 
 INSTALLED_APPS = (

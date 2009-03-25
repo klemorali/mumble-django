@@ -168,15 +168,16 @@ class MumbleUser( models.Model ):
 			self.mumbleid = murmur.registerPlayer( dbus.String( self.name ) );
 		
 		# Update user's registration
-		murmur.setRegistration(
-			dbus.Int32(  self.mumbleid    ),
-			dbus.String( self.name        ),
-			dbus.String( self.owner.email ),
-			dbus.String( self.password    )
-			);
-		
-		# Don't save the users' passwords, we don't need them anyway
-		self.password = '';
+		if self.password:
+			murmur.setRegistration(
+				dbus.Int32(  self.mumbleid    ),
+				dbus.String( self.name        ),
+				dbus.String( self.owner.email ),
+				dbus.String( self.password    )
+				);
+			
+			# Don't save the users' passwords, we don't need them anyway
+			self.password = '';
 		
 		self.setAdmin( self.isAdmin );
 		
