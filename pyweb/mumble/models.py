@@ -188,7 +188,7 @@ class MumbleUser( models.Model ):
 	def getAdmin( self ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
 		bus = self.server.getDbusObject();
-		acl = mmACL( bus.getACL(0) );
+		acl = mmACL( bus.getACL(0), 0 );
 		
 		if not hasattr( acl, "admingroup" ):
 			raise ValueError( "The admin group was not found in the ACL's groups list!" );
