@@ -22,6 +22,12 @@ MUMBLE_DJANGO_ROOT = None;                                     ##
 #################################################################
 #################################################################
 
+# Default email address to send mails from.
+DEFAULT_FROM_EMAIL = "webmaster@localhost"
+
+
+ACCOUNT_ACTIVATION_DAYS = 30
+
 
 from os.path import join, dirname, abspath
 
