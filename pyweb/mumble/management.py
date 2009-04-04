@@ -150,7 +150,7 @@ def find_existing_instances( **kwargs ):
 				if v > 1:
 					print "Checking Player with id %d and name '%s'." % playerdata[:2];
 				try:
-					models.MumbleUser.objects.get( mumbleid=playerdata[0] );
+					models.MumbleUser.objects.get( server=instance, mumbleid=playerdata[0] );
 				except models.MumbleUser.DoesNotExist:
 					if v:
 						print 'Found new Player "%s".' % playerdata[1];
