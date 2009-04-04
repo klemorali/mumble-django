@@ -41,11 +41,19 @@ def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	
 	for keyword in keys:
 		if keyword in conf:
+			if isinstance( conf[keyword], dbus.String ):
+				return unicode(conf[keyword]);
+			elif isinstance( conf[keyword], dbus.Int32 ):
+				return int(conf[keyword]);
 			return conf[keyword];
 	
 	for keyword in keys:
 		keyword = keyword.lower();
 		if keyword in default:
+			if isinstance( default[keyword], dbus.String ):
+				return unicode(default[keyword]);
+			elif isinstance( default[keyword], dbus.Int32 ):
+				return int(default[keyword]);
 			return default[keyword];
 	
 	return valueIfNotFound;
