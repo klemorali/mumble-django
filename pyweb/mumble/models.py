@@ -147,7 +147,7 @@ class Mumble( models.Model ):
 class MumbleUser( models.Model ):
 	mumbleid = models.IntegerField( 'Mumble player_id', editable = False, default = -1 );
 	name     = models.CharField(    'User name and Login', max_length = 200 );
-	password = models.CharField(    'Login password',      max_length = 200 );
+	password = models.CharField(    'Login password',      max_length = 200, blank=True );
 	server   = models.ForeignKey(   Mumble );
 	owner    = models.ForeignKey(   User, null=True, blank=True   );
 	isAdmin  = models.BooleanField( 'Admin on root channel', default = False );
@@ -168,7 +168,7 @@ class MumbleUser( models.Model ):
 			self.mumbleid = murmur.registerPlayer( dbus.String( self.name ) );
 		
 		# Update user's registration
-		if self.password:
+		if self.password and self.owner:
 			murmur.setRegistration(
 				dbus.Int32(  self.mumbleid    ),
 				dbus.String( self.name        ),
