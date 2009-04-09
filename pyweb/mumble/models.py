@@ -35,7 +35,7 @@ from django.db import models
 
 from mmobjects import mmServer, mmACL
 
-from pyweb.settings import DEFAULT_FROM_EMAIL
+from django.conf import settings
 
 import dbus
 import socket
@@ -174,7 +174,7 @@ class MumbleUser( models.Model ):
 			murmur.setRegistration(
 				dbus.Int32(  self.mumbleid    ),
 				dbus.String( self.name        ),
-				dbus.String( self.owner.email if self.owner else DEFAULT_FROM_EMAIL ),
+				dbus.String( self.owner.email if self.owner else settings.DEFAULT_FROM_EMAIL ),
 				dbus.String( self.password    )
 				);
 			
