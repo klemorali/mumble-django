@@ -55,5 +55,8 @@
     </tr>
   {% endfor %}
   </table>
-  <p><a href="/mumble/reg/{{DBaseObject.id}}" class="dingen">Mumble-Account verwalten</a></p>
+  <p><a href="/mumble/reg/{{DBaseObject.id}}" class="dingen">Manage Account</a></p>
+  {% if CurrentUserIsAdmin %}
+    <p><a href="/mumble/admin/{{DBaseObject.id}}" class="dingen">Manage Server settings</a></p>
+  {% endif %}
 </div>

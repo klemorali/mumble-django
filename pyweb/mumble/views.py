@@ -37,6 +37,7 @@ from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 
 from models	import Mumble, MumbleUser
+from forms import *
 from mmobjects	import mmServer, mmChannel
 
 class Storage( object ):
@@ -55,10 +56,10 @@ def mumbles( request ):
 def show( request, server ):
 	"Displays the channel list for the given Server ID."
 	srv, o = createChannelList( server );
-	
+		
 	return render_to_response(
 		'mumble/mumble.htm',
-		{ 'DBaseObject': srv, 'ServerObject': o, 'ChannelTable': Storage.s },
+		{ 'DBaseObject': srv, 'ServerObject': o, 'ChannelTable': Storage.s, "CurrentUserIsAdmin": srv.isUserAdmin( request.user ) },
 		context_instance = RequestContext(request)
 		);
 
@@ -152,6 +153,24 @@ def savereg( request ):
 	return HttpResponseRedirect( "/mumble/%d" % srv.id );
 
 
+	
+@login_required
+def admin( request, serverid ):
+	murmur = get_object_or_404( Mumble, id=serverid );
+	
+	if request.method == 'POST':
+		form = MumbleForm( request.POST, instance=murmur );
+		if form.is_valid():
+			form.save();
+			return HttpResponseRedirect( '/mumble/%d' % int(serverid) );
+	else:
+		form = MumbleForm( instance=murmur );
+	
+	return render_to_response(
+		'mumble/admin.htm',
+		{ "Mumble": murmur, "Adminform": form, "CurrentUserIsAdmin": murmur.isUserAdmin( request.user ) },
+		context_instance = RequestContext(request)
+		);
 
 
 

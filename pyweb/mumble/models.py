@@ -131,6 +131,14 @@ class Mumble( models.Model ):
 		# Now allow django to save the record set
 		return models.Model.save( self );
 	
+	def isUserAdmin( self, user ):
+		if user.is_authenticated():
+			try:
+				return self.mumbleuser_set.get( owner=user ).getAdmin();
+			except MumbleUser.DoesNotExist:
+				return False;
+		return False;
+	
 	def deleteServer( self ):
 		srvid = dbus.Int32( self.srvid );
 		murmur = self.getDbusMeta();
