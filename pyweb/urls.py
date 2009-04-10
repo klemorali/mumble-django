@@ -7,6 +7,7 @@ admin.autodiscover()
 from django.conf import settings
 
 urlpatterns = patterns('',
+	(r'^/?$',               'django.views.generic.simple.redirect_to', { 'url': '/mumble/' } ),
     # Example:
     # (r'^mumble_django/', include('mumble_django.foo.urls')),
 
@@ -25,8 +26,7 @@ urlpatterns = patterns('',
 
 # Development stuff
 if settings.DEBUG:
-        urlpatterns += patterns('',
-                (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
-		(r'^/?$',                  'django.views.generic.simple.redirect_to', { 'url': '/mumble/' } ),
-        )
+	urlpatterns += patterns('',
+		(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
+	)
 

@@ -77,7 +77,14 @@ def showContent( server, user = None ):
 			mumbleAcc = mmUsers[0];
 	
 	t_content = loader.get_template( 'mumble/content.htm' );
-	c_content = Context( { 'DBaseObject': srv, 'ServerObject': o, 'ChannelTable': Storage.s, 'user': user, 'mumbleAccount': mumbleAcc } );
+	c_content = Context( {
+		'DBaseObject': srv,
+		'ServerObject': o,
+		'ChannelTable': Storage.s,
+		'user': user,
+		'mumbleAccount': mumbleAcc,
+		"CurrentUserIsAdmin": srv.isUserAdmin( request.user ),
+		} );
 	r_content = t_content.render( c_content );
 	
 	return r_content;
