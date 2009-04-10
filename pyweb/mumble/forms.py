@@ -1,5 +1,5 @@
 from django.forms	import ModelForm
-from models			import *
+from models		import *
 
 class MumbleForm( ModelForm ):
 	class Meta:

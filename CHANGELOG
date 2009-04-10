@@ -2,6 +2,14 @@
 mumble-django changelog
 =======================
 
+Version 0.4, 10 April 2009:
+------------------------------
+* Various bug fixes.
+* Added settings for django-registration to settings.py, so users can
+  actually find them and don't need to figure these out on their own.
+* Added a form for Server Admins (people added to the Admin group on the
+  root channel) to change a few settings like server password and MOTD.
+
 Version 0.3, 25 March 2009:
 ------------------------------
 * added basepath autodetection.
