@@ -15,12 +15,14 @@ td.mumble {
 	padding:  0px;
 	margin:   0px;
 	line-height: 6px;
+	border:  none;
 	}
 
-div.rahmen {
-	background-color: #CCCCCC;
+div.mumble {
+	background-color: #BDDAFF;
 	color:            #283E53;
 	padding:          10px;
 	margin-top:       20px;
 	margin-bottom:    20px;
+	width:            100%;
 	}

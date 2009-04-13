@@ -1,37 +1,38 @@
 {% load mumble_extras %}
-<div class="rahmen">
-  <table cellspacing="0" cellpadding="0">
+<div class="mumble">
+  <table cellspacing="0" cellpadding="0" style="width:100%">
   <tr>
     <td class="mumble">
       <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
       {{ ServerObject.rootName }}
     </td>
+    <td class="mumble"> </td>
   </tr>
   {% for item in ChannelTable %}
     <tr>
       <td class="mumble mm-left">
-	    <span
-		  class="mumble_{%if item.1.is_channel%}channel{%else%}{%if item.1.is_player%}player{%endif%}{%endif%}"
-		  title="{{ item.1.name }} - Online since {{item.1.onlinesince|time:"H:i"}}&lt;br /&gt;&lt;a href=&quot;/accounts/profiles/{{item.1.mumbleuser.owner.id}}&quot;&gt;{{item.1.mumbleuser.owner}}&lt;/a&gt;"
-		  >
-      {% spaceless %}
-        {% for num in item.0|mrange %}
-          <img src="/static/mumble/linie_v_trans.png" alt="|" />
-        {% endfor %}
-        <img src="/static/mumble/knoten_v_trans.png" alt="+-"  />
-      {% endspaceless %}
-      {% if item.1.userid %}
-        <img src="/static/mumble/talking_off.png" alt="player" />
-		{{ item.1.name }}
-      {% else %}
-        {% if item.1.linked %}
-          <img src="/static/mumble/channel_linked.png" alt="linked channel"/>
-        {% else %}
-          <img src="/static/mumble/channel.png" alt="channel"/>
-        {% endif %}
-        <a  href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">{{ item.1.name }}</a>
-      {% endif %}
-	    </span>
+        <span
+          class="mumble_{%if item.1.is_channel%}channel{%else%}{%if item.1.is_player%}player{%endif%}{%endif%}"
+          title="{{ item.1.name }} - Online since {{item.1.onlinesince|time:"H:i"}}&lt;br /&gt;&lt;a href=&quot;/accounts/profiles/{{item.1.mumbleuser.owner.id}}&quot;&gt;{{item.1.mumbleuser.owner}}&lt;/a&gt;"
+          >
+          {% spaceless %}
+          {% for num in item.0|mrange %}
+            <img src="/static/mumble/linie_v_trans.png" alt="|" />
+          {% endfor %}
+            <img src="/static/mumble/knoten_v_trans.png" alt="+-"  />
+          {% endspaceless %}
+          {% if item.1.userid %}
+            <img src="/static/mumble/talking_off.png" alt="player" />
+            {{ item.1.name }}
+          {% else %}
+            {% if item.1.linked %}
+              <img src="/static/mumble/channel_linked.png" alt="linked channel"/>
+            {% else %}
+              <img src="/static/mumble/channel.png" alt="channel"/>
+            {% endif %}
+            <a  href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">{{ item.1.name }}</a>
+          {% endif %}
+        </span>
       </td>
       <td class="mumble">
         {% if item.1.userid %}
@@ -55,8 +56,4 @@
     </tr>
   {% endfor %}
   </table>
-  <p><a href="/mumble/reg/{{DBaseObject.id}}" class="dingen">Manage Account</a></p>
-  {% if CurrentUserIsAdmin %}
-    <p><a href="/mumble/admin/{{DBaseObject.id}}" class="dingen">Manage Server settings</a></p>
-  {% endif %}
 </div>

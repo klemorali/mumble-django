@@ -5,10 +5,10 @@ MUMBLE_DJANGO_ROOT = None;
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE ###
 
 import os, sys
-from os.path import join, dirname, abspath
+from os.path import join, dirname, abspath, exists
 
 # Path auto-detection
-if not MUMBLE_DJANGO_ROOT:
+if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(abspath(__file__));
 
 # environment variables

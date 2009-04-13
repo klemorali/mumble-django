@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ This file is part of the mumble-django application.
     
     Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -36,14 +37,15 @@ from django.http			import HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 
-from models	import Mumble, MumbleUser
-from forms import *
-from mmobjects	import mmServer, mmChannel
+from models				import Mumble, MumbleUser
+from forms				import *
+from mmobjects				import mmServer, mmChannel
+
+# Handler class for all Server specific views
 
 class Storage( object ):
 	s = list();
 	r = None;
-
 
 def mumbles( request ):
 	"Displays a list of all configured Mumble servers."
@@ -56,13 +58,60 @@ def mumbles( request ):
 def show( request, server ):
 	"Displays the channel list for the given Server ID."
 	srv, o = createChannelList( server );
-		
+	
+	isAdmin = srv.isUserAdmin( request.user );
+	
+	if isAdmin:
+		if request.method == 'POST' and "mode" in request.POST and request.POST['mode'] == 'admin':
+			adminform = MumbleForm( request.POST, instance=srv );
+			if adminform.is_valid():
+				adminform.save();
+				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+		else:
+			adminform = MumbleForm( instance=srv );
+	else:
+		adminform = None;
+	
+	if request.user.is_authenticated():
+		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
+			try:
+				user    = MumbleUser.objects.get( server=srv, owner=request.user );
+			except MumbleUser.DoesNotExist:
+				regform = MumbleUserForm( request.POST );
+				if regform.is_valid():
+					model = regform.save( commit=False );
+					model.isAdmin = False;
+					model.server  = srv;
+					model.owner   = request.user;
+					model.save();
+					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+			else:
+				regform = MumbleUserForm( request.POST, instance=user );
+				if regform.is_valid():
+					regform.save();
+					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+		else:
+			try:
+				user  = MumbleUser.objects.get( server=srv, owner=request.user );
+			except MumbleUser.DoesNotExist:
+				regform = MumbleUserForm();
+			else:
+				regform = MumbleUserForm( instance=user );
+	else:
+		regform = None;
+	
 	return render_to_response(
 		'mumble/mumble.htm',
-		{ 'DBaseObject': srv, 'ServerObject': o, 'ChannelTable': Storage.s, "CurrentUserIsAdmin": srv.isUserAdmin( request.user ) },
+		{
+			'DBaseObject':  srv,
+			'ServerObject': o,
+			'ChannelTable': Storage.s,
+			"CurrentUserIsAdmin": isAdmin,
+			"AdminForm":    adminform,
+			"RegForm":      regform,
+		},
 		context_instance = RequestContext(request)
 		);
-
 
 def showContent( server, user = None ):
 	"Renders and returns the channel list for the given Server ID."
@@ -141,26 +190,35 @@ def register( request, server ):
 
 @login_required
 def savereg( request ):
-	#if not request.user.is_authenticated():
-	#	raise Exception, "You need to be logged in to register yourself with Mumble.";
+	srv  = Mumble.objects.get( id=request.POST['server'] );
 	
-	srv = Mumble.objects.get( id=request.POST['id'] );
-	try:
-		reg = MumbleUser.objects.get( server=srv, owner=request.user );
-	except MumbleUser.DoesNotExist:
-		reg = None;
-	
-	if reg is None:
-		reg = MumbleUser( name=request.POST['username'], password=request.POST['password'], server=srv, owner=request.user );
+	if request.method == 'POST':
+		try:
+			user  = MumbleUser.objects.get( server=srv, owner=request.user );
+		except MumbleUser.DoesNotExist:
+			form  = MumbleUserForm( request.POST );
+			if form.is_valid():
+				model = form.save( commit=False );
+				model.isAdmin = False;
+				model.server  = srv;
+				model.save();
+		else:
+			form = MumbleForm( request.POST, instance=user );
+			if form.is_valid():
+				model.save();
+		
+		return HttpResponseRedirect( '/mumble/%d' % int(serverid) );
 	else:
-		reg.name     = request.POST['username'];
-		reg.password = request.POST['password'];
+		form = MumbleForm( instance=murmur );
 	
-	reg.save();
-	return HttpResponseRedirect( "/mumble/%d" % srv.id );
+	return render_to_response(
+		'mumble/admin.htm',
+		{ "Mumble": murmur, "Adminform": form, "CurrentUserIsAdmin": murmur.isUserAdmin( request.user ) },
+		context_instance = RequestContext(request)
+		);
 
 
-	
+
 @login_required
 def admin( request, serverid ):
 	murmur = get_object_or_404( Mumble, id=serverid );

@@ -1,10 +1,42 @@
-{% extends "base.htm" %}
-{% block modelstyle %}
-	{% include "mumble/style.htm" %}
-{% endblock %}
+{% extends "index.htm" %}
 {% block headtags %}
   <meta http-equiv="refresh" content="30" />
 {% endblock %}
-{% block content %}
-	{% include "mumble/content.htm" %}
+{% block Headline %}
+  {{ ServerObject.rootName }}
+{% endblock %}
+{% block LeftColumn %}
+  {% include "mumble/content.htm" %}
+{% endblock %}
+{% block Content %}
+  {% if user.is_authenticated %}
+    <div id="mumble_registration">
+      <h2>Server registration</h2>
+      <form action="" method="post">
+        <table>
+          {{ RegForm }}
+        </table>
+        <input type="hidden" name="mode" value="reg" />
+        <input type="submit" />
+      </form>
+    </div>
+  {% else %}
+    not admin...
+  {% endif %}
+  
+  {% if CurrentUserIsAdmin %}
+    <div id="mumble_admin">
+      <h2>Server administration</h2>
+      <form action="" method="post">
+        <table>
+          {{ AdminForm }}
+        </table>
+        <input type="hidden" name="mode" value="admin" />
+        <input type="submit" />
+      </form>
+    </div>
+  {% else %}
+    not admin...
+  {% endif %}
+  
 {% endblock %}

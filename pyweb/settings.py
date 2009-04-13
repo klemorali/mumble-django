@@ -6,10 +6,14 @@
 ##  The only setting you should alter is this path.            ##
 ##  Mumble-Django will try to auto-detect this value if it     ##
 ##  isn't set, which is the default. However, if this should   ##
-##  not work as expected, et this to the path where you        ##
+##  not work as expected, set this to the path where you       ##
 ##  extracted Mumble-Django.                                   ##
 ##                                                             ##
+##  Default: Auto Detection                                    ##
 MUMBLE_DJANGO_ROOT = None;                                     ##
+##  Examples:                                                  ##
+#MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';          ##
+#MUMBLE_DJANGO_ROOT = 'c:/web/mumble-django';                  ##
 ##                                                             ##
 ##  For a basic installation, this is all you need to edit in  ##
 ##  this file, the rest will be handled automatically!         ##
@@ -29,9 +33,9 @@ DEFAULT_FROM_EMAIL = "webmaster@localhost"
 ACCOUNT_ACTIVATION_DAYS = 30
 
 
-from os.path import join, dirname, abspath
+from os.path import join, dirname, abspath, exists
 
-if not MUMBLE_DJANGO_ROOT:
+if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
 
 DEBUG = True
