@@ -13,6 +13,11 @@
     <div id="mumble_registration">
       <h2>Server registration</h2>
       <form action="" method="post">
+        {% if Registered %}
+          You are registered on this server.<br />
+        {% else %}
+          You do not have an account on this server.<br />
+        {% endif %}
         <table>
           {{ RegForm }}
         </table>

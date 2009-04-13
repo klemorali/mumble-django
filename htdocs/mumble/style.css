@@ -19,10 +19,11 @@ td.mumble {
 	}
 
 div.mumble {
-	background-color: #BDDAFF;
+	background-color: #FFFFFF;
 	color:            #283E53;
 	padding:          10px;
 	margin-top:       20px;
 	margin-bottom:    20px;
-	width:            100%;
+	width:             80%;
+	min-height:       250px;
 	}

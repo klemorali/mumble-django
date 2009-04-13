@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
 # Uncomment the next two lines to enable the admin:
@@ -14,6 +15,7 @@ urlpatterns = patterns('',
 	# (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
 	(r'^accounts/profile/', 'views.profile' ),
+	(r'^accounts/imprint/', 'views.imprint' ),
 	(r'^accounts/',         include('registration.urls')),
 
 	(r'^mumble/',           include('mumble.urls')),

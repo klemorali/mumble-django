@@ -196,7 +196,9 @@
   *
   * @section content-misc
   */
-
+  input, textarea { 
+    border: 1px solid #CCCCCC;
+  }
  /**
   * (en) Emphasizing external Hyperlinks via CSS
   * (de) Hervorhebung externer Hyperlinks mit CSS

@@ -72,6 +72,7 @@ def show( request, server ):
 	else:
 		adminform = None;
 	
+	registered = False;
 	if request.user.is_authenticated():
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
@@ -97,6 +98,7 @@ def show( request, server ):
 				regform = MumbleUserForm();
 			else:
 				regform = MumbleUserForm( instance=user );
+				registered = True;
 	else:
 		regform = None;
 	
@@ -109,6 +111,7 @@ def show( request, server ):
 			"CurrentUserIsAdmin": isAdmin,
 			"AdminForm":    adminform,
 			"RegForm":      regform,
+			"Registered":   registered,
 		},
 		context_instance = RequestContext(request)
 		);
