@@ -2,13 +2,11 @@
 <div class="mumble">
   <table cellspacing="0" cellpadding="0" style="width:100%; border:none">
     <tr>
-      <td class="mumble" id="server">
+      <td class="mumble" id="server" colspan="2">
         <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
         <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/" class="dingen" id="link_server">
           {{ ServerObject.rootName }}
         </a>
-      </td>
-      <td class="mumble"> </td>
     </tr>
     {% for item in ChannelTable %}
     <tr>
