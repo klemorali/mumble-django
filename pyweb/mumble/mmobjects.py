@@ -136,7 +136,7 @@ class mmChannel( object ):
 			self.serverId = self.parent.serverId;
 	
 	def parentChannels( self ):
-		if self.parent is None or self.parent.is_server() or self.parent.id == 0:
+		if self.parent is None or self.parent.is_server() or self.parent.chanid == 0:
 			return [];
 		return self.parent.parentChannels() + [self.parent.name];
 	
