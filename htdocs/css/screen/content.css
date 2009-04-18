@@ -80,6 +80,11 @@
   dt { font-weight: bold; }
   dd { margin: 0 0 1em 0.8em; }
 
+  /* The above broke ExtJS's Tabs, so fix em */
+  .x-tab-strip-wrap li {
+    list-style-type: none;
+  }
+  
   /* --- general text formatting | Allgemeine Textauszeichnung ------------------------------------------ */
 
   p { line-height: 1.5em; margin: 0 0 1em 0; }

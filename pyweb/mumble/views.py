@@ -47,13 +47,17 @@ class Storage( object ):
 	s = list();
 	r = None;
 
+
 def mumbles( request ):
 	"Displays a list of all configured Mumble servers."
 	return render_to_response(
 		'mumble/list.htm',
-		{ 'MumbleObjects': get_list_or_404( Mumble ) },
+		{ 'MumbleObjects': get_list_or_404( Mumble ),
+		  'MumbleActive':  True,
+		},
 		context_instance = RequestContext(request)
 		);
+
 
 def show( request, server ):
 	"Displays the channel list for the given Server ID."
@@ -61,9 +65,15 @@ def show( request, server ):
 	
 	isAdmin = srv.isUserAdmin( request.user );
 	
+	# The tab to start on.
+	displayTab = 0;
+	
 	if isAdmin:
 		if request.method == 'POST' and "mode" in request.POST and request.POST['mode'] == 'admin':
 			adminform = MumbleForm( request.POST, instance=srv );
+			# In case we redisplay the page, it was displayed with errors on the admin form, so tell
+			# Ext to show the admin form tab first.
+			displayTab = 1;
 			if adminform.is_valid():
 				adminform.save();
 				return HttpResponseRedirect( '/mumble/%d' % int(server) );
@@ -112,9 +122,12 @@ def show( request, server ):
 			"AdminForm":    adminform,
 			"RegForm":      regform,
 			"Registered":   registered,
+			"DisplayTab":   displayTab,
+			'MumbleActive':  True,
 		},
 		context_instance = RequestContext(request)
 		);
+
 
 def showContent( server, user = None ):
 	"Renders and returns the channel list for the given Server ID."
@@ -136,6 +149,7 @@ def showContent( server, user = None ):
 		'user': user,
 		'mumbleAccount': mumbleAcc,
 		"CurrentUserIsAdmin": srv.isUserAdmin( request.user ),
+		'MumbleActive':  True,
 		} );
 	r_content = t_content.render( c_content );
 	
@@ -169,77 +183,6 @@ def renderListItem( item, level ):
 		Storage.s.append( ( level, item, item.parentChannels() ) );
 	else:
 		Storage.s.append( ( level, item ) );
-
-
-
-@login_required
-def register( request, server ):
-	# Register the current user with this mumble server, or give them a form to change their registration data.
-	srv = Mumble.objects.get( id=server );
-	
-	if request.user.is_authenticated():
-		try:
-			reg = MumbleUser.objects.get( server=srv, owner=request.user );
-		except MumbleUser.DoesNotExist:
-			reg = None;
-	else:
-		reg = None;
-	
-	return render_to_response(
-		'mumble/reg.htm',
-		{ 'Mumble': srv, 'Reg': reg },
-		context_instance = RequestContext(request)
-		);
-
-@login_required
-def savereg( request ):
-	srv  = Mumble.objects.get( id=request.POST['server'] );
-	
-	if request.method == 'POST':
-		try:
-			user  = MumbleUser.objects.get( server=srv, owner=request.user );
-		except MumbleUser.DoesNotExist:
-			form  = MumbleUserForm( request.POST );
-			if form.is_valid():
-				model = form.save( commit=False );
-				model.isAdmin = False;
-				model.server  = srv;
-				model.save();
-		else:
-			form = MumbleForm( request.POST, instance=user );
-			if form.is_valid():
-				model.save();
-		
-		return HttpResponseRedirect( '/mumble/%d' % int(serverid) );
-	else:
-		form = MumbleForm( instance=murmur );
-	
-	return render_to_response(
-		'mumble/admin.htm',
-		{ "Mumble": murmur, "Adminform": form, "CurrentUserIsAdmin": murmur.isUserAdmin( request.user ) },
-		context_instance = RequestContext(request)
-		);
-
-
-
-@login_required
-def admin( request, serverid ):
-	murmur = get_object_or_404( Mumble, id=serverid );
-	
-	if request.method == 'POST':
-		form = MumbleForm( request.POST, instance=murmur );
-		if form.is_valid():
-			form.save();
-			return HttpResponseRedirect( '/mumble/%d' % int(serverid) );
-	else:
-		form = MumbleForm( instance=murmur );
-	
-	return render_to_response(
-		'mumble/admin.htm',
-		{ "Mumble": murmur, "Adminform": form, "CurrentUserIsAdmin": murmur.isUserAdmin( request.user ) },
-		context_instance = RequestContext(request)
-		);
-
 
 
 

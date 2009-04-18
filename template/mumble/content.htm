@@ -10,11 +10,16 @@
   </tr>
   {% for item in ChannelTable %}
     <tr>
-      <td class="mumble mm-left">
-        <span
-          class="mumble_{%if item.1.is_channel%}channel{%else%}{%if item.1.is_player%}player{%endif%}{%endif%}"
-          title="{{ item.1.name }} - Online since {{item.1.onlinesince|time:"H:i"}}&lt;br /&gt;&lt;a href=&quot;/accounts/profiles/{{item.1.mumbleuser.owner.id}}&quot;&gt;{{item.1.mumbleuser.owner}}&lt;/a&gt;"
-          >
+      <td class="mumble mm-left" {% if item.1.is_player %} id="{{ mm_item.1.userid }}" {% endif %}>
+        <span {% spaceless %}
+         {% if item.1.is_channel %}
+           class="mumble_channel"
+         {% else %}
+           {% if item.1.is_player %}
+             class="mumble_player"
+           {% endif %}
+         {% endif %}
+         {% endspaceless %} title="{{ item.1.name }}">
           {% spaceless %}
           {% for num in item.0|mrange %}
             <img src="/static/mumble/linie_v_trans.png" alt="|" />

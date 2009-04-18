@@ -1,11 +1,9 @@
-{% extends "base.htm" %}
+{% extends "index.htm" %}
 {% load i18n %}
 
-{% block title %}{% endblock %}
+{% block Headline %}Account activation{% endblock %}
 
-{% block content %}
-<h2>Account successfully activated</h2>
-
+{% block Content %}
 {% if account %}
     <p>{% with account.username as username %}
     Thank you for registering!<br />

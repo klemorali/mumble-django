@@ -26,7 +26,7 @@
       </form>
     </div>
   {% else %}
-    not admin...
+    <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account.</p>
   {% endif %}
   
   {% if CurrentUserIsAdmin %}
@@ -40,8 +40,38 @@
         <input type="submit" />
       </form>
     </div>
-  {% else %}
-    not admin...
+    <noscript>
+      By the way, if you had enabled JavaScript, you could see a nifty Tab bar here :)
+    </noscript>
   {% endif %}
   
+{% endblock %}
+
+{% block HeadTag %}
+  {% if CurrentUserIsAdmin %}
+    <script type="text/javascript">
+	Ext.onReady( function(){
+		Ext.get( 'mumble_registration' ).addClass( 'x-hide-display' );
+		Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
+		
+		var cardpanel = new Ext.Panel({
+			renderTo:   'col3_content',
+			layout:     'card',
+			height:     400,
+			activeItem: 0,
+			border:     false,
+			items:      [ {
+				xtype:     'tabpanel',
+				defaults:  { autoheight: true },
+				activeTab: {{ DisplayTab }},
+				items: [
+					{ contentEl: 'mumble_registration', title: 'Registration'   },
+					{ contentEl: 'mumble_admin',        title: 'Administration' },
+					]
+				} ],
+			});
+		
+		} );
+    </script>
+  {% endif %}
 {% endblock %}

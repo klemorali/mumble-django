@@ -13,6 +13,7 @@ from mumble.models			import Mumble, MumbleUser
 @login_required
 def profile( request ):
 	userdata = {
+		"ProfileActive": True,
 		"mumbleaccs":	MumbleUser.objects.filter(	owner  = request.user ),
 #		"gbposts": 	Entry.objects.filter(		author = request.user ).count(),
 #		"gbcomments": 	Comment.objects.filter(		author = request.user ).count(),
@@ -24,6 +25,7 @@ def profile( request ):
 		userdata,
 		context_instance = RequestContext(request)
 		);
+
 
 def imprint( request ):
 	return render_to_response( 'registration/imprint.html' );

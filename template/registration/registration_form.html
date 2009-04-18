@@ -1,51 +1,16 @@
-{% extends "base.htm" %}
+{% extends "index.htm" %}
 {% load i18n %}
 
-{% block title %}Create Account{% endblock %}
+{% block Headline %}Create Account{% endblock %}
 
-{% block content %}
+{% block Content %}
 <h2>Create Account</h2>
 <p>Please fill in the following form.</p>
 
 <form method="post" action=".">
-    {% if form.non_field_errors %}
-    <div class="errorbox">
-    <p>Error:</p>
-    {{ form.non_field_errors }}
-    </div>
-    {% endif %}
-
-    <dl>
-        <dt>{{ form.username.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.username }}</dd>
-        {% if form.username.help_text %}<dd>{{ form.username.help_text }}</dd>{% endif %}
-        {% if form.username.errors %}<dd class="myerrors">{{ form.username.errors }}</dd>{% endif %}
-
-        <dt>{{ form.email.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.email }}</dd>
-        {% if form.email.help_text %}<dd>{{ form.email.help_text }}</dd>{% endif %}
-        {% if form.email.errors %}<dd class="myerrors">{{ form.email.errors }}</dd>{% endif %}
-
-        <dt>{{ form.first_name.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.first_name }}</dd>
-        {% if form.first_name.help_text %}<dd>{{ form.first_name.help_text }}</dd>{% endif %}
-        {% if form.first_name.errors %}<dd class="myerrors">{{ form.first_name.errors }}</dd>{% endif %}
-
-        <dt>{{ form.last_name.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.last_name }}</dd>
-        {% if form.last_name.help_text %}<dd>{{ form.last_name.help_text }}</dd>{% endif %}
-        {% if form.last_name.errors %}<dd class="myerrors">{{ form.last_name.errors }}</dd>{% endif %}
-
-        <dt>{{ form.password1.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.password1 }}</dd>
-        {% if form.password1.help_text %}<dd>{{ form.password1.help_text }}</dd>{% endif %}
-        {% if form.password1.errors %}<dd class="myerrors">{{ form.password1.errors }}</dd>{% endif %}
-
-        <dt>{{ form.password2.label_tag }}<span style="color:red">*</span></dt>
-        <dd>{{ form.password2 }}</dd>
-        {% if form.password2.help_text %}<dd>{{ form.password2.help_text }}</dd>{% endif %}
-        {% if form.password2.errors %}<dd class="myerrors">{{ form.password2.errors }}</dd>{% endif %}
-    </dl>
+    <table>
+      {{ form }}
+    </table>
     <input type="submit" value="{% trans "Create Account" %}" />
 </form>
 {% endblock %}
