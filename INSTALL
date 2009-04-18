@@ -1,16 +1,27 @@
 Thanks for downloading mumble-django.
 
-To install the fully functional version, extract it to wherever you would
-like it to reside. Alter settings.py to fit your needs (the most important
-parts are the Database config and the TEMPLATE_DIRS), and then run:
+To install mumble-django, extract it to wherever you would like it to
+reside, and then run:
 
     python manage.py syncdb
+
+Under most circumstances, that should be all you need to do. However, if
+Murmur is not configured to connect to DBus, syncdb will give you an error
+message and Mumble-Django will not be able to work correctly. In this case,
+have a look at the wiki at
+<http://bitbucket.org/Svedrin/mumble-django/wiki/Connecting_Murmur_to_DBus>
+for instructions how to connect Murmur to DBus.
 
 If you need instructions on how to configure your web server in order to
 serve this application, you can have a look at the Wiki at
 <http://bitbucket.org/Svedrin/mumble-django/wiki/Webserver_Setup>. The wsgi
-config file is already included as mumble-django.wsgi, but you will have to
-alter the paths in this file.
+script is also able to detect the installation paths automatically, so you
+shouldn't need to edit it.
+
+Django_Registration requires a valid EMail address to be set in settings.py,
+that can be used as a sender address for the registration emails. If you
+intend to use the registration feature, you may need to change the
+DEFAULT_FROM_EMAIL setting in settings.py.
 
 Note that there is no need to use the same Database that Murmur itself uses,
 as mumble-django exclusively uses DBus to connect to Murmur and does not

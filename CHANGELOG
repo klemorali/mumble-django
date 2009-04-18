@@ -2,6 +2,16 @@
 mumble-django changelog
 =======================
 
+Version 0.5, 18 April 2009:
+------------------------------
+* Added redirect for / into urls.py, as this is easier than configuring
+  it in the Apache config because it doesn't require the user to do
+  anything.
+* Completely refurbished the user interface, now using a YAML template
+  and ExtJS for some extra cool stuff. Still, the page does not _require_
+  JavaScript to be enabled in order to function correctly, users with JS
+  disabled will only see the registration forms and a hint to enable JS.
+
 Version 0.4, 10 April 2009:
 ------------------------------
 * Various bug fixes.
