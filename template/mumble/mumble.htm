@@ -27,6 +27,12 @@
     </div>
   {% else %}
     <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account.</p>
+    <noscript>
+      <p>
+        This area is used to display additional information for each channel and player, but requires JavaScript to be
+        enabled in order to work correctly.
+      </p>
+    </noscript>
   {% endif %}
   
   {% if CurrentUserIsAdmin %}
@@ -45,6 +51,20 @@
     </noscript>
   {% endif %}
   
+  {% for item in ChannelTable %}
+    {% if item.1.is_player %}
+    <div id="mumble_{{ item.1.id }}" class="x-hide-display">
+      Player {{ item.1.name }}
+      Online since {{item.1.onlinesince|time:"H:i"}}<br />
+      <a href="/accounts/profiles/{{item.1.mumbleuser.owner.id}}">{{item.1.mumbleuser.owner}}</a>
+    </div>
+    {% else %}
+    <div id="mumble_{{ item.1.id }}" class="x-hide-display">
+      Channel {{ item.1.name }}<br />
+      <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
+    </div>
+    {% endif %}
+  {% endfor %}
 {% endblock %}
 
 {% block HeadTag %}
@@ -57,10 +77,12 @@
 		var cardpanel = new Ext.Panel({
 			renderTo:   'col3_content',
 			layout:     'card',
+			id:         'mumble_container',
 			height:     400,
 			activeItem: 0,
 			border:     false,
 			items:      [ {
+				id:        'mumble_tabpanel',
 				xtype:     'tabpanel',
 				defaults:  { autoheight: true },
 				activeTab: {{ DisplayTab }},
@@ -68,9 +90,23 @@
 					{ contentEl: 'mumble_registration', title: 'Registration'   },
 					{ contentEl: 'mumble_admin',        title: 'Administration' },
 					]
-				} ],
+				},
+				{% for item in ChannelTable %}
+					{ contentEl: 'mumble_{{ item.1.id }}', id: 'carditem_{{ item.1.id }}' },
+				{% endfor %}
+				],
 			});
 		
+		Ext.get( 'link_server' ).on( 'click', function( event, target ){
+			cardpanel.layout.setActiveItem( 'mumble_tabpanel' );
+			event.preventDefault();
+			});
+		{% for item in ChannelTable %}
+			Ext.get( 'link_{{ item.1.id }}' ).on( 'click', function( event, target ){
+				cardpanel.layout.setActiveItem( 'carditem_{{ item.1.id }}' );
+				event.preventDefault();
+				});
+		{% endfor %}
 		} );
     </script>
   {% endif %}

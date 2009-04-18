@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ This file is part of the mumble-django application.
     
     Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -116,7 +117,7 @@ class mmServer( object ):
 class mmChannel( object ):
 	# channels  = list();
 	# subchans  = list();
-	# id        = int();
+	# chanid    = int();
 	# name      = str();
 	# parent    = mmChannel();
 	# linked    = list();
@@ -127,7 +128,7 @@ class mmChannel( object ):
 		self.subchans = list();
 		self.linked   = list();
 		
-		(self.id, self.name, parent, self.linkedIDs ) = channelObj;
+		(self.chanid, self.name, parent, self.linkedIDs ) = channelObj;
 		
 		self.parent = parentChan;
 		if self.parent is not None:
@@ -150,9 +151,10 @@ class mmChannel( object ):
 		lambda self: len( self.players ) + sum( [ chan.playerCount for chan in self.subchans ] ),
 		None
 		);
+	id = property( lambda self: "channel_%d"%self.chanid, None );
 	
 	def __str__( self ):
-		return '<Channel "%s" (%d)>' % ( self.name, self.id );
+		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
 	
 	def visit( self, callback, lvl = 0 ):
 		# call callback on myself, then visit my subchans, then my players
@@ -210,10 +212,8 @@ class mmPlayer( object ):
 		return True;
 	
 	# kept for compatibility to mmChannel (useful for traversal funcs)
-	playerCount = property(
-		lambda self: -1,
-		None
-		);
+	playerCount = property( lambda self: -1, None );
+	id = property( lambda self: "player_%d"%self.id, None );
 	
 	def visit( self, callback, lvl = 0 ):
 		callback( self, lvl );

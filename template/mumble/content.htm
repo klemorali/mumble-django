@@ -1,24 +1,24 @@
 {% load mumble_extras %}
 <div class="mumble">
   <table cellspacing="0" cellpadding="0" style="width:100%; border:none">
-  <tr>
-    <td class="mumble">
-      <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
-      {{ ServerObject.rootName }}
-    </td>
-    <td class="mumble"> </td>
-  </tr>
-  {% for item in ChannelTable %}
     <tr>
-      <td class="mumble mm-left" {% if item.1.is_player %} id="{{ mm_item.1.userid }}" {% endif %}>
+      <td class="mumble" id="server">
+        <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
+        <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/" class="dingen" id="link_server">
+          {{ ServerObject.rootName }}
+        </a>
+      </td>
+      <td class="mumble"> </td>
+    </tr>
+    {% for item in ChannelTable %}
+    <tr>
+      <td class="mumble mm-left" id="{{ item.1.id }}">
         <span {% spaceless %}
-         {% if item.1.is_channel %}
-           class="mumble_channel"
-         {% else %}
-           {% if item.1.is_player %}
+           {% if item.1.is_channel %}
+             class="mumble_channel"
+           {% else %}
              class="mumble_player"
            {% endif %}
-         {% endif %}
          {% endspaceless %} title="{{ item.1.name }}">
           {% spaceless %}
           {% for num in item.0|mrange %}
@@ -26,7 +26,7 @@
           {% endfor %}
             <img src="/static/mumble/knoten_v_trans.png" alt="+-"  />
           {% endspaceless %}
-          {% if item.1.userid %}
+          {% if item.1.is_player %}
             <img src="/static/mumble/talking_off.png" alt="player" />
             {{ item.1.name }}
           {% else %}
@@ -35,7 +35,7 @@
             {% else %}
               <img src="/static/mumble/channel.png" alt="channel"/>
             {% endif %}
-            <a  href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">{{ item.1.name }}</a>
+            <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen" id="link_{{ item.1.id }}">{{ item.1.name }}</a>
           {% endif %}
         </span>
       </td>
@@ -59,6 +59,6 @@
         {% endif %}
       </td>
     </tr>
-  {% endfor %}
+    {% endfor %}
   </table>
 </div>
