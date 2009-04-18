@@ -10,7 +10,7 @@
     </tr>
     {% for item in ChannelTable %}
     <tr>
-      <td class="mumble mm-left" id="{{ item.1.id }}">
+      <td class="mumble" id="{{ item.1.id }}">
         <span {% spaceless %}
            {% if item.1.is_channel %}
              class="mumble_channel"
