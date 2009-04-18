@@ -9,8 +9,16 @@
   {% include "mumble/content.htm" %}
 {% endblock %}
 {% block Content %}
-  {% if user.is_authenticated %}
+  <noscript>
+    <p>
+      <b>Hint:</b><br />
+      This area is used to display additional information for each channel and player, but requires JavaScript to be
+      enabled in order to be displayed correctly. You will not see the detail pages, but you can use all links and forms
+      that are displayed.
+    </p>
+  </noscript>
     <div id="mumble_registration">
+  {% if user.is_authenticated %}
       <h2>Server registration</h2>
       <form action="" method="post">
         {% if Registered %}
@@ -24,16 +32,10 @@
         <input type="hidden" name="mode" value="reg" />
         <input type="submit" />
       </form>
-    </div>
   {% else %}
     <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account.</p>
-    <noscript>
-      <p>
-        This area is used to display additional information for each channel and player, but requires JavaScript to be
-        enabled in order to work correctly.
-      </p>
-    </noscript>
   {% endif %}
+    </div>
   
   {% if CurrentUserIsAdmin %}
     <div id="mumble_admin">
@@ -68,11 +70,12 @@
 {% endblock %}
 
 {% block HeadTag %}
-  {% if CurrentUserIsAdmin %}
     <script type="text/javascript">
 	Ext.onReady( function(){
 		Ext.get( 'mumble_registration' ).addClass( 'x-hide-display' );
-		Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
+		{% if CurrentUserIsAdmin %}
+			Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
+		{% endif %}
 		
 		var cardpanel = new Ext.Panel({
 			renderTo:   'col3_content',
@@ -88,7 +91,9 @@
 				activeTab: {{ DisplayTab }},
 				items: [
 					{ contentEl: 'mumble_registration', title: 'Registration'   },
-					{ contentEl: 'mumble_admin',        title: 'Administration' },
+					{% if CurrentUserIsAdmin %}
+						{ contentEl: 'mumble_admin',        title: 'Administration' },
+					{% endif %}
 					]
 				},
 				{% for item in ChannelTable %}
@@ -109,5 +114,4 @@
 		{% endfor %}
 		} );
     </script>
-  {% endif %}
 {% endblock %}
