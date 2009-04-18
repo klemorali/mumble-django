@@ -28,7 +28,7 @@
           {% endspaceless %}
           {% if item.1.is_player %}
             <img src="/static/mumble/talking_off.png" alt="player" />
-            {{ item.1.name }}
+            <a id="link_{{ item.1.id }}" class="dingen" href="#">{{ item.1.name }}</a>
           {% else %}
             {% if item.1.linked %}
               <img src="/static/mumble/channel_linked.png" alt="linked channel"/>
