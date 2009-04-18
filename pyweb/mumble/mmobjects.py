@@ -213,7 +213,7 @@ class mmPlayer( object ):
 	
 	# kept for compatibility to mmChannel (useful for traversal funcs)
 	playerCount = property( lambda self: -1, None );
-	id = property( lambda self: "player_%d"%self.id, None );
+	id = property( lambda self: "player_%d"%self.userid, None );
 	
 	def visit( self, callback, lvl = 0 ):
 		callback( self, lvl );
