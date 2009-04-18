@@ -1,8 +1,10 @@
 {% extends "index.htm" %}
 {% load mumble_extras %}
+{% block Headline %}
+Configured Mumble Servers
+{% endblock %}
 {% block Content %}
 <div class="rahmen">
-  <h1>Configured Mumble Servers</h1>
   <ul>
   {% for mumble in MumbleObjects %}
     <li><a href="/mumble/{{mumble.id}}/">{{mumble.name}}</a></li>

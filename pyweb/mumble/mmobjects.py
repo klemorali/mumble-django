@@ -204,6 +204,11 @@ class mmPlayer( object ):
 	def isAuthed( self ):
 		return self.dbaseid != -1;
 	
+	isAdmin = property(
+		lambda self: self.mumbleuser and self.mumbleuser.getAdmin(),
+		None
+		);
+	
 	def is_server( self ):
 		return False;
 	def is_channel( self ):

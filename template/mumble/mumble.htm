@@ -56,13 +56,30 @@
   {% for item in ChannelTable %}
     {% if item.1.is_player %}
     <div id="mumble_{{ item.1.id }}" class="x-hide-display">
-      Player {{ item.1.name }}
-      Online since {{item.1.onlinesince|time:"H:i"}}<br />
-      <a href="/accounts/profiles/{{item.1.mumbleuser.owner.id}}">{{item.1.mumbleuser.owner}}</a>
+      <h2>Player {{ item.1.name }}</h2>
+      <ul>
+        <li>Online since {{item.1.onlinesince|time:"H:i"}}</li>
+        <li>Authenticated: {% if item.1.isAuthed     %}Yes{% else %}No{% endif %}</li>
+        <li>Admin:         {% if item.1.isAdmin      %}Yes{% else %}No{% endif %}</li>
+        <li>Muted:         {% if item.1.muted        %}Yes{% else %}No{% endif %}</li>
+        <li>Deafened:      {% if item.1.deafened     %}Yes{% else %}No{% endif %}</li>
+        <li>Self-Muted:    {% if item.1.selfmuted    %}Yes{% else %}No{% endif %}</li>
+        <li>Self-Deafened: {% if item.1.selfdeafened %}Yes{% else %}No{% endif %}</li>
+      </ul>
+      {% if item.1.mumbleuser and item.1.mumbleuser.owner %}
+        <h2>User {{ item.1.mumbleuser.owner.username|capfirst }}</h2>
+        <ul>
+          {% if item.1.mumbleuser.owner.first_name and item.1.mumbleuser.owner.last_name %}
+            <li>Full Name: {{ item.1.mumbleuser.owner.first_name }} {{ item.1.mumbleuser.owner.last_name }}</li>
+          {% endif %}
+          <li>Admin: {% if item.1.mumbleuser.owner.is_staff %}Yes{% else %}No{% endif %}</li>
+          <li>Sign-up date: {{ item.1.mumbleuser.owner.date_joined }}</li>
+        </ul>
+      {% endif %}
     </div>
     {% else %}
     <div id="mumble_{{ item.1.id }}" class="x-hide-display">
-      Channel {{ item.1.name }}<br />
+      <h2>Channel {{ item.1.name }}</h2>
       <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
     </div>
     {% endif %}
