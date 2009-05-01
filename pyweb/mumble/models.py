@@ -38,6 +38,10 @@ class Mumble( models.Model ):
 	bwidth = models.IntegerField( 'Bandwidth [Bps]',                      blank = True, null = True );
 	sslcrt = models.TextField(    'SSL Certificate',                      blank = True   );
 	sslkey = models.TextField(    'SSL Key',            blank = True   );
+	obfsc  = models.BooleanField( 'IP Obfuscation',     default = False );
+	player = models.CharField(    'Player name regex',  max_length=200, default=r'[-=\w\[\]\{\}\(\)\@\|\.]+' );
+	channel= models.CharField(    'Channel name regex', max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
+	default= models.IntegerField( 'Default channel',    default=0      );
 	booted = models.BooleanField( 'Boot Server',        default = True );
 	
 	def getDbusMeta( self ):
@@ -80,6 +84,11 @@ class Mumble( models.Model ):
 		murmur.setConf( srvid,     'password',            self.passwd );
 		murmur.setConf( srvid,     'certificate',         self.sslcrt );
 		murmur.setConf( srvid,     'key',                 self.sslkey );
+		murmur.setConf( srvid,     'obfuscate',           str(self.obfsc).lower() );
+		murmur.setConf( srvid,     'playername',          self.player );
+		murmur.setConf( srvid,     'channelname',         self.channel );
+		murmur.setConf( srvid,     'defaultchannel',      str(self.default) );
+		
 		
 		if self.port is not None:
 			murmur.setConf( srvid, 'port',                str(self.port) );

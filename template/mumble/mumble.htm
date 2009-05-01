@@ -33,7 +33,7 @@
         <input type="submit" />
       </form>
   {% else %}
-    <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account.</p>
+    <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account on this Mumble server.</p>
   {% endif %}
     </div>
   
@@ -95,7 +95,7 @@
 			renderTo:   'col3_content',
 			layout:     'card',
 			id:         'mumble_container',
-			height:     400,
+			height:     510,
 			activeItem: 0,
 			border:     false,
 			items:      [ {
@@ -104,9 +104,9 @@
 				defaults:  { autoheight: true },
 				activeTab: {{ DisplayTab }},
 				items: [
-					{ contentEl: 'mumble_registration', title: 'Registration'   },
+					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
 					{% if CurrentUserIsAdmin %}
-						{ contentEl: 'mumble_admin',        title: 'Administration' },
+						{ contentEl: 'mumble_admin', title: 'Administration', autoScroll: true },
 					{% endif %}
 					]
 				},
