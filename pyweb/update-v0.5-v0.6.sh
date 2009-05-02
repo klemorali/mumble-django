@@ -22,12 +22,8 @@ from django.db   import connection
 from django.conf import settings
 crs = connection.cursor();
 
-crs.execute( """ALTER TABLE mumble_mumble
-    ADD obfsc   BOOLEAN      NOT NULL DEFAULT 0,
-    ADD player  VARCHAR(200) NOT NULL DEFAULT '%s',
-    ADD channel VARCHAR(200) NOT NULL DEFAULT '%s',
-    ADD defchan              NOT NULL DEFAULT 0;""" % (
-	r'[-=\\w\\[\\]\\{\\}\\(\\)\\@\\|\\.]+',
-	r'[ \\-=\\w\\#\\[\\]\\{\\}\\(\\)\\@\\|]+' )
-);
+crs.execute( "ALTER TABLE mumble_mumble ADD obfsc   BOOLEAN      NOT NULL DEFAULT 0"   );
+crs.execute( "ALTER TABLE mumble_mumble ADD player  VARCHAR(200) NOT NULL DEFAULT '%s'" % r'[-=\\w\\[\\]\\{\\}\\(\\)\\@\\|\\.]+'    );
+crs.execute( "ALTER TABLE mumble_mumble ADD channel VARCHAR(200) NOT NULL DEFAULT '%s'" % r'[ \\-=\\w\\#\\[\\]\\{\\}\\(\\)\\@\\|]+' );
+crs.execute( "ALTER TABLE mumble_mumble ADD defchan INTEGER      NOT NULL DEFAULT 0"   );
 EOF
