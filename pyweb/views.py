@@ -43,4 +43,4 @@ def profile( request ):
 
 
 def imprint( request ):
-	return render_to_response( 'registration/imprint.html' );
+	return render_to_response( 'registration/imprint.html', {}, context_instance = RequestContext(request) );
