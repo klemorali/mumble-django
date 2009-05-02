@@ -41,7 +41,7 @@ class Mumble( models.Model ):
 	obfsc  = models.BooleanField( 'IP Obfuscation',     default = False );
 	player = models.CharField(    'Player name regex',  max_length=200, default=r'[-=\w\[\]\{\}\(\)\@\|\.]+' );
 	channel= models.CharField(    'Channel name regex', max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
-	default= models.IntegerField( 'Default channel',    default=0      );
+	defchan= models.IntegerField( 'Default channel',    default=0      );
 	booted = models.BooleanField( 'Boot Server',        default = True );
 	
 	def getDbusMeta( self ):
@@ -87,7 +87,7 @@ class Mumble( models.Model ):
 		murmur.setConf( srvid,     'obfuscate',           str(self.obfsc).lower() );
 		murmur.setConf( srvid,     'playername',          self.player );
 		murmur.setConf( srvid,     'channelname',         self.channel );
-		murmur.setConf( srvid,     'defaultchannel',      str(self.default) );
+		murmur.setConf( srvid,     'defaultchannel',      str(self.defchan) );
 		
 		
 		if self.port is not None:
