@@ -172,11 +172,16 @@ class MumbleUser( models.Model ):
 		
 		# Update user's registration
 		if self.password:
+			if self.owner:
+				email = self.owner.email
+			else:
+				email = settings.DEFAULT_FROM_EMAIL;
+			
 			murmur.setRegistration(
-				dbus.Int32(  self.mumbleid    ),
-				dbus.String( self.name        ),
-				dbus.String( self.owner.email if self.owner else settings.DEFAULT_FROM_EMAIL ),
-				dbus.String( self.password    )
+				dbus.Int32(  self.mumbleid  ),
+				dbus.String( self.name      ),
+				dbus.String( email          ),
+				dbus.String( self.password  )
 				);
 			
 			# Don't save the users' passwords, we don't need them anyway
