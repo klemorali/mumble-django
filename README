@@ -1,0 +1,25 @@
+============================================
+Mumble-django -- A murmur config application
+============================================
+
+mumble-django is a Django web interface application that configures a
+Murmur server. It is able to create and remove vservers, start/stop them,
+and configure them.
+
+Furthermore, registered Django users can sign up for user accounts on the
+configured vservers and change their registration names and passwords.
+
+This package contains a fully functional Django project that runs as a
+standalone web application. Use this if you do not have a Django-driven
+website that you could integrate mumble-django in.
+
+The main Mumble application is a complete reusable Module of its own, so
+integrating it in your own Django project is fairly easy if you're familiar
+with the way Django works. To do this, you will need the following
+directories:
+* pyweb/mumble:    The main application code
+* template/mumble: The templates
+* htdocs/mumble:   Static content like images and CSS for the Channel Viewer
+
+For installation instructions, see the file "INSTALL" in this
+directory.

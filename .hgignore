@@ -1,0 +1,7 @@
+syntax: glob
+
+*.pyc
+*.db3
+*~
+.directory
+
