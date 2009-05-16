@@ -78,8 +78,8 @@ class Mumble( models.Model ):
 		srvid = dbus.Int32( self.srvid );
 		
 		murmur.setConf( srvid,     'host',                socket.gethostbyname( self.addr ) );
-		murmur.setConf( srvid,     'registerName',        self.name );
-		murmur.setConf( srvid,     'registerUrl',         self.url );
+		murmur.setConf( srvid,     'registername',        self.name );
+		murmur.setConf( srvid,     'registerurl',         self.url );
 		murmur.setConf( srvid,     'welcometext',         self.motd );
 		murmur.setConf( srvid,     'password',            self.passwd );
 		murmur.setConf( srvid,     'certificate',         self.sslcrt );
@@ -107,9 +107,9 @@ class Mumble( models.Model ):
 		
 		# registerHostname needs to take the port no into account
 		if self.port and self.port != 64738:
-			murmur.setConf( srvid, 'registerHostname',    "%s:%d" % ( self.addr, self.port ) );
+			murmur.setConf( srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
 		else:
-			murmur.setConf( srvid, 'registerHostname',    self.addr );
+			murmur.setConf( srvid, 'registerhostname',    self.addr );
 		
 		if self.supw:
 			murmur.setSuperUserPassword( srvid, self.supw );
