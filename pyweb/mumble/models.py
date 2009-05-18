@@ -14,6 +14,10 @@
  *  GNU General Public License for more details.
 """
 
+from PIL import Image
+from struct import pack
+from zlib import compress
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -219,7 +223,24 @@ class MumbleUser( models.Model ):
 		bus.setACL( *acl.pack() );
 		return value;
 	
-	
+	def setTexture( self, infile ):
+		# open image, convert to RGBA, and resize to 600x60
+		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
+		# iterate over the list and pack everything into a string
+		bgrastring = "";
+		for ent in list( img.getdata() ):
+			# ent is in RGBA format, but Murmur wants BGRA (ARGB inverse), so stuff needs
+			# to be reordered when passed to pack()
+			bgrastring += pack( "4B",  ent[2], ent[1], ent[0], ent[3] );
+		# compress using zlib
+		compressed = compress( bgrastring );
+		# pack the original length in 4 byte big endian, and concat the compressed
+		# data to it to emulate qCompress().
+		texture = pack( ">L", len(bgrastring) ) + compressed;
+		# finally call murmur and set the texture
+		murmur = self.server.getDbusObject();
+		murmur.setTexture( dbus.Int32( self.mumbleid ), texture );
+
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].unregister();
