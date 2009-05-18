@@ -37,6 +37,20 @@
   {% endif %}
     </div>
   
+  {% if Registered %}
+    <div id="mumble_texture">
+	  <h2>User Texture</h2>
+	  You can upload an image that you would like to use as your user texture here.<br />
+	  <form action="" method="post" enctype="multipart/form-data">
+	    <table>
+	      {{ TextureForm }}
+        </table>
+        <input type="hidden" name="mode" value="texture" />
+        <input type="submit" />
+      </form>
+	</div>
+  {% endif %}
+  
   {% if CurrentUserIsAdmin %}
     <div id="mumble_admin">
       <h2>Server administration</h2>
@@ -87,6 +101,9 @@
     <script type="text/javascript">
 	Ext.onReady( function(){
 		Ext.get( 'mumble_registration' ).addClass( 'x-hide-display' );
+		{% if Registered %}
+			Ext.get( 'mumble_texture' ).addClass( 'x-hide-display' );
+		{% endif %}
 		{% if CurrentUserIsAdmin %}
 			Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
 		{% endif %}
@@ -105,6 +122,9 @@
 				activeTab: {{ DisplayTab }},
 				items: [
 					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
+					{% if Registered %}
+						{ contentEl: 'mumble_texture', title: 'User Texture', autoScroll: true },
+					{% endif %}
 					{% if CurrentUserIsAdmin %}
 						{ contentEl: 'mumble_admin', title: 'Administration', autoScroll: true },
 					{% endif %}

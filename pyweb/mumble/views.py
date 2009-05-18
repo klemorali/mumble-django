@@ -66,6 +66,7 @@ def show( request, server ):
 		adminform = None;
 	
 	registered = False;
+	
 	if request.user.is_authenticated():
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
@@ -92,8 +93,18 @@ def show( request, server ):
 			else:
 				regform = MumbleUserForm( instance=user );
 				registered = True;
+		
+		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'texture' and registered:
+			textureform = MumbleTextureForm( request.POST, request.FILES );
+			if textureform.is_valid():
+				user.setTexture( request.FILES['texturefile'] );
+				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+		else:
+			textureform = MumbleTextureForm();
+
 	else:
 		regform = None;
+		textureform = None;
 	
 	return render_to_response(
 		'mumble/mumble.htm',
@@ -104,6 +115,7 @@ def show( request, server ):
 			"CurrentUserIsAdmin": isAdmin,
 			"AdminForm":    adminform,
 			"RegForm":      regform,
+			"TextureForm":  textureform,
 			"Registered":   registered,
 			"DisplayTab":   displayTab,
 			'MumbleActive':  True,
@@ -166,7 +178,5 @@ def renderListItem( item, level ):
 		Storage.s.append( ( level, item, item.parentChannels() ) );
 	else:
 		Storage.s.append( ( level, item ) );
-
-
 
 

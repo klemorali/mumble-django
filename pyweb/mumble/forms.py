@@ -14,7 +14,8 @@
  *  GNU General Public License for more details.
 """
 
-from django.forms	import ModelForm
+from django			import forms
+from django.forms	import Form, ModelForm
 from models		import *
 
 class MumbleForm( ModelForm ):
@@ -27,4 +28,9 @@ class MumbleUserForm( ModelForm ):
 	class Meta:
 		model   = MumbleUser;
 		fields  = ( 'name', 'password' );
+
+
+class MumbleTextureForm( Form ):
+	texturefile = forms.ImageField();
+
 
