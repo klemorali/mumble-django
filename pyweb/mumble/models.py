@@ -14,9 +14,9 @@
  *  GNU General Public License for more details.
 """
 
-from PIL import Image
-from struct import pack
-from zlib import compress
+from PIL    import Image
+from struct import pack, unpack
+from zlib   import compress, decompress
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -222,6 +222,28 @@ class MumbleUser( models.Model ):
 		
 		bus.setACL( *acl.pack() );
 		return value;
+	
+	def getTexture( self ):
+		murmur = self.server.getDbusObject();
+		texture = murmur.getTexture( dbus.Int32( self.mumbleid ) );
+		if len(texture) == 0:
+			raise ValueError( "No Texture has been set." );
+		# this returns a list of bytes.
+		# first 4 bytes: Length of uncompressed string, rest: compressed data
+		orig_len = ( texture[0] << 24 ) | ( texture[1] << 16 ) | ( texture[2] << 8 ) | ( texture[3] );
+		# convert rest to string and run decompress
+		bytestr = "";
+		for byte in texture[4:]:
+			bytestr += pack( "B", int(byte) );
+		decompressed = decompress( bytestr );
+		# iterate over 4 byte chunks of the string
+		imgdata = "";
+		for idx in range( 0, orig_len, 4 ):
+			# read 4 bytes = BGRA and convert to RGBA
+			bgra = unpack( "4B", decompressed[idx:idx+4] );
+			imgdata += pack( "4B",  bgra[2], bgra[1], bgra[0], bgra[3] );
+		# return an 600x60 RGBA image object created from the data
+		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata );
 	
 	def setTexture( self, infile ):
 		# open image, convert to RGBA, and resize to 600x60

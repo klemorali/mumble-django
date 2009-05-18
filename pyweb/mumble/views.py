@@ -14,9 +14,11 @@
  *  GNU General Public License for more details.
 """
 
+from StringIO				import StringIO
+
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
 from django.template			import RequestContext
-from django.http			import HttpResponseRedirect
+from django.http			import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 
@@ -123,6 +125,20 @@ def show( request, server ):
 		context_instance = RequestContext(request)
 		);
 
+
+def showTexture( request, server ):
+	if request.user.is_authenticated():
+		srv  = Mumble.objects.get( id=int(server) );
+		user = MumbleUser.objects.get( server=srv, owner=request.user );
+		try:
+			img  = user.getTexture();
+		except ValueError:
+			raise Http404();
+		else:
+			buffer = StringIO();
+			img.save( buffer, "JPEG" );
+			return HttpResponse( buffer.getvalue(), "image/jpeg" );
+	raise Http404();
 
 def showContent( server, user = None ):
 	"Renders and returns the channel list for the given Server ID."
