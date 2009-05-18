@@ -58,53 +58,53 @@ class Mumble( models.Model ):
 
 		# check if this server already exists, if not call newServer and set my srvid first
 
-		murmur = MumbleCtlBase.newInstance();
+		ctl = MumbleCtlBase.newInstance();
 		if self.id is None:
-			self.srvid = murmur.newServer();
+			self.srvid = ctl.newServer();
 
-		murmur.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
-		murmur.setConf( self.srvid,     'registername',        self.name );
-		murmur.setConf( self.srvid,     'registerurl',         self.url );
-		murmur.setConf( self.srvid,     'welcometext',         self.motd );
-		murmur.setConf( self.srvid,     'password',            self.passwd );
-		murmur.setConf( self.srvid,     'certificate',         self.sslcrt );
-		murmur.setConf( self.srvid,     'key',                 self.sslkey );
-		murmur.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
-		murmur.setConf( self.srvid,     'playername',          self.player );
-		murmur.setConf( self.srvid,     'channelname',         self.channel );
-		murmur.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
+		ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
+		ctl.setConf( self.srvid,     'registername',        self.name );
+		ctl.setConf( self.srvid,     'registerurl',         self.url );
+		ctl.setConf( self.srvid,     'welcometext',         self.motd );
+		ctl.setConf( self.srvid,     'password',            self.passwd );
+		ctl.setConf( self.srvid,     'certificate',         self.sslcrt );
+		ctl.setConf( self.srvid,     'key',                 self.sslkey );
+		ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
+		ctl.setConf( self.srvid,     'playername',          self.player );
+		ctl.setConf( self.srvid,     'channelname',         self.channel );
+		ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
 		
 		
 		if self.port is not None:
-			murmur.setConf( self.srvid, 'port',                str(self.port) );
+			ctl.setConf( self.srvid, 'port',                str(self.port) );
 		else:
-			murmur.setConf( self.srvid, 'port',                '' );
+			ctl.setConf( self.srvid, 'port',                '' );
 		
 		if self.users is not None:
-			murmur.setConf( self.srvid, 'users',               str(self.users) );
+			ctl.setConf( self.srvid, 'users',               str(self.users) );
 		else:
-			murmur.setConf( self.srvid, 'users',               '' );
+			ctl.setConf( self.srvid, 'users',               '' );
 		
 		if self.bwidth is not None:
-			murmur.setConf( self.srvid, 'bandwidth',           str(self.bwidth) );
+			ctl.setConf( self.srvid, 'bandwidth',           str(self.bwidth) );
 		else:
-			murmur.setConf( self.srvid, 'bandwidth',           '' );
+			ctl.setConf( self.srvid, 'bandwidth',           '' );
 		
 		# registerHostname needs to take the port no into account
 		if self.port and self.port != 64738:
-			murmur.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
+			ctl.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
 		else:
-			murmur.setConf( self.srvid, 'registerhostname',    self.addr );
-		
+			ctl.setConf( self.srvid, 'registerhostname',    self.addr );
+
 		if self.supw:
-			murmur.setSuperUserPassword( self.srvid, self.supw );
+			ctl.setSuperUserPassword( self.srvid, self.supw );
 			self.supw = '';
 		
-		if self.booted != murmur.isBooted( self.srvid ):
+		if self.booted != ctl.isBooted( self.srvid ):
 			if self.booted:
-				murmur.start( self.srvid );
+				ctl.start( self.srvid );
 			else:
-				murmur.stop( self.srvid );
+				ctl.stop( self.srvid );
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
@@ -116,7 +116,12 @@ class Mumble( models.Model ):
 			except MumbleUser.DoesNotExist:
 				return False;
 		return False;
-	
+
+	def deleteServer( self ):
+		# Unregister this player in Murmur via ctroller.
+		print MumbleCtlBase.newInstance()
+		MumbleCtlBase.newInstance().deleteServer(self.srvid)
+
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].deleteServer();
@@ -152,10 +157,11 @@ class MumbleUser( models.Model ):
 				email = settings.DEFAULT_FROM_EMAIL;
 			
 			ctl.setRegistration(
-				dbus.Int32(  self.mumbleid  ),
-				dbus.String( self.name      ),
-				dbus.String( email          ),
-				dbus.String( self.password  )
+				self.server.srvid,
+				self.mumbleid,
+				self.name,
+				email,
+				self.password
 				);
 			
 			# Don't save the users' passwords, we don't need them anyway
@@ -177,19 +183,19 @@ class MumbleUser( models.Model ):
 	
 	def setAdmin( self, value ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
-		bus = self.server.getDbusObject();
-		acl = mmACL( 0, bus.getACL(0) );
+		ctl = MumbleCtlBase.newInstance();
+		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
 			raise ValueError( "The admin group was not found in the ACL's groups list!" );
 		
 		if value != ( self.mumbleid in acl.admingroup['add'] ):
 			if value:
-				acl.admingroup['add'].append( dbus.Int32(self.mumbleid) );
+				acl.admingroup['add'].append( self.mumbleid );
 			else:
 				acl.admingroup['add'].remove( self.mumbleid );
 		
-		bus.setACL( *acl.pack() );
+		ctl.setACL(self.server.srvid, acl);
 		return value;
 	
 	
@@ -198,9 +204,8 @@ class MumbleUser( models.Model ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
-		# Unregister this player in Murmur via dbus.
-		murmur = self.server.getDbusObject();
-		murmur.unregisterPlayer( dbus.Int32( self.mumbleid ) );
+		# Unregister this player in Murmur via ctroller.
+		MumbleCtlBase.newInstance().unregisterPlayer(self.server.srvid, self.mumbleid)
 
 
 
