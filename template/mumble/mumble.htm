@@ -122,11 +122,11 @@
 				activeTab: {{ DisplayTab }},
 				items: [
 					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
-					{% if Registered %}
-						{ contentEl: 'mumble_texture', title: 'User Texture', autoScroll: true },
-					{% endif %}
 					{% if CurrentUserIsAdmin %}
 						{ contentEl: 'mumble_admin', title: 'Administration', autoScroll: true },
+					{% endif %}
+					{% if Registered %}
+						{ contentEl: 'mumble_texture', title: 'User Texture', autoScroll: true },
 					{% endif %}
 					]
 				},
