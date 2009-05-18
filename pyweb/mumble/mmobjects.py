@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-import dbus
+import mctl
 
 import datetime
 from time import time
@@ -30,8 +30,8 @@ class mmServer( object ):
 	# id          = int();
 	# rootName    = str();
 	
-	def __init__( self, serverID, serverObj, rootName = '' ):
-		self.dbusObj  = serverObj;
+	def __init__( self, serverID, ctl, rootName = '' ):
+		#self.dbusObj  = serverObj;
 		self.channels = dict();
 		self.players  = dict();
 		self.id       = serverID;
@@ -39,7 +39,7 @@ class mmServer( object ):
 		
 		links         = dict();
 		
-		for theChan in serverObj.getChannels():
+		for theChan in ctl.getChannels(serverID):
 			# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
 			
 			if( theChan[2] == -1 ):
@@ -68,7 +68,8 @@ class mmServer( object ):
 		if self.rootName:
 			self.channels[0].name = self.rootName;
 		
-		for thePlayer in serverObj.getPlayers():
+		for thePlayer in ctl.getPlayers(serverID):
+			# in DBus
 			# Players - Fields: 0 = UserID, 6 = ChannelID
 			self.players[ thePlayer[0] ] = mmPlayer( thePlayer, self.channels[ thePlayer[6] ] );
 			
