@@ -86,7 +86,7 @@ def find_existing_instances( **kwargs ):
 		except models.Mumble.DoesNotExist:
 			conf   = murmur.getAllConf( dbus.Int32( id ) );
 			
-			servername = find_in_dicts( "registerName",                conf, default, "noname" );
+			servername = find_in_dicts( "registername",                conf, default, "noname" );
 			if not servername:
 				# RegistrationName was found in the dicts, but is an empty string
 				servername = "noname";
