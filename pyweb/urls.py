@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+
+"""
+ *  Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+ *
+ *  Mumble-Django is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This package is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+"""
+
+from django.conf.urls.defaults import *
+
+# Uncomment the next two lines to enable the admin:
+from django.contrib import admin
+admin.autodiscover()
+
+from django.conf import settings
+
+urlpatterns = patterns('',
+	(r'^/?$',               'django.views.generic.simple.redirect_to', { 'url': '/mumble/' } ),
+
+	# Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
+	# to INSTALLED_APPS to enable admin documentation:
+	# (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+	(r'^accounts/profile/', 'views.profile' ),
+	(r'^accounts/imprint/', 'views.imprint' ),
+	(r'^accounts/',         include('registration.urls')),
+
+	(r'^mumble/',           include('mumble.urls')),
+
+	# Uncomment the next line to enable the admin:
+	(r'^admin/(.*)', admin.site.root),
+)
+
+# Development stuff
+if settings.DEBUG:
+	urlpatterns += patterns('',
+		(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
+	)
+

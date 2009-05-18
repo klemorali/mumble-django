@@ -1,0 +1,101 @@
+Author:
+
+    Michael Ziegler <diese-addy@funzt-halt.net>
+
+Copyright:
+
+    <Copyright © 2009 Michael Ziegler>
+
+License:
+
+    This package is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This package is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this package; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+
+===============================================================================
+
+
+The directory "htdocs/ext-2.2" provides the ExtJS JavaScript library.
+
+Ext JS - JavaScript Library
+Copyright © 2006-2008, Ext JS, LLC
+All rights reserved.
+licensing@extjs.com
+
+http://extjs.com/license
+
+Open Source License
+-------------------------------------------------------------------
+Ext is licensed under the terms of the Open Source GPL 3.0 license.
+
+http://www.gnu.org/licenses/gpl.html
+
+There are several FLOSS exceptions available for use with this
+release for open source applications that are distributed under a
+license other than the GPL.
+
+* Open Source License Exception for Applications
+
+  http://extjs.com/products/floss-exception.php
+
+* Open Source License Exception for Development
+
+  http://extjs.com/products/ux-exception.php
+
+
+Commercial License
+-------------------------------------------------------------------
+This is the appropriate option if you are creating proprietary
+applications and you are not prepared to distribute and share the
+source code of your application under the GPL v3 license. Please
+visit http://extjs.com/license for more details.
+
+
+OEM / Reseller License
+-------------------------------------------------------------------
+For more details, please visit: http://extjs.com/license.
+
+--
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+
+===============================================================================
+
+The directory "htdocs/yaml" provides the base files needed for YAML, yet
+another multicolumn layout, on which the layout of Mumble-Django is based.
+
+It was downloaded from:
+    http://www.yaml.de
+
+Upstream Author:
+    Dirk Jesse
+
+Copyright:
+    <Copyright 2005-2009, Dirk Jesse>
+
+License:
+    YAML has been licensed under a Creative Commons Attribution 2.0 License
+    (CC-A 2.0) since version 2.2.
+    The YAML framework is published under the Creative Commons Attribution
+    2.0 License, which permits both private and commercial use.
+
+    Condition: For the free use of the YAML framework, a backlink to the YAML
+    homepage (http://www.yaml.de) in a suitable place (e.g.: footer of the
+    website or in the imprint) is required.
+
