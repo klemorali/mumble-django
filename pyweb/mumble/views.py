@@ -136,8 +136,8 @@ def showTexture( request, server ):
 			raise Http404();
 		else:
 			buffer = StringIO();
-			img.save( buffer, "JPEG" );
-			return HttpResponse( buffer.getvalue(), "image/jpeg" );
+			img.save( buffer, "PNG" );
+			return HttpResponse( buffer.getvalue(), "image/png" );
 	raise Http404();
 
 def showContent( server, user = None ):
