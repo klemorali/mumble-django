@@ -271,8 +271,13 @@ class MumbleUser( models.Model ):
 		# Unregister this player in Murmur via dbus.
 		murmur = self.server.getDbusObject();
 		murmur.unregisterPlayer( dbus.Int32( self.mumbleid ) );
-
-
+	
+	def __setattr__( self, name, value ):
+		if name == 'server':
+			if self.id is not None and self.server != value:
+				raise AttributeError( "This field must not be updated once the Record has been saved." );
+		
+		models.Model.__setattr__( self, name, value );
 
 
 from django.db.models import signals
