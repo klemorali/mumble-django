@@ -34,10 +34,15 @@ class Storage( object ):
 
 
 def mumbles( request ):
-	"Displays a list of all configured Mumble servers."
+	"Displays a list of all configured Mumble servers, or redirects if only one configured."
+	mumbles = get_list_or_404( Mumble );
+	
+	if len(mumbles) == 1:
+		return HttpResponseRedirect( '/mumble/%d' % mumbles[0].id );
+	
 	return render_to_response(
 		'mumble/list.htm',
-		{ 'MumbleObjects': get_list_or_404( Mumble ),
+		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
 		},
 		context_instance = RequestContext(request)
