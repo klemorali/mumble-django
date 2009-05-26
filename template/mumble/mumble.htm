@@ -97,7 +97,7 @@
     {% else %}
     <div id="mumble_{{ item.1.id }}" class="x-hide-display">
       <h2>Channel {{ item.1.name }}</h2>
-      <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
+      <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
     </div>
     {% endif %}
   {% endfor %}
