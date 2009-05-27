@@ -56,6 +56,11 @@ if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+DAOTYPE='dbus'
+ICE_SLICE='/usr/share/slice/Murmur.ice'
+ICE_PROXY='Meta:tcp -h 127.0.0.1 -p 6502'
+
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
