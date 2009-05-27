@@ -16,36 +16,29 @@
 
 
 import models
-import dbus
 from django.db.models import signals
+
+from mctl import *
 
 def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	if not isinstance( keys, tuple ):
 		keys = ( keys, );
-	
+
 	for keyword in keys:
 		if keyword in conf:
-			if isinstance( conf[keyword], dbus.String ):
-				return unicode(conf[keyword]);
-			elif isinstance( conf[keyword], dbus.Int32 ):
-				return int(conf[keyword]);
 			return conf[keyword];
-	
+
 	for keyword in keys:
 		keyword = keyword.lower();
 		if keyword in default:
-			if isinstance( default[keyword], dbus.String ):
-				return unicode(default[keyword]);
-			elif isinstance( default[keyword], dbus.Int32 ):
-				return int(default[keyword]);
 			return default[keyword];
-	
+
 	return valueIfNotFound;
 
 
 def find_existing_instances( **kwargs ):
-	bus = dbus.SystemBus();
-	
+	ctl = MumbleCtlBase.newInstance();
+
 	if "verbosity" in kwargs:
 		v = kwargs['verbosity'];
 	else:
@@ -54,7 +47,7 @@ def find_existing_instances( **kwargs ):
 	if v > 1:
 		print "Starting Mumble servers and players detection now.";
 	
-	dbusName = 'net.sourceforge.mumble.murmur';
+	'''
 	online = False;
 	while not online:
 		try:
@@ -71,11 +64,11 @@ def find_existing_instances( **kwargs ):
 			online = True;
 			if v > 1:
 				print "Successfully connected to Murmur via DBus (%s)." % dbusName;
+	'''
+	default = ctl.getDefaultConf();
 	
-	default = murmur.getDefaultConf();
-	
-	servIDs   = murmur.getAllServers();
-	bootedIDs = murmur.getBootedServers();
+	servIDs   = ctl.getAllServers();
+	bootedIDs = ctl.getBootedServers();
 	
 	for id in servIDs:
 		if v > 1:
@@ -84,7 +77,7 @@ def find_existing_instances( **kwargs ):
 		try:
 			instance = models.Mumble.objects.get( srvid=id );
 		except models.Mumble.DoesNotExist:
-			conf   = murmur.getAllConf( dbus.Int32( id ) );
+			conf   = ctl.getAllConf(id);
 			
 			servername = find_in_dicts( "registername",                conf, default, "noname" );
 			if not servername:
@@ -94,7 +87,7 @@ def find_existing_instances( **kwargs ):
 			values = {
 				"name":    servername,
 				"srvid":   id,
-				"dbus":    dbusName,
+				"dbus":    'net.sourceforge.mumble.murmur',
 				"addr":    find_in_dicts( ( "registerhostame", "host" ), conf, default, "0.0.0.0" ),
 				"port":    find_in_dicts( "port",                        conf, default ),
 				"url":     find_in_dicts( "registerurl",                 conf, default ),
@@ -127,12 +120,7 @@ def find_existing_instances( **kwargs ):
 		if v > 1:
 			print "Looking for registered Players on Server id %d." % id;
 		if id in bootedIDs:
-			murmurinstance = dbus.Interface(
-				bus.get_object( 'net.sourceforge.mumble.murmur', '/%d'%id ),
-				'net.sourceforge.mumble.Murmur'
-				);
-			
-			players = murmurinstance.getRegisteredPlayers('');
+			players = ctl.getRegisteredPlayers(id);
 			
 			for playerdata in players:
 				if playerdata[0] == 0:
