@@ -77,32 +77,6 @@ General Public License for more details.
 ===============================================================================
 
 
-The directory "htdocs/yaml" provides the base files needed for YAML, yet
-another multicolumn layout, on which the layout of Mumble-Django is based.
-
-It was downloaded from:
-    http://www.yaml.de
-
-Upstream Author:
-    Dirk Jesse
-
-Copyright:
-    <Copyright © 2005-2009, Dirk Jesse>
-
-License:
-    YAML has been licensed under a Creative Commons Attribution 2.0 License
-    (CC-A 2.0) since version 2.2.
-    The YAML framework is published under the Creative Commons Attribution
-    2.0 License, which permits both private and commercial use.
-
-    Condition: For the free use of the YAML framework, a backlink to the YAML
-    homepage (http://www.yaml.de) in a suitable place (e.g.: footer of the
-    website or in the imprint) is required.
-
-
-===============================================================================
-
-
 The images in the directory "htdocs/mumble" are displayed in the Channel
 viewer. They were included in Mumble's source package, which can be obtained
 from http://mumble.sf.net.

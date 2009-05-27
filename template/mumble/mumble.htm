@@ -17,6 +17,7 @@
       that are displayed.
     </p>
   </noscript>
+    <div id="mumble_ext_container"></div>
     <div id="mumble_registration">
   {% if user.is_authenticated %}
       <h2>Server registration</h2>
@@ -115,10 +116,10 @@
 		{% endif %}
 		
 		var cardpanel = new Ext.Panel({
-			renderTo:   'col3_content',
+			renderTo:   'mumble_ext_container',
 			layout:     'card',
 			id:         'mumble_container',
-			height:     510,
+			height:     550,
 			activeItem: 0,
 			border:     false,
 			items:      [ {
