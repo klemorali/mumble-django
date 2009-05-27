@@ -2,15 +2,16 @@
 Mumble-Django changelog
 =======================
 
-Version 0.7, 19 May 2009:
+Version 0.7, 27 May 2009:
 ------------------------------
 * Added copyright information about the Icons in the channel viewer to
   COPYRIGHT.
 * Fixed bug that prevented various settings from being applied to Murmur.
 * Fixed Python 2.4 incompatibility.
 * Various minor bug fixes.
-* Added setting users' textures
-* Added Mumble icon as favicon
+* Added setting users' textures.
+* Added Mumble icon as favicon.
+* Replaced YAML by a self-written template due to license problems.
 
 Version 0.6, 02. May 2009:
 ------------------------------
