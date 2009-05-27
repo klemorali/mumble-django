@@ -1,94 +1,68 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <title>Mumble Administration</title>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" type="text/css" href="/static/ext-2.2/resources/css/ext-all.css" />
-  <link rel="shortcut icon" href="/static/mumble/mumble.16x16.png" type="image/png" />
-  <link href="/static/css/my_layout.css" rel="stylesheet" type="text/css" />
-  <link href="/static/mumble/style.css"  rel="stylesheet" type="text/css" />
-  
-  <script type="text/javascript" src="/static/ext-2.2/adapter/ext/ext-base.js"></script>
-  <script type="text/javascript" src="/static/ext-2.2/ext-all.js"></script>
+<html>
+  <head>
+    <title>Mumble Administration</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-  <!--[if lte IE 7]>
-    <link href="/static/css/patches/patch_my_layout.css" rel="stylesheet" type="text/css" />
-  <![endif]-->
-  {% block HeadTag %}
-  {% endblock %}
-</head>
-<body>
-  <div class="page_margins">
-    <div id="border-top">
-      <div id="edge-tl"></div>
-      <div id="edge-tr"></div>
-    </div>
-    <div class="page">
-      <div id="header">
-        <div id="topnav">
-          <!-- start: skip link navigation -->
-          <a class="skip" title="skip link" href="#navigation">Skip to the navigation</a><span class="hideme">.</span>
-          <a class="skip" title="skip link" href="#content">Skip to the content</a><span class="hideme">.</span>
-          <!-- end: skip link navigation -->
+    <link rel="stylesheet"    type="text/css"  href="/static/ext-2.2/resources/css/ext-all.css" />
+    <link rel="stylesheet"    type="text/css"  href="/static/style.css" />
+    <link rel="stylesheet"    type="text/css"  href="/static/templatestyle.css" />
+    <link rel="stylesheet"    type="text/css"  href="/static/mumble/style.css"  />
+    <link rel="shortcut icon" type="image/png" href="/static/mumble/mumble.16x16.png" />
+
+    <script type="text/javascript" src="/static/ext-2.2/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="/static/ext-2.2/ext-all.js"></script>
+
+    {% block HeadTag %}
+    {% endblock %}
+  </head>
+  <body bgcolor="#3B69AD">
+    <div id="content">
+      <!-- header -->
+      <div id="headpanel">
+        <div id="headlinks">
           {% if user.is_authenticated %}
-            <a href="/accounts/logout">Logout</a> | 
+            <a href="/accounts/logout">Logout</a> |
           {% else %}
-            <a href="/accounts/login">Login</a> | 
+            <a href="/accounts/login">Login</a> |
           {% endif %}
-          <a href="/admin" target="_blank">Admin</a> | 
+          <a href="/admin" target="_blank">Admin</a> |
           <a href="/accounts/imprint">Imprint</a>
         </div>
         <h2>{% block Headline %}{% endblock %}</h2>
       </div>
-      <div id="nav">
-        <!-- skiplink anchor: navigation -->
-        <a id="navigation" name="navigation"></a>
-        <div class="hlist">
-          <!-- main navigation: horizontal list -->
-          <ul>
-            <li><a href="/">Home</a></li>
-            {% if MumbleActive %}
-              <li class="active"><strong>Mumble</strong></li>
-            {% else %}
-              <li><a href="/mumble">Mumble</a></li>
-            {% endif %}
-            {% if ProfileActive %}
-              <li class="active"><strong>Profile</strong></li>
-            {% else %}
-              <li><a href="/accounts/profile">Profile</a></li>
-            {% endif %}
-          </ul>
+      <!-- navi -->
+      <div id="navipanel">
+        <ul id="navilinks">
+          <li><a href="/">Home</a></li>
+          {% if MumbleActive %}
+            <li><b>Mumble</b></li>
+          {% else %}
+            <li><a href="/mumble">Mumble</a></li>
+          {% endif %}
+          {% if ProfileActive %}
+            <li><b>Profile</b></li>
+          {% else %}
+            <li><a href="/accounts/profile">Profile</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <!-- content -->
+      <div id="contentpanel">
+        <div id="contentleft">
+          {% block LeftColumn %}
+          {% endblock %}
+        </div>
+        <div id="contentright">
+          {% block Content %}
+          {% endblock %}
         </div>
       </div>
-      <div id="main">
-        <div id="col1">
-          <div id="col1_content" class="clearfix">
-            <!-- add your content here -->
-            {% block LeftColumn %}
-            {% endblock %}
-          </div>
-        </div>
-        <div id="col3">
-          <div id="col3_content" class="clearfix">
-            <!-- add your content here -->
-            {% block Content %}
-            {% endblock %}
-          </div>
-          <!-- IE Column Clearing -->
-          <div id="ie_clearing"> &#160; </div>
-        </div>
-      </div>
-      <!-- begin: #footer -->
-      <div id="footer">
+      <!-- footer -->
+      <div id="footerpanel">
         You are using <a href="http://bitbucket.org/Svedrin/mumble-django" target="_blank">Mumble-Django</a> --
-        layout based on <a href="http://www.yaml.de/" target="_blank">YAML</a> --
         interface built using <a href="http://extjs.com/" target="_blank">ExtJS</a>
       </div>
     </div>
-    <div id="border-bottom">
-      <div id="edge-bl"></div>
-      <div id="edge-br"></div>
-    </div>
-  </div>
-</body>
+  </body>
 </html>
+
