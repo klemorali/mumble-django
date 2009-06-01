@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # mumble-django contributed by withgod@sourceforge.net
 
-import dbus
 
 #zope.interface is good but don't standard interface library
 #abc is better but 2.6 higher.
@@ -84,6 +83,96 @@ class MumbleCtlBase ():
 		#	ret = MumbleCtlIce()
 		return ret
 
+import Ice
+class MumbleCtlIce(MumbleCtlBase):
+	proxy = 'Meta:tcp -h 127.0.0.1 -p 6502'
+	slice = '/usr/share/slice/Murmur.ice'
+	meta = None
+
+	def __init__(self):
+		self.meta = self._getIceMeta()
+
+	def _getIceMeta(self):
+		Ice.loadSlice(self.slice)
+		ice = Ice.initialize()
+		import Murmur
+		prx = ice.stringToProxy(self.proxy)
+		return Murmur.MetaPrx.checkedCast(prx)
+
+	def _getIceServerObject(self, srvid):
+		if srvid not in self.getBootedServers():
+			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( srvid, self.meta );
+		return self.meta.getServer(srvid);
+
+	def getBootedServers(self):
+		return range(1, len(self.meta.getBootedServers())+1)
+
+	def getAllServers(self):
+		return range(1, len(self.meta.getAllServers())+1)
+
+	def getRegisteredPlayers(self, srvid):
+		users = self._getIceServerObject(srvid).getRegisteredPlayers('')
+		ret = []
+
+		for user in users:
+			ret.append([user.playerid, unicode(user.name), unicode(user.email), unicode(user.pw)])
+
+		return ret
+
+	def getChannels(self, srvid):
+		chans = self._getIceServerObject(srvid).getChannels()
+		ret = []
+
+		for x in chans:
+			chan = chans[x]
+			ret.append([chan.id, unicode(chan.name), chan.parent, chan.links])
+
+		return ret
+
+	def getPlayers(self, srvid):
+		users = self._getIceServerObject(srvid).getPlayers()
+		ret = []
+
+		for x in users:
+			user = users[x]
+			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, unicode(user.name), user.onlinesecs, user.bytespersec])
+
+		return ret
+
+	def getACL(self, srvid, identifier):
+		import Murmur
+		acls = self._getIceServerObject(srvid).getACL(identifier)
+		ret = []
+
+		for x in acls:
+			if isinstance(x, list):
+				tmp = []
+				for y in x:
+					if y.__class__ is Murmur.ACL:
+						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, unicode(y.group), y.allow, y.deny])
+					elif y.__class__ is Murmur.Group:
+						tmp.append([unicode(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
+
+				ret.append(tmp)
+			else:
+				ret.append(x)
+
+		return ret
+
+	def getDefaultConf(self):
+		return MumbleCtlIce.setUnicodeFlag(self.meta.getDefaultConf())
+
+	def getAllConf(self, srvid):
+		return MumbleCtlIce.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+
+	@staticmethod
+	def setUnicodeFlag(data):
+		ret = {}
+		for key in data.keys():
+			ret[unicode(key)] = unicode(data[key])
+		return ret
+
+import dbus
 class MumbleCtlDbus(MumbleCtlBase):
 	meta   = None
 	dbus_base='net.sourceforge.mumble.murmur'
@@ -179,24 +268,52 @@ class MumbleCtlDbus(MumbleCtlBase):
 		return ret
 
 if __name__ == "__main__":
-	print "--- test start"
+	print "--- Dbus test start"
 	#ctl = MumbleCtlBase.newInstance()
-	ctl = MumbleCtlDbus()
-	print ctl
-	print ctl.meta
-	print "booted server", ctl.getBootedServers()
+	dbusCtl = MumbleCtlDbus()
+	print dbusCtl
+	print dbusCtl.meta
+	print "booted server", dbusCtl.getBootedServers()
 	print "chans"
-	print ctl.getChannels(1)
+	print dbusCtl.getChannels(1)
 	print "users"
-	print ctl.getPlayers(1)
-	print "getACL", ctl.getACL(1, 0)
-	print ctl.getACL(1, 0)[0].__class__ is dbus.Array
+	print dbusCtl.getPlayers(1)
+	print "getACL", dbusCtl.getACL(1, 0)
+	print dbusCtl.getACL(1, 0)[0].__class__ is dbus.Array
 	print "getAllServers()"
-	print ctl.getAllServers()
+	print dbusCtl.getAllServers()
 	print "getDefaultConf()"
-	print ctl.getDefaultConf()
+	print dbusCtl.getDefaultConf()
 	print "getAllConf(1)"
-	print ctl.getAllConf(1)
-	
-	print "--- test end"
+	print dbusCtl.getAllConf(1)
+	print "--Dbus end--"
+	print "--- Ice test start"
+	iceCtl = MumbleCtlIce()
+	print iceCtl
+	print iceCtl.meta
+	print "booted server", iceCtl.getBootedServers()
+	print "chans"
+	print iceCtl.getChannels(1)
+	print "users"
+	print iceCtl.getPlayers(1)
+	print "getACL", iceCtl.getACL(1, 0)
+	print iceCtl.getACL(1, 0)[0].__class__ is dbus.Array
+	print "getAllServers()"
+	print iceCtl.getAllServers()
+	print "getDefaultConf()"
+	print iceCtl.getDefaultConf()
+	print "getAllConf(1)"
+	print iceCtl.getAllConf(1)
+	print "--- Ice test end"
+
+	print "equal test ---"
+	print "getBootedServers			[%s]" % (dbusCtl.getBootedServers() == iceCtl.getBootedServers())
+	print "getChannels				[%s]" % (dbusCtl.getChannels(1) == iceCtl.getChannels(1))
+	print "getPlayers				[%s]" % (dbusCtl.getPlayers(1) == iceCtl.getPlayers(1))
+	print "getACL(1, 0)				[%s]" % (dbusCtl.getACL(1, 0) == iceCtl.getACL(1, 0))
+	print "getAllServers			[%s]" % (dbusCtl.getAllServers() == iceCtl.getAllServers())
+	print "getDefaultConf			[%s]" % (dbusCtl.getDefaultConf() == iceCtl.getDefaultConf())
+	print "getAllConf(1)			[%s]" % (dbusCtl.getAllConf(1) == iceCtl.getAllConf(1))
+	print "getRegisteredPlayers(1)	[%s]" % (dbusCtl.getRegisteredPlayers(1) == iceCtl.getRegisteredPlayers(1))
+
 
