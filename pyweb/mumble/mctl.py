@@ -78,7 +78,8 @@ class MumbleCtlBase ():
 	def newInstance():
 		# if dbus
 		#if settings.DAOTYPE == 'dbus':
-		ret = MumbleCtlDbus()
+		#ret = MumbleCtlDbus()
+		ret = MumbleCtlIce()
 		#else:
 		#	ret = MumbleCtlIce()
 		return ret
@@ -100,15 +101,19 @@ class MumbleCtlIce(MumbleCtlBase):
 		return Murmur.MetaPrx.checkedCast(prx)
 
 	def _getIceServerObject(self, srvid):
-		if srvid not in self.getBootedServers():
-			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( srvid, self.meta );
 		return self.meta.getServer(srvid);
 
 	def getBootedServers(self):
-		return range(1, len(self.meta.getBootedServers())+1)
+		ret = []
+		for x in self.meta.getBootedServers():
+			ret.append(x.id())
+		return ret
 
 	def getAllServers(self):
-		return range(1, len(self.meta.getAllServers())+1)
+		ret = []
+		for x in self.meta.getAllServers():
+			ret.append(x.id())
+		return ret
 
 	def getRegisteredPlayers(self, srvid):
 		users = self._getIceServerObject(srvid).getRegisteredPlayers('')
@@ -164,6 +169,43 @@ class MumbleCtlIce(MumbleCtlBase):
 
 	def getAllConf(self, srvid):
 		return MumbleCtlIce.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+
+	def newServer(self):
+		return self.meta.newServer().id()
+
+	def deleteServer( self, srvid ):
+		if self._getIceServerObject(srvid).isRunning():
+			self._getIceServerObject(srvid).stop()
+		self._getIceServerObject(srvid).delete()
+
+	def setSuperUserPassword(self, srvid, value):
+		self.meta.setSuperUserPassword(srvid, value)
+
+	def setConf(self, srvid, key, value):
+		#print "%s server %s/%s" % (srvid, key, value)
+		self._getIceServerObject(srvid).setConf(key, value)
+
+	def registerPlayer(self, srvid, name):
+		return self._getIceServerObject(srvid).registerPlayer(name)
+
+	def unregisterPlayer(self, srvid, mumbleid):
+		self._getIceServerObject(srvid).unregisterPlayer(mumbleid)
+
+	def setRegistration(self, srvid, mumbleid, name, email, password):
+		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
+		user.name  = name
+		user.email = email
+		user.pw    = password
+		#print user
+		# update*r*egistration r is lowercase...
+		return self._getIceServerObject(srvid).updateregistration(user)
+
+	def setACL(self, srvid, acl):
+		print "xxxx"
+		print srvid
+		print acl
+		print "xxxx"
+		#self._getIceServerObject(srvid).setACL(*acl.pack())
 
 	@staticmethod
 	def setUnicodeFlag(data):
@@ -268,52 +310,55 @@ class MumbleCtlDbus(MumbleCtlBase):
 		return ret
 
 if __name__ == "__main__":
+	import sys
+	x = int(sys.argv[1])
+	dbusCtl = MumbleCtlDbus()
+	iceCtl = MumbleCtlIce()
+	'''
 	print "--- Dbus test start"
 	#ctl = MumbleCtlBase.newInstance()
-	dbusCtl = MumbleCtlDbus()
 	print dbusCtl
 	print dbusCtl.meta
 	print "booted server", dbusCtl.getBootedServers()
 	print "chans"
-	print dbusCtl.getChannels(1)
+	print dbusCtl.getChannels(x)
 	print "users"
-	print dbusCtl.getPlayers(1)
-	print "getACL", dbusCtl.getACL(1, 0)
-	print dbusCtl.getACL(1, 0)[0].__class__ is dbus.Array
+	print dbusCtl.getPlayers(x)
+	print "getACL", dbusCtl.getACL(x, 0)
 	print "getAllServers()"
 	print dbusCtl.getAllServers()
 	print "getDefaultConf()"
 	print dbusCtl.getDefaultConf()
-	print "getAllConf(1)"
-	print dbusCtl.getAllConf(1)
+	print "getAllConf(x)"
+	print dbusCtl.getAllConf(x)
 	print "--Dbus end--"
 	print "--- Ice test start"
-	iceCtl = MumbleCtlIce()
 	print iceCtl
 	print iceCtl.meta
 	print "booted server", iceCtl.getBootedServers()
 	print "chans"
-	print iceCtl.getChannels(1)
+	print iceCtl.getChannels(x)
 	print "users"
-	print iceCtl.getPlayers(1)
-	print "getACL", iceCtl.getACL(1, 0)
-	print iceCtl.getACL(1, 0)[0].__class__ is dbus.Array
+	print iceCtl.getPlayers(x)
+	print "getACL", iceCtl.getACL(x, 0)
 	print "getAllServers()"
 	print iceCtl.getAllServers()
 	print "getDefaultConf()"
 	print iceCtl.getDefaultConf()
-	print "getAllConf(1)"
-	print iceCtl.getAllConf(1)
+	print "getAllConf(x)"
+	print iceCtl.getAllConf(x)
 	print "--- Ice test end"
+	'''
 
 	print "equal test ---"
 	print "getBootedServers			[%s]" % (dbusCtl.getBootedServers() == iceCtl.getBootedServers())
-	print "getChannels				[%s]" % (dbusCtl.getChannels(1) == iceCtl.getChannels(1))
-	print "getPlayers				[%s]" % (dbusCtl.getPlayers(1) == iceCtl.getPlayers(1))
-	print "getACL(1, 0)				[%s]" % (dbusCtl.getACL(1, 0) == iceCtl.getACL(1, 0))
+	print "getChannels				[%s]" % (dbusCtl.getChannels(x) == iceCtl.getChannels(x))
+	print "getPlayers				[%s]" % (dbusCtl.getPlayers(x) == iceCtl.getPlayers(x))
+	print "getACL(x, 0)				[%s]" % (dbusCtl.getACL(x, 0) == iceCtl.getACL(x, 0))
 	print "getAllServers			[%s]" % (dbusCtl.getAllServers() == iceCtl.getAllServers())
 	print "getDefaultConf			[%s]" % (dbusCtl.getDefaultConf() == iceCtl.getDefaultConf())
-	print "getAllConf(1)			[%s]" % (dbusCtl.getAllConf(1) == iceCtl.getAllConf(1))
-	print "getRegisteredPlayers(1)	[%s]" % (dbusCtl.getRegisteredPlayers(1) == iceCtl.getRegisteredPlayers(1))
+	print "getAllConf(x)			[%s]" % (dbusCtl.getAllConf(x) == iceCtl.getAllConf(x))
+	print "getRegisteredPlayers(x)	[%s]" % (dbusCtl.getRegisteredPlayers(x) == iceCtl.getRegisteredPlayers(x))
 
+	#print iceCtl.getACL(x, 0)
 
