@@ -148,7 +148,6 @@ class MumbleCtlIce(MumbleCtlBase):
 		import Murmur
 		acls = self._getIceServerObject(srvid).getACL(identifier)
 		ret = []
-
 		for x in acls:
 			if isinstance(x, list):
 				tmp = []
@@ -201,11 +200,46 @@ class MumbleCtlIce(MumbleCtlBase):
 		return self._getIceServerObject(srvid).updateregistration(user)
 
 	def setACL(self, srvid, acl):
+		'''
 		print "xxxx"
 		print srvid
 		print acl
+		print "--"
+		print acl.pack()
 		print "xxxx"
-		#self._getIceServerObject(srvid).setACL(*acl.pack())
+		'''
+		import Murmur
+		tmp     = acl.pack()
+		id      = tmp[0]
+		_acls   = tmp[1]
+		acls    = []
+		_groups = tmp[2]
+		groups  = []
+		inherit = tmp[3]
+
+		for x in _acls:
+			acl = Murmur.ACL()
+			acl.applyHere = x[0]
+			acl.applySubs = x[1]
+			acl.inherited = x[2]
+			acl.playerid  = x[3]
+			acl.group     = x[4]
+			acl.allow     = x[5]
+			acl.deny      = x[6]
+			acls.append(acl)
+
+		for x in _groups:
+			group = Murmur.Group()
+			group.name        = x[0]
+			group.inherited   = x[1]
+			group.inherit     = x[2]
+			group.inheritable = x[3]
+			group.add         = x[4]
+			group.remove      = x[5]
+			group.members     = x[6]
+			groups.append(group)
+
+		self._getIceServerObject(srvid).setACL(id, acls, groups, inherit)
 
 	@staticmethod
 	def setUnicodeFlag(data):
@@ -360,5 +394,7 @@ if __name__ == "__main__":
 	print "getAllConf(x)			[%s]" % (dbusCtl.getAllConf(x) == iceCtl.getAllConf(x))
 	print "getRegisteredPlayers(x)	[%s]" % (dbusCtl.getRegisteredPlayers(x) == iceCtl.getRegisteredPlayers(x))
 
+
+	#print iceCtl.getRegisteredPlayers(x)
 	#print iceCtl.getACL(x, 0)
 
