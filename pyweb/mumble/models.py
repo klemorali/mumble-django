@@ -14,6 +14,10 @@
  *  GNU General Public License for more details.
 """
 
+from PIL    import Image
+from struct import pack, unpack
+from zlib   import compress, decompress
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -119,7 +123,7 @@ class Mumble( models.Model ):
 
 	def deleteServer( self ):
 		# Unregister this player in Murmur via ctroller.
-		print MumbleCtlBase.newInstance()
+		#print MumbleCtlBase.newInstance()
 		MumbleCtlBase.newInstance().deleteServer(self.srvid)
 
 	@staticmethod
@@ -198,16 +202,26 @@ class MumbleUser( models.Model ):
 		ctl.setACL(self.server.srvid, acl);
 		return value;
 	
+	def getTexture( self ):
+		return MumbleCtlBase.newInstance().getTexture(self.server.srvid, self.mumbleid);
 	
+	def setTexture( self, infile ):
+		MumbleCtlBase.newInstance().setTexture(self.server.srvid, self.mumbleid, infile)
+
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
-		# Unregister this player in Murmur via ctroller.
+		# Unregister this player in Murmur via dbus.
 		MumbleCtlBase.newInstance().unregisterPlayer(self.server.srvid, self.mumbleid)
 
-
+	def __setattr__( self, name, value ):
+		if name == 'server':
+			if self.id is not None and self.server != value:
+				raise AttributeError( "This field must not be updated once the Record has been saved." );
+		
+		models.Model.__setattr__( self, name, value );
 
 
 from django.db.models import signals

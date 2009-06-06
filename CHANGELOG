@@ -2,6 +2,17 @@
 Mumble-Django changelog
 =======================
 
+Version 0.7, 27 May 2009:
+------------------------------
+* Added copyright information about the Icons in the channel viewer to
+  COPYRIGHT.
+* Fixed bug that prevented various settings from being applied to Murmur.
+* Fixed Python 2.4 incompatibility.
+* Various minor bug fixes.
+* Added setting users' textures.
+* Added Mumble icon as favicon.
+* Replaced YAML by a self-written template due to license problems.
+
 Version 0.6, 02. May 2009:
 ------------------------------
 * Re-Licensed the complete project under the GPL v2+, added License tags
@@ -43,7 +54,6 @@ Version 0.3, 25 March 2009:
 
 Version 0.2, 24 March 2009:
 ------------------------------
-
 * Reorganized settings.py, so only one single line needs to be edited in
   order to configure everything.
 * Added a syncdb hook that looks for already configured Murmur instances
@@ -53,7 +63,6 @@ Version 0.2, 24 March 2009:
 
 Version 0.1, 21 February 2009:
 ------------------------------
-
 * Set up a Django project that uses the Mumble application to make use
   easier for Django inexperienced users
 * First official Release

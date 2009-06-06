@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 # mumble-django contributed by withgod@sourceforge.net
 
+from PIL    import Image
+from struct import pack, unpack
+from zlib   import compress, decompress
+
 from mctl import MumbleCtlBase
 
 import Ice
@@ -159,6 +163,12 @@ class MumbleCtlIce(MumbleCtlBase):
 			groups.append(group)
 
 		self._getIceServerObject(srvid).setACL(id, acls, groups, inherit)
+
+
+
+	def getTexture(self, srvid, mumbleid):
+		print self._getIceServerObject(srvid).getTexture(mumbleid)
+		#return Image.fromstring( "RGBA", ( 600, 60 ), self._getIceServerObject(srvid).getTexture(mumbleid));
 
 	@staticmethod
 	def setUnicodeFlag(data):

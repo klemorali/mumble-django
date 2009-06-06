@@ -14,9 +14,11 @@
  *  GNU General Public License for more details.
 """
 
+from StringIO				import StringIO
+
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
 from django.template			import RequestContext
-from django.http			import HttpResponseRedirect
+from django.http			import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 
@@ -32,10 +34,15 @@ class Storage( object ):
 
 
 def mumbles( request ):
-	"Displays a list of all configured Mumble servers."
+	"Displays a list of all configured Mumble servers, or redirects if only one configured."
+	mumbles = get_list_or_404( Mumble );
+	
+	if len(mumbles) == 1:
+		return HttpResponseRedirect( '/mumble/%d' % mumbles[0].id );
+	
 	return render_to_response(
 		'mumble/list.htm',
-		{ 'MumbleObjects': get_list_or_404( Mumble ),
+		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
 		},
 		context_instance = RequestContext(request)
@@ -66,6 +73,7 @@ def show( request, server ):
 		adminform = None;
 	
 	registered = False;
+	
 	if request.user.is_authenticated():
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
@@ -92,8 +100,18 @@ def show( request, server ):
 			else:
 				regform = MumbleUserForm( instance=user );
 				registered = True;
+		
+		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'texture' and registered:
+			textureform = MumbleTextureForm( request.POST, request.FILES );
+			if textureform.is_valid():
+				user.setTexture( request.FILES['texturefile'] );
+				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+		else:
+			textureform = MumbleTextureForm();
+
 	else:
 		regform = None;
+		textureform = None;
 	
 	return render_to_response(
 		'mumble/mumble.htm',
@@ -104,6 +122,7 @@ def show( request, server ):
 			"CurrentUserIsAdmin": isAdmin,
 			"AdminForm":    adminform,
 			"RegForm":      regform,
+			"TextureForm":  textureform,
 			"Registered":   registered,
 			"DisplayTab":   displayTab,
 			'MumbleActive':  True,
@@ -111,6 +130,20 @@ def show( request, server ):
 		context_instance = RequestContext(request)
 		);
 
+
+def showTexture( request, server ):
+	if request.user.is_authenticated():
+		srv  = Mumble.objects.get( id=int(server) );
+		user = MumbleUser.objects.get( server=srv, owner=request.user );
+		try:
+			img  = user.getTexture();
+		except ValueError:
+			raise Http404();
+		else:
+			buffer = StringIO();
+			img.save( buffer, "PNG" );
+			return HttpResponse( buffer.getvalue(), "image/png" );
+	raise Http404();
 
 def showContent( server, user = None ):
 	"Renders and returns the channel list for the given Server ID."
@@ -166,7 +199,5 @@ def renderListItem( item, level ):
 		Storage.s.append( ( level, item, item.parentChannels() ) );
 	else:
 		Storage.s.append( ( level, item ) );
-
-
 
 

@@ -74,6 +74,12 @@ class MumbleCtlBase ():
 	def setACL(self, srvid, acl):
 		pass
 
+	def getTexture(self, srvid, mumbleid):
+		pass
+
+	def setTexture(self, srvid, mumbleid, infile):
+		pass
+
 	@staticmethod
 	def newInstance():
 		# if dbus
@@ -91,41 +97,6 @@ if __name__ == "__main__":
 	x = int(sys.argv[1])
 	dbusCtl = MumbleCtlDbus()
 	iceCtl = MumbleCtlIce()
-	'''
-	print "--- Dbus test start"
-	#ctl = MumbleCtlBase.newInstance()
-	print dbusCtl
-	print dbusCtl.meta
-	print "booted server", dbusCtl.getBootedServers()
-	print "chans"
-	print dbusCtl.getChannels(x)
-	print "users"
-	print dbusCtl.getPlayers(x)
-	print "getACL", dbusCtl.getACL(x, 0)
-	print "getAllServers()"
-	print dbusCtl.getAllServers()
-	print "getDefaultConf()"
-	print dbusCtl.getDefaultConf()
-	print "getAllConf(x)"
-	print dbusCtl.getAllConf(x)
-	print "--Dbus end--"
-	print "--- Ice test start"
-	print iceCtl
-	print iceCtl.meta
-	print "booted server", iceCtl.getBootedServers()
-	print "chans"
-	print iceCtl.getChannels(x)
-	print "users"
-	print iceCtl.getPlayers(x)
-	print "getACL", iceCtl.getACL(x, 0)
-	print "getAllServers()"
-	print iceCtl.getAllServers()
-	print "getDefaultConf()"
-	print iceCtl.getDefaultConf()
-	print "getAllConf(x)"
-	print iceCtl.getAllConf(x)
-	print "--- Ice test end"
-	'''
 
 	print "equal test ---"
 	print "getBootedServers			[%s]" % (dbusCtl.getBootedServers() == iceCtl.getBootedServers())
@@ -136,8 +107,7 @@ if __name__ == "__main__":
 	print "getDefaultConf			[%s]" % (dbusCtl.getDefaultConf() == iceCtl.getDefaultConf())
 	print "getAllConf(x)			[%s]" % (dbusCtl.getAllConf(x) == iceCtl.getAllConf(x))
 	print "getRegisteredPlayers(x)	[%s]" % (dbusCtl.getRegisteredPlayers(x) == iceCtl.getRegisteredPlayers(x))
+	print "getTexture(2, 30)		[%s]" % (dbusCtl.getTexture(2, 30) == iceCtl.getTexture(2, 30))
 
-
-	#print iceCtl.getRegisteredPlayers(x)
-	#print iceCtl.getACL(x, 0)
-
+	#print iceCtl.getTexture(2, 30).__class__
+	#print dbusCtl.getTexture(2, 30).__class__

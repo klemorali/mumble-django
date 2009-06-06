@@ -1,0 +1,15 @@
+
+form input, form textarea {
+	background-color: lightgrey;
+	border: 1px solid darkgrey;
+	margin: 5px 0;
+	min-width: 330px;
+	padding: 2px;
+	padding-left: 3px;
+}
+
+form input[type=submit] {
+	margin-left: 30px;
+	padding: 5px;
+	min-width: 150px;
+}
