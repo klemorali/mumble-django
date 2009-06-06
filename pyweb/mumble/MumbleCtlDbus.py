@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # mumble-django contributed by withgod@sourceforge.net
 
+from PIL    import Image
+from struct import pack, unpack
+from zlib   import compress, decompress
 
 from mctl import MumbleCtlBase
 
@@ -76,6 +79,46 @@ class MumbleCtlDbus(MumbleCtlBase):
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), dbus.String(name), dbus.String(email), dbus.String(password)))
 
+	def getTexture(self, srvid, mumbleid):
+		texture = self._getDbusServerObject(srvid).getTexture(dbus.Int32(mumbleid));
+		
+		if len(texture) == 0:
+			raise ValueError( "No Texture has been set." );
+		# this returns a list of bytes.
+		# first 4 bytes: Length of uncompressed string, rest: compressed data
+		orig_len = ( texture[0] << 24 ) | ( texture[1] << 16 ) | ( texture[2] << 8 ) | ( texture[3] );
+		# convert rest to string and run decompress
+		bytestr = "";
+		for byte in texture[4:]:
+			bytestr += pack( "B", int(byte) );
+		decompressed = decompress( bytestr );
+		# iterate over 4 byte chunks of the string
+		imgdata = "";
+		for idx in range( 0, orig_len, 4 ):
+			# read 4 bytes = BGRA and convert to RGBA
+			bgra = unpack( "4B", decompressed[idx:idx+4] );
+			imgdata += pack( "4B",  bgra[2], bgra[1], bgra[0], bgra[3] );
+		
+		# return an 600x60 RGBA image object created from the data
+		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata);
+
+	def setTexture(self, srvid, mumbleid, infile):
+		# open image, convert to RGBA, and resize to 600x60
+		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
+		# iterate over the list and pack everything into a string
+		bgrastring = "";
+		for ent in list( img.getdata() ):
+			# ent is in RGBA format, but Murmur wants BGRA (ARGB inverse), so stuff needs
+			# to be reordered when passed to pack()
+			bgrastring += pack( "4B",  ent[2], ent[1], ent[0], ent[3] );
+		# compress using zlib
+		compressed = compress( bgrastring );
+		# pack the original length in 4 byte big endian, and concat the compressed
+		# data to it to emulate qCompress().
+		texture = pack( ">L", len(bgrastring) ) + compressed;
+		# finally call murmur and set the texture
+		self._getDbusServerObject(srvid).setTexture(dbus.Int32( mumbleid ), texture)
+
 	@staticmethod
 	def converDbusTypeToNative(data):
 		#i know dbus.* type is extends python native type.
@@ -97,4 +140,6 @@ class MumbleCtlDbus(MumbleCtlBase):
 				ret = unicode(data)
 			elif data.__class__  is dbus.Int32 or data.__class__ is dbus.UInt32:
 				ret = int(data)
+			elif data.__class__ is dbus.Byte:
+				ret = byte(data)
 		return ret

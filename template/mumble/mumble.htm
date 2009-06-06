@@ -17,6 +17,7 @@
       that are displayed.
     </p>
   </noscript>
+    <div id="mumble_ext_container"></div>
     <div id="mumble_registration">
   {% if user.is_authenticated %}
       <h2>Server registration</h2>
@@ -36,6 +37,26 @@
     <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account on this Mumble server.</p>
   {% endif %}
     </div>
+  
+  {% if Registered %}
+    <div id="mumble_texture">
+	  <h2>User Texture</h2>
+	  <p>
+	    You can upload an image that you would like to use as your user texture here.<br />
+	    Your current texture is:<br />
+	    <img src="/mumble/{{DBaseObject.id}}/texture.png" alt="user texture" /><br />
+		Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
+		a different size, it will be resized accordingly.<br />
+	  </p>
+	  <form action="" method="post" enctype="multipart/form-data">
+	    <table>
+	      {{ TextureForm }}
+        </table>
+        <input type="hidden" name="mode" value="texture" />
+        <input type="submit" />
+      </form>
+	</div>
+  {% endif %}
   
   {% if CurrentUserIsAdmin %}
     <div id="mumble_admin">
@@ -77,7 +98,7 @@
     {% else %}
     <div id="mumble_{{ item.1.id }}" class="x-hide-display">
       <h2>Channel {{ item.1.name }}</h2>
-      <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
+      <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
     </div>
     {% endif %}
   {% endfor %}
@@ -87,15 +108,18 @@
     <script type="text/javascript">
 	Ext.onReady( function(){
 		Ext.get( 'mumble_registration' ).addClass( 'x-hide-display' );
+		{% if Registered %}
+			Ext.get( 'mumble_texture' ).addClass( 'x-hide-display' );
+		{% endif %}
 		{% if CurrentUserIsAdmin %}
 			Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
 		{% endif %}
 		
 		var cardpanel = new Ext.Panel({
-			renderTo:   'col3_content',
+			renderTo:   'mumble_ext_container',
 			layout:     'card',
 			id:         'mumble_container',
-			height:     510,
+			height:     550,
 			activeItem: 0,
 			border:     false,
 			items:      [ {
@@ -107,6 +131,9 @@
 					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
 					{% if CurrentUserIsAdmin %}
 						{ contentEl: 'mumble_admin', title: 'Administration', autoScroll: true },
+					{% endif %}
+					{% if Registered %}
+						{ contentEl: 'mumble_texture', title: 'User Texture', autoScroll: true },
 					{% endif %}
 					]
 				},
