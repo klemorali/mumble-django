@@ -164,11 +164,41 @@ class MumbleCtlIce(MumbleCtlBase):
 
 		self._getIceServerObject(srvid).setACL(id, acls, groups, inherit)
 
-
-
 	def getTexture(self, srvid, mumbleid):
-		print self._getIceServerObject(srvid).getTexture(mumbleid)
-		#return Image.fromstring( "RGBA", ( 600, 60 ), self._getIceServerObject(srvid).getTexture(mumbleid));
+		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
+		if len(texture) == 0:
+			raise ValueError( "No Texture has been set." );
+		# this returns a list of bytes.
+		decompressed = decompress( texture );
+		# iterate over 4 byte chunks of the string
+		imgdata = "";
+		for idx in range( 0, len(decompressed), 4 ):
+			# read 4 bytes = BGRA and convert to RGBA
+			# manual wrote getTexture returns "Textures are stored as zlib compress()ed 600x60 32-bit RGBA data."
+			# http://mumble.sourceforge.net/slice/Murmur/Server.html#getTexture
+			# but return values BGRA X(
+			bgra = unpack( "4B", decompressed[idx:idx+4] );
+			imgdata += pack( "4B",  bgra[2], bgra[1], bgra[0], bgra[3] );
+		
+		# return an 600x60 RGBA image object created from the data
+		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata);
+
+	def setTexture(self, srvid, mumbleid, infile):
+		# open image, convert to RGBA, and resize to 600x60
+		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
+		# iterate over the list and pack everything into a string
+		bgrastring = "";
+		for ent in list( img.getdata() ):
+			# ent is in RGBA format, but Murmur wants BGRA (ARGB inverse), so stuff needs
+			# to be reordered when passed to pack()
+			bgrastring += pack( "4B",  ent[2], ent[1], ent[0], ent[3] );
+		# compress using zlib
+		compressed = compress( bgrastring );
+		# pack the original length in 4 byte big endian, and concat the compressed
+		# data to it to emulate qCompress().
+		texture = pack( ">L", len(bgrastring) ) + compressed;
+		# finally call murmur and set the texture
+		self._getIceServerObject(srvid).setTexture(mumbleid, texture)
 
 	@staticmethod
 	def setUnicodeFlag(data):

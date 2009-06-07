@@ -97,7 +97,7 @@ if __name__ == "__main__":
 	x = int(sys.argv[1])
 	dbusCtl = MumbleCtlDbus()
 	iceCtl = MumbleCtlIce()
-
+	"""
 	print "equal test ---"
 	print "getBootedServers			[%s]" % (dbusCtl.getBootedServers() == iceCtl.getBootedServers())
 	print "getChannels				[%s]" % (dbusCtl.getChannels(x) == iceCtl.getChannels(x))
@@ -108,6 +108,7 @@ if __name__ == "__main__":
 	print "getAllConf(x)			[%s]" % (dbusCtl.getAllConf(x) == iceCtl.getAllConf(x))
 	print "getRegisteredPlayers(x)	[%s]" % (dbusCtl.getRegisteredPlayers(x) == iceCtl.getRegisteredPlayers(x))
 	print "getTexture(2, 30)		[%s]" % (dbusCtl.getTexture(2, 30) == iceCtl.getTexture(2, 30))
-
-	#print iceCtl.getTexture(2, 30).__class__
+	"""
+	dbusCtl.getTexture(2, 30).__class__
+	iceCtl.getTexture(2, 30).__class__
 	#print dbusCtl.getTexture(2, 30).__class__

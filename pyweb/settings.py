@@ -56,8 +56,8 @@ if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-#DAOTYPE='ice'
-DAOTYPE='dbus'
+DAOTYPE='ice'
+#DAOTYPE='dbus'
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
