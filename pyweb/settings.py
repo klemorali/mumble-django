@@ -56,13 +56,12 @@ if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
 # The slice to use for communication over ZeroC ICE.
 # This can be set to the path to the Murmur.ice file that resides
 # in your Murmur directory.
 SLICE = join( MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble', 'Murmur.ice' )
 
-DAOTYPE='ice'
-#DAOTYPE='dbus'
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

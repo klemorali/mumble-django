@@ -19,11 +19,11 @@
 #abc is better but 2.6 higher.
 #import abc
 
-from django.conf import settings
+import re
 
 class MumbleCtlBase ():
 	''' abstract Ctrol Object '''
-
+	
 	def getAllConf(self, srvid):
 		pass
 
@@ -94,14 +94,18 @@ class MumbleCtlBase ():
 		pass
 
 	@staticmethod
-	def newInstance():
-		# if dbus
-		if settings.DAOTYPE == 'dbus':
+	def newInstance( connstring ):
+		# connstring defines whether to connect via ICE or DBus.
+		# Dbus service names: some.words.divided.by.periods
+		# ICE specs are WAY more complex, so if DBus doesn't match, use ICE.
+		rd = re.compile( r'^(\w+\.)*\w+$' );
+		
+		if rd.match( connstring ):
 			from MumbleCtlDbus import MumbleCtlDbus
-			return MumbleCtlDbus()
+			return MumbleCtlDbus( connstring )
 		else:
 			from MumbleCtlIce import MumbleCtlIce
-			return MumbleCtlIce()
+			return MumbleCtlIce( connstring )
 
 
 

@@ -50,7 +50,7 @@ class Mumble( models.Model ):
 	booted = models.BooleanField( 'Boot Server',        default = True );
 
 	def getServerObject( self ):
-		return mmServer( self.srvid, MumbleCtlBase.newInstance(), self.name );
+		return mmServer( self.srvid, MumbleCtlBase.newInstance( self.dbus ), self.name );
 
 	def __unicode__( self ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
@@ -62,7 +62,7 @@ class Mumble( models.Model ):
 
 		# check if this server already exists, if not call newServer and set my srvid first
 
-		ctl = MumbleCtlBase.newInstance();
+		ctl = MumbleCtlBase.newInstance( self.dbus );
 		if self.id is None:
 			self.srvid = ctl.newServer();
 
@@ -124,7 +124,7 @@ class Mumble( models.Model ):
 	def deleteServer( self ):
 		# Unregister this player in Murmur via ctroller.
 		#print MumbleCtlBase.newInstance()
-		MumbleCtlBase.newInstance().deleteServer(self.srvid)
+		MumbleCtlBase.newInstance( self.dbus ).deleteServer(self.srvid)
 
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
@@ -147,7 +147,7 @@ class MumbleUser( models.Model ):
 			return models.Model.save( self );
 		
 		# Before the record set is saved, update Murmur via ctroller.
-		ctl = MumbleCtlBase.newInstance();
+		ctl = MumbleCtlBase.newInstance( self.server.dbus );
 
 		if self.id is None:
 			# This is a new user record, so Murmur doesn't know about it yet
@@ -179,7 +179,7 @@ class MumbleUser( models.Model ):
 	
 	def getAdmin( self ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
-		acl = mmACL( 0, MumbleCtlBase.newInstance().getACL(self.server.srvid, 0) );
+		acl = mmACL( 0, MumbleCtlBase.newInstance( self.server.dbus ).getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
 			raise ValueError( "The admin group was not found in the ACL's groups list!" );
@@ -187,7 +187,7 @@ class MumbleUser( models.Model ):
 	
 	def setAdmin( self, value ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
-		ctl = MumbleCtlBase.newInstance();
+		ctl = MumbleCtlBase.newInstance( self.server.dbus );
 		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
@@ -203,10 +203,10 @@ class MumbleUser( models.Model ):
 		return value;
 	
 	def getTexture( self ):
-		return MumbleCtlBase.newInstance().getTexture(self.server.srvid, self.mumbleid);
+		return MumbleCtlBase.newInstance( self.server.dbus ).getTexture(self.server.srvid, self.mumbleid);
 	
 	def setTexture( self, infile ):
-		MumbleCtlBase.newInstance().setTexture(self.server.srvid, self.mumbleid, infile)
+		MumbleCtlBase.newInstance( self.server.dbus ).setTexture(self.server.srvid, self.mumbleid, infile)
 
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
@@ -214,7 +214,7 @@ class MumbleUser( models.Model ):
 	
 	def unregister( self ):
 		# Unregister this player in Murmur via dbus.
-		MumbleCtlBase.newInstance().unregisterPlayer(self.server.srvid, self.mumbleid)
+		MumbleCtlBase.newInstance( self.server.dbus ).unregisterPlayer(self.server.srvid, self.mumbleid)
 
 	def __setattr__( self, name, value ):
 		if name == 'server':

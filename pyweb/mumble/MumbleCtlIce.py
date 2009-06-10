@@ -26,15 +26,14 @@ from mctl import MumbleCtlBase
 import Ice
 
 class MumbleCtlIce(MumbleCtlBase):
-	proxy = 'Meta:tcp -h 127.0.0.1 -p 6502'
-	slice = settings.SLICE
-	meta = None
-
-	def __init__(self):
-		self.meta = self._getIceMeta()
+	method = "ICE";
+	
+	def __init__( self, connstring ):
+		self.proxy = connstring;
+		self.meta  = self._getIceMeta()
 
 	def _getIceMeta(self):
-		Ice.loadSlice(self.slice)
+		Ice.loadSlice(settings.SLICE)
 		ice = Ice.initialize()
 		import Murmur
 		prx = ice.stringToProxy(self.proxy)
