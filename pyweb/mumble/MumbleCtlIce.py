@@ -43,7 +43,7 @@ class MumbleCtlIce(MumbleCtlBase):
 		ret = []
 
 		for user in users:
-			ret.append([user.playerid, unicode(user.name), unicode(user.email), unicode(user.pw)])
+			ret.append([user.playerid, MumbleCtlIce.setUnicodeFlag(user.name), MumbleCtlIce.setUnicodeFlag(user.email), MumbleCtlIce.setUnicodeFlag(user.pw)])
 
 		return ret
 
@@ -53,7 +53,7 @@ class MumbleCtlIce(MumbleCtlBase):
 
 		for x in chans:
 			chan = chans[x]
-			ret.append([chan.id, unicode(chan.name), chan.parent, chan.links])
+			ret.append([chan.id, MumbleCtlIce.setUnicodeFlag(chan.name), chan.parent, chan.links])
 
 		return ret
 
@@ -63,7 +63,7 @@ class MumbleCtlIce(MumbleCtlBase):
 
 		for x in users:
 			user = users[x]
-			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, unicode(user.name), user.onlinesecs, user.bytespersec])
+			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, MumbleCtlIce.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
 
 		return ret
 
@@ -76,9 +76,9 @@ class MumbleCtlIce(MumbleCtlBase):
 				tmp = []
 				for y in x:
 					if y.__class__ is Murmur.ACL:
-						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, unicode(y.group), y.allow, y.deny])
+						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, MumbleCtlIce.setUnicodeFlag(y.group), y.allow, y.deny])
 					elif y.__class__ is Murmur.Group:
-						tmp.append([unicode(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
+						tmp.append([MumbleCtlIce.setUnicodeFlag(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
 
 				ret.append(tmp)
 			else:
@@ -202,8 +202,13 @@ class MumbleCtlIce(MumbleCtlBase):
 
 	@staticmethod
 	def setUnicodeFlag(data):
-		ret = {}
-		for key in data.keys():
-			ret[unicode(key)] = unicode(data[key])
+		ret = ''
+		if isinstance(data, tuple) or isinstance(data, list) or isinstance(data, dict):
+			ret = {}
+			for key in data.keys():
+				ret[MumbleCtlIce.setUnicodeFlag(key)] = MumbleCtlIce.setUnicodeFlag(data[key])
+		else:
+			ret = unicode(data, 'utf-8')
+
 		return ret
 
