@@ -23,11 +23,11 @@ from mctl import MumbleCtlBase
 
 import dbus
 class MumbleCtlDbus(MumbleCtlBase):
-	meta   = None
-	dbus_base='net.sourceforge.mumble.murmur'
-
-	def __init__(self):
+	method = "DBus";
+	
+	def __init__( self, connstring ):
 		# Prior to saving the model, connect to murmur via dbus and update its settings.
+		self.dbus_base = connstring;
 		self.meta = self._getDbusMeta();
 
 	def _getDbusMeta( self ):

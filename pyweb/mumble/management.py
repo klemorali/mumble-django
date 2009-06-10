@@ -37,8 +37,6 @@ def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 
 
 def find_existing_instances( **kwargs ):
-	ctl = MumbleCtlBase.newInstance();
-
 	if "verbosity" in kwargs:
 		v = kwargs['verbosity'];
 	else:
@@ -47,24 +45,41 @@ def find_existing_instances( **kwargs ):
 	if v > 1:
 		print "Starting Mumble servers and players detection now.";
 	
-	'''
+	
 	online = False;
 	while not online:
-		try:
-			murmur = dbus.Interface( bus.get_object( dbusName, '/' ), 'net.sourceforge.mumble.Meta' );
-		except dbus.exceptions.DBusException:
+		print
+		print "--- Murmur connection info ---"
+		print "  1) DBus -- net.sourceforge.mumble.murmur"
+		print "  2) ICE  -- Meta:tcp -h 127.0.0.1 -p 6502"
+		print "Enter 1 or 2 for the defaults above, nothing to skip Server detection,"
+		print "and if the defaults do not fit your needs, enter the correct string."
+		print "Whether to use DBus or ICE will be detected automatically from the"
+		print "string's format."
+		print
+		
+		dbusName = raw_input( "Service string: " );
+		
+		if not dbusName:
 			if v:
-				print "Unable to connect to DBus using name %s. Is Murmur even running!?" % dbusName;
-			dbusName = raw_input( "DBus Service name (or empty to skip Servers/Players detection): " );
-			if not dbusName:
-				if v:
-					print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
-				return False;
+				print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
+			return False;
+		elif dbusName == "1":
+			dbusName = "net.sourceforge.mumble.murmur";
+		elif dbusName == "2":
+			dbusName = "Meta:tcp -h 127.0.0.1 -p 6502";
+		
+		try:
+			ctl = MumbleCtlBase.newInstance( dbusName );
+		except Exception, instance:
+			if v:
+				print "Unable to connect using name %s. The error was:" % dbusName;
+				print instance;
 		else:
 			online = True;
 			if v > 1:
-				print "Successfully connected to Murmur via DBus (%s)." % dbusName;
-	'''
+				print "Successfully connected to Murmur via connection string %s, using %s." % ( dbusName, ctl.method );
+	
 	default = ctl.getDefaultConf();
 	
 	servIDs   = ctl.getAllServers();
