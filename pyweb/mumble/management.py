@@ -102,7 +102,7 @@ def find_existing_instances( **kwargs ):
 			values = {
 				"name":    servername,
 				"srvid":   id,
-				"dbus":    'net.sourceforge.mumble.murmur',
+				"dbus":    dbusName,
 				"addr":    find_in_dicts( ( "registerhostame", "host" ), conf, default, "0.0.0.0" ),
 				"port":    find_in_dicts( "port",                        conf, default ),
 				"url":     find_in_dicts( "registerurl",                 conf, default ),
