@@ -36,7 +36,7 @@ class MumbleCtlIce(MumbleCtlBase):
 		Ice.loadSlice(settings.SLICE)
 		ice = Ice.initialize()
 		import Murmur
-		prx = ice.stringToProxy(self.proxy)
+		prx = ice.stringToProxy(self.proxy.encode("utf-8"))
 		return Murmur.MetaPrx.checkedCast(prx)
 
 	def _getIceServerObject(self, srvid):
