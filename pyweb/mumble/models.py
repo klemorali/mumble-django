@@ -50,7 +50,7 @@ class Mumble( models.Model ):
 	booted = models.BooleanField( 'Boot Server',        default = True );
 
 	def getServerObject( self ):
-		return mmServer( self.srvid, MumbleCtlBase.newInstance( self.dbus ), self.name );
+		return mmServer( self, MumbleCtlBase.newInstance( self.dbus ) );
 
 	def __unicode__( self ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );

@@ -30,16 +30,17 @@ class mmServer( object ):
 	# id          = int();
 	# rootName    = str();
 	
-	def __init__( self, serverID, ctl, rootName = '' ):
+	def __init__( self, model, ctl ):
 		#self.dbusObj  = serverObj;
 		self.channels = dict();
 		self.players  = dict();
-		self.id       = serverID;
-		self.rootName = rootName;
+		self.id       = model.srvid;
+		self.rootName = model.name;
+		self.model    = model;
 		
 		links         = dict();
 		
-		for theChan in ctl.getChannels(serverID):
+		for theChan in ctl.getChannels(model.srvid):
 			# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
 			
 			if( theChan[2] == -1 ):
@@ -68,10 +69,10 @@ class mmServer( object ):
 		if self.rootName:
 			self.channels[0].name = self.rootName;
 		
-		for thePlayer in ctl.getPlayers(serverID):
+		for thePlayer in ctl.getPlayers(model.srvid):
 			# in DBus
 			# Players - Fields: 0 = UserID, 6 = ChannelID
-			self.players[ thePlayer[0] ] = mmPlayer( thePlayer, self.channels[ thePlayer[6] ] );
+			self.players[ thePlayer[0] ] = mmPlayer( self.model, thePlayer, self.channels[ thePlayer[6] ] );
 			
 	
 	playerCount = property(
@@ -166,7 +167,7 @@ class mmPlayer( object ):
 	
 	# mumbleuser   = models.MumbleUser();
 	
-	def __init__( self, playerObj, playerChan ):
+	def __init__( self, srvInstance, playerObj, playerChan ):
 		( self.userid, self.muted, self.deafened, self.suppressed, self.selfmuted, self.selfdeafened, chanID, self.dbaseid, self.name, onlinetime, self.bytesPerSec ) = playerObj;
 		self.onlinesince = datetime.datetime.fromtimestamp( float( time() - onlinetime ) );
 		self.channel = playerChan;
@@ -174,7 +175,6 @@ class mmPlayer( object ):
 		
 		if self.isAuthed():
 			from models import Mumble, MumbleUser
-			srvInstance     = Mumble.objects.get( srvid=self.channel.serverId );
 			try:
 				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.dbaseid, server=srvInstance );
 			except MumbleUser.DoesNotExist:
