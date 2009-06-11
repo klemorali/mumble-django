@@ -40,31 +40,40 @@ class mmServer( object ):
 		
 		links         = dict();
 		
-		for theChan in ctl.getChannels(model.srvid):
-			# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
-			
-			if( theChan[2] == -1 ):
-				# No parent
-				self.channels[theChan[0]] = mmChannel( theChan );
-			else:
-				self.channels[theChan[0]] = mmChannel( theChan, self.channels[theChan[2]] );
-			
-			self.channels[theChan[0]].serverId = self.id;
-			
-			# process links - if the linked channels are known, link; else save their ids to link later
-			for linked in theChan[3]:
-				if linked in self.channels:
-					self.channels[theChan[0]].linked.append( self.channels[linked] );
+		chanlist = ctl.getChannels(model.srvid);
+		# sometimes, ICE seems to return the Channel list in a weird order.
+		while len(chanlist):
+			#print len(chanlist)
+			for theChan in chanlist:
+				# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
+				
+				if( theChan[2] == -1 ):
+					# No parent
+					self.channels[theChan[0]] = mmChannel( theChan );
+				elif theChan[2] in self.channels:
+					# parent already known
+					self.channels[theChan[0]] = mmChannel( theChan, self.channels[theChan[2]] );
 				else:
-					if linked not in links:
-						links[linked] = list();
-					links[linked].append( self.channels[theChan[0]] );
-					#print "Saving link: %s <- %s" % ( linked, self.channels[theChan[0]] );
-			
-			# check if earlier round trips saved channel ids to be linked to the current channel
-			if theChan[0] in links:
-				for targetChan in links[theChan[0]]:
-					targetChan.linked.append( self.channels[theChan[0]] );
+					continue;
+				
+				chanlist.remove( theChan );
+				
+				self.channels[theChan[0]].serverId = self.id;
+				
+				# process links - if the linked channels are known, link; else save their ids to link later
+				for linked in theChan[3]:
+					if linked in self.channels:
+						self.channels[theChan[0]].linked.append( self.channels[linked] );
+					else:
+						if linked not in links:
+							links[linked] = list();
+						links[linked].append( self.channels[theChan[0]] );
+						#print "Saving link: %s <- %s" % ( linked, self.channels[theChan[0]] );
+				
+				# check if earlier round trips saved channel ids to be linked to the current channel
+				if theChan[0] in links:
+					for targetChan in links[theChan[0]]:
+						targetChan.linked.append( self.channels[theChan[0]] );
 		
 		if self.rootName:
 			self.channels[0].name = self.rootName;
