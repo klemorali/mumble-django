@@ -90,7 +90,7 @@ def find_existing_instances( **kwargs ):
 			print "Checking Murmur instance with id %d." % id;
 		# first check that the server has not yet been inserted into the DB
 		try:
-			instance = models.Mumble.objects.get( srvid=id );
+			instance = models.Mumble.objects.get( dbus=dbusName, srvid=id );
 		except models.Mumble.DoesNotExist:
 			conf   = ctl.getAllConf(id);
 			
