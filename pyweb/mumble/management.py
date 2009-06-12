@@ -58,7 +58,7 @@ def find_existing_instances( **kwargs ):
 		print "string's format."
 		print
 		
-		dbusName = raw_input( "Service string: " );
+		dbusName = raw_input( "Service string: " ).strip();
 		
 		if not dbusName:
 			if v:
@@ -141,7 +141,7 @@ def find_existing_instances( **kwargs ):
 				if playerdata[0] == 0:
 					continue;
 				if v > 1:
-					print "Checking Player with id %d and name '%s'." % playerdata[:2];
+					print "Checking Player with id %d and name '%s'." % ( int(playerdata[0]), playerdata[1] );
 				try:
 					models.MumbleUser.objects.get( server=instance, mumbleid=playerdata[0] );
 				except models.MumbleUser.DoesNotExist:

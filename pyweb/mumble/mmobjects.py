@@ -42,7 +42,11 @@ class mmServer( object ):
 		
 		chanlist = ctl.getChannels(model.srvid);
 		# sometimes, ICE seems to return the Channel list in a weird order.
-		while len(chanlist):
+		# itercount prevents infinite loops.
+		itercount = 0;
+		maxiter   = len(chanlist) * 3;
+		while len(chanlist) and itercount < maxiter:
+			itercount += 1;
 			#print len(chanlist)
 			for theChan in chanlist:
 				# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
