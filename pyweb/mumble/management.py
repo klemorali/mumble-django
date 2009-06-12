@@ -14,6 +14,7 @@
  *  GNU General Public License for more details.
 """
 
+import os
 
 import models
 from django.db.models import signals
@@ -45,20 +46,23 @@ def find_existing_instances( **kwargs ):
 	if v > 1:
 		print "Starting Mumble servers and players detection now.";
 	
-	
+	triedEnviron = False;
 	online = False;
 	while not online:
-		print
-		print "--- Murmur connection info ---"
-		print "  1) DBus -- net.sourceforge.mumble.murmur"
-		print "  2) ICE  -- Meta:tcp -h 127.0.0.1 -p 6502"
-		print "Enter 1 or 2 for the defaults above, nothing to skip Server detection,"
-		print "and if the defaults do not fit your needs, enter the correct string."
-		print "Whether to use DBus or ICE will be detected automatically from the"
-		print "string's format."
-		print
-		
-		dbusName = raw_input( "Service string: " ).strip();
+		if not triedEnviron and 'MURMUR_CONNSTR' in os.environ:
+			dbusName = os.environ['MURMUR_CONNSTR'];
+			triedEnviron = True;
+		else:
+			print "--- Murmur connection info ---"
+			print "  1) DBus -- net.sourceforge.mumble.murmur"
+			print "  2) ICE  -- Meta:tcp -h 127.0.0.1 -p 6502"
+			print "Enter 1 or 2 for the defaults above, nothing to skip Server detection,"
+			print "and if the defaults do not fit your needs, enter the correct string."
+			print "Whether to use DBus or ICE will be detected automatically from the"
+			print "string's format."
+			print
+			
+			dbusName = raw_input( "Service string: " ).strip();
 		
 		if not dbusName:
 			if v:
@@ -75,6 +79,7 @@ def find_existing_instances( **kwargs ):
 			if v:
 				print "Unable to connect using name %s. The error was:" % dbusName;
 				print instance;
+				print
 		else:
 			online = True;
 			if v > 1:
