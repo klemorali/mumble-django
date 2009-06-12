@@ -28,4 +28,10 @@ def mrange( value ):
 
 register.filter( 'mrange', mrange );
 
+### FILTER: trunc -- converts "a very very extaordinary long text" to "a very very extra..."
+def trunc( string, maxlen = 50 ):
+	if len(string) < maxlen:
+		return string;
+	return string[:(maxlen - 3)] + "...";
 
+register.filter( 'trunc', trunc );

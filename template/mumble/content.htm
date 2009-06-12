@@ -26,14 +26,14 @@
           {% endspaceless %}
           {% if item.1.is_player %}
             <img src="/static/mumble/talking_off.png" alt="player" />
-            <a id="link_{{ item.1.id }}" class="dingen" href="#">{{ item.1.name }}</a>
+            <a id="link_{{ item.1.id }}" class="dingen" href="#" title="{{ item.1.name }}">{{ item.1.name|trunc:30 }}</a>
           {% else %}
             {% if item.1.linked %}
               <img src="/static/mumble/channel_linked.png" alt="linked channel"/>
             {% else %}
               <img src="/static/mumble/channel.png" alt="channel"/>
             {% endif %}
-            <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen" id="link_{{ item.1.id }}">{{ item.1.name }}</a>
+            <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen" id="link_{{ item.1.id }}" title="{{ item.1.name }}">{{ item.1.name|trunc:30 }}</a>
           {% endif %}
         </span>
       </td>
