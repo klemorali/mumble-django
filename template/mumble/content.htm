@@ -4,7 +4,7 @@
     <tr>
       <td class="mumble" id="server" colspan="2">
         <img src="/static/mumble/mumble.16x16.png" alt="mumble" />
-        <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/" class="dingen" id="link_server">
+        <a href="mumble://{% if MumbleAccount %}{{ MumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/" class="dingen" id="link_server">
           {{ ServerObject.rootName }}
         </a>
     </tr>
@@ -33,7 +33,7 @@
             {% else %}
               <img src="/static/mumble/channel.png" alt="channel"/>
             {% endif %}
-            <a href="mumble://{% if mumbleAccount %}{{ mumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen" id="link_{{ item.1.id }}" title="{{ item.1.name }}">{{ item.1.name|trunc:30 }}</a>
+            <a href="mumble://{% if MumbleAccount %}{{ MumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen" id="link_{{ item.1.id }}" title="{{ item.1.name }}">{{ item.1.name|trunc:30 }}</a>
           {% endif %}
         </span>
       </td>
