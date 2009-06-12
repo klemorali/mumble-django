@@ -73,6 +73,7 @@ def show( request, server ):
 		adminform = None;
 	
 	registered = False;
+	user = None;
 	
 	if request.user.is_authenticated():
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
@@ -119,13 +120,14 @@ def show( request, server ):
 			'DBaseObject':  srv,
 			'ServerObject': o,
 			'ChannelTable': Storage.s,
-			"CurrentUserIsAdmin": isAdmin,
-			"AdminForm":    adminform,
-			"RegForm":      regform,
-			"TextureForm":  textureform,
-			"Registered":   registered,
-			"DisplayTab":   displayTab,
-			'MumbleActive':  True,
+			'CurrentUserIsAdmin': isAdmin,
+			'AdminForm':    adminform,
+			'RegForm':      regform,
+			'TextureForm':  textureform,
+			'Registered':   registered,
+			'DisplayTab':   displayTab,
+			'MumbleActive': True,
+			'MumbleAccount':user,
 		},
 		context_instance = RequestContext(request)
 		);
