@@ -14,20 +14,19 @@
  *  GNU General Public License for more details.
 """
 
-from PIL    import Image
-from struct import pack, unpack
-from zlib   import compress, decompress
+import socket
+from PIL         import Image
+from struct      import pack, unpack
+from zlib        import compress, decompress
 
 from django.contrib.auth.models import User
-from django.db import models
-
-from mmobjects import mmServer, mmACL
+from django.db   import models
 
 from django.conf import settings
 
-from mctl import *
+from mmobjects   import *
+from mctl        import *
 
-import socket
 
 class Mumble( models.Model ):
 	name   = models.CharField(    'Server Name',        max_length = 200 );
@@ -48,70 +47,88 @@ class Mumble( models.Model ):
 	channel= models.CharField(    'Channel name regex', max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
 	defchan= models.IntegerField( 'Default channel',    default=0      );
 	booted = models.BooleanField( 'Boot Server',        default = True );
-
-	def getServerObject( self ):
-		return mmServer( self, MumbleCtlBase.newInstance( self.dbus ) );
-
+	
+	def __init__( self, *args, **kwargs ):
+		models.Model.__init__( self, *args, **kwargs );
+		self._ctl      = None;
+		self._channels = None;
+		self._rootchan = None;
+	
 	def __unicode__( self ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
+	
+	
+	is_server  = True;
+	is_channel = False;
+	is_player  = False;
+	
+	
+	# Ctl instantiation
+	def getCtl( self ):
+		if not self._ctl:
+			self._ctl = MumbleCtlBase.newInstance( self.dbus );
+		return self._ctl;
+	
+	ctl = property( getCtl, None );
+	
 	
 	def save( self, dontConfigureMurmur=False ):
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing servers.
 			return models.Model.save( self );
-
+		
 		# check if this server already exists, if not call newServer and set my srvid first
-
-		ctl = MumbleCtlBase.newInstance( self.dbus );
+		
 		if self.id is None:
-			self.srvid = ctl.newServer();
-
-		ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
-		ctl.setConf( self.srvid,     'registername',        self.name );
-		ctl.setConf( self.srvid,     'registerurl',         self.url );
-		ctl.setConf( self.srvid,     'welcometext',         self.motd );
-		ctl.setConf( self.srvid,     'password',            self.passwd );
-		ctl.setConf( self.srvid,     'certificate',         self.sslcrt );
-		ctl.setConf( self.srvid,     'key',                 self.sslkey );
-		ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
-		ctl.setConf( self.srvid,     'playername',          self.player );
-		ctl.setConf( self.srvid,     'channelname',         self.channel );
-		ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
+			self.srvid = self.ctl.newServer();
+		
+		self.ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
+		self.ctl.setConf( self.srvid,     'registername',        self.name );
+		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
+		self.ctl.setConf( self.srvid,     'welcometext',         self.motd );
+		self.ctl.setConf( self.srvid,     'password',            self.passwd );
+		self.ctl.setConf( self.srvid,     'certificate',         self.sslcrt );
+		self.ctl.setConf( self.srvid,     'key',                 self.sslkey );
+		self.ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
+		self.ctl.setConf( self.srvid,     'playername',          self.player );
+		self.ctl.setConf( self.srvid,     'channelname',         self.channel );
+		self.ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
 		
 		
 		if self.port is not None:
-			ctl.setConf( self.srvid, 'port',                str(self.port) );
+			self.ctl.setConf( self.srvid, 'port',                str(self.port) );
 		else:
-			ctl.setConf( self.srvid, 'port',                '' );
+			self.ctl.setConf( self.srvid, 'port',                '' );
 		
 		if self.users is not None:
-			ctl.setConf( self.srvid, 'users',               str(self.users) );
+			self.ctl.setConf( self.srvid, 'users',               str(self.users) );
 		else:
-			ctl.setConf( self.srvid, 'users',               '' );
+			self.ctl.setConf( self.srvid, 'users',               '' );
 		
 		if self.bwidth is not None:
-			ctl.setConf( self.srvid, 'bandwidth',           str(self.bwidth) );
+			self.ctl.setConf( self.srvid, 'bandwidth',           str(self.bwidth) );
 		else:
-			ctl.setConf( self.srvid, 'bandwidth',           '' );
+			self.ctl.setConf( self.srvid, 'bandwidth',           '' );
 		
 		# registerHostname needs to take the port no into account
 		if self.port and self.port != 64738:
-			ctl.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
+			self.ctl.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
 		else:
-			ctl.setConf( self.srvid, 'registerhostname',    self.addr );
-
+			self.ctl.setConf( self.srvid, 'registerhostname',    self.addr );
+		
 		if self.supw:
-			ctl.setSuperUserPassword( self.srvid, self.supw );
+			self.ctl.setSuperUserPassword( self.srvid, self.supw );
 			self.supw = '';
 		
-		if self.booted != ctl.isBooted( self.srvid ):
+		if self.booted != self.ctl.isBooted( self.srvid ):
 			if self.booted:
-				ctl.start( self.srvid );
+				self.ctl.start( self.srvid );
 			else:
-				ctl.stop( self.srvid );
+				self.ctl.stop( self.srvid );
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
+	
 	
 	def isUserAdmin( self, user ):
 		if user.is_authenticated():
@@ -120,15 +137,83 @@ class Mumble( models.Model ):
 			except MumbleUser.DoesNotExist:
 				return False;
 		return False;
-
+	
+	
+	# Deletion handler
 	def deleteServer( self ):
 		# Unregister this player in Murmur via ctroller.
-		#print MumbleCtlBase.newInstance()
-		MumbleCtlBase.newInstance( self.dbus ).deleteServer(self.srvid)
-
+		self.ctl.deleteServer(self.srvid)
+	
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].deleteServer();
+	
+	
+	# Channel lists: flat list
+	def getChannels( self ):
+		if self._channels is None:
+			self._channels = {};
+			chanlist = self.ctl.getChannels(self.srvid);
+			links = {};
+			
+			# sometimes, ICE seems to return the Channel list in a weird order.
+			# itercount prevents infinite loops.
+			itercount = 0;
+			maxiter   = len(chanlist) * 3;
+			while len(chanlist) and itercount < maxiter:
+				itercount += 1;
+				for theChan in chanlist:
+					# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
+					if( theChan[2] == -1 ):
+						# No parent
+						self._channels[theChan[0]] = mmChannel( self, theChan );
+					elif theChan[2] in self.channels:
+						# parent already known
+						self._channels[theChan[0]] = mmChannel( self, theChan, self.channels[theChan[2]] );
+					else:
+						continue;
+					
+					chanlist.remove( theChan );
+					
+					self._channels[theChan[0]].serverId = self.id;
+					
+					# process links - if the linked channels are known, link; else save their ids to link later
+					for linked in theChan[3]:
+						if linked in self._channels:
+							self._channels[theChan[0]].linked.append( self._channels[linked] );
+						else:
+							if linked not in links:
+								links[linked] = list();
+							links[linked].append( self._channels[theChan[0]] );
+					
+					# check if earlier round trips saved channel ids to be linked to the current channel
+					if theChan[0] in links:
+						for targetChan in links[theChan[0]]:
+							targetChan.linked.append( self._channels[theChan[0]] );
+			
+			self._channels[0].name = self.name;
+			
+			self.players = {};
+			for thePlayer in self.ctl.getPlayers(self.srvid):
+				# Players - Fields: 0 = UserID, 6 = ChannelID
+				self.players[ thePlayer[0] ] = mmPlayer( self, thePlayer, self._channels[ thePlayer[6] ] );
+		
+		return self._channels;
+	
+	channels = property( getChannels, None );
+	rootchan = property( lambda self: self.channels[0], None );
+	
+	def getURL( self, forUser = None ):
+		# mumble://username@host:port/
+		userstr = "";
+		if forUser is not None:
+			userstr = "%s@" % forUser.name;
+		
+		return "mumble://%s%s:%d/" % ( userstr, self.addr, self.port );
+	
+	url = property( getURL, None );
+
+
 
 class MumbleUser( models.Model ):
 	mumbleid = models.IntegerField( 'Mumble player_id', editable = False, default = -1 );
@@ -137,18 +222,26 @@ class MumbleUser( models.Model ):
 	server   = models.ForeignKey(   Mumble );
 	owner    = models.ForeignKey(   User, null=True, blank=True   );
 	isAdmin  = models.BooleanField( 'Admin on root channel', default = False );
-
+	
+	
+	is_server  = False;
+	is_channel = False;
+	is_player  = True;
+	
+	
 	def __unicode__( self ):
 		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );
+	
+	
 	
 	def save( self, dontConfigureMurmur=False ):
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing players.
 			return models.Model.save( self );
 		
-		# Before the record set is saved, update Murmur via ctroller.
-		ctl = MumbleCtlBase.newInstance( self.server.dbus );
-
+		# Before the record set is saved, update Murmur via controller.
+		ctl = self.server.ctl;
+		
 		if self.id is None:
 			# This is a new user record, so Murmur doesn't know about it yet
 			self.mumbleid = ctl.registerPlayer(self.server.srvid, self.name);
@@ -177,9 +270,11 @@ class MumbleUser( models.Model ):
 		return models.Model.save( self );
 	
 	
+	# Admin handlers
+	
 	def getAdmin( self ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
-		acl = mmACL( 0, MumbleCtlBase.newInstance( self.server.dbus ).getACL(self.server.srvid, 0) );
+		acl = mmACL( 0, self.server.ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
 			raise ValueError( "The admin group was not found in the ACL's groups list!" );
@@ -187,7 +282,7 @@ class MumbleUser( models.Model ):
 	
 	def setAdmin( self, value ):
 		# Get ACL of root Channel, get the admin group and see if I'm in it
-		ctl = MumbleCtlBase.newInstance( self.server.dbus );
+		ctl = self.server.ctl;
 		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
@@ -202,26 +297,37 @@ class MumbleUser( models.Model ):
 		ctl.setACL(self.server.srvid, acl);
 		return value;
 	
+	
+	# Texture handlers
+	
 	def getTexture( self ):
-		return MumbleCtlBase.newInstance( self.server.dbus ).getTexture(self.server.srvid, self.mumbleid);
+		return self.server.ctl.getTexture(self.server.srvid, self.mumbleid);
 	
 	def setTexture( self, infile ):
-		MumbleCtlBase.newInstance( self.server.dbus ).setTexture(self.server.srvid, self.mumbleid, infile)
-
+		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
+	
+	
+	# Deletion handler
+	
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
 		# Unregister this player in Murmur via dbus.
-		MumbleCtlBase.newInstance( self.server.dbus ).unregisterPlayer(self.server.srvid, self.mumbleid)
-
+		self.server.ctl.unregisterPlayer(self.server.srvid, self.mumbleid)
+	
+	
+	# "server" field protection
+	
 	def __setattr__( self, name, value ):
 		if name == 'server':
 			if self.id is not None and self.server != value:
 				raise AttributeError( "This field must not be updated once the Record has been saved." );
 		
 		models.Model.__setattr__( self, name, value );
+
+
 
 
 from django.db.models import signals

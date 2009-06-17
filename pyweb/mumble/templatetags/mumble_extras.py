@@ -13,7 +13,8 @@
  *  GNU General Public License for more details.
 """
 
-from django import template
+from django                 import template
+from django.template.loader import render_to_string
 
 register = template.Library();
 
@@ -35,3 +36,24 @@ def trunc( string, maxlen = 50 ):
 	return string[:(maxlen - 3)] + "...";
 
 register.filter( 'trunc', trunc );
+
+
+### FILTER: chanview -- renders an mmChannel / mmPlayer object with the correct template.
+def chanview( obj, user = None ):
+	if obj.is_server:
+		return render_to_string( 'mumble/server.htm',  { 'Server':  obj, 'MumbleAccount': user } );
+	elif obj.is_channel:
+		return render_to_string( 'mumble/channel.htm', { 'Channel': obj, 'MumbleAccount': user } );
+	elif obj.is_player:
+		return render_to_string( 'mumble/player.htm',  { 'Player':  obj, 'MumbleAccount': user } );
+
+register.filter( 'chanview', chanview );
+
+
+### FILTER: chanurl -- creates a connection URL and takes the user's login into account
+def chanurl( obj, user ):
+	return obj.getURL( user );
+
+register.filter( 'chanurl', chanurl );
+
+

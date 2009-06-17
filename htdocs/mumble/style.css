@@ -1,29 +1,26 @@
-td.mumble img {
-	padding: 0px;
-	margin:  0px;
-	}
 
-a.dingen:link, a.dingen:visited, a.dingen:hover, a.dingen:active {
+a.mumble:link, a.mumble:visited, a.mumble:hover, a.mumble:active {
 	font-weight:     bold;
 	font-size:       8pt;
 	color:           #283E53;
 	text-decoration: none;
-	}
-
-td.mumble {
-	height:  20px;
-	padding:  0px;
-	margin:   0px;
-	line-height: 6px;
-	border:  none;
-	}
+}
 
 div.mumble {
-	background-color: #FFFFFF;
-	color:            #283E53;
-	padding:          10px;
-	margin-top:       20px;
-	margin-bottom:    20px;
-	width:             80%;
-	min-height:       250px;
-	}
+	background-image: url( /static/mumble/linie_v.png );
+	background-repeat: repeat-y;
+	margin-left: 20px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+div.mumble img {
+	padding: 0px;
+	margin:  0px;
+}
+
+span.mumble {
+	width: 10em;
+	float:right;
+}
+
