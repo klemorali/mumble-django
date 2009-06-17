@@ -9,9 +9,11 @@
   <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
     {{ Channel.name|trunc:30 }}
   </a>
-  {% for sub in Channel.subchans %}
-    {{ sub|chanview:MumbleAccount }}
-  {% endfor %}
-  {% for player in Channel.players %}{{ player|chanview }}{% endfor %}
+  {% if Channel.show %}
+    {% for sub in Channel.subchans %}
+      {{ sub|chanview:MumbleAccount }}
+    {% endfor %}
+    {% for player in Channel.players %}{{ player|chanview }}{% endfor %}
+  {% endif %}
 </div>
 
