@@ -1,0 +1,17 @@
+{% load mumble_extras %}
+<div class="mumble">
+  <img src="/static/mumble/knoten_v.png" />
+  {% if Channel.linked %}
+    <img src="/static/mumble/channel_linked.png" alt="linked channel" />
+  {% else %}
+    <img src="/static/mumble/channel.png" alt="channel" />
+  {% endif %}
+  <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
+    {{ Channel.name|trunc:30 }}
+  </a>
+  {% for sub in Channel.subchans %}
+    {{ sub|chanview:MumbleAccount }}
+  {% endfor %}
+  {% for player in Channel.players %}{{ player|chanview }}{% endfor %}
+</div>
+

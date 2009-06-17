@@ -1,12 +1,10 @@
 {% extends "index.htm" %}
-{% block headtags %}
-  <meta http-equiv="refresh" content="30" />
-{% endblock %}
+{% load mumble_extras %}
 {% block Headline %}
-  {{ ServerObject.rootName }}
+  {{ DBaseObject.name }}
 {% endblock %}
 {% block LeftColumn %}
-  {% include "mumble/content.htm" %}
+  {{ DBaseObject|chanview:MumbleAccount }}
 {% endblock %}
 {% block Content %}
   <noscript>
@@ -34,28 +32,28 @@
         <input type="submit" />
       </form>
   {% else %}
-    <p>You need to be <a href="/accounts/login">logged in</a> to be able to register an account on this Mumble server.</p>
+    <p>You need to be <a href="/accounts/login?next=%2Fmumble%2F{{ DBaseObject.id }}">logged in</a> to be able to register an account on this Mumble server.</p>
   {% endif %}
     </div>
   
   {% if Registered %}
     <div id="mumble_texture">
-	  <h2>User Texture</h2>
-	  <p>
-	    You can upload an image that you would like to use as your user texture here.<br />
-	    Your current texture is:<br />
-	    <img src="/mumble/{{DBaseObject.id}}/texture.png" alt="user texture" /><br />
-		Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
-		a different size, it will be resized accordingly.<br />
-	  </p>
-	  <form action="" method="post" enctype="multipart/form-data">
-	    <table>
-	      {{ TextureForm }}
+      <h2>User Texture</h2>
+      <p>
+        You can upload an image that you would like to use as your user texture here.<br />
+        Your current texture is:<br />
+        <img src="/mumble/{{DBaseObject.id}}/texture.png" alt="user texture" /><br />
+        Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
+        a different size, it will be resized accordingly.<br />
+      </p>
+      <form action="" method="post" enctype="multipart/form-data">
+        <table>
+          {{ TextureForm }}
         </table>
         <input type="hidden" name="mode" value="texture" />
         <input type="submit" />
       </form>
-	</div>
+    </div>
   {% endif %}
   
   {% if CurrentUserIsAdmin %}
@@ -72,33 +70,33 @@
   {% endif %}
   
   {% for item in ChannelTable %}
-    {% if item.1.is_player %}
-    <div id="mumble_{{ item.1.id }}" class="x-hide-display">
-      <h2>Player {{ item.1.name }}</h2>
+    {% if item.is_player %}
+    <div id="mumble_{{ item.id }}" class="x-hide-display">
+      <h2>Player {{ item.name }}</h2>
       <ul>
-        <li>Online since {{item.1.onlinesince|time:"H:i"}}</li>
-        <li>Authenticated: {% if item.1.isAuthed     %}Yes{% else %}No{% endif %}</li>
-        <li>Admin:         {% if item.1.isAdmin      %}Yes{% else %}No{% endif %}</li>
-        <li>Muted:         {% if item.1.muted        %}Yes{% else %}No{% endif %}</li>
-        <li>Deafened:      {% if item.1.deafened     %}Yes{% else %}No{% endif %}</li>
-        <li>Self-Muted:    {% if item.1.selfmuted    %}Yes{% else %}No{% endif %}</li>
-        <li>Self-Deafened: {% if item.1.selfdeafened %}Yes{% else %}No{% endif %}</li>
+        <li>Online since {{item.onlinesince|time:"H:i"}}</li>
+        <li>Authenticated: {% if item.isAuthed     %}Yes{% else %}No{% endif %}</li>
+        <li>Admin:         {% if item.isAdmin      %}Yes{% else %}No{% endif %}</li>
+        <li>Muted:         {% if item.muted        %}Yes{% else %}No{% endif %}</li>
+        <li>Deafened:      {% if item.deafened     %}Yes{% else %}No{% endif %}</li>
+        <li>Self-Muted:    {% if item.selfmuted    %}Yes{% else %}No{% endif %}</li>
+        <li>Self-Deafened: {% if item.selfdeafened %}Yes{% else %}No{% endif %}</li>
       </ul>
-      {% if item.1.mumbleuser and item.1.mumbleuser.owner %}
-        <h2>User {{ item.1.mumbleuser.owner.username|capfirst }}</h2>
+      {% if item.mumbleuser and item.mumbleuser.owner %}
+        <h2>User {{ item.mumbleuser.owner.username|capfirst }}</h2>
         <ul>
-          {% if item.1.mumbleuser.owner.first_name and item.1.mumbleuser.owner.last_name %}
-            <li>Full Name: {{ item.1.mumbleuser.owner.first_name }} {{ item.1.mumbleuser.owner.last_name }}</li>
+          {% if item.mumbleuser.owner.first_name and item.mumbleuser.owner.last_name %}
+            <li>Full Name: {{ item.mumbleuser.owner.first_name }} {{ item.mumbleuser.owner.last_name }}</li>
           {% endif %}
-          <li>Admin: {% if item.1.mumbleuser.owner.is_staff %}Yes{% else %}No{% endif %}</li>
-          <li>Sign-up date: {{ item.1.mumbleuser.owner.date_joined }}</li>
+          <li>Admin: {% if item.mumbleuser.owner.is_staff %}Yes{% else %}No{% endif %}</li>
+          <li>Sign-up date: {{ item.mumbleuser.owner.date_joined }}</li>
         </ul>
       {% endif %}
     </div>
     {% else %}
-    <div id="mumble_{{ item.1.id }}" class="x-hide-display">
-      <h2>Channel {{ item.1.name }}</h2>
-      <a href="mumble://{% if MumbleAccount %}{{ MumbleAccount.name }}@{% endif %}{{ DBaseObject.addr }}:{{ DBaseObject.port }}/{% for chan in item.2 %}{{ chan|urlencode }}/{% endfor %}{{ item.1.name|urlencode }}" class="dingen">Connect</a>
+    <div id="mumble_{{ item.id }}" class="x-hide-display">
+      <h2>Channel {{ item.name }}</h2>
+      <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">Connect</a>
     </div>
     {% endif %}
   {% endfor %}
@@ -138,7 +136,7 @@
 					]
 				},
 				{% for item in ChannelTable %}
-					{ contentEl: 'mumble_{{ item.1.id }}', id: 'carditem_{{ item.1.id }}' },
+					{ contentEl: 'mumble_{{ item.id }}', id: 'carditem_{{ item.id }}' },
 				{% endfor %}
 				],
 			});
@@ -148,11 +146,12 @@
 			event.preventDefault();
 			});
 		{% for item in ChannelTable %}
-			Ext.get( 'link_{{ item.1.id }}' ).on( 'click', function( event, target ){
-				cardpanel.layout.setActiveItem( 'carditem_{{ item.1.id }}' );
+			Ext.get( 'link_{{ item.id }}' ).on( 'click', function( event, target ){
+				cardpanel.layout.setActiveItem( 'carditem_{{ item.id }}' );
 				event.preventDefault();
 				});
 		{% endfor %}
 		} );
     </script>
+    <meta http-equiv="refresh" content="300" />
 {% endblock %}
