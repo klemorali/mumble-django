@@ -60,7 +60,10 @@ class mmChannel( object ):
 		lambda self: len( self.players ) + sum( [ chan.playerCount for chan in self.subchans ] ),
 		None
 		);
-	id = property( lambda self: "channel_%d"%self.chanid, None );
+	
+	id   = property( lambda self: "channel_%d"%self.chanid, None );
+	
+	show = property( lambda self: self.parent is None or self.playerCount > 0, None );
 	
 	def __str__( self ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
