@@ -63,7 +63,7 @@ class mmChannel( object ):
 	
 	id   = property( lambda self: "channel_%d"%self.chanid, None );
 	
-	show = property( lambda self: self.parent is None or self.playerCount > 0, None );
+	show = property( lambda self: self.parent is None or self.parent.chanid == 0 or self.playerCount > 0, None );
 	
 	def __str__( self ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
