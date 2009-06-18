@@ -1,11 +1,11 @@
 {% extends "index.htm" %}
 {% load i18n %}
 
-{% block Headline %}Profil{% endblock %}
+{% block Headline %}Profile{% endblock %}
 
 {% block Content %}
-<h2>Profil von {{user|capfirst}}</h2>
-<div>
+<h2 class="profile">Profile of {{user|capfirst}}</h2>
+<div class="profile">
   <h4>Statistics</h4>
   <ul>
     {% if mumbleaccs %}
@@ -13,8 +13,7 @@
         <ul>
         {% for mm in mumbleaccs %}
           <li>
-            {{ mm.name }} auf <a href="/mumble/{{mm.server.id}}">{{ mm.server.name }}</a><br />
-            <a href="/mumble/reg/{{mm.server.id}}">Set Password</a>
+            {{ mm.name }} on Server <a href="/mumble/{{mm.server.id}}">{{ mm.server.name }}</a> (<a href="/mumble/reg/{{mm.server.id}}">Set Password</a>)
           </li>
         {% endfor %}
         </ul>
@@ -22,7 +21,7 @@
     {% endif %}
   </ul>
 </div>
-<div>
+<div class="profile">
   <h4>Account</h4>
   <ul>
     <li>Full Name: {{ user.first_name }} {{ user.last_name }}</li>
