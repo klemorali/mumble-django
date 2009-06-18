@@ -21,7 +21,7 @@ from time       import time
 from os.path    import join
 
 from django.utils.http import urlquote
-
+from django.conf       import settings
 
 def cmp_names( a, b ):
 	return cmp( a.name, b.name );
@@ -102,9 +102,12 @@ class mmChannel( object ):
 		# create a path by joining the channel names
 		chanpath = join( *chanlist );
 		
-		return "mumble://%s%s:%d/%s" % ( userstr, self.server.addr, self.server.port, chanpath );
+		if self.server.port != settings.MUMBLE_DEFAULT_PORT:
+			return "mumble://%s%s:%d/%s" % ( userstr, self.server.addr, self.server.port, chanpath );
+		
+		return "mumble://%s%s/%s" % ( userstr, self.server.addr, chanpath );
 	
-	url = property( getURL, None );
+	connecturl = property( getURL, None );
 
 
 
