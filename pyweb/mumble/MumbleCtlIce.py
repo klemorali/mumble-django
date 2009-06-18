@@ -140,46 +140,34 @@ class MumbleCtlIce(MumbleCtlBase):
 		return self._getIceServerObject(srvid).updateregistration(user)
 
 	def setACL(self, srvid, acl):
-		'''
-		print "xxxx"
-		print srvid
-		print acl
-		print "--"
-		print acl.pack()
-		print "xxxx"
-		'''
 		import Murmur
-		tmp     = acl.pack()
-		id      = tmp[0]
-		_acls   = tmp[1]
-		acls    = []
-		_groups = tmp[2]
-		groups  = []
-		inherit = tmp[3]
+		
+		newacls   = [];
+		newgroups = [];
+		
+		for curr_acl in acl.acls:
+			new_acl = Murmur.ACL();
+			new_acl.applyHere = curr_acl['applyHere'];
+			new_acl.applySubs = curr_acl['applySubs'];
+			new_acl.inherited = curr_acl['inherited'];
+			new_acl.playerid  = curr_acl['playerid'];
+			new_acl.group     = curr_acl['group'].encode( "UTF-8" );
+			new_acl.allow     = curr_acl['allow'];
+			new_acl.deny      = curr_acl['deny'];
+			newacls.append( new_acl );
+		
+		for curr_group in acl.groups:
+			new_group = Murmur.Group()
+			new_group.name        = curr_group['name'].encode( "UTF-8" );
+			new_group.inherited   = curr_group['inherited'];
+			new_group.inherit     = curr_group['inherit'];
+			new_group.inheritable = curr_group['inheritable'];
+			new_group.add         = curr_group['add'];
+			new_group.remove      = curr_group['remove'];
+			new_group.members     = curr_group['members'];
+			newgroups.append( new_group );
 
-		for x in _acls:
-			acl = Murmur.ACL()
-			acl.applyHere = x[0]
-			acl.applySubs = x[1]
-			acl.inherited = x[2]
-			acl.playerid  = x[3]
-			acl.group     = x[4]
-			acl.allow     = x[5]
-			acl.deny      = x[6]
-			acls.append(acl)
-
-		for x in _groups:
-			group = Murmur.Group()
-			group.name        = x[0]
-			group.inherited   = x[1]
-			group.inherit     = x[2]
-			group.inheritable = x[3]
-			group.add         = x[4]
-			group.remove      = x[5]
-			group.members     = x[6]
-			groups.append(group)
-
-		self._getIceServerObject(srvid).setACL(id, acls, groups, inherit)
+		self._getIceServerObject(srvid).setACL( acl.channelId, newacls, newgroups, acl.inherit );
 
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
