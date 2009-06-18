@@ -111,7 +111,7 @@ class Mumble( models.Model ):
 			self.ctl.setConf( self.srvid, 'bandwidth',           '' );
 		
 		# registerHostname needs to take the port no into account
-		if self.port and self.port != 64738:
+		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
 			self.ctl.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
 		else:
 			self.ctl.setConf( self.srvid, 'registerhostname',    self.addr );
@@ -211,9 +211,12 @@ class Mumble( models.Model ):
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
 		
-		return "mumble://%s%s:%d/" % ( userstr, self.addr, self.port );
+		if self.port != settings.MUMBLE_DEFAULT_PORT:
+			return "mumble://%s%s:%d/" % ( userstr, self.addr, self.port );
+		
+		return "mumble://%s%s/" % ( userstr, self.addr );
 	
-	url = property( getURL, None );
+	connecturl = property( getURL, None );
 
 
 
