@@ -112,7 +112,7 @@ def show( request, server ):
 	# ChannelTable is a somewhat misleading name, as it actually contains channels and players.
 	channelTable = [];
 	for id in srv.channels:
-		if id != 0 and ( srv.channels[id].show or srv.channels[id].parent.show ):
+		if id != 0 and srv.channels[id].show:
 			channelTable.append( srv.channels[id] );
 	for id in srv.players:
 		channelTable.append( srv.players[id] );
