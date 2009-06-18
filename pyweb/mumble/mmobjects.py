@@ -23,6 +23,10 @@ from os.path    import join
 from django.utils.http import urlquote
 
 
+def cmp_names( a, b ):
+	return cmp( a.name, b.name );
+
+
 class mmChannel( object ):
 	# channels  = list();
 	# subchans  = list();
@@ -67,6 +71,13 @@ class mmChannel( object ):
 	
 	def __str__( self ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
+	
+	def sort( self ):
+		# Sort my subchannels and players, and then iterate over them and sort them recursively
+		self.subchans.sort( cmp_names );
+		self.players.sort( cmp_names );
+		for sc in self.subchans:
+			sc.sort();
 	
 	def visit( self, callback, lvl = 0 ):
 		# call callback on myself, then visit my subchans, then my players
