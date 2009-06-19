@@ -122,11 +122,11 @@ class MumbleCtlIce_118(MumbleCtlBase):
 						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, self.setUnicodeFlag(y.group), y.allow, y.deny])
 					elif y.__class__ is Murmur.Group:
 						tmp.append([self.setUnicodeFlag(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
-
+				
 				ret.append(tmp)
 			else:
 				ret.append(x)
-
+		
 		return ret
 
 	def getDefaultConf(self):
@@ -292,4 +292,52 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		user.email = email
 		user.pw    = password
 		return self._getIceServerObject(srvid).updateRegistration(user)
-
+	
+	def getACL(self, srvid, identifier):
+		import Murmur
+		acls = self._getIceServerObject(srvid).getACL(identifier)
+		ret = []
+		for x in acls:
+			if isinstance(x, list):
+				tmp = []
+				for y in x:
+					if y.__class__ is Murmur.ACL:
+						tmp.append([y.applyHere, y.applySubs, y.inherited, y.userid, self.setUnicodeFlag(y.group), y.allow, y.deny])
+					elif y.__class__ is Murmur.Group:
+						tmp.append([self.setUnicodeFlag(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
+				
+				ret.append(tmp)
+			else:
+				ret.append(x)
+		
+		return ret
+	
+	def setACL(self, srvid, acl):
+		import Murmur
+		
+		newacls   = [];
+		newgroups = [];
+		
+		for curr_acl in acl.acls:
+			new_acl = Murmur.ACL();
+			new_acl.applyHere = curr_acl['applyHere'];
+			new_acl.applySubs = curr_acl['applySubs'];
+			new_acl.inherited = curr_acl['inherited'];
+			new_acl.userid    = curr_acl['playerid'];
+			new_acl.group     = curr_acl['group'].encode( "UTF-8" );
+			new_acl.allow     = curr_acl['allow'];
+			new_acl.deny      = curr_acl['deny'];
+			newacls.append( new_acl );
+		
+		for curr_group in acl.groups:
+			new_group = Murmur.Group()
+			new_group.name        = curr_group['name'].encode( "UTF-8" );
+			new_group.inherited   = curr_group['inherited'];
+			new_group.inherit     = curr_group['inherit'];
+			new_group.inheritable = curr_group['inheritable'];
+			new_group.add         = curr_group['add'];
+			new_group.remove      = curr_group['remove'];
+			new_group.members     = curr_group['members'];
+			newgroups.append( new_group );
+		
+		self._getIceServerObject(srvid).setACL( acl.channelId, newacls, newgroups, acl.inherit );
