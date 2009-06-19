@@ -269,11 +269,9 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 
 	def getPlayers(self, srvid):
 		serv = self._getIceServerObject(srvid);
-		print type(serv), serv;
-		print dir(serv);
 		users = serv.getUsers()
 		ret = []
-
+		
 		for x in users:
 			user = users[x]
 			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
