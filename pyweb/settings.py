@@ -18,7 +18,6 @@
 #################################################################
 #################################################################
 ##                                                             ##
-##  The only setting you should alter is this path.            ##
 ##  Mumble-Django will try to auto-detect this value if it     ##
 ##  isn't set, which is the default. However, if this should   ##
 ##  not work as expected, set this to the path where you       ##
@@ -34,47 +33,56 @@ MUMBLE_DJANGO_ROOT = None;                                     ##
 ##  this file, the rest will be handled automatically!         ##
 ##                                                             ##
 #################################################################
-##                                                             ##
-##  DO NOT CHANGE ANYTHING ELSE IN THIS FILE UNLESS YOU KNOW   ##
-##  WHAT YOU ARE DOING!                                        ##
-##                                                             ##
-#################################################################
 #################################################################
 
-# Default email address to send mails from.
-DEFAULT_FROM_EMAIL = "webmaster@localhost"
-
-ACCOUNT_ACTIVATION_DAYS = 30
-
-MUMBLE_DEFAULT_PORT = 64738
 
 from os.path import join, dirname, abspath, exists
-
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
+# The ICE interface version to use.
+SLICE_VERSION = (1, 1, 8)
+# Murmur 1.2.0 is incompatible with 1.1.8, that's why this needs to be configured here.
+# If you have <=1.1.8 and 1.2.0 servers running simultaneously, consider using DBus for
+# the <=1.1.8 servers and ICE for 1.2.0. That way, you will be able to manage both server
+# versions with the same install of Mumble-Django, without losing any functionality.
 
 # The slice to use for communication over ZeroC ICE.
 # This can be set to the path to the Murmur.ice file that resides
 # in your Murmur directory.
-SLICE = join( MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble', 'Murmur.ice' )
+# Default: None -- use the slices shipped with MD.
+SLICE = None
 
 
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-)
+# Default email address to send mails from.
+DEFAULT_FROM_EMAIL = "webmaster@localhost"
 
-MANAGERS = ADMINS
+# Length of the account activation period, in days.
+ACCOUNT_ACTIVATION_DAYS = 30
 
+# Default mumble port. If your server runs under this port, it will not be included in the links in the Channel Viewer.
+MUMBLE_DEFAULT_PORT = 64738
+
+# Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
+# Mumble-Django should use its own!
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'mumble-django.db3' )
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
+
+
+# Show debug information on errors?
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('Your Name', 'your_email@domain.com'),
+)
+
+MANAGERS = ADMINS
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
