@@ -15,9 +15,10 @@
  *  GNU General Public License for more details.
 """
 
-from PIL    import Image
-from struct import pack, unpack
-from zlib   import compress, decompress
+from os.path import join
+from PIL     import Image
+from struct  import pack, unpack
+from zlib    import compress, decompress
 
 from django.conf import settings
 
@@ -25,19 +26,45 @@ from mctl import MumbleCtlBase
 
 import Ice
 
-class MumbleCtlIce(MumbleCtlBase):
+
+def MumbleCtlIce( connstring ):
+	version = settings.SLICE_VERSION;
+
+	slice = settings.SLICE;
+	if not slice:
+		slice = join(
+			settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
+			'Murmur_%d-%d-%d.ice' % (version[0], version[1], version[2] )
+			);
+	
+	Ice.loadSlice( slice )
+	ice = Ice.initialize()
+	import Murmur
+	prx = ice.stringToProxy( connstring.encode("utf-8") )
+	meta = Murmur.MetaPrx.checkedCast(prx)
+	
+	murmurversion = meta.getVersion();
+	
+	if murmurversion[0] != version[0] or murmurversion[1] != version[1] or murmurversion[2] != version[2]:
+		raise TypeError(
+			"Detected Murmur version %d.%d.%d, for which I am not configured." % ( murmurversion[0], murmurversion[1], murmurversion[2] )
+			);
+	
+	if murmurversion[0] == murmurversion[1] == 1 and murmurversion[2] <= 8:
+		return MumbleCtlIce_118( connstring, meta );
+	elif murmurversion[0] == 1 and murmurversion[1] == 2 and murmurversion[2] == 0:
+		return MumbleCtlIce_120( connstring, meta );
+	
+	
+
+
+
+class MumbleCtlIce_118(MumbleCtlBase):
 	method = "ICE";
 	
-	def __init__( self, connstring ):
+	def __init__( self, connstring, meta ):
 		self.proxy = connstring;
-		self.meta  = self._getIceMeta()
-
-	def _getIceMeta(self):
-		Ice.loadSlice(settings.SLICE)
-		ice = Ice.initialize()
-		import Murmur
-		prx = ice.stringToProxy(self.proxy.encode("utf-8"))
-		return Murmur.MetaPrx.checkedCast(prx)
+		self.meta  = meta;
 
 	def _getIceServerObject(self, srvid):
 		return self.meta.getServer(srvid);
@@ -59,7 +86,7 @@ class MumbleCtlIce(MumbleCtlBase):
 		ret = []
 
 		for user in users:
-			ret.append([user.playerid, MumbleCtlIce.setUnicodeFlag(user.name), MumbleCtlIce.setUnicodeFlag(user.email), MumbleCtlIce.setUnicodeFlag(user.pw)])
+			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
 
 		return ret
 
@@ -69,7 +96,7 @@ class MumbleCtlIce(MumbleCtlBase):
 
 		for x in chans:
 			chan = chans[x]
-			ret.append([chan.id, MumbleCtlIce.setUnicodeFlag(chan.name), chan.parent, chan.links])
+			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links])
 
 		return ret
 
@@ -79,7 +106,7 @@ class MumbleCtlIce(MumbleCtlBase):
 
 		for x in users:
 			user = users[x]
-			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, MumbleCtlIce.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
+			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
 
 		return ret
 
@@ -92,9 +119,9 @@ class MumbleCtlIce(MumbleCtlBase):
 				tmp = []
 				for y in x:
 					if y.__class__ is Murmur.ACL:
-						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, MumbleCtlIce.setUnicodeFlag(y.group), y.allow, y.deny])
+						tmp.append([y.applyHere, y.applySubs, y.inherited, y.playerid, self.setUnicodeFlag(y.group), y.allow, y.deny])
 					elif y.__class__ is Murmur.Group:
-						tmp.append([MumbleCtlIce.setUnicodeFlag(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
+						tmp.append([self.setUnicodeFlag(y.name), y.inherited, y.inherit, y.inheritable, y.add, y.remove, y.members])
 
 				ret.append(tmp)
 			else:
@@ -103,10 +130,10 @@ class MumbleCtlIce(MumbleCtlBase):
 		return ret
 
 	def getDefaultConf(self):
-		return MumbleCtlIce.setUnicodeFlag(self.meta.getDefaultConf())
+		return self.setUnicodeFlag(self.meta.getDefaultConf())
 
 	def getAllConf(self, srvid):
-		return MumbleCtlIce.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+		return self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
 
 	def newServer(self):
 		return self.meta.newServer().id()
@@ -211,9 +238,58 @@ class MumbleCtlIce(MumbleCtlBase):
 		if isinstance(data, tuple) or isinstance(data, list) or isinstance(data, dict):
 			ret = {}
 			for key in data.keys():
-				ret[MumbleCtlIce.setUnicodeFlag(key)] = MumbleCtlIce.setUnicodeFlag(data[key])
+				ret[self.setUnicodeFlag(key)] = self.setUnicodeFlag(data[key])
 		else:
 			ret = unicode(data, 'utf-8')
 
 		return ret
+
+
+
+
+class MumbleCtlIce_120(MumbleCtlIce_118):
+	def getRegisteredPlayers(self, srvid):
+		users = self._getIceServerObject(srvid).getRegisteredUsers('')
+		ret = []
+
+		for user in users:
+			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
+
+		return ret
+
+	def getChannels(self, srvid):
+		chans = self._getIceServerObject(srvid).getChannels()
+		ret = []
+
+		for x in chans:
+			chan = chans[x]
+			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links])
+
+		return ret
+
+	def getPlayers(self, srvid):
+		serv = self._getIceServerObject(srvid);
+		print type(serv), serv;
+		print dir(serv);
+		users = serv.getUsers()
+		ret = []
+
+		for x in users:
+			user = users[x]
+			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
+
+		return ret
+
+	def registerPlayer(self, srvid, name):
+		return self._getIceServerObject(srvid).registerUser(name)
+
+	def unregisterPlayer(self, srvid, mumbleid):
+		self._getIceServerObject(srvid).unregisterUser(mumbleid)
+
+	def setRegistration(self, srvid, mumbleid, name, email, password):
+		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
+		user.name  = name
+		user.email = email
+		user.pw    = password
+		return self._getIceServerObject(srvid).updateRegistration(user)
 
