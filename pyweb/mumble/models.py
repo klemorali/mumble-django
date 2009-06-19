@@ -217,6 +217,8 @@ class Mumble( models.Model ):
 		return "mumble://%s%s/" % ( userstr, self.addr );
 	
 	connecturl = property( getURL, None );
+	
+	version = property( lambda self: self.ctl.getVersion(), None );
 
 
 
