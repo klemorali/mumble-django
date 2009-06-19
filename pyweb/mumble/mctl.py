@@ -27,6 +27,9 @@ class MumbleCtlBase ():
 	def getAllConf(self, srvid):
 		pass
 
+	def getVersion( self ):
+		pass
+	
 	def setConf(self, srvid, key, value):
 		pass
 

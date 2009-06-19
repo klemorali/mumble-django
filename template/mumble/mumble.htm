@@ -16,7 +16,20 @@
     </p>
   </noscript>
     <div id="mumble_ext_container"></div>
-    <div id="mumble_registration">
+	<div id="mumble_motd" class="mumble-ext x-hide-display">
+	  <ul>
+	    <li>Server address: <a href="{{ DBaseObject.connecturl }}">{{ DBaseObject.addr }}:{{ DBaseObject.port }}</a></li>
+	    {% if DBaseObject.url %}
+	      <li>Website: {{ DBaseObject.url|urlize }}</li>
+	    {% endif %}
+	    <li>Server version: {{ DBaseObject.version.0 }}.{{ DBaseObject.version.1 }}.{{ DBaseObject.version.2 }}</li>
+	  </ul>
+	  <fieldset>
+	    <legend>Welcome message</legend>
+	    {{ DBaseObject.motd|safe }}
+	  </fieldset>
+	</div>
+    <div id="mumble_registration" class="mumble-ext">
   {% if user.is_authenticated %}
       <h2>Server registration</h2>
       <form action="" method="post">
@@ -37,7 +50,7 @@
     </div>
   
   {% if Registered %}
-    <div id="mumble_texture">
+    <div id="mumble_texture" class="mumble-ext">
       <h2>User Texture</h2>
       <p>
         You can upload an image that you would like to use as your user texture here.<br />
@@ -57,7 +70,7 @@
   {% endif %}
   
   {% if CurrentUserIsAdmin %}
-    <div id="mumble_admin">
+    <div id="mumble_admin" class="mumble-ext">
       <h2>Server administration</h2>
       <form action="" method="post">
         <table>
@@ -71,7 +84,7 @@
   
   {% for item in ChannelTable %}
     {% if item.is_player %}
-    <div id="mumble_{{ item.id }}" class="x-hide-display">
+    <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
       <h2>Player {{ item.name }}</h2>
       <ul>
         <li>Online since {{item.onlinesince|time:"H:i"}}</li>
@@ -94,9 +107,15 @@
       {% endif %}
     </div>
     {% else %}
-    <div id="mumble_{{ item.id }}" class="x-hide-display">
+    <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
       <h2>Channel {{ item.name }}</h2>
       <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">Connect</a>
+	  {% if item.description %}
+	    <fieldset>
+	      <legend>Channel description</legend>
+	      {{ item.description|safe }}
+	    </fieldset>
+	  {% endif %}
     </div>
     {% endif %}
   {% endfor %}
@@ -117,7 +136,7 @@
 			renderTo:   'mumble_ext_container',
 			layout:     'card',
 			id:         'mumble_container',
-			height:     550,
+			height:     570,
 			activeItem: 0,
 			border:     false,
 			items:      [ {
@@ -126,12 +145,13 @@
 				defaults:  { autoheight: true },
 				activeTab: {{ DisplayTab }},
 				items: [
+					{ contentEl: 'mumble_motd',          title: 'Server Info',    autoScroll: true },
 					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
 					{% if CurrentUserIsAdmin %}
-						{ contentEl: 'mumble_admin', title: 'Administration', autoScroll: true },
+						{ contentEl: 'mumble_admin',     title: 'Administration', autoScroll: true },
 					{% endif %}
 					{% if Registered %}
-						{ contentEl: 'mumble_texture', title: 'User Texture', autoScroll: true },
+						{ contentEl: 'mumble_texture',   title: 'User Texture',   autoScroll: true },
 					{% endif %}
 					]
 				},

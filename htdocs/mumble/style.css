@@ -24,3 +24,17 @@ span.mumble {
 	float:right;
 }
 
+div.mumble-ext {
+	padding: 10px;
+}
+
+div.mumble-ext ul {
+	list-style-type: disc;
+	padding-left: 20px;
+}
+
+div.mumble-ext fieldset {
+	border: 1px solid darkblue;
+	margin-top: 20px;
+	padding: 10px;
+}

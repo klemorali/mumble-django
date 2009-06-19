@@ -74,7 +74,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		for x in self.meta.getBootedServers():
 			ret.append(x.id())
 		return ret
-
+	
+	def getVersion( self ):
+		return self.meta.getVersion();
+	
 	def getAllServers(self):
 		ret = []
 		for x in self.meta.getAllServers():
@@ -263,7 +266,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 
 		for x in chans:
 			chan = chans[x]
-			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links])
+			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links, chan.description])
 
 		return ret
 

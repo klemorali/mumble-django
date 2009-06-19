@@ -29,18 +29,21 @@ class MumbleCtlDbus(MumbleCtlBase):
 		# Prior to saving the model, connect to murmur via dbus and update its settings.
 		self.dbus_base = connstring;
 		self.meta = self._getDbusMeta();
-
+	
 	def _getDbusMeta( self ):
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus_base, '/' ), 'net.sourceforge.mumble.Meta' );
 	
 	def _getDbusServerObject( self, srvid):
 		"Connects to DBus and returns an mmServer object representing this Murmur instance."
-
+		
 		if srvid not in self.getBootedServers():
 			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( srvid, self.meta );
-
+		
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus_base, '/%d' % srvid ), 'net.sourceforge.mumble.Murmur' );
-
+	
+	def getVersion( self ):
+		return MumbleCtlDbus.converDbusTypeToNative( self.meta.getVersion() )
+	
 	def getAllConf(self, srvid):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getAllConf(dbus.Int32(srvid)))
 

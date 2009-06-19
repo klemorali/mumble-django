@@ -42,7 +42,15 @@ class mmChannel( object ):
 		self.subchans = list();
 		self.linked   = list();
 		
-		(self.chanid, self.name, parent, self.linkedIDs ) = channelObj;
+		self.chanid    = channelObj[0];
+		self.name      = channelObj[1];
+		parent         = channelObj[2];
+		self.linkedIDs = channelObj[3];
+		
+		if len( channelObj ) == 5:
+			self.description = channelObj[4];
+		else:
+			self.description = "";
 		
 		self.parent = parentChan;
 		if self.parent is not None:
