@@ -52,7 +52,16 @@ class MumbleCtlDbus(MumbleCtlBase):
 
 	def getDefaultConf(self):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getDefaultConf())
+	
+	def start( self, srvid ):
+		self.meta.start( srvid );
 
+	def stop( self, srvid ):
+		self.meta.stop( srvid );
+
+	def isBooted( self, srvid ):
+		return bool( self.meta.isBooted( srvid ) );
+	
 	def deleteServer( self, srvid ):
 		srvid = dbus.Int32( srvid )
 		if self.meta.isBooted( srvid ):
