@@ -30,7 +30,7 @@ from mctl        import *
 
 class Mumble( models.Model ):
 	name   = models.CharField(    'Server Name',        max_length = 200 );
-	dbus   = models.CharField(    'DBus or ICE base',   max_length = 200, default = 'Meta:tcp -h 127.0.0.1 -p 6502' );
+	dbus   = models.CharField(    'DBus or ICE base',   max_length = 200, default = settings.DEFAULT_CONN );
 	srvid  = models.IntegerField( 'Server ID',          editable = False );
 	addr   = models.CharField(    'Server Address',     max_length = 200 );
 	port   = models.IntegerField( 'Server Port',                          blank = True, null = True  );
