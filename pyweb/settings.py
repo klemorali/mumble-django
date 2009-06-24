@@ -56,6 +56,12 @@ SLICE_VERSION = (1, 1, 8)
 SLICE = None
 
 
+# The default connection string to set for newly created instances.
+# ICE:
+#DEFAULT_CONN = 'Meta:tcp -h 127.0.0.1 -p 6502'
+# DBus:
+DEFAULT_CONN = 'net.sourceforge.mumble.murmur'
+
 # Default email address to send mails from.
 DEFAULT_FROM_EMAIL = "webmaster@localhost"
 
