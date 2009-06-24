@@ -241,7 +241,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		if isinstance(data, tuple) or isinstance(data, list) or isinstance(data, dict):
 			ret = {}
 			for key in data.keys():
-				ret[self.setUnicodeFlag(key)] = self.setUnicodeFlag(data[key])
+				ret[MumbleCtlIce_118.setUnicodeFlag(key)] = MumbleCtlIce_118.setUnicodeFlag(data[key])
 		else:
 			ret = unicode(data, 'utf-8')
 
