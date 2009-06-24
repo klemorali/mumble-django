@@ -141,6 +141,15 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	def newServer(self):
 		return self.meta.newServer().id()
 
+	def isBooted( self, srvid ):
+		return bool( self._getIceServerObject(srvid).isRunning() );
+	
+	def start( self, srvid ):
+		self._getIceServerObject(srvid).start();
+
+	def stop( self, srvid ):
+		self._getIceServerObject(srvid).stop();
+
 	def deleteServer( self, srvid ):
 		if self._getIceServerObject(srvid).isRunning():
 			self._getIceServerObject(srvid).stop()
