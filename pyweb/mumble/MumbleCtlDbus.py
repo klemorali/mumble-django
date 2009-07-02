@@ -103,7 +103,8 @@ class MumbleCtlDbus(MumbleCtlBase):
 		self.meta.setSuperUserPassword(dbus.Int32(srvid), value)
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), dbus.String(name), dbus.String(email), dbus.String(password)))
+		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), name, email, password))
+		#return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), dbus.String(name), dbus.String(email), dbus.String(password)))
 
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getDbusServerObject(srvid).getTexture(dbus.Int32(mumbleid));
