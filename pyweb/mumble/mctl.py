@@ -63,7 +63,7 @@ class MumbleCtlBase ():
 	def getPlayers(self, srvid):
 		pass
 
-	def getRegisteredPlayers(self, srvid):
+	def getRegisteredPlayers(self, srvid, filter):
 		pass
 
 	def getChannels(self, srvid):

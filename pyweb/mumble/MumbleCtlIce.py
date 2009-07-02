@@ -84,8 +84,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 			ret.append(x.id())
 		return ret
 
-	def getRegisteredPlayers(self, srvid):
-		users = self._getIceServerObject(srvid).getRegisteredPlayers('')
+	def getRegisteredPlayers(self, srvid, filter = ''):
+		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter )
 		ret = []
 
 		for user in users:
@@ -260,8 +260,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 
 
 class MumbleCtlIce_120(MumbleCtlIce_118):
-	def getRegisteredPlayers(self, srvid):
-		users = self._getIceServerObject(srvid).getRegisteredUsers('')
+	def getRegisteredPlayers(self, srvid, filter = ''):
+		users = self._getIceServerObject(srvid).getRegisteredUsers(filter)
 		ret = []
 
 		for user in users:

@@ -84,8 +84,8 @@ class MumbleCtlDbus(MumbleCtlBase):
 	def getPlayers(self, srvid):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers())
 
-	def getRegisteredPlayers(self, srvid):
-		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers(''))
+	def getRegisteredPlayers(self, srvid, filter = ''):
+		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers( filter ) )
 
 	def getACL(self, srvid, identifier):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getACL(identifier))
