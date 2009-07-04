@@ -297,11 +297,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		self._getIceServerObject(srvid).unregisterUser(mumbleid)
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
+		user = self._getIceServerObject( srvid ).getRegistration( mumbleid )
 		user['name']  = name
 		user['email'] = email
 		user['pw']    = password
-		return self._getIceServerObject(srvid).updateRegistration(user)
+		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
 	
 	def getACL(self, srvid, identifier):
 		import Murmur
