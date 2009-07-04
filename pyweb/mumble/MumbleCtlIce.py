@@ -171,9 +171,9 @@ class MumbleCtlIce_118(MumbleCtlBase):
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
-		user.name  = name
-		user.email = email
-		user.pw    = password
+		user.name  = name.encode( "UTF-8" )
+		user.email = email.encode( "UTF-8" )
+		user.pw    = password.encode( "UTF-8" )
 		#print user
 		# update*r*egistration r is lowercase...
 		return self._getIceServerObject(srvid).updateregistration(user)
