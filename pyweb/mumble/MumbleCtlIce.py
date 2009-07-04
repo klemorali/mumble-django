@@ -298,9 +298,9 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
-		user.name  = name
-		user.email = email
-		user.pw    = password
+		user['name']  = name
+		user['email'] = email
+		user['pw']    = password
 		return self._getIceServerObject(srvid).updateRegistration(user)
 	
 	def getACL(self, srvid, identifier):
