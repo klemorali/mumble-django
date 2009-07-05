@@ -85,7 +85,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		return ret
 
 	def getRegisteredPlayers(self, srvid, filter = ''):
-		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter )
+		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter.encode( "UTF-8" ) )
 		ret = []
 
 		for user in users:
@@ -156,12 +156,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		self._getIceServerObject(srvid).delete()
 
 	def setSuperUserPassword(self, srvid, value):
-		self.meta.setSuperUserPassword(srvid, value)
+		self.meta.setSuperUserPassword( srvid, value.encode( "UTF-8" ) )
 
 	def setConf(self, srvid, key, value):
-		value = value.encode("utf-8")
-		#print "%s server %s=%s (%s/%s)" % (srvid, key, value, type(key), type(value))
-		self._getIceServerObject(srvid).setConf(key, value)
+		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 
 	def registerPlayer(self, srvid, name):
 		return self._getIceServerObject(srvid).registerPlayer( name.encode( "UTF-8" ) )
@@ -225,7 +223,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 			imgdata += pack( "4B",  bgra[2], bgra[1], bgra[0], bgra[3] );
 		
 		# return an 600x60 RGBA image object created from the data
-		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata);
+		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata );
 
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
@@ -261,7 +259,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 
 class MumbleCtlIce_120(MumbleCtlIce_118):
 	def getRegisteredPlayers(self, srvid, filter = ''):
-		users = self._getIceServerObject(srvid).getRegisteredUsers(filter)
+		users = self._getIceServerObject( srvid ).getRegisteredUsers( filter.encode( "UTF-8" ) )
 		ret = []
 
 		for user in users:
