@@ -28,7 +28,7 @@ class MumbleCtlBase ():
 		raise NotImplementedError( "mctl::getAllConf" );
 
 	def getVersion( self ):
-		raise NotImplementedError( "mctl::getVersion );
+		raise NotImplementedError( "mctl::getVersion" );
 	
 	def setConf(self, srvid, key, value):
 		raise NotImplementedError( "mctl::setConf" );
