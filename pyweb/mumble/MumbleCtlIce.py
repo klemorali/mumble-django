@@ -156,7 +156,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		self._getIceServerObject(srvid).delete()
 
 	def setSuperUserPassword(self, srvid, value):
-		self.meta.setSuperUserPassword( srvid, value.encode( "UTF-8" ) )
+		self.meta.setSuperuserPassword( srvid, value.encode( "UTF-8" ) )
 
 	def setConf(self, srvid, key, value):
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
