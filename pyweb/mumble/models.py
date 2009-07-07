@@ -48,6 +48,9 @@ class Mumble( models.Model ):
 	defchan= models.IntegerField( 'Default channel',    default=0      );
 	booted = models.BooleanField( 'Boot Server',        default = True );
 	
+	class Meta:
+		unique_together = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
+	
 	def __init__( self, *args, **kwargs ):
 		models.Model.__init__( self, *args, **kwargs );
 		self._ctl      = None;
@@ -230,6 +233,8 @@ class MumbleUser( models.Model ):
 	owner    = models.ForeignKey(   User, null=True, blank=True   );
 	isAdmin  = models.BooleanField( 'Admin on root channel', default = False );
 	
+	class Meta:
+		unique_together = ( ( 'server', 'owner' ), );
 	
 	is_server  = False;
 	is_channel = False;
