@@ -323,7 +323,8 @@ class MumbleUser( models.Model ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
-		# Unregister this player in Murmur via dbus.
+		if self.getAdmin():
+			self.setAdmin( False );
 		self.server.ctl.unregisterPlayer(self.server.srvid, self.mumbleid)
 	
 	

@@ -46,19 +46,19 @@ class MumbleCtlDbus(MumbleCtlBase):
 	
 	def getAllConf(self, srvid):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getAllConf(dbus.Int32(srvid)))
-
+	
 	def setConf(self, srvid, key, value):
 		self.meta.setConf(dbus.Int32( srvid ), key, value)
-
+	
 	def getDefaultConf(self):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getDefaultConf())
 	
 	def start( self, srvid ):
 		self.meta.start( srvid );
-
+	
 	def stop( self, srvid ):
 		self.meta.stop( srvid );
-
+	
 	def isBooted( self, srvid ):
 		return bool( self.meta.isBooted( srvid ) );
 	
@@ -66,46 +66,46 @@ class MumbleCtlDbus(MumbleCtlBase):
 		srvid = dbus.Int32( srvid )
 		if self.meta.isBooted( srvid ):
 			self.meta.stop( srvid )
-
+		
 		self.meta.deleteServer( srvid )
-
+	
 	def newServer(self):
 		return self.meta.newServer()
-
+	
 	def registerPlayer(self, srvid, name):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).registerPlayer(name))
-
+	
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getDbusServerObject(srvid).unregisterPlayer(dbus.Int32( mumbleid ))
-
+	
 	def getChannels(self, srvid):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getChannels())
-
+	
 	def getPlayers(self, srvid):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers())
-
+	
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers( filter ) )
-
-	def getACL(self, srvid, identifier):
-		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getACL(identifier))
-
+	
+	def getACL(self, srvid, channelid):
+		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getACL(channelid))
+	
 	def setACL(self, srvid, acl):
 		self._getDbusServerObject(srvid).setACL(*acl.pack())
-
+	
 	def getBootedServers(self):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getBootedServers())
-
+	
 	def getAllServers(self):
 		return MumbleCtlDbus.converDbusTypeToNative(self.meta.getAllServers())
-
+	
 	def setSuperUserPassword(self, srvid, value):
 		self.meta.setSuperUserPassword(dbus.Int32(srvid), value)
-
+	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), name, email, password))
 		#return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), dbus.String(name), dbus.String(email), dbus.String(password)))
-
+	
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getDbusServerObject(srvid).getTexture(dbus.Int32(mumbleid));
 		
@@ -128,7 +128,7 @@ class MumbleCtlDbus(MumbleCtlBase):
 		
 		# return an 600x60 RGBA image object created from the data
 		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata);
-
+	
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
 		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
@@ -145,13 +145,13 @@ class MumbleCtlDbus(MumbleCtlBase):
 		texture = pack( ">L", len(bgrastring) ) + compressed;
 		# finally call murmur and set the texture
 		self._getDbusServerObject(srvid).setTexture(dbus.Int32( mumbleid ), texture)
-
+	
 	@staticmethod
 	def converDbusTypeToNative(data):
 		#i know dbus.* type is extends python native type.
 		#but dbus.* type is not native type.  it's not good transparent for using Ice/Dbus.
 		ret = None
-
+		
 		if isinstance(data, tuple) or type(data) is data.__class__ is dbus.Array or data.__class__ is dbus.Struct:
 			ret = []
 			for x in data:

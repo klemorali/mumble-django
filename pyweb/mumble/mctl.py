@@ -78,7 +78,7 @@ class MumbleCtlBase ():
 	def getAllServers(self):
 		raise NotImplementedError( "mctl::getAllServers" );
 
-	def getACL(self, srvid, identifier):
+	def getACL(self, srvid, channelid):
 		raise NotImplementedError( "mctl::getACL" );
 
 	def setACL(self, srvid, acl):
