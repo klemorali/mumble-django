@@ -156,7 +156,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		self._getIceServerObject(srvid).delete()
 
 	def setSuperUserPassword(self, srvid, value):
-		self.meta.setSuperuserPassword( srvid, value.encode( "UTF-8" ) )
+		self._getIceServerObject(srvid).setSuperuserPassword( value.encode( "UTF-8" ) )
 
 	def setConf(self, srvid, key, value):
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
@@ -172,7 +172,6 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		user.name  = name.encode( "UTF-8" )
 		user.email = email.encode( "UTF-8" )
 		user.pw    = password.encode( "UTF-8" )
-		#print user
 		# update*r*egistration r is lowercase...
 		return self._getIceServerObject(srvid).updateregistration(user)
 
@@ -203,9 +202,9 @@ class MumbleCtlIce_118(MumbleCtlBase):
 			new_group.remove      = curr_group['remove'];
 			new_group.members     = curr_group['members'];
 			newgroups.append( new_group );
-
+		
 		self._getIceServerObject(srvid).setACL( acl.channelId, newacls, newgroups, acl.inherit );
-
+	
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
 		if len(texture) == 0:
@@ -224,7 +223,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		
 		# return an 600x60 RGBA image object created from the data
 		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata );
-
+	
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
 		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
@@ -241,7 +240,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		texture = pack( ">L", len(bgrastring) ) + compressed;
 		# finally call murmur and set the texture
 		self._getIceServerObject(srvid).setTexture(mumbleid, texture)
-
+	
 	@staticmethod
 	def setUnicodeFlag(data):
 		ret = ''
