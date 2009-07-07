@@ -65,10 +65,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	def __init__( self, connstring, meta ):
 		self.proxy = connstring;
 		self.meta  = meta;
-
+	
 	def _getIceServerObject(self, srvid):
 		return self.meta.getServer(srvid);
-
+	
 	def getBootedServers(self):
 		ret = []
 		for x in self.meta.getBootedServers():
@@ -83,39 +83,82 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		for x in self.meta.getAllServers():
 			ret.append(x.id())
 		return ret
-
+	
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter.encode( "UTF-8" ) )
 		ret = []
-
+		
 		for user in users:
 			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
-
+		
 		return ret
-
+	
 	def getChannels(self, srvid):
 		chans = self._getIceServerObject(srvid).getChannels()
 		ret = []
-
+		
 		for x in chans:
 			chan = chans[x]
 			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links])
-
+		
 		return ret
-
+	
 	def getPlayers(self, srvid):
 		users = self._getIceServerObject(srvid).getPlayers()
 		ret = []
-
+	
 		for x in users:
 			user = users[x]
 			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
-
+		
 		return ret
-
-	def getACL(self, srvid, identifier):
+	
+	def getDefaultConf(self):
+		return self.setUnicodeFlag(self.meta.getDefaultConf())
+	
+	def getAllConf(self, srvid):
+		return self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+	
+	def newServer(self):
+		return self.meta.newServer().id()
+	
+	def isBooted( self, srvid ):
+		return bool( self._getIceServerObject(srvid).isRunning() );
+	
+	def start( self, srvid ):
+		self._getIceServerObject(srvid).start();
+	
+	def stop( self, srvid ):
+		self._getIceServerObject(srvid).stop();
+	
+	def deleteServer( self, srvid ):
+		if self._getIceServerObject(srvid).isRunning():
+			self._getIceServerObject(srvid).stop()
+		self._getIceServerObject(srvid).delete()
+	
+	def setSuperUserPassword(self, srvid, value):
+		self._getIceServerObject(srvid).setSuperuserPassword( value.encode( "UTF-8" ) )
+	
+	def setConf(self, srvid, key, value):
+		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
+	
+	def registerPlayer(self, srvid, name):
+		return self._getIceServerObject(srvid).registerPlayer( name.encode( "UTF-8" ) )
+	
+	def unregisterPlayer(self, srvid, mumbleid):
+		self._getIceServerObject(srvid).unregisterPlayer(mumbleid)
+	
+	def setRegistration(self, srvid, mumbleid, name, email, password):
+		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
+		user.name  = name.encode( "UTF-8" )
+		user.email = email.encode( "UTF-8" )
+		user.pw    = password.encode( "UTF-8" )
+		# update*r*egistration r is lowercase...
+		return self._getIceServerObject(srvid).updateregistration(user)
+	
+	def getACL(self, srvid, channelid):
 		import Murmur
-		acls = self._getIceServerObject(srvid).getACL(identifier)
+		acls = self._getIceServerObject(srvid).getACL(channelid)
 		ret = []
 		for x in acls:
 			if isinstance(x, list):
@@ -131,50 +174,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 				ret.append(x)
 		
 		return ret
-
-	def getDefaultConf(self):
-		return self.setUnicodeFlag(self.meta.getDefaultConf())
-
-	def getAllConf(self, srvid):
-		return self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
-
-	def newServer(self):
-		return self.meta.newServer().id()
-
-	def isBooted( self, srvid ):
-		return bool( self._getIceServerObject(srvid).isRunning() );
 	
-	def start( self, srvid ):
-		self._getIceServerObject(srvid).start();
-
-	def stop( self, srvid ):
-		self._getIceServerObject(srvid).stop();
-
-	def deleteServer( self, srvid ):
-		if self._getIceServerObject(srvid).isRunning():
-			self._getIceServerObject(srvid).stop()
-		self._getIceServerObject(srvid).delete()
-
-	def setSuperUserPassword(self, srvid, value):
-		self._getIceServerObject(srvid).setSuperuserPassword( value.encode( "UTF-8" ) )
-
-	def setConf(self, srvid, key, value):
-		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
-
-	def registerPlayer(self, srvid, name):
-		return self._getIceServerObject(srvid).registerPlayer( name.encode( "UTF-8" ) )
-
-	def unregisterPlayer(self, srvid, mumbleid):
-		self._getIceServerObject(srvid).unregisterPlayer(mumbleid)
-
-	def setRegistration(self, srvid, mumbleid, name, email, password):
-		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
-		user.name  = name.encode( "UTF-8" )
-		user.email = email.encode( "UTF-8" )
-		user.pw    = password.encode( "UTF-8" )
-		# update*r*egistration r is lowercase...
-		return self._getIceServerObject(srvid).updateregistration(user)
-
 	def setACL(self, srvid, acl):
 		import Murmur
 		
@@ -250,7 +250,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 				ret[MumbleCtlIce_118.setUnicodeFlag(key)] = MumbleCtlIce_118.setUnicodeFlag(data[key])
 		else:
 			ret = unicode(data, 'utf-8')
-
+	
 		return ret
 
 
@@ -260,22 +260,22 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject( srvid ).getRegisteredUsers( filter.encode( "UTF-8" ) )
 		ret = []
-
+		
 		for user in users:
 			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
-
+		
 		return ret
-
+	
 	def getChannels(self, srvid):
 		chans = self._getIceServerObject(srvid).getChannels()
 		ret = []
-
+		
 		for x in chans:
 			chan = chans[x]
 			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links, chan.description])
-
+		
 		return ret
-
+	
 	def getPlayers(self, srvid):
 		serv = self._getIceServerObject(srvid);
 		users = serv.getUsers()
@@ -284,15 +284,15 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		for x in users:
 			user = users[x]
 			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
-
+		
 		return ret
-
+	
 	def registerPlayer(self, srvid, name):
 		return self._getIceServerObject(srvid).registerUser( name.encode( "UTF-8" ) )
-
+	
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getIceServerObject(srvid).unregisterUser(mumbleid)
-
+	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject( srvid ).getRegistration( mumbleid )
 		user['name']  = name.encode( "UTF-8" )
@@ -300,9 +300,9 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		user['pw']    = password.encode( "UTF-8" )
 		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
 	
-	def getACL(self, srvid, identifier):
+	def getACL(self, srvid, channelid):
 		import Murmur
-		acls = self._getIceServerObject(srvid).getACL(identifier)
+		acls = self._getIceServerObject(srvid).getACL(channelid)
 		ret = []
 		for x in acls:
 			if isinstance(x, list):
@@ -348,3 +348,5 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			newgroups.append( new_group );
 		
 		self._getIceServerObject(srvid).setACL( acl.channelId, newacls, newgroups, acl.inherit );
+	
+
