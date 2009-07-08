@@ -19,14 +19,14 @@ from PIL    import Image
 from struct import pack, unpack
 from zlib   import compress, decompress
 
-from mctl import MumbleCtlBase
+from mctl   import MumbleCtlBase
 
 import dbus
+
 class MumbleCtlDbus(MumbleCtlBase):
 	method = "DBus";
 	
 	def __init__( self, connstring ):
-		# Prior to saving the model, connect to murmur via dbus and update its settings.
 		self.dbus_base = connstring;
 		self.meta = self._getDbusMeta();
 	
@@ -34,10 +34,8 @@ class MumbleCtlDbus(MumbleCtlBase):
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus_base, '/' ), 'net.sourceforge.mumble.Meta' );
 	
 	def _getDbusServerObject( self, srvid):
-		"Connects to DBus and returns an mmServer object representing this Murmur instance."
-		
 		if srvid not in self.getBootedServers():
-			raise Exception, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( srvid, self.meta );
+			raise SystemError, 'No murmur process with the given server ID (%d) is running and attached to system dbus under %s.' % ( srvid, self.meta );
 		
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus_base, '/%d' % srvid ), 'net.sourceforge.mumble.Murmur' );
 	
@@ -104,7 +102,6 @@ class MumbleCtlDbus(MumbleCtlBase):
 	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), name, email, password))
-		#return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), dbus.String(name), dbus.String(email), dbus.String(password)))
 	
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getDbusServerObject(srvid).getTexture(dbus.Int32(mumbleid));
@@ -170,3 +167,5 @@ class MumbleCtlDbus(MumbleCtlBase):
 			elif data.__class__ is dbus.Byte:
 				ret = byte(data)
 		return ret
+
+

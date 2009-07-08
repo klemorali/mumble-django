@@ -15,10 +15,6 @@
  *  GNU General Public License for more details.
 """
 
-#zope.interface is good but don't standard interface library
-#abc is better but 2.6 higher.
-#import abc
-
 import re
 
 class MumbleCtlBase ():
@@ -105,27 +101,4 @@ class MumbleCtlBase ():
 			return MumbleCtlIce( connstring )
 
 
-
-if __name__ == "__main__":
-	import sys
-	from MumbleCtlIce import MumbleCtlIce
-	from MumbleCtlDbus import MumbleCtlDbus
-	x = int(sys.argv[1])
-	dbusCtl = MumbleCtlDbus()
-	iceCtl = MumbleCtlIce()
-	print "equal test ---"
-	print "getBootedServers			[%s]" % (dbusCtl.getBootedServers() == iceCtl.getBootedServers())
-	print "getChannels				[%s]" % (dbusCtl.getChannels(x) == iceCtl.getChannels(x))
-	print "getPlayers				[%s]" % (dbusCtl.getPlayers(x) == iceCtl.getPlayers(x))
-	print "getACL(x, 0)				[%s]" % (dbusCtl.getACL(x, 0) == iceCtl.getACL(x, 0))
-	print "getAllServers			[%s]" % (dbusCtl.getAllServers() == iceCtl.getAllServers())
-	print "getDefaultConf			[%s]" % (dbusCtl.getDefaultConf() == iceCtl.getDefaultConf())
-	print "getAllConf(x)			[%s]" % (dbusCtl.getAllConf(x) == iceCtl.getAllConf(x))
-	print dbusCtl.getRegisteredPlayers(x)
-	#print dbusCtl.getRegisteredPlayers(x)[3][1]
-	print iceCtl.getRegisteredPlayers(x)
-	#print iceCtl.getRegisteredPlayers(x)[3][1]
-	print "getRegisteredPlayers(x)	[%s]" % (dbusCtl.getRegisteredPlayers(x) == iceCtl.getRegisteredPlayers(x))
-	#print "getTexture(2, 30)		[%s]" % (dbusCtl.getTexture(2, 30) == iceCtl.getTexture(2, 30))
-	#print dbusCtl.getTexture(2, 30).__class__
 
