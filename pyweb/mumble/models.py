@@ -144,7 +144,6 @@ class Mumble( models.Model ):
 	
 	# Deletion handler
 	def deleteServer( self ):
-		# Unregister this player in Murmur via ctroller.
 		self.ctl.deleteServer(self.srvid)
 	
 	@staticmethod
@@ -152,7 +151,7 @@ class Mumble( models.Model ):
 		kwargs['instance'].deleteServer();
 	
 	
-	# Channel lists: flat list
+	# Channel list
 	def getChannels( self ):
 		if self._channels is None:
 			self._channels = {};
@@ -291,7 +290,7 @@ class MumbleUser( models.Model ):
 		acl = mmACL( 0, self.server.ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
-			raise ValueError( "The admin group was not found in the ACL's groups list!" );
+			raise ReferenceError( "The admin group was not found in the ACL's groups list!" );
 		return self.mumbleid in acl.admingroup['add'];
 	
 	def setAdmin( self, value ):
@@ -300,7 +299,7 @@ class MumbleUser( models.Model ):
 		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
-			raise ValueError( "The admin group was not found in the ACL's groups list!" );
+			raise ReferenceError( "The admin group was not found in the ACL's groups list!" );
 		
 		if value != ( self.mumbleid in acl.admingroup['add'] ):
 			if value:

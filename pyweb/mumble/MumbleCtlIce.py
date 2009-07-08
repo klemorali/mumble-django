@@ -22,14 +22,14 @@ from zlib    import compress, decompress
 
 from django.conf import settings
 
-from mctl import MumbleCtlBase
+from mctl    import MumbleCtlBase
 
 import Ice
 
 
 def MumbleCtlIce( connstring ):
 	version = settings.SLICE_VERSION;
-
+	
 	slice = settings.SLICE;
 	if not slice:
 		slice = join(
@@ -106,7 +106,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	def getPlayers(self, srvid):
 		users = self._getIceServerObject(srvid).getPlayers()
 		ret = []
-	
+		
 		for x in users:
 			user = users[x]
 			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
@@ -250,7 +250,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 				ret[MumbleCtlIce_118.setUnicodeFlag(key)] = MumbleCtlIce_118.setUnicodeFlag(data[key])
 		else:
 			ret = unicode(data, 'utf-8')
-	
+		
 		return ret
 
 
