@@ -25,7 +25,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
 from mumble.models import *
-mm = Mumble.objects.filter( booted = True )
+mm = Mumble.objects.filter( booted = True ).order_by( "id" );
 
 if sys.argv[-1] == 'config':
 	print "graph_vlabel Users"
