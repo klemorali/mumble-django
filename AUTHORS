@@ -1,7 +1,7 @@
 The primary author of mumble-django is Michael "Svedrin" Ziegler
 <diese-addy@funzt-halt.net>.
 
-The Dbus/ICE interface modules are developed by withgod
+The Dbus/ICE interface modules have been contributed by withgod
 <withgod@sourceforge.net>.
 
 Others who have contributed to the application:
