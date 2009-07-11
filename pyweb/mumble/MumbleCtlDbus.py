@@ -70,8 +70,10 @@ class MumbleCtlDbus(MumbleCtlBase):
 	def newServer(self):
 		return self.meta.newServer()
 	
-	def registerPlayer(self, srvid, name):
-		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).registerPlayer(name))
+	def registerPlayer(self, srvid, name, email, password):
+		mumbleid = MumbleCtlDbus.converDbusTypeToNative( self._getDbusServerObject(srvid).registerPlayer(name) );
+		self.setRegistration( srvid, mumbleid, name, email, password );
+		return mumbleid;
 	
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getDbusServerObject(srvid).unregisterPlayer(dbus.Int32( mumbleid ))
