@@ -1,16 +1,21 @@
-Thanks for downloading mumble-django.
+Thank you for downloading mumble-django. :-)
 
 To install mumble-django, extract it to wherever you would like it to
 reside, and then run:
 
     python manage.py syncdb
 
-Under most circumstances, that should be all you need to do. However, if
-Murmur is not configured to connect to DBus, syncdb will give you an error
-message and Mumble-Django will not be able to work correctly. In this case,
-have a look at the wiki at
-<http://bitbucket.org/Svedrin/mumble-django/wiki/Connecting_Murmur_to_DBus>
-for instructions how to connect Murmur to DBus.
+This script will create the database for you. You will be asked whether to
+use Ice or DBus to connect to Murmur, so please make sure that:
+a) Murmur is reachable either over Ice or DBus. How to configure that is
+   described in the wiki at
+   http://bitbucket.org/Svedrin/mumble-django/wiki/Connecting_Murmur_to_ICE
+   and
+   http://bitbucket.org/Svedrin/mumble-django/wiki/Connecting_Murmur_to_DBus
+b) the slice version configured in settings.py matches the Murmur version
+   you are running (1.1.8 or 1.2.0).
+In case of an emergency, you can always skip this step and repeat it later
+simply by running the syncdb command again.
 
 If you need instructions on how to configure your web server in order to
 serve this application, you can have a look at the Wiki at
@@ -20,13 +25,24 @@ shouldn't need to edit it.
 
 Django_Registration requires a valid EMail address to be set in settings.py,
 that can be used as a sender address for the registration emails. If you
-intend to use the registration feature, you may need to change the
+intend to use the registration feature, you will need to change the
 DEFAULT_FROM_EMAIL setting in settings.py.
 
-Note that there is no need to use the same Database that Murmur itself uses,
-as mumble-django exclusively uses DBus to connect to Murmur and does not
+Note that there it is discouraged to use the same Database that Murmur itself
+uses, as mumble-django exclusively uses DBus to connect to Murmur and does not
 access Murmur's database directly.
 
 Also note that this application requires Python 2.3 or later, and a
 functional installation of Django 1.0 or newer. You can obtain Python
 from http://www.python.org/ and Django from http://www.djangoproject.com/.
+
+In order to use the Munin plugin that ships with Mumble-Django, just symlink
+munin.py to /etc/munin/plugins and restart munin-node. Munin will then create
+a new section called "Mumble users" in the Network category. Don't worry if
+the numbers show up as "nan" at first, this will go away after a few Munin
+runs. To test the plugin, simply run it:
+    standalone: python munin.py
+    via Munin:  munin-run <whatever you named the symlink in plugins>
+It should give you an output like "1.value 10". If it doesn't, you might need
+to set the MUMBLE_DJANGO_ROOT variable to the path you extracted Mumble-Django
+to (i.e, the one mumble-django.wsgi can be found in).

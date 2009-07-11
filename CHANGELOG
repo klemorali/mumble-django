@@ -2,6 +2,24 @@
 Mumble-Django changelog
 =======================
 
+Version 0.8, 11 July 2009:
+------------------------------
+* Added Ice connector objects. Now MD can connect via both DBus and Ice.
+* Connectors can be used simultaneously, so managing 1.1.8 and 1.2.0 Murmurs
+  is possible with a single instance of Mumble-Django.
+* Full compatibility to Murmur 1.2.0.
+* Added Channel descriptions to channel viewer for 1.2.0 servers.
+* management.py can now *always* add servers with a non-default connstring,
+  not only when the default connstring doesn't resolve.
+* management.py tries to get connstring from an environment variable.
+* Changed channel viewer to use <div>s instead of a table, which is a lot
+  cleaner to generate.
+* Fixed username@ missing in the channel links.
+* Merged mmServer object directly into Model and cleaned up mmobjects.py.
+* Added "Default connstring" and "Slice Version" fields to settings.py.
+* Added a Munin plugin to display the number of players on each server.
+* Added a few UNIQUE statements to the Models to prevent get() errors.
+
 Version 0.7, 27 May 2009:
 ------------------------------
 * Added copyright information about the Icons in the channel viewer to
