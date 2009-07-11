@@ -59,7 +59,7 @@ class MumbleCtlBase ():
 	def getChannels(self, srvid):
 		raise NotImplementedError( "mctl::getChannels" );
 
-	def registerPlayer(self, srvid, name):
+	def registerPlayer(self, srvid, name, email, password):
 		raise NotImplementedError( "mctl::registerPlayer" );
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):

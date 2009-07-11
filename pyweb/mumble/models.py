@@ -253,19 +253,22 @@ class MumbleUser( models.Model ):
 		# Before the record set is saved, update Murmur via controller.
 		ctl = self.server.ctl;
 		
+		if self.owner:
+			email = self.owner.email;
+		else:
+			email = settings.DEFAULT_FROM_EMAIL;
+		
 		if self.id is None:
 			# This is a new user record, so Murmur doesn't know about it yet
 			if len( ctl.getRegisteredPlayers( self.server.srvid, self.name ) ) > 0:
 				raise ValueError( "Another player already registered that name." );
-			self.mumbleid = ctl.registerPlayer( self.server.srvid, self.name );
+			if not self.password:
+				raise ValueError( "Cannot register player without a password!" );
+			
+			self.mumbleid = ctl.registerPlayer( self.server.srvid, self.name, email, self.password );
 		
 		# Update user's registration
-		if self.password:
-			if self.owner:
-				email = self.owner.email
-			else:
-				email = settings.DEFAULT_FROM_EMAIL;
-			
+		elif self.password:
 			ctl.setRegistration(
 				self.server.srvid,
 				self.mumbleid,
@@ -273,9 +276,9 @@ class MumbleUser( models.Model ):
 				email,
 				self.password
 				);
-			
-			# Don't save the users' passwords, we don't need them anyway
-			self.password = '';
+		
+		# Don't save the users' passwords, we don't need them anyway
+		self.password = '';
 		
 		self.setAdmin( self.isAdmin );
 		
