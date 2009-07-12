@@ -29,6 +29,20 @@ from mctl        import *
 
 
 class Mumble( models.Model ):
+	"""Represents a Murmur server instance.
+	
+	All configurable settings are represented by a field in this model. To change the
+	settings, just update the appropriate field and call the save() method.
+	
+	To set up a new server instance, instanciate this Model. The first field you should
+	define is the "dbus" field, which tells the connector subsystem how to connect to
+	the Murmurd master process. Set this to the appropriate DBus service name or the
+	Ice proxy string.
+	
+	When an instance of this model is deleted, the according server instance will be
+	deleted as well.
+	"""
+	
 	name   = models.CharField(    'Server Name',        max_length = 200 );
 	dbus   = models.CharField(    'DBus or ICE base',   max_length = 200, default = settings.DEFAULT_CONN );
 	srvid  = models.IntegerField( 'Server ID',          editable = False );
@@ -68,6 +82,10 @@ class Mumble( models.Model ):
 	
 	# Ctl instantiation
 	def getCtl( self ):
+		"""Instantiate and return a MumbleCtl object for this server.
+		
+		Only one instance will be created, and reused on subsequent calls.
+		"""
 		if not self._ctl:
 			self._ctl = MumbleCtlBase.newInstance( self.dbus );
 		return self._ctl;
@@ -76,6 +94,10 @@ class Mumble( models.Model ):
 	
 	
 	def save( self, dontConfigureMurmur=False ):
+		"""
+		Save the options configured in this model instance not only to Django's database,
+		but to Murmur as well.
+		"""
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing servers.
 			return models.Model.save( self );
@@ -134,6 +156,7 @@ class Mumble( models.Model ):
 	
 	
 	def isUserAdmin( self, user ):
+		"""Determine if the given user is an admin on this server."""
 		if user.is_authenticated():
 			try:
 				return self.mumbleuser_set.get( owner=user ).getAdmin();
@@ -144,6 +167,7 @@ class Mumble( models.Model ):
 	
 	# Deletion handler
 	def deleteServer( self ):
+		"""Delete this server instance from Murmur."""
 		self.ctl.deleteServer(self.srvid)
 	
 	@staticmethod
@@ -153,6 +177,11 @@ class Mumble( models.Model ):
 	
 	# Channel list
 	def getChannels( self ):
+		"""Query the channels from Murmur and create a tree structure.
+		
+		Again, this will only be done for the first call to this function. Subsequent
+		calls will simply return the list created last time.
+		"""
 		if self._channels is None:
 			self._channels = {};
 			chanlist = self.ctl.getChannels(self.srvid);
@@ -204,11 +233,11 @@ class Mumble( models.Model ):
 		
 		return self._channels;
 	
-	channels = property( getChannels, None );
-	rootchan = property( lambda self: self.channels[0], None );
+	channels = property( getChannels, None );                       """A convenience wrapper for getChannels()."""
+	rootchan = property( lambda self: self.channels[0], None );     """A convenience wrapper for getChannels()[0]."""
 	
 	def getURL( self, forUser = None ):
-		# mumble://username@host:port/
+		"""Create an URL of the form mumble://username@host:port/ for this server."""
 		userstr = "";
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
@@ -218,13 +247,25 @@ class Mumble( models.Model ):
 		
 		return "mumble://%s%s/" % ( userstr, self.addr );
 	
-	connecturl = property( getURL, None );
+	connecturl = property( getURL, None );                          """A convenience wrapper for getURL()."""
 	
-	version = property( lambda self: self.ctl.getVersion(), None );
+	version = property( lambda self: self.ctl.getVersion(), None ); """Get the version of Murmur."""
 
 
 
 class MumbleUser( models.Model ):
+	"""Represents a User account in Murmur.
+	
+	To change an account, simply set the according field in this model and call the save()
+	method to update the account in Murmur and in Django's database. Note that, once saved
+	for the first time, the server field must not be changed. Attempting to do this will
+	result in an AttributeError. To move an account to a new server, recreate it on the
+	new server and delete the old model.
+	
+	When you delete an instance of this model, the according user account will be deleted
+	in Murmur as well, after revoking the user's admin privileges.
+	"""
+	
 	mumbleid = models.IntegerField( 'Mumble player_id', editable = False, default = -1 );
 	name     = models.CharField(    'User name and Login', max_length = 200 );
 	password = models.CharField(    'Login password',      max_length = 200, blank=True );
@@ -239,13 +280,11 @@ class MumbleUser( models.Model ):
 	is_channel = False;
 	is_player  = True;
 	
-	
 	def __unicode__( self ):
 		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );
 	
-	
-	
 	def save( self, dontConfigureMurmur=False ):
+		"""Save the settings in this model to Murmur."""
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing players.
 			return models.Model.save( self );
@@ -289,7 +328,7 @@ class MumbleUser( models.Model ):
 	# Admin handlers
 	
 	def getAdmin( self ):
-		# Get ACL of root Channel, get the admin group and see if I'm in it
+		"""Get ACL of root Channel, get the admin group and see if this user is in it."""
 		acl = mmACL( 0, self.server.ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
@@ -297,7 +336,7 @@ class MumbleUser( models.Model ):
 		return self.mumbleid in acl.admingroup['add'];
 	
 	def setAdmin( self, value ):
-		# Get ACL of root Channel, get the admin group and see if I'm in it
+		"""Set or revoke this user's membership in the admin group on the root channel."""
 		ctl = self.server.ctl;
 		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
@@ -317,11 +356,12 @@ class MumbleUser( models.Model ):
 	# Texture handlers
 	
 	def getTexture( self ):
+		"""Get the user texture as a PIL Image."""
 		return self.server.ctl.getTexture(self.server.srvid, self.mumbleid);
 	
 	def setTexture( self, infile ):
+		"""Read an image from the infile and install it as the user's texture."""
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
-	
 	
 	# Deletion handler
 	
@@ -330,6 +370,7 @@ class MumbleUser( models.Model ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
+		"""Delete this user account from Murmur."""
 		if self.getAdmin():
 			self.setAdmin( False );
 		self.server.ctl.unregisterPlayer(self.server.srvid, self.mumbleid)

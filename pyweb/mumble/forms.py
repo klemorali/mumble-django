@@ -19,18 +19,27 @@ from django.forms	import Form, ModelForm
 from models		import *
 
 class MumbleForm( ModelForm ):
+	"""
+	The Mumble Server admin form that allows to configure settings which do not necessarily
+	have to be reserved to the server hoster.
+	
+	Server hosters are expected to use the Django admin application instead, where everything
+	can be configured freely.
+	"""
 	class Meta:
 		model   = Mumble;
 		exclude = ( 'dbus', 'booted', 'addr', 'port', 'users', 'bwidth', 'sslcrt', 'sslkey', );
 	
 
 class MumbleUserForm( ModelForm ):
+	"""The user registration form used to register an account."""
 	class Meta:
 		model   = MumbleUser;
 		fields  = ( 'name', 'password' );
 
 
 class MumbleTextureForm( Form ):
+	"""The form used to upload a new image to be set as texture."""
 	texturefile = forms.ImageField();
 
 
