@@ -28,6 +28,8 @@ def cmp_names( a, b ):
 
 
 class mmChannel( object ):
+	"""Represents a channel in Murmur."""
+	
 	# channels  = list();
 	# subchans  = list();
 	# chanid    = int();
@@ -58,6 +60,7 @@ class mmChannel( object ):
 	
 	
 	def parentChannels( self ):
+		"""Return the names of this channel's parents in the channel tree."""
 		if self.parent is None or self.parent.is_server or self.parent.chanid == 0:
 			return [];
 		return self.parent.parentChannels() + [self.parent.name];
@@ -81,14 +84,14 @@ class mmChannel( object ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
 	
 	def sort( self ):
-		# Sort my subchannels and players, and then iterate over them and sort them recursively
+		"""Sort my subchannels and players, and then iterate over them and sort them recursively."""
 		self.subchans.sort( cmp_names );
 		self.players.sort( cmp_names );
 		for sc in self.subchans:
 			sc.sort();
 	
 	def visit( self, callback, lvl = 0 ):
-		# call callback on myself, then visit my subchans, then my players
+		"""Call callback on myself, then visit my subchans, then my players."""
 		callback( self, lvl );
 		for sc in self.subchans:
 			sc.visit( callback, lvl + 1 );
@@ -97,7 +100,10 @@ class mmChannel( object ):
 	
 	
 	def getURL( self, forUser = None ):
-		# mumble://username@host:port/parentchans/self.name
+		"""
+		Create an URL to connect to this channel. The URL is of the form
+		mumble://username@host:port/parentchans/self.name
+		"""
 		userstr = "";
 		
 		if forUser is not None:
@@ -120,6 +126,8 @@ class mmChannel( object ):
 
 
 class mmPlayer( object ):
+	"""Represents a Player in Murmur."""
+	
 	# muted        = bool;
 	# deafened     = bool;
 	# suppressed   = bool;
@@ -175,6 +183,8 @@ class mmPlayer( object ):
 
 
 class mmACL:
+	"""Represents an ACL for a certain channel."""
+	
 	def __init__( self, channelId, aclObj ):
 		aclsrc, groupsrc, inherit = aclObj;
 		
@@ -197,6 +207,7 @@ class mmACL:
 		self.inherit = inherit;
 	
 	def pack( self ):
+		"""Packs the information in this ACL up in a way that it can be passed to DBus."""
 		return (
 			self.channelId,
 			[( acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] ) for acl in self.acls ],

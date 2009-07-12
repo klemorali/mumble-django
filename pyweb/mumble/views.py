@@ -29,7 +29,7 @@ from mmobjects				import *
 
 
 def mumbles( request ):
-	"Displays a list of all configured Mumble servers, or redirects if only one configured."
+	"""Display a list of all configured Mumble servers, or redirects if only one configured."""
 	mumbles = get_list_or_404( Mumble );
 	
 	if len(mumbles) == 1:
@@ -45,7 +45,12 @@ def mumbles( request ):
 
 
 def show( request, server ):
-	"Displays the channel list for the given Server ID."
+	"""Display the channel list for the given Server ID.
+	
+	This includes not only the channel list itself, but indeed the user registration,
+	server admin and user texture form as well. The template then uses JavaScript
+	to display these forms integrated into the Channel viewer.
+	"""
 	srv = get_object_or_404( Mumble, id=server );
 	
 	isAdmin = srv.isUserAdmin( request.user );
@@ -137,6 +142,7 @@ def show( request, server ):
 
 
 def showTexture( request, server ):
+	"""Pack the currently logged in user's texture (if any) into an HttpResponse."""
 	if request.user.is_authenticated():
 		srv  = Mumble.objects.get( id=int(server) );
 		user = MumbleUser.objects.get( server=srv, owner=request.user );
