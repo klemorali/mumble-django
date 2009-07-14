@@ -72,6 +72,8 @@ class Mumble( models.Model ):
 		self._rootchan = None;
 	
 	def __unicode__( self ):
+		if not self.id:
+			return u'Murmur "%s" (NOT YET CREATED)' % self.name;
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
 	
 	
