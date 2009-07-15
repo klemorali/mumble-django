@@ -18,6 +18,15 @@ from django			import forms
 from django.forms	import Form, ModelForm
 from models		import *
 
+class MumbleAdminForm( ModelForm ):
+	"""
+	A Mumble Server admin form intended to be used by the server hoster.
+	"""
+	
+	class Meta:
+		model   = Mumble;
+		exclude = ( 'sslcrt', 'sslkey' );
+
 class MumbleForm( ModelForm ):
 	"""
 	The Mumble Server admin form that allows to configure settings which do not necessarily

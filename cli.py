@@ -45,6 +45,7 @@ import	curses
 from	django.db.models.fields.related		import ForeignKey
 
 from	mumble.models				import *
+from	mumble.forms				import *
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -245,6 +246,30 @@ class BaseWindow( object ):
 	
 	def border( self ):
 		self.win.border();
+	
+	def enter( self ):
+		while( True ):
+			key = self.win.getch();
+			if key == curses.KEY_UP:
+				return;
+
+
+class FormEditor( object ):
+	def __init__( self, win, form ):
+		self.win      = win;
+		self.form     = form;
+	
+	def draw( self ):
+		curr_y = 1;
+		
+		for fname in self.form.fields:
+			field = self.form.fields[fname];
+			value = unicode( getattr( self.form.data, fname ) );
+			
+			self.win.addstr( curr_y, 1,  field.label.encode(locale.getpreferredencoding()) );
+			self.win.addstr( curr_y, 30, value.encode(locale.getpreferredencoding()) );
+			
+			curr_y += 1;
 
 
 class WndChannels( BaseWindow ):
@@ -264,8 +289,17 @@ class WndChannels( BaseWindow ):
 		self.curr_y = 1;
 		self.mm.rootchan.visit( self.printItem );
 
-class WndSettings( BaseWindow ):
+
+class WndSettings( BaseWindow, FormEditor ):
 	tabName = 'Server settings';
+	
+	def __init__( self, parentwin, mumble, pos_x, pos_y ):
+		BaseWindow.__init__( self, parentwin, mumble, pos_x, pos_y );
+		FormEditor.__init__( self, self.win,  MumbleAdminForm( mumble ) );
+	
+	def draw( self ):
+		FormEditor.draw( self );
+
 
 class WndUsers( BaseWindow ):
 	tabName = 'Registered users';
@@ -297,7 +331,7 @@ class MumbleForm( object ):
 		self.win.mvwin( self.pos[1], self.pos[0] );
 	
 	def draw( self ):
-		self.win.addstr( 0, 0, self.mm.name );
+		self.win.addstr( 0, 0, self.mm.name.encode(locale.getpreferredencoding()) );
 	
 	def drawTabs( self ):
 		first = True;
@@ -325,8 +359,11 @@ class MumbleForm( object ):
 			elif key == curses.KEY_RIGHT and self.curridx < self.currmax:
 				self.curridx += 1;
 			
-			elif key in ( ord('q'), ord('Q') ):
+			elif key in ( ord('q'), ord('Q'), curses.KEY_UP ):
 				return;
+			
+			elif key in ( curses.KEY_ENTER, curses.KEY_DOWN, ord('\n') ):
+				self.currwin.enter();
 			
 			self.win.clear();
 			self.draw();
@@ -334,6 +371,7 @@ class MumbleForm( object ):
 			self.currwin.draw();
 			self.currwin.border();
 			self.win.refresh();
+			
 
 
 
@@ -368,7 +406,7 @@ def main( stdscr ):
 			stdscr.addstr( first_y + selectedIdx, 3, ' ' );
 			selectedIdx += 1;
 		
-		elif key in ( curses.KEY_ENTER, ord('\n') ):
+		elif key in ( curses.KEY_RIGHT, curses.KEY_ENTER, ord('\n') ):
 			stdscr.clear();
 			selectedObj.mvwin( 5, first_y );
 			selectedObj.draw();
