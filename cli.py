@@ -39,11 +39,15 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 # Uncomment this line to point the egg cache to /tmp.
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
+import	locale
 import	curses
 
 from	django.db.models.fields.related		import ForeignKey
 
 from	mumble.models				import *
+
+locale.setlocale(locale.LC_ALL, '')
+
 
 def getNum( prompt, **kwargs ):
 	id = None;
@@ -247,11 +251,13 @@ class WndChannels( BaseWindow ):
 	tabName = 'Channels';
 	
 	def printItem( self, item, level ):
+		str = "";
 		if item.is_server or item.is_channel:
-			self.win.addstr( self.curr_y, 2*level+1, "%s (Channel)" % unicode(item.name) )
+			str = "%s (Channel)" % item.name;
 		else:
-			self.win.addstr( self.curr_y, 2*level+1, "%s (Player)" % unicode(item.name) )
+			str = "%s (Player)" % item.name
 		
+		self.win.addstr( self.curr_y, 4*level+1, str.encode(locale.getpreferredencoding()) )
 		self.curr_y += 1;
 	
 	def draw( self ):
