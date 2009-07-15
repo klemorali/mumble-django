@@ -14,18 +14,19 @@
  *  GNU General Public License for more details.
 """
 
-from django			import forms
+from django		import forms
 from django.forms	import Form, ModelForm
 from models		import *
+
 
 class MumbleAdminForm( ModelForm ):
 	"""
 	A Mumble Server admin form intended to be used by the server hoster.
 	"""
-	
 	class Meta:
 		model   = Mumble;
 		exclude = ( 'sslcrt', 'sslkey' );
+
 
 class MumbleForm( ModelForm ):
 	"""
@@ -38,7 +39,7 @@ class MumbleForm( ModelForm ):
 	class Meta:
 		model   = Mumble;
 		exclude = ( 'dbus', 'booted', 'addr', 'port', 'users', 'bwidth', 'sslcrt', 'sslkey', );
-	
+
 
 class MumbleUserForm( ModelForm ):
 	"""The user registration form used to register an account."""

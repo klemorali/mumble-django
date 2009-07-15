@@ -41,8 +41,10 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 
 import	locale
 import	curses
+from	curses.textpad				import Textbox
 
 from	django.db.models.fields.related		import ForeignKey
+from	django.db				import models
 
 from	mumble.models				import *
 from	mumble.forms				import *
@@ -254,24 +256,6 @@ class BaseWindow( object ):
 				return;
 
 
-class FormEditor( object ):
-	def __init__( self, win, form ):
-		self.win      = win;
-		self.form     = form;
-	
-	def draw( self ):
-		curr_y = 1;
-		
-		for fname in self.form.fields:
-			field = self.form.fields[fname];
-			value = unicode( getattr( self.form.data, fname ) );
-			
-			self.win.addstr( curr_y, 1,  field.label.encode(locale.getpreferredencoding()) );
-			self.win.addstr( curr_y, 30, value.encode(locale.getpreferredencoding()) );
-			
-			curr_y += 1;
-
-
 class WndChannels( BaseWindow ):
 	tabName = 'Channels';
 	
@@ -290,16 +274,95 @@ class WndChannels( BaseWindow ):
 		self.mm.rootchan.visit( self.printItem );
 
 
-class WndSettings( BaseWindow, FormEditor ):
+class WndSettings( BaseWindow ):
 	tabName = 'Server settings';
+	
+	blacklist = ( 'id', 'sslkey', 'sslcrt' );
 	
 	def __init__( self, parentwin, mumble, pos_x, pos_y ):
 		BaseWindow.__init__( self, parentwin, mumble, pos_x, pos_y );
-		FormEditor.__init__( self, self.win,  MumbleAdminForm( mumble ) );
+		self.form     = MumbleAdminForm( instance=mumble );
+		
+		self.editors  = {};
+		self.fields   = [ mf for mf in mumble._meta.fields if mf.name not in self.blacklist ];
+	
+	def getFieldHeight( self, field ):
+		if isinstance( field, models.TextField ):
+			return 10;
+		return 1;
+	
+	def getFieldYPos( self, field ):
+		ypos = 3;
+		for curr_field in self.fields:
+			if curr_field is field:
+				return ypos;
+			ypos += self.getFieldHeight( curr_field );
+		raise ReferenceError( "Field not found!" );
 	
 	def draw( self ):
-		FormEditor.draw( self );
-
+		curr_y = 3;
+		
+		for field in self.fields:
+			value = unicode( getattr( self.mm, field.name ) );
+			
+			self.win.addstr( curr_y, 1, field.verbose_name.encode(locale.getpreferredencoding()) );
+			
+			height = self.getFieldHeight( field );
+			winsize = self.win.getmaxyx();
+			
+			editwin = self.win.subwin( height, winsize[1]-31, self.pos[1] + curr_y, self.pos[0] + 30 );
+			editwin.keypad(1);
+			editwin.addstr( value.encode(locale.getpreferredencoding()) );
+			editbox = Textbox( editwin );
+			
+			self.editors[field.name] = ( editwin, editbox );
+			
+			curr_y += height;
+	
+	def enter( self ):
+		self.selIdx = 0;
+		self.selMax = len( self.fields ) - 1;
+		
+		while( True ):
+			# Highlight selected field label
+			field = self.fields[self.selIdx];
+			
+			self.win.addstr(
+				self.getFieldYPos(field), 1,
+				field.verbose_name.encode(locale.getpreferredencoding()),
+				curses.A_STANDOUT
+				);
+			self.win.refresh();
+			
+			key = self.win.getch();
+			
+			if key == curses.KEY_UP and self.selIdx > 0:
+				self.selIdx -= 1;
+			
+			elif key == curses.KEY_DOWN and self.selIdx < self.selMax:
+				self.selIdx += 1;
+			
+			elif key in ( ord('q'), ord('Q') ):
+				return;
+			
+			elif key in ( ord('s'), ord('S') ):
+				try:
+					self.mm.save();
+				except Exception, instance:
+					msg = unicode( instance );
+				else:
+					msg = "Your settings have been saved.";
+				self.win.addstr( 1, 5, msg.encode(locale.getpreferredencoding()) );
+			
+			elif key in ( curses.KEY_RIGHT, curses.KEY_ENTER, ord('\n') ):
+				self.editors[field.name][1].edit();
+				setattr( self.mm, field.name, field.to_python( self.editors[field.name][1].gather().strip() ) );
+				self.editors[field.name][0].refresh();
+			
+			self.win.addstr(
+				self.getFieldYPos(field), 1,
+				field.verbose_name.encode(locale.getpreferredencoding())
+				);
 
 class WndUsers( BaseWindow ):
 	tabName = 'Registered users';
