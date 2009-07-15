@@ -122,6 +122,12 @@ class mmChannel( object ):
 		return "mumble://%s%s/%s" % ( userstr, self.server.addr, chanpath );
 	
 	connecturl = property( getURL, None );
+	
+	def setDefault( self ):
+		self.server.defchan = self.chanid;
+		self.server.save();
+	
+	is_default = property( lambda self: self.server.defchan == self.chanid, None );
 
 
 

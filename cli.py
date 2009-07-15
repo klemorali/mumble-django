@@ -39,8 +39,11 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 # Uncomment this line to point the egg cache to /tmp.
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
-from django.db.models.fields.related   import ForeignKey
-from mumble.models import *
+import	curses
+
+from	django.db.models.fields.related		import ForeignKey
+
+from	mumble.models				import *
 
 def getNum( prompt, **kwargs ):
 	id = None;
@@ -206,7 +209,7 @@ def cli_chooseAction( server ):
 
 
 
-def main():
+def oldmain():
 	print
 	
 	while True:
@@ -223,6 +226,164 @@ def main():
 
 
 
+class BaseWindow( object ):
+	tabName = "tehBasez";
+	
+	def __init__( self, parentwin, mumble, pos_x, pos_y ):
+		self.pos = ( pos_x, pos_y );
+		self.win = parentwin.subwin( pos_y, pos_x );
+		self.mm  = mumble;
+		
+		self.win.keypad(1);
+	
+	def draw( self ):
+		self.win.addstr( 1, 1, self.tabName );
+	
+	def border( self ):
+		self.win.border();
+
+
+class WndChannels( BaseWindow ):
+	tabName = 'Channels';
+	
+	def printItem( self, item, level ):
+		if item.is_server or item.is_channel:
+			self.win.addstr( self.curr_y, 2*level+1, "%s (Channel)" % unicode(item.name) )
+		else:
+			self.win.addstr( self.curr_y, 2*level+1, "%s (Player)" % unicode(item.name) )
+		
+		self.curr_y += 1;
+	
+	def draw( self ):
+		self.curr_y = 1;
+		self.mm.rootchan.visit( self.printItem );
+
+class WndSettings( BaseWindow ):
+	tabName = 'Server settings';
+
+class WndUsers( BaseWindow ):
+	tabName = 'Registered users';
+
+
+class MumbleForm( object ):
+	def __init__( self, parentwin, mumble, pos_x, pos_y ):
+		self.pos = ( pos_x, pos_y );
+		self.win = parentwin.subwin( pos_y, pos_x );
+		self.mm  = mumble;
+		
+		self.win.keypad(1);
+		
+		self.windows = (
+			WndChannels( self.win, mumble, pos_x + 2, pos_y + 2 ),
+			WndSettings( self.win, mumble, pos_x + 2, pos_y + 2 ),
+			WndUsers(    self.win, mumble, pos_x + 2, pos_y + 2 ),
+			);
+		
+		self.curridx = 0;
+		self.currmax = len( self.windows ) - 1;
+	
+	currwin = property( lambda self: self.windows[self.curridx], None );
+	
+	def mvwin( self, pos_x, pos_y ):
+		self.win.mvwin( pos_y, pos_x );
+	
+	def mvdefault( self ):
+		self.win.mvwin( self.pos[1], self.pos[0] );
+	
+	def draw( self ):
+		self.win.addstr( 0, 0, self.mm.name );
+	
+	def drawTabs( self ):
+		first = True;
+		for subwin in self.windows:
+			flags = 0;
+			if subwin is self.currwin: flags |= curses.A_STANDOUT;
+			
+			if first:
+				self.win.addstr( 1, 2, "%-20s" % subwin.tabName, flags );
+				first = False;
+			else:
+				self.win.addstr( "%-20s" % subwin.tabName, flags );
+	
+	def enter( self ):
+		self.drawTabs();
+		self.currwin.draw();
+		self.currwin.border();
+		
+		while( True ):
+			key = self.win.getch();
+			
+			if key == curses.KEY_LEFT and self.curridx > 0:
+				self.curridx -= 1;
+			
+			elif key == curses.KEY_RIGHT and self.curridx < self.currmax:
+				self.curridx += 1;
+			
+			elif key in ( ord('q'), ord('Q') ):
+				return;
+			
+			self.win.clear();
+			self.draw();
+			self.drawTabs();
+			self.currwin.draw();
+			self.currwin.border();
+			self.win.refresh();
+
+
+
+def main( stdscr ):
+	first_y = 3;
+	curr_y  = first_y;
+	
+	mumbles = list();
+	
+	for mm in Mumble.objects.all().order_by( "name", "id" ):
+		mwin = MumbleForm( stdscr, mm, pos_x=5, pos_y=curr_y );
+		mumbles.append( mwin );
+		mwin.draw();
+		curr_y += 1;
+	
+	selectedIdx = 0;
+	selectedMax = len(mumbles) - 1;
+	
+	while( True ):
+		selectedObj = mumbles[selectedIdx];
+		
+		# Draw selection marker
+		stdscr.addstr( first_y + selectedIdx, 3, '*' );
+		stdscr.refresh();
+		
+		key = stdscr.getch();
+		if key == curses.KEY_UP:
+			stdscr.addstr( first_y + selectedIdx, 3, ' ' );
+			selectedIdx -= 1;
+		
+		elif key == curses.KEY_DOWN:
+			stdscr.addstr( first_y + selectedIdx, 3, ' ' );
+			selectedIdx += 1;
+		
+		elif key in ( curses.KEY_ENTER, ord('\n') ):
+			stdscr.clear();
+			selectedObj.mvwin( 5, first_y );
+			selectedObj.draw();
+			stdscr.refresh();
+			
+			selectedObj.enter();
+			
+			stdscr.clear();
+			selectedObj.mvdefault();
+			for mwin in mumbles:
+				mwin.draw();
+		
+		elif key in ( ord('q'), ord('Q') ):
+			return;
+		
+		if   selectedIdx < 0:           selectedIdx = 0;
+		elif selectedIdx > selectedMax: selectedIdx = selectedMax;
+	
+
+
+
 
 if __name__ == '__main__':
 	#parser = OptionParser();
@@ -231,7 +392,7 @@ if __name__ == '__main__':
 	#parser.add_option( "-s", "--sure",    help="don't prompt if num >= 10", default=False, action="store_true" );
 	#options, args = parser.parse_args();
 	
-	main();
+	curses.wrapper( main );
 
 
 
