@@ -1,6 +1,6 @@
 # German translation file for Mumble-Django.
 #
-# Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+# Copyright (C) 2009, Vid "Night" Marić <nightcooki3@gmail.com>
 #
 # Mumble-Django is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
