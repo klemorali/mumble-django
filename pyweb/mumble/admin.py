@@ -14,14 +14,35 @@
  *  GNU General Public License for more details.
 """
 
-from models import *
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
+from models import *
 
 class MumbleAdmin(admin.ModelAdmin):
-	list_display   = [ 'name', 'addr', 'port', 'booted' ];
-	list_filter    = [ 'booted' ];
+	list_display   = [ 'name', 'addr', 'port', 'booted', 'getIsPublic', 'getUsersRegged', 'getUsersOnline', 'getChannelCnt' ];
+	list_filter    = [ 'booted', 'addr' ];
 	search_fields  = [ 'name', 'addr' ];
 	ordering       = [ 'name' ];
+	
+	def getUsersRegged( self, obj ):
+		return obj.users_regged;
+	getUsersRegged.short_description = _( 'Registered users' );
+	
+	def getUsersOnline( self, obj ):
+		return obj.users_online;
+	getUsersOnline.short_description = _( 'Online users' );
+	
+	def getChannelCnt( self, obj ):
+		return obj.channel_cnt;
+	getChannelCnt.short_description = _( 'Channel count' );
+	
+	def getIsPublic( self, obj ):
+		if obj.is_public:
+			return _( 'Yes' );
+		return _( 'No' );
+	getIsPublic.short_description = _( 'Public' );
+	
 
 class MumbleUserAdmin(admin.ModelAdmin):
 	list_display   = [ 'owner', 'server', 'name' ];

@@ -19,6 +19,7 @@ from PIL         import Image
 from struct      import pack, unpack
 from zlib        import compress, decompress
 
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db   import models
 
@@ -43,27 +44,29 @@ class Mumble( models.Model ):
 	deleted as well.
 	"""
 	
-	name   = models.CharField(    'Server Name',        max_length = 200 );
-	dbus   = models.CharField(    'DBus or ICE base',   max_length = 200, default = settings.DEFAULT_CONN );
-	srvid  = models.IntegerField( 'Server ID',          editable = False );
-	addr   = models.CharField(    'Server Address',     max_length = 200 );
-	port   = models.IntegerField( 'Server Port',                          blank = True, null = True  );
-	url    = models.CharField(    'Website URL',        max_length = 200, blank = True );
-	motd   = models.TextField(    'Welcome Message',                      blank = True );
-	passwd = models.CharField(    'Server Password',    max_length = 200, blank = True );
-	supw   = models.CharField(    'Superuser Password', max_length = 200, blank = True );
-	users  = models.IntegerField( 'Max. Users',                           blank = True, null = True );
-	bwidth = models.IntegerField( 'Bandwidth [Bps]',                      blank = True, null = True );
-	sslcrt = models.TextField(    'SSL Certificate',                      blank = True   );
-	sslkey = models.TextField(    'SSL Key',            blank = True   );
-	obfsc  = models.BooleanField( 'IP Obfuscation',     default = False );
-	player = models.CharField(    'Player name regex',  max_length=200, default=r'[-=\w\[\]\{\}\(\)\@\|\.]+' );
-	channel= models.CharField(    'Channel name regex', max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
-	defchan= models.IntegerField( 'Default channel',    default=0      );
-	booted = models.BooleanField( 'Boot Server',        default = True );
+	name    = models.CharField(    _('Server Name'),        max_length = 200 );
+	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN );
+	srvid   = models.IntegerField( _('Server ID'),          editable = False );
+	addr    = models.CharField(    _('Server Address'),     max_length = 200 );
+	port    = models.IntegerField( _('Server Port'),                          blank = True, null = True );
+	url     = models.CharField(    _('Website URL'),        max_length = 200, blank = True );
+	motd    = models.TextField(    _('Welcome Message'),                      blank = True );
+	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True );
+	supw    = models.CharField(    _('Superuser Password'), max_length = 200, blank = True );
+	users   = models.IntegerField( _('Max. Users'),                           blank = True, null = True );
+	bwidth  = models.IntegerField( _('Bandwidth [Bps]'),                      blank = True, null = True );
+	sslcrt  = models.TextField(    _('SSL Certificate'),                      blank = True );
+	sslkey  = models.TextField(    _('SSL Key'),            blank = True    );
+	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False );
+	player  = models.CharField(    _('Player name regex'),  max_length=200, default=r'[-=\w\[\]\{\}\(\)\@\|\.]+'   );
+	channel = models.CharField(    _('Channel name regex'), max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
+	defchan = models.IntegerField( _('Default channel'),    default=0       );
+	booted  = models.BooleanField( _('Boot Server'),        default = True  );
 	
 	class Meta:
-		unique_together = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
+		unique_together     = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
+		verbose_name        = _('Server instance');
+		verbose_name_plural = _('Server instances');
 	
 	def __init__( self, *args, **kwargs ):
 		models.Model.__init__( self, *args, **kwargs );
@@ -76,6 +79,11 @@ class Mumble( models.Model ):
 			return u'Murmur "%s" (NOT YET CREATED)' % self.name;
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
 	
+	
+	users_regged = property( lambda self: self.mumbleuser_set.count(),           None );
+	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  None );
+	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), None );
+	is_public    = property( lambda self: self.passwd == '',                     None );
 	
 	is_server  = True;
 	is_channel = False;
@@ -268,22 +276,24 @@ class MumbleUser( models.Model ):
 	in Murmur as well, after revoking the user's admin privileges.
 	"""
 	
-	mumbleid = models.IntegerField( 'Mumble player_id', editable = False, default = -1 );
-	name     = models.CharField(    'User name and Login', max_length = 200 );
-	password = models.CharField(    'Login password',      max_length = 200, blank=True );
-	server   = models.ForeignKey(   Mumble );
-	owner    = models.ForeignKey(   User, null=True, blank=True   );
-	isAdmin  = models.BooleanField( 'Admin on root channel', default = False );
+	mumbleid = models.IntegerField(         _('Mumble player_id'),            editable = False, default = -1 );
+	name     = models.CharField(            _('User name and Login'),         max_length = 200 );
+	password = models.CharField(            _('Login password'),              max_length = 200, blank=True );
+	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance') );
+	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),  null=True, blank=True   );
+	isAdmin  = models.BooleanField(         _('Admin on root channel'),       default = False );
 	
 	class Meta:
-		unique_together = ( ( 'server', 'owner' ), );
+		unique_together     = ( ( 'server', 'owner' ), );
+		verbose_name        = _( 'User account'  );
+		verbose_name_plural = _( 'User accounts' );
 	
 	is_server  = False;
 	is_channel = False;
 	is_player  = True;
 	
 	def __unicode__( self ):
-		return u"Mumble user %s on %s owned by Django user %s" % ( self.name, self.server, self.owner );
+		return _("Mumble user %(mu)s on %(srv)s owned by Django user %(du)s") % { 'mu': self.name, 'srv': self.server, 'du': self.owner };
 	
 	def save( self, dontConfigureMurmur=False ):
 		"""Save the settings in this model to Murmur."""
@@ -302,9 +312,9 @@ class MumbleUser( models.Model ):
 		if self.id is None:
 			# This is a new user record, so Murmur doesn't know about it yet
 			if len( ctl.getRegisteredPlayers( self.server.srvid, self.name ) ) > 0:
-				raise ValueError( "Another player already registered that name." );
+				raise ValueError( _( "Another player already registered that name." ) );
 			if not self.password:
-				raise ValueError( "Cannot register player without a password!" );
+				raise ValueError( _( "Cannot register player without a password!" ) );
 			
 			self.mumbleid = ctl.registerPlayer( self.server.srvid, self.name, email, self.password );
 		
@@ -334,7 +344,7 @@ class MumbleUser( models.Model ):
 		acl = mmACL( 0, self.server.ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
-			raise ReferenceError( "The admin group was not found in the ACL's groups list!" );
+			raise ReferenceError( _( "The admin group was not found in the ACL's groups list!" ) );
 		return self.mumbleid in acl.admingroup['add'];
 	
 	def setAdmin( self, value ):
@@ -343,7 +353,7 @@ class MumbleUser( models.Model ):
 		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
 		
 		if not hasattr( acl, "admingroup" ):
-			raise ReferenceError( "The admin group was not found in the ACL's groups list!" );
+			raise ReferenceError( _( "The admin group was not found in the ACL's groups list!" ) );
 		
 		if value != ( self.mumbleid in acl.admingroup['add'] ):
 			if value:
@@ -383,7 +393,7 @@ class MumbleUser( models.Model ):
 	def __setattr__( self, name, value ):
 		if name == 'server':
 			if self.id is not None and self.server != value:
-				raise AttributeError( "This field must not be updated once the Record has been saved." );
+				raise AttributeError( _( "This field must not be updated once the record has been saved." ) );
 		
 		models.Model.__setattr__( self, name, value );
 

@@ -1,5 +1,6 @@
 {% extends "index.htm" %}
 {% load mumble_extras %}
+{% load i18n %}
 {% block Headline %}
   {{ DBaseObject.name }}
 {% endblock %}
@@ -9,34 +10,36 @@
 {% block Content %}
   <noscript>
     <p>
+	  {% blocktrans %}
       <b>Hint:</b><br />
       This area is used to display additional information for each channel and player, but requires JavaScript to be
       displayed correctly. You will not see the detail pages, but you can use all links and forms
       that are displayed.
+	  {% endblocktrans %}
     </p>
   </noscript>
     <div id="mumble_ext_container"></div>
 	<div id="mumble_motd" class="mumble-ext x-hide-display">
 	  <ul>
-	    <li>Server address: <a href="{{ DBaseObject.connecturl }}">{{ DBaseObject.connecturl }}</a></li>
+	    <li>{% trans "Server Address" %}: <a href="{{ DBaseObject.connecturl }}">{{ DBaseObject.connecturl }}</a></li>
 	    {% if DBaseObject.url %}
-	      <li>Website: {{ DBaseObject.url|urlize }}</li>
+	      <li>{% trans "Website" %}: {{ DBaseObject.url|urlize }}</li>
 	    {% endif %}
-	    <li>Server version: {{ DBaseObject.version.0 }}.{{ DBaseObject.version.1 }}.{{ DBaseObject.version.2 }}</li>
+	    <li>{% trans "Server version" %}: {{ DBaseObject.version.0 }}.{{ DBaseObject.version.1 }}.{{ DBaseObject.version.2 }}</li>
 	  </ul>
 	  <fieldset>
-	    <legend>Welcome message</legend>
+	    <legend>{% trans "Welcome message" %}</legend>
 	    {{ DBaseObject.motd|safe }}
 	  </fieldset>
 	</div>
     <div id="mumble_registration" class="mumble-ext">
   {% if user.is_authenticated %}
-      <h2>Server registration</h2>
+      <h2>{% trans "Server registration" %}</h2>
       <form action="" method="post">
         {% if Registered %}
-          You are registered on this server.<br />
+          {% trans "You are registered on this server" %}.<br />
         {% else %}
-          You do not have an account on this server.<br />
+          {% trans "You do not have an account on this server" %}.<br />
         {% endif %}
         <table>
           {{ RegForm }}
@@ -45,19 +48,23 @@
         <input type="submit" />
       </form>
   {% else %}
-    <p>You need to be <a href="/accounts/login?next=%2Fmumble%2F{{ DBaseObject.id }}">logged in</a> to be able to register an account on this Mumble server.</p>
+    {% blocktrans with DBaseObject.id as serverid %}
+      <p>You need to be <a href="/accounts/login?next=%2Fmumble%2F{{ serverid }}">logged in</a> to be able to register an account on this Mumble server.</p>
+	{% endblocktrans %}
   {% endif %}
     </div>
   
   {% if Registered %}
     <div id="mumble_texture" class="mumble-ext">
-      <h2>User Texture</h2>
+      <h2>{% trans "User Texture" %}</h2>
       <p>
-        You can upload an image that you would like to use as your user texture here.<br />
-        Your current texture is:<br />
-        <img src="/mumble/{{DBaseObject.id}}/texture.png" alt="user texture" /><br />
-        Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
-        a different size, it will be resized accordingly.<br />
+	    {% blocktrans with DBaseObject.id as serverid %}
+          You can upload an image that you would like to use as your user texture here.<br />
+          Your current texture is:<br />
+          <img src="/mumble/{{serverid}}/texture.png" alt="user texture" /><br />
+          Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
+          a different size, it will be resized accordingly.<br />
+		{% endblocktrans %}
       </p>
       <form action="" method="post" enctype="multipart/form-data">
         <table>
@@ -71,7 +78,7 @@
   
   {% if CurrentUserIsAdmin %}
     <div id="mumble_admin" class="mumble-ext">
-      <h2>Server administration</h2>
+      <h2>{% trans "Server administration" %}</h2>
       <form action="" method="post">
         <table>
           {{ AdminForm }}
@@ -85,34 +92,34 @@
   {% for item in ChannelTable %}
     {% if item.is_player %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
-      <h2>Player {{ item.name }}</h2>
+      <h2>{% trans "Player" %} {{ item.name }}</h2>
       <ul>
-        <li>Online since {{item.onlinesince|time:"H:i"}}</li>
-        <li>Authenticated: {% if item.isAuthed     %}Yes{% else %}No{% endif %}</li>
-        <li>Admin:         {% if item.isAdmin      %}Yes{% else %}No{% endif %}</li>
-        <li>Muted:         {% if item.muted        %}Yes{% else %}No{% endif %}</li>
-        <li>Deafened:      {% if item.deafened     %}Yes{% else %}No{% endif %}</li>
-        <li>Self-Muted:    {% if item.selfmuted    %}Yes{% else %}No{% endif %}</li>
-        <li>Self-Deafened: {% if item.selfdeafened %}Yes{% else %}No{% endif %}</li>
+        <li>{% trans "Online since" %}   {{item.onlinesince|time:"H:i"}}</li>
+        <li>{% blocktrans with     item.isAuthed|yesno:_("yes,no") as authed       %}Authenticated:    {{ authed       }}{% endblocktrans %}</li>
+        <li>{% blocktrans with      item.isAdmin|yesno:_("yes,no") as admin        %}Admin:            {{ admin        }}{% endblocktrans %}</li>
+        <li>{% blocktrans with        item.muted|yesno:_("yes,no") as muted        %}Muted:            {{ muted        }}{% endblocktrans %}</li>
+        <li>{% blocktrans with     item.deafened|yesno:_("yes,no") as deafened     %}Deafened:         {{ deafened     }}{% endblocktrans %}</li>
+        <li>{% blocktrans with    item.selfmuted|yesno:_("yes,no") as selfmuted    %}Muted by self:    {{ selfmuted    }}{% endblocktrans %}</li>
+        <li>{% blocktrans with item.selfdeafened|yesno:_("yes,no") as selfdeafened %}Deafened by self: {{ selfdeafened }}{% endblocktrans %}</li>
       </ul>
       {% if item.mumbleuser and item.mumbleuser.owner %}
-        <h2>User {{ item.mumbleuser.owner.username|capfirst }}</h2>
+        <h2>{% trans "User" %} {{ item.mumbleuser.owner.username|capfirst }}</h2>
         <ul>
           {% if item.mumbleuser.owner.first_name and item.mumbleuser.owner.last_name %}
-            <li>Full Name: {{ item.mumbleuser.owner.first_name }} {{ item.mumbleuser.owner.last_name }}</li>
+            <li>{% trans "Full Name" %}:  {{ item.mumbleuser.owner.first_name }} {{ item.mumbleuser.owner.last_name }}</li>
           {% endif %}
-          <li>Admin: {% if item.mumbleuser.owner.is_staff %}Yes{% else %}No{% endif %}</li>
-          <li>Sign-up date: {{ item.mumbleuser.owner.date_joined }}</li>
+          <li>{% trans "Admin" %}:        {% if item.mumbleuser.owner.is_staff %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+          <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined }}</li>
         </ul>
       {% endif %}
     </div>
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
-      <h2>Channel {{ item.name }}</h2>
-      <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">Connect</a>
+      <h2>{% trans "Channel" %} {{ item.name }}</h2>
+      <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">{% trans "Connect" %}</a>
 	  {% if item.description %}
 	    <fieldset>
-	      <legend>Channel description</legend>
+	      <legend>{% trans "Channel description" %}</legend>
 	      {{ item.description|safe }}
 	    </fieldset>
 	  {% endif %}
@@ -145,13 +152,13 @@
 				defaults:  { autoheight: true },
 				activeTab: {{ DisplayTab }},
 				items: [
-					{ contentEl: 'mumble_motd',          title: 'Server Info',    autoScroll: true },
-					{ contentEl: 'mumble_registration',  title: 'Registration',   autoScroll: true },
+					{ contentEl: 'mumble_motd',          title: '{% trans "Server Info" %}',    autoScroll: true },
+					{ contentEl: 'mumble_registration',  title: '{% trans "Registration" %}',   autoScroll: true },
 					{% if CurrentUserIsAdmin %}
-						{ contentEl: 'mumble_admin',     title: 'Administration', autoScroll: true },
+						{ contentEl: 'mumble_admin',     title: '{% trans "Administration" %}', autoScroll: true },
 					{% endif %}
 					{% if Registered %}
-						{ contentEl: 'mumble_texture',   title: 'User Texture',   autoScroll: true },
+						{ contentEl: 'mumble_texture',   title: '{% trans "User Texture" %}',   autoScroll: true },
 					{% endif %}
 					]
 				},
