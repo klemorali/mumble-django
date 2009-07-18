@@ -1,0 +1,37 @@
+{% extends "index.htm" %}
+{% load i18n %}
+
+{% block Headline %}Profile{% endblock %}
+
+{% block Content %}
+<h2 class="profile">Profile of {{user|capfirst}}</h2>
+<div class="profile">
+  <h4>Statistics</h4>
+  <ul>
+    {% if mumbleaccs %}
+      <li>Mumble Accounts:
+        <ul>
+        {% for mm in mumbleaccs %}
+          <li>
+            {{ mm.name }} on Server <a href="/mumble/{{mm.server.id}}">{{ mm.server.name }}</a> (<a href="/mumble/reg/{{mm.server.id}}">Set Password</a>)
+          </li>
+        {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+<div class="profile">
+  <h4>Account</h4>
+  <ul>
+    <li>Full Name: {{ user.first_name }} {{ user.last_name }}</li>
+    <li>E-Mail Adress: {{ user.email }}</li>
+    <li>Staff: {% if user.is_staff %} yes <a href="/admin">(admin area)</a> {% else %} no {% endif %}</li>
+    <li>Sign-up date: {{ user.date_joined }}</li>
+    <li>Last login: {{ user.last_login }}</li>
+    <li><a href="/accounts/password/change">Change Password</a></li>
+    <li><a href="/accounts/logout">Logout</a></li>
+  </ul>
+</div>
+{% endblock %}
+

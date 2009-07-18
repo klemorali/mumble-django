@@ -1,0 +1,25 @@
+{% load mumble_extras %}
+<div class="mumble">
+  <span class="mumble">
+    {% if Player.isAuthed %}
+      <img src="/static/mumble/authenticated.png" alt="authed" title="Authenticated" />
+    {% endif %}
+    {% if Player.muted %}
+      <img src="/static/mumble/muted_server.png" alt="muted" title="Muted by server" />
+    {% endif %}
+    {% if Player.deafened %}
+      <img src="/static/mumble/deafened_server.png" alt="deafened" title="Deafened by server" />
+    {% endif %}
+    {% if Player.selfmuted %}
+      <img src="/static/mumble/muted_self.png" alt="self-muted" title="Muted by themselves" />
+    {% endif %}
+    {% if Player.selfdeafened %}
+      <img src="/static/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
+    {% endif %}
+  </span>
+  <span>
+    <img src="/static/mumble/knoten_v.png" />
+    <img src="/static/mumble/talking_off.png" alt="Player" />
+    <a id="link_{{ Player.id }}" class="mumble" href="#" title="{{ Player.name }}">{{ Player.name|trunc:30 }}</a>
+  </span>
+</div>

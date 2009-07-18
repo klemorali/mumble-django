@@ -1,0 +1,350 @@
+# German translation file for Mumble-Django.
+#
+# Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+#
+# Mumble-Django is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This package is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mumble-Django v0.8\n"
+"Report-Msgid-Bugs-To: Michael Ziegler\n"
+"POT-Creation-Date: 2009-07-18 17:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Michael Ziegler <diese-addy@funzt-halt.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:30
+msgid "Registered users"
+msgstr "Registrierte Benutzer"
+
+#: admin.py:34
+msgid "Online users"
+msgstr "Benutzer online"
+
+#: admin.py:38
+msgid "Channel count"
+msgstr "Channels"
+
+#: admin.py:42
+msgid "Yes"
+msgstr "Ja"
+
+#: admin.py:43
+msgid "No"
+msgstr "Nein"
+
+#: admin.py:44
+msgid "Public"
+msgstr "Öffentlich"
+
+#: models.py:47
+msgid "Server Name"
+msgstr "Servername"
+
+#: models.py:48
+msgid "DBus or ICE base"
+msgstr "DBus- oder ICE-String"
+
+#: models.py:49
+msgid "Server ID"
+msgstr "Server-ID"
+
+#: models.py:50
+msgid "Server Address"
+msgstr "Serveradresse"
+
+#: models.py:51
+msgid "Server Port"
+msgstr "Serverport"
+
+#: models.py:52
+msgid "Website URL"
+msgstr "URL der Webseite"
+
+#: models.py:53
+msgid "Welcome Message"
+msgstr "Willkommensnachricht"
+
+#: models.py:54
+msgid "Server Password"
+msgstr "Serverpasswort"
+
+#: models.py:55
+msgid "Superuser Password"
+msgstr "SuperUser-Passwort"
+
+#: models.py:56
+msgid "Max. Users"
+msgstr "Max. Benutzer"
+
+#: models.py:57
+msgid "Bandwidth [Bps]"
+msgstr "Bandbreite [Bps]"
+
+#: models.py:58
+msgid "SSL Certificate"
+msgstr "SSL-Zertifikat"
+
+#: models.py:59
+msgid "SSL Key"
+msgstr "SSL-Schlüssel"
+
+#: models.py:60
+msgid "IP Obfuscation"
+msgstr "IP-Adressen anonymisieren"
+
+#: models.py:61
+msgid "Player name regex"
+msgstr "Regex für Spielernamen"
+
+#: models.py:62
+msgid "Channel name regex"
+msgstr "Regex für Channelnamen"
+
+#: models.py:63
+msgid "Default channel"
+msgstr "Standardchannel"
+
+#: models.py:64
+msgid "Boot Server"
+msgstr "Server starten"
+
+#: models.py:68 models.py:282
+msgid "Server instance"
+msgstr "Serverinstanz"
+
+#: models.py:69
+msgid "Server instances"
+msgstr "Serverinstanzen"
+
+#: models.py:279
+msgid "Mumble player_id"
+msgstr "ID des Spielers in Murmur"
+
+#: models.py:280
+msgid "User name and Login"
+msgstr "Benutzername und Login"
+
+#: models.py:281
+msgid "Login password"
+msgstr "Passwort"
+
+#: models.py:283
+msgid "Account owner"
+msgstr "Accountbesitzer"
+
+#: models.py:284
+msgid "Admin on root channel"
+msgstr "Admin im Wurzelkanal"
+
+#: models.py:288
+msgid "User account"
+msgstr "Benutzerkonto"
+
+#: models.py:289
+msgid "User accounts"
+msgstr "Benutzerkonten"
+
+#: models.py:296
+#, python-format
+msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
+msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
+
+#: models.py:315
+msgid "Another player already registered that name."
+msgstr "Ein anderer Spieler hat sich unter diesem Namen bereits registriert."
+
+#: models.py:317
+msgid "Cannot register player without a password!"
+msgstr "Kann Account nicht ohne Passwort registrieren!"
+
+#: models.py:347 models.py:356
+msgid "The admin group was not found in the ACL's groups list!"
+msgstr "Die Admin-Gruppe wurde in der Gruppenliste der ACL nicht gefunden."
+
+#: models.py:396
+msgid "This field must not be updated once the record has been saved."
+msgstr "Dieses Feld darf nicht mehr verändert werden, nachdem der Eintrag zum ersten Mal gespeichert wurde."
+
+#: mumble.htm:13
+msgid ""
+"\n"
+"      <b>Hint:</b><br />\n"
+"      This area is used to display additional information for each channel "
+"and player, but requires JavaScript to be\n"
+"      displayed correctly. You will not see the detail pages, but you can "
+"use all links and forms\n"
+"      that are displayed.\n"
+"\t  "
+msgstr ""
+"\n"
+"      <b>Hinweis:</b><br />\n"
+"      Dieser Bereich wird genutzt um zusätzliche Informationen über jeden Channel "
+"und Spieler anzuzeigen, erfordert aber JavaScript um\n"
+"      richtig angezeigt zu werden. Du wirst zwar die Detailseiten nicht sehen, "
+"kannst aber alle sichtbaren Formulare benutzen.\n"
+"\t  "
+
+#: mumble.htm:26
+msgid "Website"
+msgstr "Webseite"
+
+#: mumble.htm:28
+msgid "Server version"
+msgstr "Serverversion"
+
+#: mumble.htm:31
+msgid "Welcome message"
+msgstr "Willkommensnachricht"
+
+#: mumble.htm:37
+msgid "Server registration"
+msgstr "Benutzerregistrierung"
+
+#: mumble.htm:40
+msgid "You are registered on this server"
+msgstr "Du bist auf diesem Server registriert"
+
+#: mumble.htm:42
+msgid "You do not have an account on this server"
+msgstr "Du bist auf diesem Server nicht registriert"
+
+#: mumble.htm:51
+msgid ""
+"\n"
+"      <p>You need to be <a href=\"/accounts/login?next=%2Fmumble%2F%"
+"(serverid)s\">logged in</a> to be able to register an account on this Mumble "
+"server.</p>\n"
+"\t"
+msgstr ""
+"\n"
+"      <p>Du musst <a href=\"/accounts/login?next=%2Fmumble%2F%"
+"(serverid)s\">eingeloggt</a> sein um auf diesem Mumble-Server einen Account "
+"registrieren zu können.</p>\n"
+"\t"
+
+#: mumble.htm:59 mumble.htm.py:161
+msgid "User Texture"
+msgstr "Benutzertextur"
+
+#: mumble.htm:61
+#, python-format
+msgid ""
+"\n"
+"          You can upload an image that you would like to use as your user "
+"texture here.<br />\n"
+"          Your current texture is:<br />\n"
+"          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
+"\" /><br />\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you "
+"upload an image with\n"
+"          a different size, it will be resized accordingly.<br />\n"
+"\t\t"
+msgstr ""
+"\n"
+"          Du kannst hier ein Bild hochladen, das als deine Benutzertextur "
+"angezeigt werden soll.<br />\n"
+"          Deine momentane Textur ist diese:<br />\n"
+"          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
+"\" /><br />\n"
+"          Hinweis: Das Texturbild <b>muss</b> die Größe 600x60 haben. Wenn du "
+"ein Bild mit einer anderen Größe hochlädst, wird es automatisch zurecht "
+"geschnitten.<br />\n"
+"\t\t"
+
+#: mumble.htm:81
+msgid "Server administration"
+msgstr "Server-Administration"
+
+#: mumble.htm:95
+msgid "Player"
+msgstr "Spieler"
+
+#: mumble.htm:97
+msgid "Online since"
+msgstr "Online seit"
+
+#: mumble.htm:98 mumble.htm.py:99 mumble.htm.py:100 mumble.htm.py:101
+#: mumble.htm:102 mumble.htm.py:103
+msgid "yes,no"
+msgstr "ja,nein"
+
+#: mumble.htm:98
+#, python-format
+msgid "Authenticated:    %(authed)s"
+msgstr "Authentifiziert: %(authed)s"
+
+#: mumble.htm:99
+#, python-format
+msgid "Admin:            %(admin)s"
+msgstr "Administrator:   %(admin)s"
+
+#: mumble.htm:100
+#, python-format
+msgid "Muted:            %(muted)s"
+msgstr "Stummgestellt:   %(muted)s"
+
+#: mumble.htm:101
+#, python-format
+msgid "Deafened:         %(deafened)s"
+msgstr "Taubgestellt:    %(deafened)s"
+
+#: mumble.htm:102
+#, python-format
+msgid "Muted by self:    %(selfmuted)s"
+msgstr "Selbst stummgestellt: %(selfmuted)s"
+
+#: mumble.htm:103
+#, python-format
+msgid "Deafened by self: %(selfdeafened)s"
+msgstr "Selbst taubgestellt: %(selfdeafened)s"
+
+#: mumble.htm:106
+msgid "User"
+msgstr "Benutzer"
+
+#: mumble.htm:109
+msgid "Full Name"
+msgstr "Vollständiger Name"
+
+#: mumble.htm:111
+msgid "Admin"
+msgstr "Administrator"
+
+#: mumble.htm:112
+msgid "Sign-up date"
+msgstr "Datum der Registrierung"
+
+#: mumble.htm:118
+msgid "Channel"
+msgstr "Kanal"
+
+#: mumble.htm:119
+msgid "Connect"
+msgstr "Verbinden"
+
+#: mumble.htm:122
+msgid "Channel description"
+msgstr "Beschreibung des Kanals"
+
+#: mumble.htm:155
+msgid "Server Info"
+msgstr "Server-Infos"
+
+#: mumble.htm:156
+msgid "Registration"
+msgstr "Registrierung"
+
+#: mumble.htm:158
+msgid "Administration"
+msgstr "Administration"

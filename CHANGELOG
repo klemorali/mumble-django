@@ -1,0 +1,86 @@
+=======================
+Mumble-Django changelog
+=======================
+
+Version 0.8, 11 July 2009:
+------------------------------
+* Added Ice connector objects. Now MD can connect via both DBus and Ice.
+* Connectors can be used simultaneously, so managing 1.1.8 and 1.2.0 Murmurs
+  is possible with a single instance of Mumble-Django.
+* Full compatibility to Murmur 1.2.0.
+* Added Channel descriptions to channel viewer for 1.2.0 servers.
+* management.py can now *always* add servers with a non-default connstring,
+  not only when the default connstring doesn't resolve.
+* management.py tries to get connstring from an environment variable.
+* Changed channel viewer to use <div>s instead of a table, which is a lot
+  cleaner to generate.
+* Fixed username@ missing in the channel links.
+* Merged mmServer object directly into Model and cleaned up mmobjects.py.
+* Added "Default connstring" and "Slice Version" fields to settings.py.
+* Added a Munin plugin to display the number of players on each server.
+* Added a few UNIQUE statements to the Models to prevent get() errors.
+
+Version 0.7, 27 May 2009:
+------------------------------
+* Added copyright information about the Icons in the channel viewer to
+  COPYRIGHT.
+* Fixed bug that prevented various settings from being applied to Murmur.
+* Fixed Python 2.4 incompatibility.
+* Various minor bug fixes.
+* Added setting users' textures.
+* Added Mumble icon as favicon.
+* Replaced YAML by a self-written template due to license problems.
+
+Version 0.6, 02. May 2009:
+------------------------------
+* Re-Licensed the complete project under the GPL v2+, added License tags
+  to code files.
+* Added "default channel", "player name", "channel name", "IP obfuscation"
+  settings to Mumble model, therefore now supporting every one of Murmur's
+  config options.
+* IMPORTANT: If updating from a version <= 0.5, please run:
+    ./update-v0.5-v0.6.sh
+  in the pyweb directory. That way, you will update the database without
+  losing any data. If you are newly installing Mumble-Django, this does not
+  apply.
+* Various minor bug fixes.
+
+Version 0.5, 18 April 2009:
+------------------------------
+* Added redirect for / into urls.py, as this is easier than configuring
+  it in the Apache config because it doesn't require the user to do
+  anything.
+* Completely refurbished the user interface, now using a YAML template
+  and ExtJS for some extra cool stuff. Still, the page does not _require_
+  JavaScript to be enabled in order to function correctly, users with JS
+  disabled will only see the registration forms and a hint to enable JS.
+
+Version 0.4, 10 April 2009:
+------------------------------
+* Various bug fixes.
+* Added settings for django-registration to settings.py, so users can
+  actually find them and don't need to figure these out on their own.
+* Added a form for Server Admins (people added to the Admin group on the
+  root channel) to change a few settings like server password and MOTD.
+
+Version 0.3, 25 March 2009:
+------------------------------
+* added basepath autodetection.
+* added "Admin on root channel" field that allows editing the ACL of the
+  root channel, to grant or revoke membership in the "admins" group,
+  thereby granting/revoking Administrator privileges.
+
+Version 0.2, 24 March 2009:
+------------------------------
+* Reorganized settings.py, so only one single line needs to be edited in
+  order to configure everything.
+* Added a syncdb hook that looks for already configured Murmur instances
+  whenever syncdb is run, and writes found instances and users into the
+  database.
+* Various minor bug fixes.
+
+Version 0.1, 21 February 2009:
+------------------------------
+* Set up a Django project that uses the Mumble application to make use
+  easier for Django inexperienced users
+* First official Release
