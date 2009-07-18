@@ -1,4 +1,4 @@
-# German translation file for Mumble-Django.
+# Croatian translation file for Mumble-Django.
 #
 # Copyright (C) 2009, Vid "Night" Marić <nightcooki3@gmail.com>
 #
@@ -121,11 +121,11 @@ msgstr "Pokreni server"
 
 #: models.py:68 models.py:282
 msgid "Server instance"
-msgstr "Serverinstanz"
+msgstr "Instanca servera"
 
 #: models.py:69
 msgid "Server instances"
-msgstr "Serverinstanzen"
+msgstr "Instance servera"
 
 #: models.py:279
 msgid "Mumble player_id"
