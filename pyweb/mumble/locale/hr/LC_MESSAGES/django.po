@@ -101,7 +101,7 @@ msgstr "SSL ključ"
 
 #: models.py:60
 msgid "IP Obfuscation"
-msgstr "IP-Adressen anonymisieren"
+msgstr "Bilježi IP adrese korisnika"
 
 #: models.py:61
 msgid "Player name regex"
