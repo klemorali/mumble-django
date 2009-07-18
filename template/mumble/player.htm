@@ -4,7 +4,7 @@
     {% if Player.isAuthed %}
       <img src="/static/mumble/authenticated.png" alt="authed" title="Authenticated" />
     {% endif %}
-    {% if Player.muted %}
+    {% if Player.muted or Player.suppressed %}
       <img src="/static/mumble/muted_server.png" alt="muted" title="Muted by server" />
     {% endif %}
     {% if Player.deafened %}
