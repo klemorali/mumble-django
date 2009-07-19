@@ -116,6 +116,9 @@
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
       <h2>{% trans "Channel" %} {{ item.name }}</h2>
+	  {% if CurrentUserIsAdmin %}
+	    {% trans "Channel" %} ID: {{ item.chanid }}<br />
+	  {% endif %}
       <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">{% trans "Connect" %}</a>
 	  {% if item.description %}
 	    <fieldset>
