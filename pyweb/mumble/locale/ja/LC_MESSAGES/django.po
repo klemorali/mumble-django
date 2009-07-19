@@ -1,0 +1,348 @@
+# German translation file for Mumble-Django.
+#
+#   Copyright (C) 2009, withgod                   <withgod@sourceforge.net>
+#                       Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+#
+# Mumble-Django is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This package is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mumble-Django v0.8\n"
+"Report-Msgid-Bugs-To: withgod\n"
+"POT-Creation-Date: 2009-07-19 15:00+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: withgod <withgod@sourceforge.net\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:30
+msgid "Registered users"
+msgstr "ユーザ登録"
+
+#: admin.py:34
+msgid "Online users"
+msgstr "オンラインのユーザ"
+
+#: admin.py:38
+msgid "Channel count"
+msgstr "チャンネル数"
+
+#: admin.py:42
+msgid "Yes"
+msgstr "はい"
+
+#: admin.py:43
+msgid "No"
+msgstr "いいえ"
+
+#: admin.py:44
+msgid "Public"
+msgstr "公開"
+
+#: models.py:47
+msgid "Server Name"
+msgstr "サーバ名"
+
+#: models.py:48
+msgid "DBus or ICE base"
+msgstr "DBusもしくはICE"
+
+#: models.py:49
+msgid "Server ID"
+msgstr "サーバID"
+
+#: models.py:50
+msgid "Server Address"
+msgstr "サーバアドレス"
+
+#: models.py:51
+msgid "Server Port"
+msgstr "サーバポート"
+
+#: models.py:52
+msgid "Website URL"
+msgstr "ウェブサイトのURL"
+
+#: models.py:53
+msgid "Welcome Message"
+msgstr "サーバメッセージ"
+
+#: models.py:54
+msgid "Server Password"
+msgstr "サーバパスワード"
+
+#: models.py:55
+msgid "Superuser Password"
+msgstr "管理者パスワード"
+
+#: models.py:56
+msgid "Max. Users"
+msgstr "最大ユーザ数"
+
+#: models.py:57
+msgid "Bandwidth [Bps]"
+msgstr "帯域制限 [Bps]"
+
+#: models.py:58
+msgid "SSL Certificate"
+msgstr "SSL認証"
+
+#: models.py:59
+msgid "SSL Key"
+msgstr "SSL認証鍵"
+
+#: models.py:60
+msgid "IP Obfuscation"
+msgstr "IPアドレス隠蔽"
+
+#: models.py:61
+msgid "Player name regex"
+msgstr "ユーザ名の正規表現制限"
+
+#: models.py:62
+msgid "Channel name regex"
+msgstr "チャンネル名の正規表現制限"
+
+#: models.py:63
+msgid "Default channel"
+msgstr "デフォルトチャンネル"
+
+#: models.py:64
+msgid "Boot Server"
+msgstr "サーバ起動"
+
+#: models.py:68 models.py:282
+msgid "Server instance"
+msgstr "サーバインスタンス"
+
+#: models.py:69
+msgid "Server instances"
+msgstr "全サーバインスタンス"
+
+#: models.py:279
+msgid "Mumble player_id"
+msgstr "マンブルユーザID"
+
+#: models.py:280
+msgid "User name and Login"
+msgstr "ユーザID"
+
+#: models.py:281
+msgid "Login password"
+msgstr "パスワード"
+
+#: models.py:283
+msgid "Account owner"
+msgstr "アカウントの所有者"
+
+#: models.py:284
+msgid "Admin on root channel"
+msgstr "管理者権限を与える"
+
+#: models.py:288
+msgid "User account"
+msgstr "ユーザアカウント"
+
+#: models.py:289
+msgid "User accounts"
+msgstr "全ユーザアカウント"
+
+#: models.py:296
+#, python-format
+msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
+msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
+
+#: models.py:315
+msgid "Another player already registered that name."
+msgstr "その名前は既に使われています."
+
+#: models.py:317
+msgid "Cannot register player without a password!"
+msgstr "パスワードは必須です"
+
+#: models.py:347 models.py:356
+msgid "The admin group was not found in the ACL's groups list!"
+msgstr "管理者グループが権限一覧に見当たりません."
+
+#: models.py:396
+msgid "This field must not be updated once the record has been saved."
+msgstr "この項目はアップデート出来ません."
+
+#: mumble.htm:13
+msgid ""
+"\n"
+"      <b>Hint:</b><br />\n"
+"      This area is used to display additional information for each channel "
+"and player, but requires JavaScript to be\n"
+"      displayed correctly. You will not see the detail pages, but you can "
+"use all links and forms\n"
+"      that are displayed.\n"
+"\t  "
+msgstr ""
+"\n"
+"      <b>ヒント:</b><br />\n"
+"      このエリアはチャンネル情報をやプレーヤー情報を表示するのにjavascriptが必要です\n"
+"      javascriptをオンにしないと、すべての情報を閲覧することは出来ません。"
+"\t  "
+
+#: mumble.htm:26
+msgid "Website"
+msgstr "ウェブサイト"
+
+#: mumble.htm:28
+msgid "Server version"
+msgstr "サーババージョン"
+
+#: mumble.htm:31
+msgid "Welcome message"
+msgstr "サーバメッセージ"
+
+#: mumble.htm:37
+msgid "Server registration"
+msgstr "サーバ登録"
+
+#: mumble.htm:40
+msgid "You are registered on this server"
+msgstr "アカウントは既に登録されています"
+
+#: mumble.htm:42
+msgid "You do not have an account on this server"
+msgstr "アカウントは登録されていません"
+
+#: mumble.htm:51
+msgid ""
+"\n"
+"      <p>You need to be <a href=\"/accounts/login?next=%2Fmumble%2F%"
+"(serverid)s\">logged in</a> to be able to register an account on this Mumble "
+"server.</p>\n"
+"\t"
+msgstr 
+"\n"
+"      <p>You need to be <a href=\"/accounts/login?next=%2Fmumble%2F%"
+"(serverid)s\">logged in</a> to be able to register an account on this Mumble "
+"server.</p>\n"
+"\t"
+
+#: mumble.htm:59 mumble.htm.py:161
+msgid "User Texture"
+msgstr "ユーザ画像"
+
+#: mumble.htm:61
+#, python-format
+msgid ""
+"\n"
+"          You can upload an image that you would like to use as your user "
+"texture here.<br />\n"
+"          Your current texture is:<br />\n"
+"          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
+"\" /><br />\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you "
+"upload an image with\n"
+"          a different size, it will be resized accordingly.<br />\n"
+"\t\t"
+msgstr ""
+"\n"
+"          任意のユーザ画像をここから登録することがきます。<br />\n"
+"          現在の画像:<br />\n"
+"          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
+"\" /><br />\n"
+"          ヒント: 画像は600x60である<b>必要</b>があります。そのサイズを超えたり収まらない "
+"場合は、リサイズが行われます。 "
+"<br />\n"
+"\t\t"
+
+#: mumble.htm:81
+msgid "Server administration"
+msgstr "サーバ管理"
+
+#: mumble.htm:95
+msgid "Player"
+msgstr "プレーヤ"
+
+#: mumble.htm:97
+msgid "Online since"
+msgstr "接続開始時間"
+
+#: mumble.htm:98 mumble.htm.py:99 mumble.htm.py:100 mumble.htm.py:101
+#: mumble.htm:102 mumble.htm.py:103
+msgid "yes,no"
+msgstr "yes,no"
+
+#: mumble.htm:98
+#, python-format
+msgid "Authenticated:    %(authed)s"
+msgstr "登録済み: %(authed)s"
+
+#: mumble.htm:99
+#, python-format
+msgid "Admin:            %(admin)s"
+msgstr "管理者:   %(admin)s"
+
+#: mumble.htm:100
+#, python-format
+msgid "Muted:            %(muted)s"
+msgstr "発言禁止:   %(muted)s"
+
+#: mumble.htm:101
+#, python-format
+msgid "Deafened:         %(deafened)s"
+msgstr "聴取禁止:    %(deafened)s"
+
+#: mumble.htm:102
+#, python-format
+msgid "Muted by self:    %(selfmuted)s"
+msgstr "自分で発言禁止: %(selfmuted)s"
+
+#: mumble.htm:103
+#, python-format
+msgid "Deafened by self: %(selfdeafened)s"
+msgstr "自分で聴取禁止: %(selfdeafened)s"
+
+#: mumble.htm:106
+msgid "User"
+msgstr "ユーザ"
+
+#: mumble.htm:109
+msgid "Full Name"
+msgstr "名前"
+
+#: mumble.htm:111
+msgid "Admin"
+msgstr "管理者"
+
+#: mumble.htm:112
+msgid "Sign-up date"
+msgstr "登録日"
+
+#: mumble.htm:118
+msgid "Channel"
+msgstr "チャンネル"
+
+#: mumble.htm:119
+msgid "Connect"
+msgstr "接続"
+
+#: mumble.htm:122
+msgid "Channel description"
+msgstr "チャンネル説明"
+
+#: mumble.htm:155
+msgid "Server Info"
+msgstr "サーバ情報"
+
+#: mumble.htm:156
+msgid "Registration"
+msgstr "登録"
+
+#: mumble.htm:158
+msgid "Administration"
+msgstr "管理"
