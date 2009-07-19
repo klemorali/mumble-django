@@ -117,6 +117,12 @@ class Mumble( models.Model ):
 		if self.id is None:
 			self.srvid = self.ctl.newServer();
 		
+		if self.port is None:
+			self.port = max( [ mm.port for mm in Mumble.objects.all() ] ) + 1;
+			if self.port > 2**16:
+				self.port -= 30000;
+		
+		
 		self.ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
 		self.ctl.setConf( self.srvid,     'registername',        self.name );
 		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
