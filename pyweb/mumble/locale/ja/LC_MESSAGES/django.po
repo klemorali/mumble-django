@@ -16,8 +16,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
-"Report-Msgid-Bugs-To: withgod\n"
-"POT-Creation-Date: 2009-07-19 15:00+0900\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-07-20 12:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: withgod <withgod@sourceforge.net\n"
 "MIME-Version: 1.0\n"
@@ -56,6 +56,12 @@ msgstr "サーバ名"
 msgid "DBus or ICE base"
 msgstr "DBusもしくはICE"
 
+#: models.py:48
+msgid ""
+"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
+"-p 6502' for Ice."
+msgstr ""
+
 #: models.py:49
 msgid "Server ID"
 msgstr "サーバID"
@@ -64,9 +70,19 @@ msgstr "サーバID"
 msgid "Server Address"
 msgstr "サーバアドレス"
 
+#: models.py:50
+msgid ""
+"Hostname or IP address to bind to. You should use a hostname here, because "
+"it will appear on the global server list."
+msgstr ""
+
 #: models.py:51
 msgid "Server Port"
 msgstr "サーバポート"
+
+#: models.py:51
+msgid "Port number to bind to. Use -1 to auto assign one."
+msgstr ""
 
 #: models.py:52
 msgid "Website URL"
@@ -79,6 +95,10 @@ msgstr "サーバメッセージ"
 #: models.py:54
 msgid "Server Password"
 msgstr "サーバパスワード"
+
+#: models.py:54
+msgid "Password required to join. Leave empty for public servers."
+msgstr ""
 
 #: models.py:55
 msgid "Superuser Password"
@@ -104,6 +124,10 @@ msgstr "SSL認証鍵"
 msgid "IP Obfuscation"
 msgstr "IPアドレス隠蔽"
 
+#: models.py:60
+msgid "If on, IP adresses of the clients are not logged."
+msgstr ""
+
 #: models.py:61
 msgid "Player name regex"
 msgstr "ユーザ名の正規表現制限"
@@ -116,11 +140,17 @@ msgstr "チャンネル名の正規表現制限"
 msgid "Default channel"
 msgstr "デフォルトチャンネル"
 
+#: models.py:63
+msgid ""
+"Enter the ID of the default channel here. The Channel viewer displays the ID "
+"to server admins on the channel detail page."
+msgstr ""
+
 #: models.py:64
 msgid "Boot Server"
 msgstr "サーバ起動"
 
-#: models.py:68 models.py:282
+#: models.py:68 models.py:287
 msgid "Server instance"
 msgstr "サーバインスタンス"
 
@@ -128,61 +158,67 @@ msgstr "サーバインスタンス"
 msgid "Server instances"
 msgstr "全サーバインスタンス"
 
-#: models.py:279
+#: models.py:124
+#, python-format
+msgid ""
+"Port number %(portno)d is not within the allowed range %(minrange)d - %"
+"(maxrange)d"
+msgstr ""
+
+#: models.py:284
 msgid "Mumble player_id"
 msgstr "マンブルユーザID"
 
-#: models.py:280
+#: models.py:285
 msgid "User name and Login"
 msgstr "ユーザID"
 
-#: models.py:281
+#: models.py:286
 msgid "Login password"
 msgstr "パスワード"
 
-#: models.py:283
+#: models.py:288
 msgid "Account owner"
 msgstr "アカウントの所有者"
 
-#: models.py:284
+#: models.py:289
 msgid "Admin on root channel"
 msgstr "管理者権限を与える"
 
-#: models.py:288
+#: models.py:293
 msgid "User account"
 msgstr "ユーザアカウント"
 
-#: models.py:289
+#: models.py:294
 msgid "User accounts"
 msgstr "全ユーザアカウント"
 
-#: models.py:296
+#: models.py:301
 #, python-format
 msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
 msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
 
-#: models.py:315
+#: models.py:320
 msgid "Another player already registered that name."
 msgstr "その名前は既に使われています."
 
-#: models.py:317
+#: models.py:322
 msgid "Cannot register player without a password!"
 msgstr "パスワードは必須です"
 
-#: models.py:347 models.py:356
+#: models.py:352 models.py:361
 msgid "The admin group was not found in the ACL's groups list!"
 msgstr "管理者グループが権限一覧に見当たりません."
 
-#: models.py:396
+#: models.py:401
 msgid "This field must not be updated once the record has been saved."
 msgstr "この項目はアップデート出来ません."
 
-#: mumble.htm:13
 msgid ""
 "\n"
 "      <b>Hint:</b><br />\n"
-"      This area is used to display additional information for each channel "
-"and player, but requires JavaScript to be\n"
+"      This area is used to display additional information for each "
+"channel and player, but requires JavaScript to be\n"
 "      displayed correctly. You will not see the detail pages, but you can "
 "use all links and forms\n"
 "      that are displayed.\n"
@@ -190,54 +226,45 @@ msgid ""
 msgstr ""
 "\n"
 "      <b>ヒント:</b><br />\n"
-"      このエリアはチャンネル情報をやプレーヤー情報を表示するのにjavascriptが必要です\n"
+"      このエリアはチャンネル情報をやプレーヤー情報を表示するのにjavascript"
+"が必要です\n"
 "      javascriptをオンにしないと、すべての情報を閲覧することは出来ません。"
 "\t  "
 
-#: mumble.htm:26
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: mumble.htm:28
 msgid "Server version"
 msgstr "サーババージョン"
 
-#: mumble.htm:31
 msgid "Welcome message"
 msgstr "サーバメッセージ"
 
-#: mumble.htm:37
 msgid "Server registration"
 msgstr "サーバ登録"
 
-#: mumble.htm:40
 msgid "You are registered on this server"
 msgstr "アカウントは既に登録されています"
 
-#: mumble.htm:42
 msgid "You do not have an account on this server"
 msgstr "アカウントは登録されていません"
 
-#: mumble.htm:51
 msgid ""
 "\n"
 "      <p>You need to be <a href=\"/accounts/login?next=%2Fmumble%2F%"
-"(serverid)s\">logged in</a> to be able to register an account on this Mumble "
-"server.</p>\n"
+"(serverid)s\">logged in</a> to be able to register an account on this "
+"Mumble server.</p>\n"
 "\t"
-msgstr 
+msgstr ""
 "\n"
 "      <p>You need to be <a href=\"/accounts/login?next=%2Fmumble%2F%"
-"(serverid)s\">logged in</a> to be able to register an account on this Mumble "
-"server.</p>\n"
+"(serverid)s\">logged in</a> to be able to register an account on this "
+"Mumble server.</p>\n"
 "\t"
 
-#: mumble.htm:59 mumble.htm.py:161
 msgid "User Texture"
 msgstr "ユーザ画像"
 
-#: mumble.htm:61
-#, python-format
 msgid ""
 "\n"
 "          You can upload an image that you would like to use as your user "
@@ -245,8 +272,8 @@ msgid ""
 "          Your current texture is:<br />\n"
 "          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
 "\" /><br />\n"
-"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you "
-"upload an image with\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If "
+"you upload an image with\n"
 "          a different size, it will be resized accordingly.<br />\n"
 "\t\t"
 msgstr ""
@@ -255,94 +282,69 @@ msgstr ""
 "          現在の画像:<br />\n"
 "          <img src=\"/mumble/%(serverid)s/texture.png\" alt=\"user texture"
 "\" /><br />\n"
-"          ヒント: 画像は600x60である<b>必要</b>があります。そのサイズを超えたり収まらない "
-"場合は、リサイズが行われます。 "
-"<br />\n"
+"          ヒント: 画像は600x60である<b>必要</b>があります。そのサイズを超"
+"えたり収まらない 場合は、リサイズが行われます。 <br />\n"
 "\t\t"
 
-#: mumble.htm:81
 msgid "Server administration"
 msgstr "サーバ管理"
 
-#: mumble.htm:95
 msgid "Player"
 msgstr "プレーヤ"
 
-#: mumble.htm:97
 msgid "Online since"
 msgstr "接続開始時間"
 
-#: mumble.htm:98 mumble.htm.py:99 mumble.htm.py:100 mumble.htm.py:101
-#: mumble.htm:102 mumble.htm.py:103
 msgid "yes,no"
 msgstr "yes,no"
 
-#: mumble.htm:98
-#, python-format
 msgid "Authenticated:    %(authed)s"
 msgstr "登録済み: %(authed)s"
 
-#: mumble.htm:99
-#, python-format
 msgid "Admin:            %(admin)s"
 msgstr "管理者:   %(admin)s"
 
-#: mumble.htm:100
-#, python-format
 msgid "Muted:            %(muted)s"
 msgstr "発言禁止:   %(muted)s"
 
-#: mumble.htm:101
-#, python-format
 msgid "Deafened:         %(deafened)s"
 msgstr "聴取禁止:    %(deafened)s"
 
-#: mumble.htm:102
-#, python-format
 msgid "Muted by self:    %(selfmuted)s"
 msgstr "自分で発言禁止: %(selfmuted)s"
 
-#: mumble.htm:103
-#, python-format
 msgid "Deafened by self: %(selfdeafened)s"
 msgstr "自分で聴取禁止: %(selfdeafened)s"
 
-#: mumble.htm:106
 msgid "User"
 msgstr "ユーザ"
 
-#: mumble.htm:109
 msgid "Full Name"
 msgstr "名前"
 
-#: mumble.htm:111
 msgid "Admin"
 msgstr "管理者"
 
-#: mumble.htm:112
 msgid "Sign-up date"
 msgstr "登録日"
 
-#: mumble.htm:118
 msgid "Channel"
 msgstr "チャンネル"
 
-#: mumble.htm:119
+msgid "Channel ID"
+msgstr ""
+
 msgid "Connect"
 msgstr "接続"
 
-#: mumble.htm:122
 msgid "Channel description"
 msgstr "チャンネル説明"
 
-#: mumble.htm:155
 msgid "Server Info"
 msgstr "サーバ情報"
 
-#: mumble.htm:156
 msgid "Registration"
 msgstr "登録"
 
-#: mumble.htm:158
 msgid "Administration"
 msgstr "管理"

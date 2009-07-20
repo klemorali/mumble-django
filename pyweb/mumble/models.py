@@ -45,22 +45,22 @@ class Mumble( models.Model ):
 	"""
 	
 	name    = models.CharField(    _('Server Name'),        max_length = 200 );
-	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN );
+	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN, help_text=_("Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
 	srvid   = models.IntegerField( _('Server ID'),          editable = False );
-	addr    = models.CharField(    _('Server Address'),     max_length = 200 );
-	port    = models.IntegerField( _('Server Port'),                          blank = True, null = True );
+	addr    = models.CharField(    _('Server Address'),     max_length = 200, help_text=_("Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list.") );
+	port    = models.IntegerField( _('Server Port'),        help_text=_("Port number to bind to. Use -1 to auto assign one.") );
 	url     = models.CharField(    _('Website URL'),        max_length = 200, blank = True );
 	motd    = models.TextField(    _('Welcome Message'),                      blank = True );
-	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True );
+	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True, help_text=_("Password required to join. Leave empty for public servers.") );
 	supw    = models.CharField(    _('Superuser Password'), max_length = 200, blank = True );
 	users   = models.IntegerField( _('Max. Users'),                           blank = True, null = True );
 	bwidth  = models.IntegerField( _('Bandwidth [Bps]'),                      blank = True, null = True );
 	sslcrt  = models.TextField(    _('SSL Certificate'),                      blank = True );
 	sslkey  = models.TextField(    _('SSL Key'),            blank = True    );
-	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False );
-	player  = models.CharField(    _('Player name regex'),  max_length=200, default=r'[-=\w\[\]\{\}\(\)\@\|\.]+'   );
-	channel = models.CharField(    _('Channel name regex'), max_length=200, default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
-	defchan = models.IntegerField( _('Default channel'),    default=0       );
+	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False,  help_text=_("If on, IP adresses of the clients are not logged.") );
+	player  = models.CharField(    _('Player name regex'),  max_length=200,   default=r'[-=\w\[\]\{\}\(\)\@\|\.]+'   );
+	channel = models.CharField(    _('Channel name regex'), max_length=200,   default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
+	defchan = models.IntegerField( _('Default channel'),    default=0,        help_text=_("Enter the ID of the default channel here. The Channel viewer displays the ID to server admins on the channel detail page."));
 	booted  = models.BooleanField( _('Boot Server'),        default = True  );
 	
 	class Meta:
@@ -117,13 +117,18 @@ class Mumble( models.Model ):
 		if self.id is None:
 			self.srvid = self.ctl.newServer();
 		
-		if self.port is None:
+		if self.port == -1:
 			self.port = max( [ mm.port for mm in Mumble.objects.all() ] ) + 1;
-			if self.port > 2**16:
-				self.port -= 30000;
 		
+		if self.port < 0 or self.port >= 2**16:
+			raise ValueError( _("Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d") % {
+				'portno': self.port,
+				'minrange': 0,
+				'maxrange': 2**16,
+				});
 		
 		self.ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
+		self.ctl.setConf( self.srvid,     'port',                str(self.port) );
 		self.ctl.setConf( self.srvid,     'registername',        self.name );
 		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
 		self.ctl.setConf( self.srvid,     'welcometext',         self.motd );
@@ -134,12 +139,6 @@ class Mumble( models.Model ):
 		self.ctl.setConf( self.srvid,     'playername',          self.player );
 		self.ctl.setConf( self.srvid,     'channelname',         self.channel );
 		self.ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
-		
-		
-		if self.port is not None:
-			self.ctl.setConf( self.srvid, 'port',                str(self.port) );
-		else:
-			self.ctl.setConf( self.srvid, 'port',                '' );
 		
 		if self.users is not None:
 			self.ctl.setConf( self.srvid, 'users',               str(self.users) );
