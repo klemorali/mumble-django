@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-20 12:43+0200\n"
+"POT-Creation-Date: 2009-07-21 01:20+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: withgod <withgod@sourceforge.net\n"
 "MIME-Version: 1.0\n"
@@ -61,6 +61,8 @@ msgid ""
 "Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
 "-p 6502' for Ice."
 msgstr ""
+"例: DBusなら'net.sourceforge.mumble.murmur' Iceなら'Meta:tcp -h 127.0.0.1 "
+"-p 6502'"
 
 #: models.py:49
 msgid "Server ID"
@@ -75,6 +77,8 @@ msgid ""
 "Hostname or IP address to bind to. You should use a hostname here, because "
 "it will appear on the global server list."
 msgstr ""
+"利用するホスト名もしくはIPアドレス. ホスト名も利用することが出来ます。 "
+"サーバ一覧に表示されます。."
 
 #: models.py:51
 msgid "Server Port"
@@ -82,7 +86,7 @@ msgstr "サーバポート"
 
 #: models.py:51
 msgid "Port number to bind to. Use -1 to auto assign one."
-msgstr ""
+msgstr "利用するポート番号を指定します、-1を指定すると空いているポートを利用します。"
 
 #: models.py:52
 msgid "Website URL"
@@ -98,7 +102,7 @@ msgstr "サーバパスワード"
 
 #: models.py:54
 msgid "Password required to join. Leave empty for public servers."
-msgstr ""
+msgstr "サーバに参加するにはパスワードが必要。空白にすると公開サーバになります。"
 
 #: models.py:55
 msgid "Superuser Password"
@@ -126,7 +130,7 @@ msgstr "IPアドレス隠蔽"
 
 #: models.py:60
 msgid "If on, IP adresses of the clients are not logged."
-msgstr ""
+msgstr "If on, IP adresses of the clients are not logged."
 
 #: models.py:61
 msgid "Player name regex"
@@ -145,6 +149,8 @@ msgid ""
 "Enter the ID of the default channel here. The Channel viewer displays the ID "
 "to server admins on the channel detail page."
 msgstr ""
+"接続開始時に利用されるデフォルトチャンネルIDを指定して下さい。チャンネル表示一覧にて "
+"チャンネル詳細を確認すればチャンネルIDを調べられます。."
 
 #: models.py:64
 msgid "Boot Server"
@@ -164,6 +170,8 @@ msgid ""
 "Port number %(portno)d is not within the allowed range %(minrange)d - %"
 "(maxrange)d"
 msgstr ""
+"ポート番号 %(portno)d は許可されていません、次の範囲が許可されています %(minrange)d - %"
+"(maxrange)d"
 
 #: models.py:284
 msgid "Mumble player_id"
@@ -196,7 +204,7 @@ msgstr "全ユーザアカウント"
 #: models.py:301
 #, python-format
 msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
-msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
+msgstr "マンブルユーザ %(mu)s は %(srv)s のDjangoユーザ %(du)s です"
 
 #: models.py:320
 msgid "Another player already registered that name."
@@ -332,7 +340,7 @@ msgid "Channel"
 msgstr "チャンネル"
 
 msgid "Channel ID"
-msgstr ""
+msgstr "チャンネルID"
 
 msgid "Connect"
 msgstr "接続"
