@@ -33,7 +33,7 @@ msgstr "Korisnici na serveru"
 
 #: admin.py:38
 msgid "Channel count"
-msgstr "Sobe"
+msgstr "Kanali"
 
 #: admin.py:42
 msgid "Yes"
@@ -60,10 +60,12 @@ msgid ""
 "Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
 "-p 6502' for Ice."
 msgstr ""
+"Primjeri: 'net.sourceforge.mumble.murmur' za DBus ili 'Meta:tcp -h 127.0.0.1 "
+"-p 6502' za Ice."
 
 #: models.py:49
 msgid "Server ID"
-msgstr "Server-ID"
+msgstr "ID servera"
 
 #: models.py:50
 msgid "Server Address"
@@ -74,6 +76,8 @@ msgid ""
 "Hostname or IP address to bind to. You should use a hostname here, because "
 "it will appear on the global server list."
 msgstr ""
+"Ime poslužitelja (hostname) ili IP adresa adresa za spajanje. Koristite ime "
+"poslužitelja ovdje zato što će se pojaviti na globalnoj listi servera."
 
 #: models.py:51
 msgid "Server Port"
@@ -81,7 +85,7 @@ msgstr "Port"
 
 #: models.py:51
 msgid "Port number to bind to. Use -1 to auto assign one."
-msgstr ""
+msgstr "Port za spajanje. Koristite -1 za automatsko dodjeljivanje porta."
 
 #: models.py:52
 msgid "Website URL"
@@ -97,7 +101,7 @@ msgstr "Lozinka servera"
 
 #: models.py:54
 msgid "Password required to join. Leave empty for public servers."
-msgstr ""
+msgstr "Lozinka za pristup serveru. Ostaviti prazno ako se spajate na javni server."
 
 #: models.py:55
 msgid "Superuser Password"
@@ -125,15 +129,15 @@ msgstr "Bilježi IP adrese korisnika"
 
 #: models.py:60
 msgid "If on, IP adresses of the clients are not logged."
-msgstr ""
+msgstr "Ako je uključeno, IP adrese klijenata se neće bilježiti."
 
 #: models.py:61
 msgid "Player name regex"
-msgstr "Dozvoljena korisnička imena"
+msgstr "Dozvoljeni znakovi u nazivu korisnika"
 
 #: models.py:62
 msgid "Channel name regex"
-msgstr "Dozvoljeni nazivi soba"
+msgstr "Dozvoljeni znakovi u nazivu kanala"
 
 #: models.py:63
 msgid "Default channel"
@@ -144,6 +148,8 @@ msgid ""
 "Enter the ID of the default channel here. The Channel viewer displays the ID "
 "to server admins on the channel detail page."
 msgstr ""
+"Unesite ID početnog kanala. Prikaz kanala pokazuje ID "
+"administratorima servera na stranici s detaljima kanala."
 
 #: models.py:64
 msgid "Boot Server"
@@ -163,6 +169,7 @@ msgid ""
 "Port number %(portno)d is not within the allowed range %(minrange)d - %"
 "(maxrange)d"
 msgstr ""
+"Port %(portno)d nije u dozvoljenom opsegu %(minrange)d - %(maxrange)d"
 
 #: models.py:284
 msgid "Mumble player_id"
@@ -207,11 +214,11 @@ msgstr "Odaberite lozinku i probajte ponovno!"
 
 #: models.py:352 models.py:361
 msgid "The admin group was not found in the ACL's groups list!"
-msgstr "Grupa administratora nije pronađena u ACL listi grupa!"
+msgstr "Grupa administratora nije pronaÄ‘ena u ACL listi grupa!"
 
 #: models.py:401
 msgid "This field must not be updated once the record has been saved."
-msgstr "Ovo polje ne smije biti obnovljeno nakon što je zapis spremljen."
+msgstr "Ovo polje ne smije biti ažurirano nakon što je zapis spremljen."
 
 msgid ""
 "\n"
@@ -321,7 +328,7 @@ msgid "User"
 msgstr "Korisnik"
 
 msgid "Full Name"
-msgstr "Puno ime"
+msgstr "Ime i prezime"
 
 msgid "Admin"
 msgstr "Administrator"
@@ -333,7 +340,7 @@ msgid "Channel"
 msgstr "Soba"
 
 msgid "Channel ID"
-msgstr ""
+msgstr "ID kanala"
 
 msgid "Connect"
 msgstr "Spoji se"
