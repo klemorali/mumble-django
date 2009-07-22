@@ -1,4 +1,4 @@
-# German translation file for Mumble-Django.
+# Japanese translation file for Mumble-Django.
 #
 #   Copyright (C) 2009, withgod                   <withgod@sourceforge.net>
 #                       Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
