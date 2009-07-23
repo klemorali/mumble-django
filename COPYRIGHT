@@ -1,10 +1,12 @@
 Author:
-
-    Michael Ziegler <diese-addy@funzt-halt.net>
+    The main developer is Michael Ziegler <diese-addy@funzt-halt.net>.
+    For a full list of authors please see the AUTHORS file in this directory.
 
 Copyright:
 
     <Copyright © 2009 Michael Ziegler>
+
+    The translation files are Copyright to their respective authors.
 
 License:
 
@@ -90,18 +92,20 @@ Copyright:
     All rights reserved.
 
 
-The file /pyweb/mumble/Murmur.ice is shipped with Murmur and contains the
-interface definitions for the ICE interface.
+The files pyweb/mumble/Murmur_1-1-8.ice and pyweb/mumble/Murmur_1-2-0.ice are
+being shipped with Murmur versions 1.1.8 and 1.2.0 respectively, and contain the
+interface definitions for the Ice interface.
 
 Upstream Author:
     Thorvald Natvig <thorvald@natvig.com>
 
 Copyright:
-	Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
-	All rights reserved.
+    Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
+    All rights reserved.
 
 
-License of Mumble (valid for both the images and Murmur.ice):
+License of Mumble (valid for both the images and Murmur*.ice):
+
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
     are met:
