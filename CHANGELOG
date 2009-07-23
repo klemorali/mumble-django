@@ -2,6 +2,16 @@
 Mumble-Django changelog
 =======================
 
+Version 0.9, 23 July 2009:
+------------------------------
+* Added i18n support, and translations to:
+  - German
+  - Croatian
+  - Italian
+  - Japanese
+* Added more descriptive field names and help texts to the models
+* Added a rudimentary CLI
+
 Version 0.8, 11 July 2009:
 ------------------------------
 * Added Ice connector objects. Now MD can connect via both DBus and Ice.
