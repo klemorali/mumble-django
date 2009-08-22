@@ -356,3 +356,10 @@ msgstr "Registracija"
 
 msgid "Administration"
 msgstr "Administracija"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Ovo je privatan server i potrebna vam je lozinka za pristup. Molimo vas unesite lozinku."
+
+msgid "The password you entered is incorrect."
+msgstr "Lozinka koju ste unijeli je neispravna."
+
