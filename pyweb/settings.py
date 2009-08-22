@@ -71,6 +71,10 @@ ACCOUNT_ACTIVATION_DAYS = 30
 # Default mumble port. If your server runs under this port, it will not be included in the links in the Channel Viewer.
 MUMBLE_DEFAULT_PORT = 64738
 
+# Protect the registration form for private servers?
+# If set to True, people will need to enter the server password in order to create accounts.
+PROTECTED_MODE = False
+
 # Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
 # Mumble-Django should use its own!
 DATABASE_ENGINE = 'sqlite3'

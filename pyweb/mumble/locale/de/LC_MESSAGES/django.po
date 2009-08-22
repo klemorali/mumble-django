@@ -363,3 +363,10 @@ msgstr "Registrierung"
 
 msgid "Administration"
 msgstr "Administration"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Dieser Server ist privat und der Registrierungsschutz ist aktiv. Bitte gib das Serverpasswort ein."
+
+msgid "The password you entered is incorrect."
+msgstr "Das eingegebene Passwort ist falsch"
+
