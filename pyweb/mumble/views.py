@@ -21,6 +21,7 @@ from django.template			import RequestContext
 from django.http			import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
+from django.conf			import settings
 
 from models				import Mumble, MumbleUser
 from forms				import *
@@ -61,12 +62,11 @@ def show( request, server ):
 	if isAdmin:
 		if request.method == 'POST' and "mode" in request.POST and request.POST['mode'] == 'admin':
 			adminform = MumbleForm( request.POST, instance=srv );
-			# In case we redisplay the page, it was displayed with errors on the admin form, so tell
-			# Ext to show the admin form tab first.
-			displayTab = 1;
 			if adminform.is_valid():
 				adminform.save();
 				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+			else:
+				displayTab = 2;
 		else:
 			adminform = MumbleForm( instance=srv );
 	else:
@@ -76,11 +76,18 @@ def show( request, server ):
 	user = None;
 	
 	if request.user.is_authenticated():
+		# Unregistered users may or may not need a password to register.
+		if settings.PROTECTED_MODE and srv.passwd:
+			unregged_user_form = MumbleUserPasswordForm;
+		else:
+			unregged_user_form = MumbleUserForm;
+		
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
 				user    = MumbleUser.objects.get( server=srv, owner=request.user );
 			except MumbleUser.DoesNotExist:
-				regform = MumbleUserForm( request.POST );
+				regform = unregged_user_form( request.POST );
+				regform.server = srv;
 				if regform.is_valid():
 					model = regform.save( commit=False );
 					model.isAdmin = False;
@@ -88,16 +95,20 @@ def show( request, server ):
 					model.owner   = request.user;
 					model.save();
 					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+				else:
+					displayTab = 1;
 			else:
 				regform = MumbleUserForm( request.POST, instance=user );
 				if regform.is_valid():
 					regform.save();
 					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+				else:
+					displayTab = 1;
 		else:
 			try:
 				user  = MumbleUser.objects.get( server=srv, owner=request.user );
 			except MumbleUser.DoesNotExist:
-				regform = MumbleUserForm();
+				regform = unregged_user_form();
 			else:
 				regform = MumbleUserForm( instance=user );
 				registered = True;

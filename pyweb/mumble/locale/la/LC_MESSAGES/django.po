@@ -1,4 +1,4 @@
-# German translation file for Mumble-Django.
+# (Iggypay) Latin translation file for Mumble-Django.
 #
 # Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
 #
@@ -359,3 +359,9 @@ msgstr "Egistrationray"
 
 msgid "Administration"
 msgstr "Inistrationadmay"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Isthay erversay is ivatepray and otectedpray odemay is iveactay. Easeplay erentay the erversay asswordpay."
+
+msgid "The password you entered is incorrect."
+msgstr "The asswordpay you eredentay is orrectincay."

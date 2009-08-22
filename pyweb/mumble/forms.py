@@ -45,10 +45,46 @@ class MumbleForm( ModelForm ):
 
 class MumbleUserForm( ModelForm ):
 	"""The user registration form used to register an account."""
+	
+	def clean_name( self ):
+		name = self.cleaned_data['name'];
+		if not self.instance.id and len( self.server.ctl.getRegisteredPlayers( self.server.srvid, name ) ) > 0:
+			raise forms.ValidationError( _( "Another player already registered that name." ) );
+		return name;
+	
+	def clean_password( self ):
+		pw = self.cleaned_data['password'];
+		if not pw:
+			raise forms.ValidationError( _( "Cannot register player without a password!" ) );
+		return pw;
+	
 	class Meta:
 		model   = MumbleUser;
 		fields  = ( 'name', 'password' );
 
+
+class MumbleUserPasswordForm( MumbleUserForm ):
+	"""The user registration form used to register an account on a private server in protected mode."""
+	
+	serverpw = forms.CharField(
+		label=_('Server Password'),
+		help_text=_('This server is private and protected mode is active. Please enter the server password.'),
+		widget=forms.PasswordInput(render_value=False)
+		);
+	
+	def clean_serverpw( self ):
+		# Validate the password
+		serverpw = self.cleaned_data['serverpw'];
+		if self.server.passwd != serverpw:
+			raise forms.ValidationError( _( "The password you entered is incorrect." ) );
+		return serverpw;
+	
+	def clean( self ):
+		# prevent save() from trying to store the password in the Model instance
+		# clean() will be called after clean_serverpw(), so it has already been validated here.
+		if 'serverpw' in self.cleaned_data:
+			del( self.cleaned_data['serverpw'] );
+		return self.cleaned_data;
 
 class MumbleTextureForm( Form ):
 	"""The form used to upload a new image to be set as texture."""
