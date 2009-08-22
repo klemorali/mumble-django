@@ -55,7 +55,7 @@ module Murmur
 		/** Is user deafened by the server? If true, this implies mute. */
 		bool deaf;
 		/** Is the user suppressed by the server? This means the user is not muted, but does not have speech privileges in the current channel. */
-		bool suppressed;
+		bool suppress;
 		/** Is the user self-muted? */
 		bool selfMute;
 		/** Is the user self-deafened? If true, this implies mute. */
@@ -107,6 +107,8 @@ module Murmur
 		string description;
 		/** Channel is temporary, and will be removed when the last user leaves it. */
 		bool temporary;
+		/** Position of the channel which is used in Client for sorting. */
+		int position;
 	};
 
 	/** A group. Groups are defined per channel, and can inherit members from parent channels.
@@ -208,6 +210,9 @@ module Murmur
 	class Tree;
 	sequence<Tree> TreeList;
 
+	enum ChannelInfo { ChannelDescription, ChannelPosition };
+	enum UserInfo { UserName, UserEmail, UserComment, UserHash, UserPassword };
+
 	dictionary<int, User> UserMap;
 	dictionary<int, Channel> ChannelMap;
 	sequence<Channel> ChannelList;
@@ -220,7 +225,7 @@ module Murmur
 	sequence<string> NameList;
 	dictionary<int, string> NameMap;
 	dictionary<string, int> IdMap;
-	dictionary<string, string> InfoMap;
+	dictionary<UserInfo, string> UserInfoMap;
 	sequence<byte> Texture;
 	dictionary<string, string> ConfigMap;
 	sequence<string> GroupNameList;
@@ -342,7 +347,7 @@ module Murmur
 		 *  @param info Information about user. This needs to include at least "name".
 		 *  @return true if information is present, false to fall through.
 		 */
-		idempotent bool getInfo(int id, out InfoMap info);
+		idempotent bool getInfo(int id, out UserInfoMap info);
 	
 		/** Map a name to a user id.
 		 *  @param name Username to map.
@@ -375,7 +380,7 @@ module Murmur
 		 *  @param info Information about user to register.
 		 *  @return User id of new user, -1 for registration failure, or -2 to fall through.
 		 */
-		int registerUser(InfoMap info);
+		int registerUser(UserInfoMap info);
 
 		/** Unregister a user.
 		 *  @param id Userid to unregister.
@@ -394,7 +399,7 @@ module Murmur
 		 *  @param info Information to set about user. This should be merged with existing information.
 		 *  @return 1 for successfull update, 0 for unsuccessfull update, -1 to fall through.
 		 */
-		idempotent int setInfo(int id, InfoMap info);
+		idempotent int setInfo(int id, UserInfoMap info);
 
 		/** Set texture of user registration.
 		 *  @param id Userid of registered user.
@@ -628,7 +633,7 @@ module Murmur
 		 * @param info Information about new user. Must include at least "name".
 		 * @return The ID of the user. See [RegisteredUser::userid].
 		 */
-		int registerUser(InfoMap info) throws ServerBootedException, InvalidUserException;
+		int registerUser(UserInfoMap info) throws ServerBootedException, InvalidUserException;
 		
 		/** Remove a user registration.
 		 * @param userid ID of registered user. See [RegisteredUser::userid].
@@ -639,13 +644,13 @@ module Murmur
 		 * and can also use it to change the user's name.
 		 * @param registration Updated registration record.
 		 */
-		idempotent void updateRegistration(int userid, InfoMap info) throws ServerBootedException, InvalidUserException;
+		idempotent void updateRegistration(int userid, UserInfoMap info) throws ServerBootedException, InvalidUserException;
 
 		/** Fetch registration for a single user.
 		 * @param userid ID of registered user. See [RegisteredUser::userid].
 		 * @return Registration record.
 		 */
-		idempotent InfoMap getRegistration(int userid) throws ServerBootedException, InvalidUserException;
+		idempotent UserInfoMap getRegistration(int userid) throws ServerBootedException, InvalidUserException;
 
 		/** Fetch a group of registered users.
 		 * @param filter Substring of user name. If blank, will retrieve all registered users.

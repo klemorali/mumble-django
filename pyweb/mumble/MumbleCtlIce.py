@@ -270,8 +270,8 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		users = self._getIceServerObject( srvid ).getRegisteredUsers( filter.encode( "UTF-8" ) )
 		ret = []
 		
-		for user in users:
-			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
+		for id in users:
+			ret.append( [ id, self.setUnicodeFlag( users[id] ) ] );
 		
 		return ret
 	
@@ -292,7 +292,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		
 		for x in users:
 			user = users[x]
-			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.userid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
+			ret.append([user.session, user.mute, user.deaf, user.suppress, user.selfMute, user.selfDeaf, user.channel, user.userid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
 		
 		return ret
 	
