@@ -18,6 +18,8 @@
 import re
 
 class MumbleCtlBase ():
+	cache = {};
+	
 	''' abstract Ctrol Object '''
 	
 	def getAllConf(self, srvid):
@@ -88,6 +90,10 @@ class MumbleCtlBase ():
 
 	@staticmethod
 	def newInstance( connstring ):
+		# check cache
+		if connstring in MumbleCtlBase.cache:
+			return MumbleCtlBase.cache[connstring];
+		
 		# connstring defines whether to connect via ICE or DBus.
 		# Dbus service names: some.words.divided.by.periods
 		# ICE specs are WAY more complex, so if DBus doesn't match, use ICE.
@@ -95,10 +101,13 @@ class MumbleCtlBase ():
 		
 		if rd.match( connstring ):
 			from MumbleCtlDbus import MumbleCtlDbus
-			return MumbleCtlDbus( connstring )
+			ctl = MumbleCtlDbus( connstring )
 		else:
 			from MumbleCtlIce import MumbleCtlIce
-			return MumbleCtlIce( connstring )
+			ctl = MumbleCtlIce( connstring )
+		
+		MumbleCtlBase.cache[connstring] = ctl;
+		return ctl;
 
 
 
