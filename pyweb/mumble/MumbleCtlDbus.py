@@ -102,6 +102,13 @@ class MumbleCtlDbus(MumbleCtlBase):
 	def setSuperUserPassword(self, srvid, value):
 		self.meta.setSuperUserPassword(dbus.Int32(srvid), value)
 	
+	def getRegistration(self, srvid, mumbleid):
+		user = MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).getRegistration(dbus.Int32(mumbleid)))
+		return {
+			'name':  user[1],
+			'email': user[2],
+			};
+	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		return MumbleCtlDbus.converDbusTypeToNative(self._getDbusServerObject(srvid).setRegistration(dbus.Int32(mumbleid), name, email, password))
 	

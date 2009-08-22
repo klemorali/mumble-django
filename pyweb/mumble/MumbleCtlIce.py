@@ -150,6 +150,13 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getIceServerObject(srvid).unregisterPlayer(mumbleid)
 	
+	def getRegistration(self, srvid, mumbleid):
+		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
+		return {
+			'name':  user.name,
+			'email': user.email,
+			};
+	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
 		user.name  = name.encode( "UTF-8" )
@@ -299,6 +306,9 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getIceServerObject(srvid).unregisterUser(mumbleid)
+	
+	def getRegistration(self, srvid, mumbleid):
+		return self._getIceServerObject( srvid ).getRegistration( mumbleid )
 	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject( srvid ).getRegistration( mumbleid )
