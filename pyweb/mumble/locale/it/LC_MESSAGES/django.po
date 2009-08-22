@@ -346,3 +346,9 @@ msgstr "Registrazione"
 #: mumble.htm:158
 msgid "Administration"
 msgstr "Amministrazione"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Server privato, la protezione di registro è attiva. Digiti prego la password d'accesso."
+
+msgid "The password you entered is incorrect."
+msgstr "La password d'accesso non è corretta."
