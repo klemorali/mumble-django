@@ -17,7 +17,7 @@
 
 import re
 
-class MumbleCtlBase ():
+class MumbleCtlBase (object):
 	cache = {};
 	
 	''' abstract Ctrol Object '''
@@ -63,6 +63,9 @@ class MumbleCtlBase ():
 
 	def registerPlayer(self, srvid, name, email, password):
 		raise NotImplementedError( "mctl::registerPlayer" );
+
+	def getRegistration(self, srvid, mumbleid):
+		raise NotImplementedError( "mctl::setRegistration" );
 
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		raise NotImplementedError( "mctl::setRegistration" );
