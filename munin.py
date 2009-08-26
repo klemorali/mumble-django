@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 """
  *  Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -49,6 +50,12 @@ if sys.argv[-1] == 'config':
 	
 	for mumble in mm:
 		print "%d.label %s" % ( mumble.id, mumble.name );
+
+elif sys.argv[-1] == 'autoconf':
+	if len(mm) == 0:
+		print "no (no servers configured)";
+	else:
+		print "yes";
 
 else:
 	for mumble in mm:
