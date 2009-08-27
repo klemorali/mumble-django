@@ -40,6 +40,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
 from mumble.models import *
+
 mm = Mumble.objects.filter( booted = True ).order_by( "id" );
 
 if sys.argv[-1] == 'config':
@@ -51,11 +52,20 @@ if sys.argv[-1] == 'config':
 	for mumble in mm:
 		print "%d.label %s" % ( mumble.id, mumble.name );
 
+
 elif sys.argv[-1] == 'autoconf':
-	if len(mm) == 0:
+	if mm.count() == 0:
 		print "no (no servers configured)";
 	else:
-		print "yes";
+		# check if connecting works
+		try:
+			for mumble in mm:
+				mumble.getCtl();
+		except Exception, instance:
+			print "no (can't connect to server %s: %s)" % ( mumble.name, instance );
+		else:
+			print "yes";
+
 
 else:
 	for mumble in mm:
