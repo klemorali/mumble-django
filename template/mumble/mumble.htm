@@ -144,6 +144,37 @@
 			Ext.get( 'mumble_admin' ).addClass( 'x-hide-display' );
 		{% endif %}
 		
+		{% if CurrentUserIsAdmin %}
+		userRecord = Ext.data.Record.create([
+			{ name: 'id',       type: 'int'    },
+			{ name: 'name',     type: 'string' },
+			{ name: 'password', type: 'string' },
+			{ name: 'owner',    type: 'string' },
+			{ name: 'owner_id', type: 'int'    },
+			{ name: 'admin',    type: 'bool'   },
+			{ name: 'delete',   type: 'bool'   },
+			]);
+		
+		userAdminStore = new Ext.data.Store({
+			url:    '/mumble/{{ DBaseObject.id }}/users/',
+			reader: new Ext.data.JsonReader({
+				root:    'objects',
+				fields:  userRecord,
+				}),
+			autoLoad: true,
+			});
+		
+		adminColumn = new Ext.grid.CheckColumn({
+			header:    '{% trans "Admin on root channel" %}',
+			dataIndex: 'admin',
+			});
+		
+		deleteColumn = new Ext.grid.CheckColumn({
+			header:    '{% trans "Delete" %}',
+			dataIndex: 'delete',
+			});
+		{% endif %}
+		
 		var cardpanel = new Ext.Panel({
 			renderTo:   'mumble_ext_container',
 			layout:     'card',
@@ -157,13 +188,79 @@
 				defaults:  { autoheight: true },
 				activeTab: {{ DisplayTab }},
 				items: [
-					{ contentEl: 'mumble_motd',          title: '{% trans "Server Info" %}',    autoScroll: true },
-					{ contentEl: 'mumble_registration',  title: '{% trans "Registration" %}',   autoScroll: true },
+					{ contentEl: 'mumble_motd',           title: '{% trans "Server Info" %}',    autoScroll: true },
+					{ contentEl: 'mumble_registration',   title: '{% trans "Registration" %}',   autoScroll: true },
 					{% if CurrentUserIsAdmin %}
-						{ contentEl: 'mumble_admin',     title: '{% trans "Administration" %}', autoScroll: true },
+						{ contentEl: 'mumble_admin',  title: '{% trans "Administration" %}', autoScroll: true },
 					{% endif %}
 					{% if Registered %}
-						{ contentEl: 'mumble_texture',   title: '{% trans "User Texture" %}',   autoScroll: true },
+						{ contentEl: 'mumble_texture',title: '{% trans "User Texture" %}',   autoScroll: true },
+					{% endif %}
+					{% if CurrentUserIsAdmin %}
+						{
+						title:  '{% trans "User List" %}',
+						xtype:  'editorgrid',
+						store:  userAdminStore,
+						cm:     new Ext.grid.ColumnModel( [ {
+								header:    '{% trans "name" %}',
+								dataIndex: 'name',
+								editor:    new Ext.form.TextField({
+									allowBlank: false,
+									}),
+							}, {
+								header:    '{% trans "Account owner" %}',
+								dataIndex: 'owner',
+								editor:    new Ext.form.TextField(),
+							}, adminColumn, {
+								header:    '{% trans "Change password" %}',
+								dataIndex: 'password',
+								editor: new Ext.form.TextField({
+									inputType: 'password',
+									}),
+							}, deleteColumn ] ),
+						tbar:   [{
+							text:     '{% trans "Add" %}',
+							handler : function(){
+								userAdminStore.add( new userRecord( {
+									id:       -1,
+									name:     'New User',
+									admin:    false,
+									owner:    null,
+									owner_id: null,
+									password: null,
+									'delete': false,
+									} ) );
+								}
+							}, {
+							text:     '{% trans "Save" %}',
+							handler : function(){
+								data = [];
+								for( i = 0; i < userAdminStore.data.items.length; i++ ){
+									rec = userAdminStore.data.items[i];
+									if( rec.dirty ){
+										data.push(rec.data);
+										}
+									}
+								
+								var conn = new Ext.data.Connection();
+								conn.request( {
+									url:     userAdminStore.url,
+									params:  { data: Ext.encode( data ), },
+									success: function(){
+										for( i = 0; i < userAdminStore.data.items.length; i++ ){
+											rec = userAdminStore.data.items[i];
+											if( rec.data['delete'] == true )
+												userAdminStore.remove( rec );
+											else if( rec.dirty ){
+												rec.commit();
+												}
+											}
+										},
+									} );
+								}
+							}],
+						plugins: [ adminColumn, deleteColumn ],
+						},
 					{% endif %}
 					]
 				},
