@@ -149,8 +149,7 @@
 			{ name: 'id',       type: 'int'    },
 			{ name: 'name',     type: 'string' },
 			{ name: 'password', type: 'string' },
-			{ name: 'owner',    type: 'string' },
-			{ name: 'owner_id', type: 'int'    },
+			{ name: 'owner',    type: 'int' },
 			{ name: 'admin',    type: 'bool'   },
 			{ name: 'delete',   type: 'bool'   },
 			]);
@@ -167,11 +166,30 @@
 		adminColumn = new Ext.grid.CheckColumn({
 			header:    '{% trans "Admin on root channel" %}',
 			dataIndex: 'admin',
+			width:     50,
 			});
 		
 		deleteColumn = new Ext.grid.CheckColumn({
 			header:    '{% trans "Delete" %}',
 			dataIndex: 'delete',
+			width:     50,
+			});
+		
+		ownerCombo = new Ext.form.ComboBox({
+			name:           'owner',
+			hiddenName:     'owner_id',
+			forceSelection: true,
+			triggerAction:  'all',
+			valueField:     'uid',
+			displayField:   'uname',
+			store: new Ext.data.Store({
+				url:    '/mumble/djangousers',
+				reader: new Ext.data.JsonReader({
+					fields:        [ 'uid', 'uname' ],
+					root:          'objects',
+					}),
+				autoLoad: true,
+				}),
 			});
 		{% endif %}
 		
@@ -210,13 +228,25 @@
 							}, {
 								header:    '{% trans "Account owner" %}',
 								dataIndex: 'owner',
-								editor:    new Ext.form.TextField(),
+								editor:    ownerCombo,
+								renderer:  function( value ){
+									if( value == '' ) return '';
+									idx = ownerCombo.store.find( 'uid', value );
+									rec = ownerCombo.store.getAt( idx );
+									return rec.get( 'uname' );
+									},
 							}, adminColumn, {
 								header:    '{% trans "Change password" %}',
 								dataIndex: 'password',
 								editor: new Ext.form.TextField({
 									inputType: 'password',
 									}),
+								renderer: function( value ){
+									ret = '';
+									for( i = 0; i < value.length; i++ )
+										ret += '*';
+									return ret;
+									},
 							}, deleteColumn ] ),
 						tbar:   [{
 							text:     '{% trans "Add" %}',
@@ -225,9 +255,8 @@
 									id:       -1,
 									name:     'New User',
 									admin:    false,
-									owner:    null,
-									owner_id: null,
-									password: null,
+									owner:    '',
+									password: '',
 									'delete': false,
 									} ) );
 								}
