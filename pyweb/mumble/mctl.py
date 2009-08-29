@@ -24,73 +24,73 @@ class MumbleCtlBase (object):
 	
 	def getAllConf(self, srvid):
 		raise NotImplementedError( "mctl::getAllConf" );
-
+	
 	def getVersion( self ):
 		raise NotImplementedError( "mctl::getVersion" );
 	
 	def setConf(self, srvid, key, value):
 		raise NotImplementedError( "mctl::setConf" );
-
+	
 	def getDefaultConf(self):
 		raise NotImplementedError( "mctl::getDefaultConf" );
-
+	
 	def newServer(self):
 		raise NotImplementedError( "mctl::newServer" );
-
+	
 	def setSuperUserPassword(self, srvid, value):
 		raise NotImplementedError( "mctl::setSuperUserPassword" );
-
+	
 	def start(self, srvid):
 		raise NotImplementedError( "mctl::start" );
-
+	
 	def stop(self, srvid):
 		raise NotImplementedError( "mctl::stop" );
-
+	
 	def isBooted(self, srvid):
 		raise NotImplementedError( "mctl::isBooted" );
-
+	
 	def deleteServer(self, srvid):
 		raise NotImplementedError( "mctl::deleteServer" );
-
+	
 	def getPlayers(self, srvid):
 		raise NotImplementedError( "mctl::getPlayers" );
-
+	
 	def getRegisteredPlayers(self, srvid, filter):
 		raise NotImplementedError( "mctl::getRegisteredPlayers" );
-
+	
 	def getChannels(self, srvid):
 		raise NotImplementedError( "mctl::getChannels" );
-
+	
 	def registerPlayer(self, srvid, name, email, password):
 		raise NotImplementedError( "mctl::registerPlayer" );
-
+	
 	def getRegistration(self, srvid, mumbleid):
-		raise NotImplementedError( "mctl::setRegistration" );
-
+		raise NotImplementedError( "mctl::getRegistration" );
+	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		raise NotImplementedError( "mctl::setRegistration" );
-
+	
 	def unregisterPlayer(self, srvid, mumbleid):
 		raise NotImplementedError( "mctl::unregisterPlayer" );
-
+	
 	def getBootedServers(self):
 		raise NotImplementedError( "mctl::getBootedServers" );
-
+	
 	def getAllServers(self):
 		raise NotImplementedError( "mctl::getAllServers" );
-
+	
 	def getACL(self, srvid, channelid):
 		raise NotImplementedError( "mctl::getACL" );
-
+	
 	def setACL(self, srvid, acl):
 		raise NotImplementedError( "mctl::setACL" );
-
+	
 	def getTexture(self, srvid, mumbleid):
 		raise NotImplementedError( "mctl::getTexture" );
-
+	
 	def setTexture(self, srvid, mumbleid, infile):
 		raise NotImplementedError( "mctl::setTexture" );
-
+	
 	@staticmethod
 	def newInstance( connstring ):
 		# check cache

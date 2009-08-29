@@ -15,11 +15,11 @@
  *  GNU General Public License for more details.
 """
 
-from PIL    import Image
-from struct import pack, unpack
-from zlib   import compress, decompress
+from PIL	import Image
+from struct	import pack, unpack
+from zlib	import compress, decompress
 
-from mctl   import MumbleCtlBase
+from mctl	import MumbleCtlBase
 
 import dbus
 

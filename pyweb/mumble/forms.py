@@ -14,11 +14,11 @@
  *  GNU General Public License for more details.
 """
 
-from django		import forms
-from django.forms	import Form, ModelForm
-from django.utils.translation import ugettext_lazy as _
+from django			import forms
+from django.forms		import Form, ModelForm
+from django.utils.translation	import ugettext_lazy as _
 
-from models		import *
+from models			import *
 
 
 class MumbleAdminForm( ModelForm ):

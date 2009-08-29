@@ -15,18 +15,15 @@
 """
 
 import socket
-from PIL         import Image
-from struct      import pack, unpack
-from zlib        import compress, decompress
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation	import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.db   import models
+from django.db			import models
+from django.db.models		import signals
+from django.conf		import settings
 
-from django.conf import settings
-
-from mmobjects   import *
-from mctl        import *
+from mmobjects			import *
+from mctl			import *
 
 
 class Mumble( models.Model ):
@@ -404,8 +401,6 @@ class MumbleUser( models.Model ):
 
 
 
-
-from django.db.models import signals
 
 signals.pre_delete.connect( Mumble.pre_delete_listener,     sender=Mumble     );
 signals.pre_delete.connect( MumbleUser.pre_delete_listener, sender=MumbleUser );
