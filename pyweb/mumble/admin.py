@@ -45,7 +45,7 @@ class MumbleAdmin(admin.ModelAdmin):
 	
 
 class MumbleUserAdmin(admin.ModelAdmin):
-	list_display   = [ 'owner', 'server', 'name' ];
+	list_display   = [ 'owner', 'server', 'name', 'isAdmin' ];
 	list_filter    = [ 'server' ];
 	search_fields  = [ 'owner__username', 'name' ];
 	ordering       = [ 'owner__username' ];
