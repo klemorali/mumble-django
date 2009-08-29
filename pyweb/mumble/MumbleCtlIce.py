@@ -15,14 +15,14 @@
  *  GNU General Public License for more details.
 """
 
-from os.path import join
-from PIL     import Image
-from struct  import pack, unpack
-from zlib    import compress, decompress
+from os.path		import join
+from PIL		import Image
+from struct		import pack, unpack
+from zlib		import compress, decompress
 
-from django.conf import settings
+from django.conf	import settings
 
-from mctl    import MumbleCtlBase
+from mctl		import MumbleCtlBase
 
 import Ice
 

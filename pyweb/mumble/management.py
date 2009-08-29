@@ -17,9 +17,9 @@
 import os
 
 import models
-from django.db.models import signals
+from django.db.models		import signals
 
-from mctl import *
+from mctl			import *
 
 def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	if not isinstance( keys, tuple ):

@@ -17,11 +17,12 @@
 import mctl
 
 import datetime
-from time       import time
-from os.path    import join
+from time			import time
+from os.path			import join
 
-from django.utils.http import urlquote
-from django.conf       import settings
+from django.utils.http		import urlquote
+from django.conf		import settings
+
 
 def cmp_names( a, b ):
 	return cmp( a.name, b.name );
