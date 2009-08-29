@@ -152,20 +152,26 @@ def show( request, server ):
 		);
 
 
-def showTexture( request, server ):
+def showTexture( request, server, userid = None ):
 	"""Pack the currently logged in user's texture (if any) into an HttpResponse."""
-	if request.user.is_authenticated():
-		srv  = Mumble.objects.get( id=int(server) );
-		user = MumbleUser.objects.get( server=srv, owner=request.user );
-		try:
-			img  = user.getTexture();
-		except ValueError:
-			raise Http404();
+	srv  = get_object_or_404( Mumble, id=int(server) );
+	
+	if userid is None:
+		if request.user.is_authenticated():
+			user = get_object_or_404( MumbleUser, server=srv, owner=request.user );
 		else:
-			buffer = StringIO();
-			img.save( buffer, "PNG" );
-			return HttpResponse( buffer.getvalue(), "image/png" );
-	raise Http404();
+			raise Http404();
+	else:
+		user = get_object_or_404( MumbleUser, server=srv, id=int(userid) );
+	
+	try:
+		img  = user.getTexture();
+	except ValueError:
+		raise Http404();
+	else:
+		buffer = StringIO();
+		img.save( buffer, "PNG" );
+		return HttpResponse( buffer.getvalue(), "image/png" );
 
 
 
