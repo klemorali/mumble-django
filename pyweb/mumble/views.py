@@ -188,7 +188,6 @@ def users( request, server ):
 	
 	if request.method == 'POST':
 		data = simplejson.loads( request.POST['data'] );
-		print "Json: ", data;
 		for record in data:
 			if record['id'] == -1:
 				if record['delete']:
@@ -204,25 +203,22 @@ def users( request, server ):
 			mu.password = record['password'];
 			mu.isAdmin  = record['admin'];
 			
-			if record['owner_id']:
-				mu.owner = User.objects.get( id=int(record['owner_id']) );
+			if record['owner']:
+				mu.owner = User.objects.get( id=int(record['owner']) );
 			
 			mu.save();
 	
 	users = [];
 	for mu in srv.mumbleuser_set.all():
 		owner = None;
-		owner_id = None;
 		if mu.owner is not None:
-			owner    = unicode( mu.owner );
-			owner_id = mu.owner.id
+			owner = mu.owner.id
 		
 		users.append( {
 			'id':       mu.id,
 			'name':     mu.name,
 			'password': None,
 			'owner':    owner,
-			'owner_id': owner_id,
 			'admin':    mu.getAdmin(),
 			} );
 	
@@ -232,6 +228,19 @@ def users( request, server ):
 		);
 
 
-
+@login_required
+def djangousers( request ):
+	"Return a list of all Django users' names and IDs."
+	users = [ { 'uid': '', 'uname': '------' } ];
+	for du in User.objects.all():
+		users.append( {
+			'uid':   du.id,
+			'uname': unicode( du ),
+			} );
+	
+	return HttpResponse(
+		simplejson.dumps( { 'success': True, 'objects': users } ),
+		mimetype='text/javascript'
+		);
 
 

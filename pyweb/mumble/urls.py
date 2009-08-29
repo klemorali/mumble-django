@@ -18,7 +18,8 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns(
 	'mumble.views',
-	( r'(?P<server>\d+)/users',				'users'	),
+	( r'djangousers',					'djangousers'	),
+	( r'(?P<server>\d+)/users',				'users' 	),
 	( r'(?P<server>\d+)/(?P<userid>\d+)texture.png',	'showTexture'	),
 	( r'(?P<server>\d+)/texture.png',			'showTexture'	),
 	( r'(?P<server>\d+)',					'show'		),
