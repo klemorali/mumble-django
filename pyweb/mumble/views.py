@@ -14,6 +14,7 @@
  *  GNU General Public License for more details.
 """
 
+import simplejson
 from StringIO				import StringIO
 
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
@@ -21,6 +22,7 @@ from django.template			import RequestContext
 from django.http			import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
+from django.contrib.auth.models 	import User
 from django.conf			import settings
 
 from models				import Mumble, MumbleUser
@@ -172,6 +174,64 @@ def showTexture( request, server, userid = None ):
 		buffer = StringIO();
 		img.save( buffer, "PNG" );
 		return HttpResponse( buffer.getvalue(), "image/png" );
+
+
+@login_required
+def users( request, server ):
+	srv = get_object_or_404( Mumble, id=int(server) );
+	
+	if not srv.isUserAdmin( request.user ):
+		return HttpResponse(
+			simplejson.dumps({ 'success': False, 'objects': [], 'errormsg': 'Access denied' }),
+			mimetype='text/javascript'
+			);
+	
+	if request.method == 'POST':
+		data = simplejson.loads( request.POST['data'] );
+		print "Json: ", data;
+		for record in data:
+			if record['id'] == -1:
+				if record['delete']:
+					continue;
+				mu = MumbleUser( server=srv );
+			else:
+				mu = MumbleUser.objects.get( id=record['id'] );
+				if record['delete']:
+					mu.delete();
+					continue;
+			
+			mu.name     = record['name'];
+			mu.password = record['password'];
+			mu.isAdmin  = record['admin'];
+			
+			if record['owner_id']:
+				mu.owner = User.objects.get( id=int(record['owner_id']) );
+			
+			mu.save();
+	
+	users = [];
+	for mu in srv.mumbleuser_set.all():
+		owner = None;
+		owner_id = None;
+		if mu.owner is not None:
+			owner    = unicode( mu.owner );
+			owner_id = mu.owner.id
+		
+		users.append( {
+			'id':       mu.id,
+			'name':     mu.name,
+			'password': None,
+			'owner':    owner,
+			'owner_id': owner_id,
+			'admin':    mu.getAdmin(),
+			} );
+	
+	return HttpResponse(
+		simplejson.dumps( { 'success': True, 'objects': users } ),
+		mimetype='text/javascript'
+		);
+
+
 
 
 
