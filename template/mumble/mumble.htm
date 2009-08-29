@@ -231,9 +231,10 @@
 								editor:    ownerCombo,
 								renderer:  function( value ){
 									if( value == '' ) return '';
-									idx = ownerCombo.store.find( 'uid', value );
-									rec = ownerCombo.store.getAt( idx );
-									return rec.get( 'uname' );
+									items = ownerCombo.store.data.items;
+									for( i = 0; i < items.length; i++ )
+										if( items[i].data.uid == value )
+											return items[i].data.uname;
 									},
 							}, adminColumn, {
 								header:    '{% trans "Change password" %}',
