@@ -232,7 +232,7 @@ def users( request, server ):
 def djangousers( request ):
 	"Return a list of all Django users' names and IDs."
 	users = [ { 'uid': '', 'uname': '------' } ];
-	for du in User.objects.all():
+	for du in User.objects.all().order_by( 'username' ):
 		users.append( {
 			'uid':   du.id,
 			'uname': unicode( du ),

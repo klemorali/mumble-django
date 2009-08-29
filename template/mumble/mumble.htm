@@ -149,7 +149,7 @@
 			{ name: 'id',       type: 'int'    },
 			{ name: 'name',     type: 'string' },
 			{ name: 'password', type: 'string' },
-			{ name: 'owner',    type: 'int' },
+			{ name: 'owner',    type: 'int'    },
 			{ name: 'admin',    type: 'bool'   },
 			{ name: 'delete',   type: 'bool'   },
 			]);
@@ -161,6 +161,7 @@
 				fields:  userRecord,
 				}),
 			autoLoad: true,
+			remoteSort: false,
 			});
 		
 		adminColumn = new Ext.grid.CheckColumn({
@@ -222,6 +223,7 @@
 						cm:     new Ext.grid.ColumnModel( [ {
 								header:    '{% trans "name" %}',
 								dataIndex: 'name',
+								sortable:  true,
 								editor:    new Ext.form.TextField({
 									allowBlank: false,
 									}),
@@ -229,6 +231,7 @@
 								header:    '{% trans "Account owner" %}',
 								dataIndex: 'owner',
 								editor:    ownerCombo,
+								sortable:  true,
 								renderer:  function( value ){
 									if( value == '' ) return '';
 									items = ownerCombo.store.data.items;
