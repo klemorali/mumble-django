@@ -112,18 +112,14 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
-from deferred_resolver import *
-
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 
 # URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = StaticResolver( 'static' );
-
-LOGIN_URL = ViewResolver( "django.contrib.auth.views.login" );
+MEDIA_URL = '/static/';
 
 # URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = StaticResolver( 'media/' );
+ADMIN_MEDIA_PREFIX = '/media/';
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
