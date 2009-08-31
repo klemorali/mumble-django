@@ -1,10 +1,10 @@
 {% load mumble_extras %}
 <div class="mumble">
-  <img src="{{ media_url }}/mumble/knoten_v.png" />
+  <img src="{{ MEDIA_URL }}/mumble/knoten_v.png" />
   {% if Channel.linked %}
-    <img src="{{ media_url }}/mumble/channel_linked.png" alt="linked channel" />
+    <img src="{{ MEDIA_URL }}/mumble/channel_linked.png" alt="linked channel" />
   {% else %}
-    <img src="{{ media_url }}/mumble/channel.png" alt="channel" />
+    <img src="{{ MEDIA_URL }}/mumble/channel.png" alt="channel" />
   {% endif %}
   <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
     {{ Channel.name|trunc:30 }}

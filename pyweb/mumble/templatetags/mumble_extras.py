@@ -34,11 +34,11 @@ register.filter( 'trunc', trunc );
 ### FILTER: chanview -- renders an mmChannel / mmPlayer object with the correct template.
 def chanview( obj, user = None ):
 	if obj.is_server:
-		return render_to_string( 'mumble/server.htm',  { 'Server':  obj, 'MumbleAccount': user, 'media_url': settings.MEDIA_URL } );
+		return render_to_string( 'mumble/server.htm',  { 'Server':  obj, 'MumbleAccount': user, 'MEDIA_URL': settings.MEDIA_URL } );
 	elif obj.is_channel:
-		return render_to_string( 'mumble/channel.htm', { 'Channel': obj, 'MumbleAccount': user, 'media_url': settings.MEDIA_URL } );
+		return render_to_string( 'mumble/channel.htm', { 'Channel': obj, 'MumbleAccount': user, 'MEDIA_URL': settings.MEDIA_URL } );
 	elif obj.is_player:
-		return render_to_string( 'mumble/player.htm',  { 'Player':  obj, 'MumbleAccount': user, 'media_url': settings.MEDIA_URL } );
+		return render_to_string( 'mumble/player.htm',  { 'Player':  obj, 'MumbleAccount': user, 'MEDIA_URL': settings.MEDIA_URL } );
 
 register.filter( 'chanview', chanview );
 

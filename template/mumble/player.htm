@@ -2,24 +2,24 @@
 <div class="mumble">
   <span class="mumble">
     {% if Player.isAuthed %}
-      <img src="{{ media_url }}/mumble/authenticated.png" alt="authed" title="Authenticated" />
+      <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="Authenticated" />
     {% endif %}
     {% if Player.muted or Player.suppressed %}
-      <img src="{{ media_url }}/mumble/muted_server.png" alt="muted" title="Muted by server" />
+      <img src="{{ MEDIA_URL }}/mumble/muted_server.png" alt="muted" title="Muted by server" />
     {% endif %}
     {% if Player.deafened %}
-      <img src="{{ media_url }}/mumble/deafened_server.png" alt="deafened" title="Deafened by server" />
+      <img src="{{ MEDIA_URL }}/mumble/deafened_server.png" alt="deafened" title="Deafened by server" />
     {% endif %}
     {% if Player.selfmuted %}
-      <img src="{{ media_url }}/mumble/muted_self.png" alt="self-muted" title="Muted by themselves" />
+      <img src="{{ MEDIA_URL }}/mumble/muted_self.png" alt="self-muted" title="Muted by themselves" />
     {% endif %}
     {% if Player.selfdeafened %}
-      <img src="{{ media_url }}/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
+      <img src="{{ MEDIA_URL }}/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
     {% endif %}
   </span>
   <span>
-    <img src="{{ media_url }}/mumble/knoten_v.png" />
-    <img src="{{ media_url }}/mumble/talking_off.png" alt="Player" />
+    <img src="{{ MEDIA_URL }}/mumble/knoten_v.png" />
+    <img src="{{ MEDIA_URL }}/mumble/talking_off.png" alt="Player" />
     <a id="link_{{ Player.id }}" class="mumble" href="#" title="{{ Player.name }}">{{ Player.name|trunc:30 }}</a>
   </span>
 </div>

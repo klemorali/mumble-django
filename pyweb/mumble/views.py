@@ -47,7 +47,7 @@ def mumbles( request ):
 		'mumble/list.htm',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
-		  'media_url':     settings.MEDIA_URL,
+		  'MEDIA_URL':     settings.MEDIA_URL,
 		},
 		context_instance = RequestContext(request)
 		);
@@ -147,7 +147,7 @@ def show( request, server ):
 	return render_to_response(
 		'mumble/mumble.htm',
 		{
-			'media_url':    settings.MEDIA_URL,
+			'MEDIA_URL':    settings.MEDIA_URL,
 			'login_url':    "%s?next=%s" % ( login_url, show_url ),
 			'DBaseObject':  srv,
 			'ChannelTable': channelTable,
