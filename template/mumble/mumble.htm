@@ -186,7 +186,7 @@
 			valueField:     'uid',
 			displayField:   'uname',
 			store: new Ext.data.Store({
-				url:    '{% url mumble.views.users DBaseObject.id %}',
+				url:    '{% url mumble.views.djangousers %}',
 				reader: new Ext.data.JsonReader({
 					fields:        [ 'uid', 'uname' ],
 					root:          'objects',
