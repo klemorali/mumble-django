@@ -13,7 +13,7 @@
         <ul>
         {% for mm in mumbleaccs %}
           <li>
-            {{ mm.name }} on Server <a href="/mumble/{{mm.server.id}}">{{ mm.server.name }}</a> (<a href="/mumble/reg/{{mm.server.id}}">Set Password</a>)
+            {{ mm.name }} on Server <a href="{% url mumble.views.show mm.server.id %}">{{ mm.server.name }}</a>
           </li>
         {% endfor %}
         </ul>
@@ -26,11 +26,11 @@
   <ul>
     <li>Full Name: {{ user.first_name }} {{ user.last_name }}</li>
     <li>E-Mail Adress: {{ user.email }}</li>
-    <li>Staff: {% if user.is_staff %} yes <a href="/admin">(admin area)</a> {% else %} no {% endif %}</li>
+    <li>Staff: {% if user.is_staff %} yes <a href="{% url admin:index %}">(admin area)</a> {% else %} no {% endif %}</li>
     <li>Sign-up date: {{ user.date_joined }}</li>
     <li>Last login: {{ user.last_login }}</li>
-    <li><a href="/accounts/password/change">Change Password</a></li>
-    <li><a href="/accounts/logout">Logout</a></li>
+    <li><a href="{% url django.contrib.auth.views.password_change %}">Change Password</a></li>
+    <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
   </ul>
 </div>
 {% endblock %}
