@@ -1,5 +1,5 @@
 {% load mumble_extras %}
-<div class="mumble">
+<div class="mumble" style="background-image: url( {{ MEDIA_URL }}/mumble/linie_v.png )">
   <span class="mumble">
     {% if Player.isAuthed %}
       <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="Authenticated" />

@@ -7,7 +7,6 @@ a.mumble:link, a.mumble:visited, a.mumble:hover, a.mumble:active {
 }
 
 div.mumble {
-	background-image: url( /static/mumble/linie_v.png );
 	background-repeat: repeat-y;
 	margin-left: 20px;
 	margin-bottom: 0;
