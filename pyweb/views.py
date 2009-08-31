@@ -20,6 +20,7 @@ from django.http			import HttpResponseRedirect
 from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
 from django.contrib.auth.models		import User
+from django.conf			import settings
 
 from mumble.models			import Mumble, MumbleUser
 #from guestbook.models			import Entry, Comment
@@ -29,6 +30,7 @@ from mumble.models			import Mumble, MumbleUser
 def profile( request ):
 	userdata = {
 		"ProfileActive": True,
+		'media_url':    settings.MEDIA_URL,
 		"mumbleaccs":	MumbleUser.objects.filter(	owner  = request.user ),
 #		"gbposts": 	Entry.objects.filter(		author = request.user ).count(),
 #		"gbcomments": 	Comment.objects.filter(		author = request.user ).count(),
@@ -43,4 +45,7 @@ def profile( request ):
 
 
 def imprint( request ):
-	return render_to_response( 'registration/imprint.html', {}, context_instance = RequestContext(request) );
+	return render_to_response(
+		'registration/imprint.html',
+		{ 'media_url':    settings.MEDIA_URL, },
+		context_instance = RequestContext(request) );

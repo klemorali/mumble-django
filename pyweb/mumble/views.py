@@ -16,6 +16,7 @@
 
 import simplejson
 from StringIO				import StringIO
+from os.path				import join
 
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
 from django.template			import RequestContext
@@ -23,24 +24,30 @@ from django.http			import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators	import login_required
 from django.contrib.auth.models 	import User
 from django.conf			import settings
+from django.core.urlresolvers		import reverse
+
+from django.contrib.auth		import views as auth_views
 
 from models				import Mumble, MumbleUser
 from forms				import *
 from mmobjects				import *
 
 
+def redir( request ):
+	return HttpResponseRedirect( reverse( mumbles ) );
 
 def mumbles( request ):
 	"""Display a list of all configured Mumble servers, or redirects if only one configured."""
 	mumbles = get_list_or_404( Mumble );
 	
 	if len(mumbles) == 1:
-		return HttpResponseRedirect( '/mumble/%d' % mumbles[0].id );
+		return HttpResponseRedirect( reverse( show, kwargs={ 'server': mumbles[0].id, } ) );
 	
 	return render_to_response(
 		'mumble/list.htm',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
+		  'media_url':     settings.MEDIA_URL,
 		},
 		context_instance = RequestContext(request)
 		);
@@ -65,7 +72,7 @@ def show( request, server ):
 			adminform = MumbleForm( request.POST, instance=srv );
 			if adminform.is_valid():
 				adminform.save();
-				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+				return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 			else:
 				displayTab = 2;
 		else:
@@ -95,14 +102,14 @@ def show( request, server ):
 					model.server  = srv;
 					model.owner   = request.user;
 					model.save();
-					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 				else:
 					displayTab = 1;
 			else:
 				regform = MumbleUserForm( request.POST, instance=user );
 				if regform.is_valid():
 					regform.save();
-					return HttpResponseRedirect( '/mumble/%d' % int(server) );
+					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 				else:
 					displayTab = 1;
 		else:
@@ -118,7 +125,7 @@ def show( request, server ):
 			textureform = MumbleTextureForm( request.POST, request.FILES );
 			if textureform.is_valid():
 				user.setTexture( request.FILES['texturefile'] );
-				return HttpResponseRedirect( '/mumble/%d' % int(server) );
+				return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 		else:
 			textureform = MumbleTextureForm();
 	
@@ -134,10 +141,14 @@ def show( request, server ):
 	for id in srv.players:
 		channelTable.append( srv.players[id] );
 	
+	show_url = reverse( show, kwargs={ 'server': srv.id } );
+	login_url = reverse( auth_views.login );
 	
 	return render_to_response(
 		'mumble/mumble.htm',
 		{
+			'media_url':    settings.MEDIA_URL,
+			'login_url':    "%s?next=%s" % ( login_url, show_url ),
 			'DBaseObject':  srv,
 			'ChannelTable': channelTable,
 			'CurrentUserIsAdmin': isAdmin,

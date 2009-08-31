@@ -7,7 +7,7 @@ Configured Mumble Servers
 <div class="rahmen">
   <ul>
   {% for mumble in MumbleObjects %}
-    <li><a href="/mumble/{{mumble.id}}/">{{mumble.name}}</a></li>
+    <li><a href="{% url mumble.views.show mumble.id %}">{{mumble.name}}</a></li>
   {% endfor %}
   </ul>
 </div>

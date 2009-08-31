@@ -36,6 +36,7 @@ MUMBLE_DJANGO_ROOT = None;                                     ##
 #################################################################
 
 
+from django.core.urlresolvers import get_script_prefix
 from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
@@ -119,12 +120,12 @@ MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = join( get_script_prefix(), 'static' );
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = join( get_script_prefix(), 'media' );
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
