@@ -29,6 +29,10 @@ MUMBLE_DJANGO_ROOT = None;                                     ##
 #MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';          ##
 #MUMBLE_DJANGO_ROOT = 'c:/web/mumble-django';                  ##
 ##                                                             ##
+##  Root URL (the path in the VirtualHost:                     ##
+MUMBLE_DJANGO_URL = '/';                                       ##
+#MUMBLE_DJANGO_URL = '/mumble-django/';                        ##
+##                                                             ##
 ##  For a basic installation, this is all you need to edit in  ##
 ##  this file, the rest will be handled automatically!         ##
 ##                                                             ##
@@ -116,10 +120,13 @@ USE_I18N = True
 MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 
 # URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = '/static/';
+MEDIA_URL = MUMBLE_DJANGO_URL+'static/'
+
+# URL to the login view
+LOGIN_URL = MUMBLE_DJANGO_URL+'accounts/login/'
 
 # URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = '/media/';
+ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
