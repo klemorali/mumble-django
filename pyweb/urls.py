@@ -22,8 +22,9 @@ admin.autodiscover()
 
 from django.conf import settings
 
+
 urlpatterns = patterns('',
-	(r'^/?$',               'django.views.generic.simple.redirect_to', { 'url': '/mumble/' } ),
+	(r'^/?$',               'mumble.views.redir' ),
 
 	# Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
 	# to INSTALLED_APPS to enable admin documentation:
@@ -36,12 +37,14 @@ urlpatterns = patterns('',
 	(r'^mumble/',           include('mumble.urls')),
 
 	# Uncomment the next line to enable the admin:
-	(r'^admin/(.*)', admin.site.root),
+	(r'^admin/',            admin.site.urls),
 )
 
 # Development stuff
 if settings.DEBUG:
 	urlpatterns += patterns('',
-		(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
+		(r'^%s/(?P<path>.*)$' % settings.MEDIA_URL[1:],
+		 'django.views.static.serve',
+		 {'document_root': settings.MEDIA_ROOT, 'show_indexes': True} ),
 	)
 

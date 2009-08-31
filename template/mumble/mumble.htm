@@ -10,12 +10,12 @@
 {% block Content %}
   <noscript>
     <p>
-	  {% blocktrans %}
+      {% blocktrans %}
       <b>Hint:</b><br />
       This area is used to display additional information for each channel and player, but requires JavaScript to be
       displayed correctly. You will not see the detail pages, but you can use all links and forms
       that are displayed.
-	  {% endblocktrans %}
+      {% endblocktrans %}
     </p>
   </noscript>
     <div id="mumble_ext_container"></div>
@@ -35,7 +35,7 @@
     <div id="mumble_registration" class="mumble-ext">
   {% if user.is_authenticated %}
       <h2>{% trans "Server registration" %}</h2>
-      <form action="" method="post">
+      <form action="{% url mumble.views.show DBaseObject.id %}" method="post">
         {% if Registered %}
           {% trans "You are registered on this server" %}.<br />
         {% else %}
@@ -48,9 +48,9 @@
         <input type="submit" />
       </form>
   {% else %}
-    {% blocktrans with DBaseObject.id as serverid %}
-      <p>You need to be <a href="/accounts/login?next=%2Fmumble%2F{{ serverid }}">logged in</a> to be able to register an account on this Mumble server.</p>
-	{% endblocktrans %}
+    {% blocktrans %}
+      <p>You need to be <a href="{{ login_url }}">logged in</a> to be able to register an account on this Mumble server.</p>
+    {% endblocktrans %}
   {% endif %}
     </div>
   
@@ -58,15 +58,17 @@
     <div id="mumble_texture" class="mumble-ext">
       <h2>{% trans "User Texture" %}</h2>
       <p>
-	    {% blocktrans with DBaseObject.id as serverid %}
+        {% blocktrans with DBaseObject.id as serverid %}
           You can upload an image that you would like to use as your user texture here.<br />
           Your current texture is:<br />
-          <img src="/mumble/{{serverid}}/texture.png" alt="user texture" /><br />
+        {% endblocktrans %}
+          <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" /><br />
+        {% blocktrans with DBaseObject.id as serverid %}
           Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
           a different size, it will be resized accordingly.<br />
-		{% endblocktrans %}
+        {% endblocktrans %}
       </p>
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="{% url mumble.views.show DBaseObject.id %}" method="post" enctype="multipart/form-data">
         <table>
           {{ TextureForm }}
         </table>
@@ -79,7 +81,7 @@
   {% if CurrentUserIsAdmin %}
     <div id="mumble_admin" class="mumble-ext">
       <h2>{% trans "Server administration" %}</h2>
-      <form action="" method="post">
+      <form action="{% url mumble.views.show DBaseObject.id %}" method="post">
         <table>
           {{ AdminForm }}
         </table>
@@ -113,7 +115,7 @@
         </ul>
       {% endif %}
       <h2>{% trans "User Texture" %}</h2>
-      <img src="/mumble/{{ DBaseObject.id }}/{{ item.mumbleuser.id }}/texture.png" alt="user texture" />
+      <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" />
     </div>
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
@@ -184,7 +186,7 @@
 			valueField:     'uid',
 			displayField:   'uname',
 			store: new Ext.data.Store({
-				url:    '/mumble/djangousers',
+				url:    '{% url mumble.views.users DBaseObject.id %}',
 				reader: new Ext.data.JsonReader({
 					fields:        [ 'uid', 'uname' ],
 					root:          'objects',

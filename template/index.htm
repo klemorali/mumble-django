@@ -3,15 +3,15 @@
     <title>Mumble Administration</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet"    type="text/css"  href="/static/ext-2.2/resources/css/ext-all.css" />
-    <link rel="stylesheet"    type="text/css"  href="/static/style.css" />
-    <link rel="stylesheet"    type="text/css"  href="/static/templatestyle.css" />
-    <link rel="stylesheet"    type="text/css"  href="/static/mumble/style.css"  />
-    <link rel="shortcut icon" type="image/png" href="/static/mumble/mumble.16x16.png" />
+    <link rel="stylesheet"    type="text/css"  href="{{ media_url }}/ext-2.2/resources/css/ext-all.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ media_url }}/style.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ media_url }}/templatestyle.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ media_url }}/mumble/style.css"  />
+    <link rel="shortcut icon" type="image/png" href="{{ media_url }}/mumble/mumble.16x16.png" />
 
-    <script type="text/javascript" src="/static/ext-2.2/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="/static/ext-2.2/ext-all.js"></script>
-    <script type="text/javascript" src="/static/checkcolumn.js"></script>
+    <script type="text/javascript" src="{{ media_url }}/ext-2.2/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="{{ media_url }}/ext-2.2/ext-all.js"></script>
+    <script type="text/javascript" src="{{ media_url }}/checkcolumn.js"></script>
 
     {% block HeadTag %}
     {% endblock %}
@@ -22,28 +22,28 @@
       <div id="headpanel">
         <div id="headlinks">
           {% if user.is_authenticated %}
-            <a href="/accounts/logout">Logout</a> |
+            <a href="{% url django.contrib.auth.views.logout %}">Logout</a> |
           {% else %}
-            <a href="/accounts/login">Login</a> |
+            <a href="{% url django.contrib.auth.views.login %}">Login</a> |
           {% endif %}
-          <a href="/admin" target="_blank">Admin</a> |
-          <a href="/accounts/imprint">Imprint</a>
+          <a href="{% url admin:index %}" target="_blank">Admin</a> |
+          <a href="{% url views.imprint %}">Imprint</a>
         </div>
         <h2>{% block Headline %}{% endblock %}</h2>
       </div>
       <!-- navi -->
       <div id="navipanel">
         <ul id="navilinks">
-          <li><a href="/">Home</a></li>
+          <li><a href="{% url mumble.views.redir %}">Home</a></li>
           {% if MumbleActive %}
             <li><b>Mumble</b></li>
           {% else %}
-            <li><a href="/mumble">Mumble</a></li>
+            <li><a href="{% url mumble.views.mumbles %}">Mumble</a></li>
           {% endif %}
           {% if ProfileActive %}
             <li><b>Profile</b></li>
           {% else %}
-            <li><a href="/accounts/profile">Profile</a></li>
+            <li><a href="{% url views.profile %}">Profile</a></li>
           {% endif %}
         </ul>
       </div>
@@ -66,4 +66,3 @@
     </div>
   </body>
 </html>
-

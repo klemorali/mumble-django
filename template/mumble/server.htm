@@ -1,6 +1,6 @@
 {% load mumble_extras %}
 <div style="margin-left: 20px">
-  <img src="/static/mumble/mumble.16x16.png" alt="server" />
+  <img src="{{ media_url }}/mumble/mumble.16x16.png" alt="server" />
   <a class="mumble" id="link_server" href="{{ Server|chanurl:MumbleAccount }}">{{ Server.name|trunc:30 }}</a>
 </div>
 {% for sub in Server.rootchan.subchans %}
