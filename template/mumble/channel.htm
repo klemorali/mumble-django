@@ -1,5 +1,5 @@
 {% load mumble_extras %}
-<div class="mumble">
+<div class="mumble" style="background-image: url( {{ MEDIA_URL }}/mumble/linie_v.png )">
   <img src="{{ MEDIA_URL }}/mumble/knoten_v.png" />
   {% if Channel.linked %}
     <img src="{{ MEDIA_URL }}/mumble/channel_linked.png" alt="linked channel" />

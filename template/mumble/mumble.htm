@@ -115,7 +115,7 @@
         </ul>
       {% endif %}
       <h2>{% trans "User Texture" %}</h2>
-      <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" />
+      <img src="{% url mumble.views.showTexture DBaseObject.id item.mumbleuser.id %}" alt="user texture" />
     </div>
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
