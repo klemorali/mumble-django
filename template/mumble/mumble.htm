@@ -157,7 +157,7 @@
 			]);
 		
 		userAdminStore = new Ext.data.Store({
-			url:    '/mumble/{{ DBaseObject.id }}/users/',
+			url:    '{% url mumble.views.users DBaseObject.id %}',
 			reader: new Ext.data.JsonReader({
 				root:    'objects',
 				fields:  userRecord,
