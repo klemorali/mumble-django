@@ -14,15 +14,15 @@
  *  GNU General Public License for more details.
 """
 
-from django.core import signals
-
-def update_paths( **kwargs ):
-	from django.core.urlresolvers import get_script_prefix, reverse
-	from os.path     import join
-	from django.conf import settings
-	pf = get_script_prefix();
-	settings.MEDIA_URL          = "%sstatic" % pf;
-	settings.ADMIN_MEDIA_PREFIX = "%smedia"  % pf;
-	signals.request_started.disconnect( update_paths );
-
-signals.request_started.connect( update_paths );
+class ViewResolver( object ):
+	def __init__( self, string, *args, **kwargs ):
+		self._string = string;
+		self._args   = args;
+		self._kwargs = kwargs;
+	
+	def __str__( self ):
+		from django.core.urlresolvers import reverse
+		return reverse( self._string, *self._args, **self._kwargs );
+	
+	def __add__( self, other ):
+		return str( self ) + other;
