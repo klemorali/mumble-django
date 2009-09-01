@@ -2,6 +2,18 @@
 Mumble-Django changelog
 =======================
 
+Version 0.10, 1 Sep 2009:
+------------------------------
+* Added protected mode, which requires users to enter the server password
+  for registration.
+* Added getRegistration methods to the CTLs.
+* Added autoconf command to the Munin plugin.
+* Added user textures to the detail pages in the channel viewer.
+* Added a user manager for server admins.
+* Added reverse resolving of URLs, allowing MD to run in a shared VirtualHost.
+* Added shell script to automatically generate a new SECRET_KEY.
+* Fixed Python 2.4 incompatible syntax.
+
 Version 0.9, 23 July 2009:
 ------------------------------
 * Added i18n support, and translations to:
@@ -9,8 +21,8 @@ Version 0.9, 23 July 2009:
   - Croatian
   - Italian
   - Japanese
-* Added more descriptive field names and help texts to the models
-* Added a rudimentary CLI
+* Added more descriptive field names and help texts to the models.
+* Added a rudimentary CLI.
 
 Version 0.8, 11 July 2009:
 ------------------------------
