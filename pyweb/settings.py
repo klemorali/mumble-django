@@ -18,6 +18,15 @@
 #################################################################
 #################################################################
 ##                                                             ##
+##  The path inside the VirtualHost that M-D lives in:         ##
+##                                                             ##
+MUMBLE_DJANGO_URL  = '/';                                      ##
+#MUMBLE_DJANGO_URL  = '/mumble-django/';                       ##
+##                                                             ##
+##  Make sure you use a trailing slash!                        ##
+##                                                             ##
+#################################################################
+##                                                             ##
 ##  Mumble-Django will try to auto-detect this value if it     ##
 ##  isn't set, which is the default. However, if this should   ##
 ##  not work as expected, set this to the path where you       ##
@@ -26,8 +35,10 @@
 ##  Default: Auto Detection                                    ##
 MUMBLE_DJANGO_ROOT = None;                                     ##
 ##  Examples:                                                  ##
-#MUMBLE_DJANGO_ROOT = '/home/mistagee/mumble-django';          ##
+#MUMBLE_DJANGO_ROOT = '/srv/mumble-django';                    ##
 #MUMBLE_DJANGO_ROOT = 'c:/web/mumble-django';                  ##
+##                                                             ##
+#################################################################
 ##                                                             ##
 ##  For a basic installation, this is all you need to edit in  ##
 ##  this file, the rest will be handled automatically!         ##
@@ -112,51 +123,52 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
+
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 
 # URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = '/static/'
+MEDIA_URL = MUMBLE_DJANGO_URL+'static/'
 
-# URL to the login view
+# URL prefix for admin media -- CSS, JavaScript and images.
+ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
+
+# URL to the login view - will be resolved on-demand
 from deferred_resolver import ViewResolver
 LOGIN_URL = ViewResolver( "django.contrib.auth.views.login" )
 
-# URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+	'django.template.loaders.filesystem.load_template_source',
+	'django.template.loaders.app_directories.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.locale.LocaleMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'pyweb.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    join( MUMBLE_DJANGO_ROOT, 'template' ),
+	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+	# Always use forward slashes, even on Windows.
+	# Don't forget to use absolute paths, not relative paths.
+	join( MUMBLE_DJANGO_ROOT, 'template' ),
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.admin',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'registration',
-    'mumble',
+	'django.contrib.auth',
+	'django.contrib.admin',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.sites',
+	'registration',
+	'mumble',
 )

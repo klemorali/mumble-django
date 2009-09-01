@@ -13,16 +13,3 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
 """
-
-from django.core import signals
-
-def update_paths( **kwargs ):
-	from django.core.urlresolvers import get_script_prefix, reverse
-	from os.path     import join
-	from django.conf import settings
-	pf = get_script_prefix();
-	settings.MEDIA_URL          = "%sstatic" % pf;
-	settings.ADMIN_MEDIA_PREFIX = "%smedia"  % pf;
-	signals.request_started.disconnect( update_paths );
-
-signals.request_started.connect( update_paths );
