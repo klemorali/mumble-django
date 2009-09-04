@@ -350,3 +350,10 @@ msgstr "登録"
 
 msgid "Administration"
 msgstr "管理"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "本サーバをプライベート及びプロテクトモードで利用する場合は、パスワードを入力してください。"
+
+msgid "The password you entered is incorrect."
+msgstr "パスワードが不正です。"
+
