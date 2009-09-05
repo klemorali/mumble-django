@@ -114,8 +114,10 @@
           <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined }}</li>
         </ul>
       {% endif %}
+      {% if item.mumbleuser %}
       <h2>{% trans "User Texture" %}</h2>
       <img src="{% url mumble.views.showTexture DBaseObject.id item.mumbleuser.id %}" alt="user texture" />
+      {% endif %}
     </div>
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
