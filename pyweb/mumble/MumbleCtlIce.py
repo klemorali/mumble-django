@@ -297,10 +297,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		return ret
 	
 	def registerPlayer(self, srvid, name, email, password):
+		from Murmur import UserInfo
 		user = {
-			'name':  name.encode( "UTF-8" ),
-			'email': email.encode( "UTF-8" ),
-			'pw':    password.encode( "UTF-8" ),
+			UserInfo(0): name.encode( "UTF-8" ),
+			UserInfo(1): email.encode( "UTF-8" ),
+			UserInfo(4): password.encode( "UTF-8" ),
 			};
 		return self._getIceServerObject(srvid).registerUser( user );
 	
@@ -311,10 +312,12 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		return self._getIceServerObject( srvid ).getRegistration( mumbleid )
 	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		user = self._getIceServerObject( srvid ).getRegistration( mumbleid )
-		user['name']  = name.encode( "UTF-8" )
-		user['email'] = email.encode( "UTF-8" )
-		user['pw']    = password.encode( "UTF-8" )
+		from Murmur import UserInfo
+		user = {
+			UserInfo(0): name.encode( "UTF-8" ),
+			UserInfo(1): email.encode( "UTF-8" ),
+			UserInfo(4): password.encode( "UTF-8" ),
+			};
 		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
 	
 	def getACL(self, srvid, channelid):
