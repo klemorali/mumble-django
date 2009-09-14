@@ -136,6 +136,7 @@ ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
 # URL to the login view - will be resolved on-demand
 from deferred_resolver import ViewResolver
 LOGIN_URL = ViewResolver( "django.contrib.auth.views.login" )
+LOGIN_REDIRECT_URL = ViewResolver( "views.profile" )
 
 
 # Make this unique, and don't share it with anybody.
