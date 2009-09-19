@@ -16,10 +16,8 @@
 
 import os
 
-import models
-from django.db.models		import signals
-
-from mctl			import *
+from mumble			import models
+from mumble.mctl		import *
 
 def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	if not isinstance( keys, tuple ):
@@ -168,11 +166,5 @@ def find_existing_instances( **kwargs ):
 	if v > 1:
 		print "Successfully finished Servers and Players detection.";
 	return True;
-
-
-signals.post_syncdb.connect( find_existing_instances, sender=models );
-
-
-
 
 
