@@ -74,12 +74,18 @@ class mmChannel( object ):
 	
 	playerCount = property(
 		lambda self: len( self.players ) + sum( [ chan.playerCount for chan in self.subchans ] ),
-		None
+		doc="The number of players in this channel."
 		);
 	
-	id   = property( lambda self: "channel_%d"%self.chanid, None );
+	id   = property(
+		lambda self: "channel_%d"%self.chanid,
+		doc="A string ready to be used in an id property of an HTML tag."
+		);
 	
-	show = property( lambda self: self.parent is None or self.parent.chanid == 0 or self.playerCount > 0, None );
+	show = property(
+		lambda self: self.parent is None or self.parent.chanid == 0 or self.playerCount > 0,
+		doc="True if this channel needs to be shown because it is root, a child of root, or has players."
+		);
 	
 	def __str__( self ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
@@ -122,13 +128,17 @@ class mmChannel( object ):
 		
 		return "mumble://%s%s/%s" % ( userstr, self.server.addr, chanpath );
 	
-	connecturl = property( getURL, None );
+	connecturl = property( getURL, doc="A convenience wrapper for getURL." );
 	
 	def setDefault( self ):
+		"Make this the server's default channel."
 		self.server.defchan = self.chanid;
 		self.server.save();
 	
-	is_default = property( lambda self: self.server.defchan == self.chanid, None );
+	is_default = property(
+		lambda self: self.server.defchan == self.chanid,
+		doc="True if this channel is the server's default channel."
+		);
 
 
 
@@ -156,7 +166,7 @@ class mmPlayer( object ):
 		self.channel = playerChan;
 		self.channel.players.append( self );
 		
-		if self.isAuthed():
+		if self.isAuthed:
 			from models import Mumble, MumbleUser
 			try:
 				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.dbaseid, server=srvInstance );
@@ -168,12 +178,14 @@ class mmPlayer( object ):
 	def __str__( self ):
 		return '<Player "%s" (%d, %d)>' % ( self.name, self.userid, self.dbaseid );
 	
-	def isAuthed( self ):
-		return self.dbaseid != -1;
+	isAuthed = property(
+		lambda self: self.dbaseid != -1,
+		doc="True if this player is authenticated (+A)."
+		);
 	
 	isAdmin = property(
 		lambda self: self.mumbleuser and self.mumbleuser.getAdmin(),
-		None
+		doc="True if this player is in the Admin group in the ACL."
 		);
 	
 	is_server  = False;
@@ -181,10 +193,15 @@ class mmPlayer( object ):
 	is_player  = True;
 	
 	# kept for compatibility to mmChannel (useful for traversal funcs)
-	playerCount = property( lambda self: -1, None );
-	id = property( lambda self: "player_%d"%self.userid, None );
+	playerCount = property( lambda self: -1, doc="Exists only for compatibility to mmChannel." );
+	
+	id = property(
+		lambda self: "player_%d"%self.userid,
+		doc="A string ready to be used in an id property of an HTML tag."
+		);
 	
 	def visit( self, callback, lvl = 0 ):
+		""" Call callback on myself. """
 		callback( self, lvl );
 
 
@@ -214,7 +231,7 @@ class mmACL:
 		self.inherit = inherit;
 	
 	def pack( self ):
-		"""Packs the information in this ACL up in a way that it can be passed to DBus."""
+		""" Pack the information in this ACL up in a way that it can be passed to DBus. """
 		return (
 			self.channelId,
 			[( acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] ) for acl in self.acls ],
