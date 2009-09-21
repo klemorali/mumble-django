@@ -34,10 +34,11 @@ from mmobjects				import *
 
 
 def redir( request ):
+	""" Redirect to the servers list. """
 	return HttpResponseRedirect( reverse( mumbles ) );
 
 def mumbles( request ):
-	"""Display a list of all configured Mumble servers, or redirects if only one configured."""
+	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
 	mumbles = get_list_or_404( Mumble );
 	
 	if len(mumbles) == 1:
@@ -165,7 +166,11 @@ def show( request, server ):
 
 
 def showTexture( request, server, userid = None ):
-	"""Pack the currently logged in user's texture (if any) into an HttpResponse."""
+	""" Pack the given user's texture into an HttpResponse.
+	
+	    If userid is none, use the currently logged in User.
+	"""
+	
 	srv  = get_object_or_404( Mumble, id=int(server) );
 	
 	if userid is None:
@@ -188,6 +193,11 @@ def showTexture( request, server, userid = None ):
 
 @login_required
 def users( request, server ):
+	""" Create a list of MumbleUsers for a given server serialized as a JSON object.
+	
+	    If the request has a "data" field, evaluate that and update the user records.
+	"""
+	
 	srv = get_object_or_404( Mumble, id=int(server) );
 	
 	if not srv.isUserAdmin( request.user ):
@@ -240,7 +250,8 @@ def users( request, server ):
 
 @login_required
 def djangousers( request ):
-	"Return a list of all Django users' names and IDs."
+	""" Return a list of all Django users' names and IDs. """
+	
 	users = [ { 'uid': '', 'uname': '------' } ];
 	for du in User.objects.all().order_by( 'username' ):
 		users.append( {

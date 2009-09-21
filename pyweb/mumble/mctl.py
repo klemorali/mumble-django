@@ -18,9 +18,9 @@
 import re
 
 class MumbleCtlBase (object):
-	cache = {};
+	""" This class defines the base interface that the Mumble model expects. """
 	
-	''' abstract Ctrol Object '''
+	cache = {};
 	
 	def getAllConf(self, srvid):
 		raise NotImplementedError( "mctl::getAllConf" );
@@ -93,6 +93,8 @@ class MumbleCtlBase (object):
 	
 	@staticmethod
 	def newInstance( connstring ):
+		""" Create a new CTL object for the given connstring. """
+		
 		# check cache
 		if connstring in MumbleCtlBase.cache:
 			return MumbleCtlBase.cache[connstring];
