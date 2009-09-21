@@ -77,10 +77,10 @@ class Mumble( models.Model ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
 	
 	
-	users_regged = property( lambda self: self.mumbleuser_set.count(),           None );
-	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  None );
-	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), None );
-	is_public    = property( lambda self: self.passwd == '',                     None );
+	users_regged = property( lambda self: self.mumbleuser_set.count(),           doc="Number of registered users." );
+	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." );
+	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." );
+	is_public    = property( lambda self: self.passwd == '',                     doc="False if a password is needed to join this server." );
 	
 	is_server  = True;
 	is_channel = False;
@@ -97,7 +97,7 @@ class Mumble( models.Model ):
 			self._ctl = MumbleCtlBase.newInstance( self.dbus );
 		return self._ctl;
 	
-	ctl = property( getCtl, None );
+	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
 	
 	
 	def save( self, dontConfigureMurmur=False ):
@@ -245,8 +245,8 @@ class Mumble( models.Model ):
 		
 		return self._channels;
 	
-	channels = property( getChannels, None );                       """A convenience wrapper for getChannels()."""
-	rootchan = property( lambda self: self.channels[0], None );     """A convenience wrapper for getChannels()[0]."""
+	channels = property( getChannels,                       doc="A convenience wrapper for getChannels()."    );
+	rootchan = property( lambda self: self.channels[0],     doc="A convenience wrapper for getChannels()[0]." );
 	
 	def getURL( self, forUser = None ):
 		"""Create an URL of the form mumble://username@host:port/ for this server."""
@@ -259,9 +259,9 @@ class Mumble( models.Model ):
 		
 		return "mumble://%s%s/" % ( userstr, self.addr );
 	
-	connecturl = property( getURL, None );                          """A convenience wrapper for getURL()."""
+	connecturl = property( getURL,                          doc="A convenience wrapper for getURL()." );
 	
-	version = property( lambda self: self.ctl.getVersion(), None ); """Get the version of Murmur."""
+	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur."              );
 
 
 

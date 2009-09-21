@@ -22,9 +22,7 @@ from models			import *
 
 
 class MumbleAdminForm( ModelForm ):
-	"""
-	A Mumble Server admin form intended to be used by the server hoster.
-	"""
+	""" A Mumble Server admin form intended to be used by the server hoster. """
 	class Meta:
 		model   = Mumble;
 		exclude = ( 'sslcrt', 'sslkey' );
@@ -44,7 +42,7 @@ class MumbleForm( ModelForm ):
 
 
 class MumbleUserForm( ModelForm ):
-	"""The user registration form used to register an account."""
+	""" The user registration form used to register an account. """
 	
 	def clean_name( self ):
 		name = self.cleaned_data['name'];
@@ -64,7 +62,7 @@ class MumbleUserForm( ModelForm ):
 
 
 class MumbleUserPasswordForm( MumbleUserForm ):
-	"""The user registration form used to register an account on a private server in protected mode."""
+	""" The user registration form used to register an account on a private server in protected mode. """
 	
 	serverpw = forms.CharField(
 		label=_('Server Password'),
@@ -87,7 +85,7 @@ class MumbleUserPasswordForm( MumbleUserForm ):
 		return self.cleaned_data;
 
 class MumbleTextureForm( Form ):
-	"""The form used to upload a new image to be set as texture."""
+	""" The form used to upload a new image to be set as texture. """
 	texturefile = forms.ImageField();
 
 
