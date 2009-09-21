@@ -32,6 +32,7 @@ class Command( BaseCommand ):
 		self.check_sites();
 		self.check_mumbles();
 		self.check_admins();
+		self.check_secret_key();
 	
 	
 	def check_dbase( self ):
@@ -122,6 +123,20 @@ class Command( BaseCommand ):
 					raise TestFailed(
 						"Connecting to Murmur `%s` (%s) failed: %s" % ( mumble.name, mumble.dbus, err )
 						);
+			print "[ OK ]";
+	
+	def check_secret_key( self ):
+		print "Checking SECRET_KEY...",
+		
+		blacklist = ( 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v', );
+		
+		if settings.SECRET_KEY in blacklist:
+			raise TestFailed(
+				"Your SECRET_KEY setting matches one of the keys that were put in the settings.py "
+				"file shipped with Mumble-Django, which means your SECRET_KEY is all but secret. "
+				"You should change the setting, or run gen_secret_key.sh to do it for you."
+				);
+		else:
 			print "[ OK ]";
 
 
