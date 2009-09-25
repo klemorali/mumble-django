@@ -354,3 +354,5 @@ msgstr "Dieser Server ist privat und der Registrierungsschutz ist aktiv. Bitte g
 msgid "The password you entered is incorrect."
 msgstr "Das eingegebene Passwort ist falsch"
 
+msgid "User List"
+msgstr "Benutzerliste"
