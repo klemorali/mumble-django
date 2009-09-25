@@ -110,7 +110,7 @@
           {% if item.mumbleuser.owner.first_name and item.mumbleuser.owner.last_name %}
             <li>{% trans "Full Name" %}:  {{ item.mumbleuser.owner.first_name }} {{ item.mumbleuser.owner.last_name }}</li>
           {% endif %}
-          <li>{% trans "Admin" %}:        {{ if item.mumbleuser.owner.is_staff|yesno }}</li>
+          <li>{% trans "Admin" %}:        {{ item.mumbleuser.owner.is_staff|yesno }}</li>
           <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined|date }}</li>
         </ul>
       {% endif %}
