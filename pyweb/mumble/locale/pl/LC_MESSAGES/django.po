@@ -1,0 +1,349 @@
+# Polskie tłumaczenia dla Mumble-Django.	
+#
+# Copyright (C) 2009, HuNt3r <admin@serv4u.pl>
+#
+# Mumble-Django is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This package is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mumble-Django v0.8\n"
+"Report-Msgid-Bugs-To: Michael Ziegler\n"
+"POT-Creation-Date: 2009-07-18 17:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: HuNt3r <admin@serv4u.pl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:30
+msgid "Registered users"
+msgstr "Zarejestrowani użytkownicy"
+
+#: admin.py:34
+msgid "Online users"
+msgstr "Użytkownicy online"
+
+#: admin.py:38
+msgid "Channel count"
+msgstr "Ilość kanałów"
+
+#: admin.py:42
+msgid "Yes"
+msgstr "Tak"
+
+#: admin.py:43
+msgid "No"
+msgstr "Nie"
+
+#: admin.py:44
+msgid "Public"
+msgstr "Publiczny"
+
+#: models.py:47
+msgid "Server Name"
+msgstr "Nazwa serwera"
+
+#: models.py:48
+msgid "DBus or ICE base"
+msgstr "DBus lub baza ICE"
+
+#: models.py:49
+msgid "Server ID"
+msgstr "Serwer-ID"
+
+#: models.py:50
+msgid "Server Address"
+msgstr "Adres serwera"
+
+#: models.py:51
+msgid "Server Port"
+msgstr "Port serwera"
+
+#: models.py:52
+msgid "Website URL"
+msgstr "Strona"
+
+#: models.py:53
+msgid "Welcome Message"
+msgstr "Wiadomość powitalna"
+
+#: models.py:54
+msgid "Server Password"
+msgstr "Hasło serwera"
+
+#: models.py:55
+msgid "Superuser Password"
+msgstr "Hasło SuperUser-a"
+
+#: models.py:56
+msgid "Max. Users"
+msgstr "Max. Użytkowników"
+
+#: models.py:57
+msgid "Bandwidth [Bps]"
+msgstr "przepustowość [Bps]"
+
+#: models.py:58
+msgid "SSL Certificate"
+msgstr "SSL-Certyfikat"
+
+#: models.py:59
+msgid "SSL Key"
+msgstr "SSL-Klucz"
+
+#: models.py:60
+msgid "IP Obfuscation"
+msgstr "Anonimizza indirizzo IP"
+
+#: models.py:61
+msgid "Player name regex"
+msgstr "Filtrowanie znaków w nazwie użytkownika"
+
+#: models.py:62
+msgid "Channel name regex"
+msgstr "Filtrowanie znaków w nazwie kanału"
+
+#: models.py:63
+msgid "Default channel"
+msgstr "Kanał domyślny"
+
+#: models.py:64
+msgid "Boot Server"
+msgstr "Odpał serwer"
+
+#: models.py:68 models.py:282
+msgid "Server instance"
+msgstr "Serwery"
+
+#: models.py:69
+msgid "Server instances"
+msgstr "Serwery"
+
+#: models.py:279
+msgid "Mumble player_id"
+msgstr "Numer ID użytkownika"
+
+#: models.py:280
+msgid "User name and Login"
+msgstr "Nazwa użytkownika i login"
+
+#: models.py:281
+msgid "Login password"
+msgstr "Hasło"
+
+#: models.py:283
+msgid "Account owner"
+msgstr "Właściciel konta"
+
+#: models.py:284
+msgid "Admin on root channel"
+msgstr "Admin na kanale root"
+
+#: models.py:288
+msgid "User account"
+msgstr "Konto użytkownika"
+
+#: models.py:289
+msgid "User accounts"
+msgstr "Konta użytkowników"
+
+#: models.py:296
+#, python-format
+msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
+msgstr "Account %(mu)s su %(srv)s con Utente %(du)s"
+
+#: models.py:315
+msgid "Another player already registered that name."
+msgstr "Nazwa użytkownika jest już zajęta."
+
+#: models.py:317
+msgid "Cannot register player without a password!"
+msgstr "Musisz podać hasło!"
+
+#: models.py:347 models.py:356
+msgid "The admin group was not found in the ACL's groups list!"
+msgstr "Grupa admin nie istnieje na liście grup ACL"
+
+#: models.py:396
+msgid "This field must not be updated once the record has been saved."
+msgstr "Questo campo non si puo cambiare, dopo che Ă© stato salvato per la prima volta."
+
+#: mumble.htm:13
+msgid ""
+"\n"
+"      <b>Hint:</b><br />\n"
+"      This area is used to display additional information for each "
+"channel and player, but requires JavaScript to be\n"
+"      displayed correctly. You will not see the detail pages, but you can "
+"use all links and forms\n"
+"      that are displayed.\n"
+"      "
+msgstr ""
+"\n"
+"      <b>Info</b><br />\n"
+"      To pole jest używane do wyświetlenia dodatkowych informacji dla każdego"
+"kanału i użytkownika, ale wymaga JavaScript aby\n"
+"      działało poprawnie. Nie zobaczysz detalów strony, lecz możesz  "
+"używać wszystkich linków i formatów\n"
+"      które zostan± wyświetlone.\n"
+"      "
+
+#: mumble.htm:26
+msgid "Website"
+msgstr "Strona"
+
+#: mumble.htm:28
+msgid "Server version"
+msgstr "Wersja serwera"
+
+#: mumble.htm:31
+msgid "Welcome message"
+msgstr "Wiadomość powitalna"
+
+#: mumble.htm:37
+msgid "Server registration"
+msgstr "Rejestrowanie serwera"
+
+#: mumble.htm:40
+msgid "You are registered on this server"
+msgstr "Masz konto na tym serwerze"
+
+#: mumble.htm:42
+msgid "You do not have an account on this server"
+msgstr "Nie masz konta na tym serwerze"
+
+#: mumble.htm:51
+msgid "\n"
+"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able to register an account on this Mumble server.</p>\n"
+"    "
+msgstr "\n"
+"      <p>Musisz być <a href=\"%(login_url)s\">zalogowany</a> aby móc zarejestrować konto na serwerze.</p>\n"
+"    "
+
+#: mumble.htm:59 mumble.htm.py:161
+msgid "User Texture"
+msgstr "Awatar użytkownika"
+
+#: mumble.htm:61
+#, python-format
+msgid ""
+"\n"
+"          You can upload an image that you would like to use as your user texture here.<br />\n"
+"          Your current texture is:<br />\n"
+"        "
+msgstr ""
+"\n"
+"          Możesz wysłać awatar jeżeli chcesz go używać.<br />"
+"          Twój obecny awatar:<br />\n"
+"        "
+
+msgid "\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If "
+"you upload an image with\n"
+"          a different size, it will be resized accordingly.<br />\n"
+"        "
+msgstr "\n"
+"          Info! <b>Dozwolony</b> rozmiar pliku to: 600x60 pikseli. "
+"Każdy inny rozmiar zostanie automatycznie zmieniony na podany wyżej."
+"        "
+
+#: mumble.htm:81
+msgid "Server administration"
+msgstr "Administracja serwerem"
+
+#: mumble.htm:95
+msgid "Player"
+msgstr "Użytkownik"
+
+#: mumble.htm:97
+msgid "Online since"
+msgstr "Czas online"
+
+#: mumble.htm:98 mumble.htm.py:99 mumble.htm.py:100 mumble.htm.py:101
+#: mumble.htm:102 mumble.htm.py:103
+msgid "yes,no"
+msgstr "Tak,Nie"
+
+#: mumble.htm:98
+#, python-format
+msgid "Authenticated:    %(authed)s"
+msgstr "Uwierzytelniony:    %(authed)s"
+
+#: mumble.htm:99
+#, python-format
+msgid "Admin:            %(admin)s"
+msgstr "Administrator:   %(admin)s"
+
+#: mumble.htm:100
+#, python-format
+msgid "Muted:            %(muted)s"
+msgstr "Wyciszony:   %(muted)s"
+
+#: mumble.htm:101
+#, python-format
+msgid "Deafened:         %(deafened)s"
+msgstr "Wyciszone słuchawki:    %(deafened)s"
+
+#: mumble.htm:102
+#, python-format
+msgid "Muted by self:    %(selfmuted)s"
+msgstr "Wyciszony przez siebie: %(selfmuted)s"
+
+#: mumble.htm:103
+#, python-format
+msgid "Deafened by self: %(selfdeafened)s"
+msgstr "Wyciszył słuchawki: %(selfdeafened)s"
+
+#: mumble.htm:106
+msgid "User"
+msgstr "Użytkownik"
+
+#: mumble.htm:109
+msgid "Full Name"
+msgstr "Nazwa"
+
+#: mumble.htm:111
+msgid "Admin"
+msgstr "Administrator"
+
+#: mumble.htm:112
+msgid "Sign-up date"
+msgstr "Data rejestracji"
+
+#: mumble.htm:118
+msgid "Channel"
+msgstr "Kanał"
+
+#: mumble.htm:119
+msgid "Connect"
+msgstr "Połącz"
+
+#: mumble.htm:122
+msgid "Channel description"
+msgstr "Opis kanału"
+
+#: mumble.htm:155
+msgid "Server Info"
+msgstr "Informacje o serwerze"
+
+#: mumble.htm:156
+msgid "Registration"
+msgstr "Rejestracja"
+
+#: mumble.htm:158
+msgid "Administration"
+msgstr "Administracja"
+
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Ten serwer jest prywatny. Podaj hasło aby się połączyć."
+
+msgid "The password you entered is incorrect."
+msgstr "Wprowadzone hasło jest niepoprawne."
