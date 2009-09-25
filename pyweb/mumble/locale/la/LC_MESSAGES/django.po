@@ -35,14 +35,6 @@ msgstr "Ineonlay ersusay"
 msgid "Channel count"
 msgstr "Annelchay ountcay"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "Esyay"
-
-#: admin.py:43
-msgid "No"
-msgstr "Onay"
-
 #: admin.py:44
 msgid "Public"
 msgstr "Ublicpay"
@@ -305,9 +297,6 @@ msgstr "Ayerplay"
 
 msgid "Online since"
 msgstr "Ineonlay incesay"
-
-msgid "yes,no"
-msgstr "esyay,onay"
 
 msgid "Authenticated:    %(authed)s"
 msgstr "Enticatedauthay: %(authed)s"

@@ -27,8 +27,8 @@
     <li>Full Name: {{ user.first_name }} {{ user.last_name }}</li>
     <li>E-Mail Adress: {{ user.email }}</li>
     <li>Staff: {% if user.is_staff %} yes <a href="{% url admin:index %}">(admin area)</a> {% else %} no {% endif %}</li>
-    <li>Sign-up date: {{ user.date_joined }}</li>
-    <li>Last login: {{ user.last_login }}</li>
+    <li>Sign-up date: {{ user.date_joined|date }} {{ user.date_joined|time }}</li>
+    <li>Last login: {{ user.last_login|date }} {{ user.last_login|time }}</li>
     <li><a href="{% url django.contrib.auth.views.password_change %}">Change Password</a></li>
     <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
   </ul>

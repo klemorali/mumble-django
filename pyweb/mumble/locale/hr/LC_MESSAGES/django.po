@@ -35,14 +35,6 @@ msgstr "Korisnici na serveru"
 msgid "Channel count"
 msgstr "Kanali"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "Da"
-
-#: admin.py:43
-msgid "No"
-msgstr "Ne"
-
 #: admin.py:44
 msgid "Public"
 msgstr "Javni server"
@@ -296,9 +288,6 @@ msgstr "Korisnik"
 
 msgid "Online since"
 msgstr "Na serveru od"
-
-msgid "yes,no"
-msgstr "da,ne"
 
 msgid "Authenticated:    %(authed)s"
 msgstr "Registriran korisnik: %(authed)s"

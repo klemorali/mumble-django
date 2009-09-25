@@ -96,13 +96,13 @@
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
       <h2>{% trans "Player" %} {{ item.name }}</h2>
       <ul>
-        <li>{% trans "Online since" %}   {{item.onlinesince|time:"H:i"}}</li>
-        <li>{% blocktrans with     item.isAuthed|yesno:_("yes,no") as authed       %}Authenticated:    {{ authed       }}{% endblocktrans %}</li>
-        <li>{% blocktrans with      item.isAdmin|yesno:_("yes,no") as admin        %}Admin:            {{ admin        }}{% endblocktrans %}</li>
-        <li>{% blocktrans with        item.muted|yesno:_("yes,no") as muted        %}Muted:            {{ muted        }}{% endblocktrans %}</li>
-        <li>{% blocktrans with     item.deafened|yesno:_("yes,no") as deafened     %}Deafened:         {{ deafened     }}{% endblocktrans %}</li>
-        <li>{% blocktrans with    item.selfmuted|yesno:_("yes,no") as selfmuted    %}Muted by self:    {{ selfmuted    }}{% endblocktrans %}</li>
-        <li>{% blocktrans with item.selfdeafened|yesno:_("yes,no") as selfdeafened %}Deafened by self: {{ selfdeafened }}{% endblocktrans %}</li>
+        <li>{% trans "Online since" %}   {{ item.onlinesince|time }}</li>
+        <li>{% blocktrans with     item.isAuthed|yesno as authed       %}Authenticated:    {{ authed       }}{% endblocktrans %}</li>
+        <li>{% blocktrans with      item.isAdmin|yesno as admin        %}Admin:            {{ admin        }}{% endblocktrans %}</li>
+        <li>{% blocktrans with        item.muted|yesno as muted        %}Muted:            {{ muted        }}{% endblocktrans %}</li>
+        <li>{% blocktrans with     item.deafened|yesno as deafened     %}Deafened:         {{ deafened     }}{% endblocktrans %}</li>
+        <li>{% blocktrans with    item.selfmuted|yesno as selfmuted    %}Muted by self:    {{ selfmuted    }}{% endblocktrans %}</li>
+        <li>{% blocktrans with item.selfdeafened|yesno as selfdeafened %}Deafened by self: {{ selfdeafened }}{% endblocktrans %}</li>
       </ul>
       {% if item.mumbleuser and item.mumbleuser.owner %}
         <h2>{% trans "User" %} {{ item.mumbleuser.owner.username|capfirst }}</h2>
@@ -110,8 +110,8 @@
           {% if item.mumbleuser.owner.first_name and item.mumbleuser.owner.last_name %}
             <li>{% trans "Full Name" %}:  {{ item.mumbleuser.owner.first_name }} {{ item.mumbleuser.owner.last_name }}</li>
           {% endif %}
-          <li>{% trans "Admin" %}:        {% if item.mumbleuser.owner.is_staff %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
-          <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined }}</li>
+          <li>{% trans "Admin" %}:        {{ if item.mumbleuser.owner.is_staff|yesno }}</li>
+          <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined|date }}</li>
         </ul>
       {% endif %}
       {% if item.mumbleuser %}
@@ -122,16 +122,16 @@
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">
       <h2>{% trans "Channel" %} {{ item.name }}</h2>
-	  {% if CurrentUserIsAdmin or user.is_staff %}
-	    {% trans "Channel ID" %}: {{ item.chanid }}<br />
-	  {% endif %}
+        {% if CurrentUserIsAdmin or user.is_staff %}
+          {% trans "Channel ID" %}: {{ item.chanid }}<br />
+        {% endif %}
       <a href="{{ item|chanurl:MumbleAccount }}" class="mumble">{% trans "Connect" %}</a>
-	  {% if item.description %}
-	    <fieldset>
-	      <legend>{% trans "Channel description" %}</legend>
-	      {{ item.description|safe }}
-	    </fieldset>
-	  {% endif %}
+        {% if item.description %}
+          <fieldset>
+            <legend>{% trans "Channel description" %}</legend>
+            {{ item.description|safe }}
+          </fieldset>
+        {% endif %}
     </div>
     {% endif %}
   {% endfor %}

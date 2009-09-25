@@ -36,14 +36,6 @@ msgstr "オンラインのユーザ"
 msgid "Channel count"
 msgstr "チャンネル数"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "はい"
-
-#: admin.py:43
-msgid "No"
-msgstr "いいえ"
-
 #: admin.py:44
 msgid "Public"
 msgstr "公開"
@@ -296,9 +288,6 @@ msgstr "プレーヤ"
 
 msgid "Online since"
 msgstr "接続開始時間"
-
-msgid "yes,no"
-msgstr "yes,no"
 
 msgid "Authenticated:    %(authed)s"
 msgstr "登録済み: %(authed)s"
