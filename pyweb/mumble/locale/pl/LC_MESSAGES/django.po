@@ -35,14 +35,6 @@ msgstr "Użytkownicy online"
 msgid "Channel count"
 msgstr "Ilość kanałów"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "Tak"
-
-#: admin.py:43
-msgid "No"
-msgstr "Nie"
-
 #: admin.py:44
 msgid "Public"
 msgstr "Publiczny"
@@ -266,11 +258,6 @@ msgstr "Użytkownik"
 #: mumble.htm:97
 msgid "Online since"
 msgstr "Czas online"
-
-#: mumble.htm:98 mumble.htm.py:99 mumble.htm.py:100 mumble.htm.py:101
-#: mumble.htm:102 mumble.htm.py:103
-msgid "yes,no"
-msgstr "Tak,Nie"
 
 #: mumble.htm:98
 #, python-format
