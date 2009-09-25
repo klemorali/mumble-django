@@ -35,14 +35,6 @@ msgstr "Benutzer online"
 msgid "Channel count"
 msgstr "Channels"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "Ja"
-
-#: admin.py:43
-msgid "No"
-msgstr "Nein"
-
 #: admin.py:44
 msgid "Public"
 msgstr "Öffentlich"
@@ -304,9 +296,6 @@ msgstr "Spieler"
 
 msgid "Online since"
 msgstr "Online seit"
-
-msgid "yes,no"
-msgstr "ja,nein"
 
 msgid "Authenticated:    %(authed)s"
 msgstr "Authentifiziert: %(authed)s"
