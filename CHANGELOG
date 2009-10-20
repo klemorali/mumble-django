@@ -2,6 +2,15 @@
 Mumble-Django changelog
 =======================
 
+Version 0.11, 25 Sep 2009:
+------------------------------
+* Fixed wrong {% URL %} tag that caused the template to crash when an anonymous user joins.
+* Added a FastCGI handler and example confs for Apache2 and Lighttpd.
+* Updated registerUser and setRegistration for Murmur snapshot snapshot b58726.
+* Added LOGIN_REDIRECT_URL to settings.
+* Added checkenv command for manage.py, that runs a few basic tests on the setup.
+* Added Polish translation.
+
 Version 0.10, 1 Sep 2009:
 ------------------------------
 * Added protected mode, which requires users to enter the server password

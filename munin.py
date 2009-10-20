@@ -50,7 +50,7 @@ if sys.argv[-1] == 'config':
 	print "graph_category network"
 	
 	for mumble in mm:
-		print "%d.label %s" % ( mumble.id, mumble.name );
+		print "%d.label %s" % ( mumble.id, mumble.name.replace( '#', '' ) );
 
 
 elif sys.argv[-1] == 'autoconf':
