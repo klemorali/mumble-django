@@ -14,6 +14,8 @@
  *  GNU General Public License for more details.
 """
 
+import re
+
 from django			import forms
 from django.forms		import Form, ModelForm
 from django.utils.translation	import ugettext_lazy as _
@@ -46,8 +48,13 @@ class MumbleUserForm( ModelForm ):
 	
 	def clean_name( self ):
 		name = self.cleaned_data['name'];
+		
+		if self.server.player and re.compile( self.server.player ).match( name ) is None:
+			raise forms.ValidationError( _( "That name is forbidden by the server." ) );
+		
 		if not self.instance.id and len( self.server.ctl.getRegisteredPlayers( self.server.srvid, name ) ) > 0:
 			raise forms.ValidationError( _( "Another player already registered that name." ) );
+		
 		return name;
 	
 	def clean_password( self ):

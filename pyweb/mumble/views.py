@@ -108,6 +108,7 @@ def show( request, server ):
 					displayTab = 1;
 			else:
 				regform = MumbleUserForm( request.POST, instance=user );
+				regform.server = srv;
 				if regform.is_valid():
 					regform.save();
 					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
