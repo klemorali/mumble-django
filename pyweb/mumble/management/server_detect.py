@@ -97,7 +97,7 @@ def find_existing_instances( **kwargs ):
 				"dbus":    dbusName,
 				}
 			
-			if v:
+			if v > 1:
 				print 'Found new Murmur instance... ',
 			
 			# now create a model for the record set.
@@ -107,15 +107,17 @@ def find_existing_instances( **kwargs ):
 				print "Syncing Murmur instance... ",
 		
 		instance.configureFromMurmur();
-		print instance.name;
+		
+		if v > 1:
+			print instance.name;
 		
 		instance.save( dontConfigureMurmur=True );
-		
 		
 		# Now search for players on this server that have not yet been registered
 		if v > 1:
 			print "Looking for registered Players on Server id %d." % id;
-		if id in bootedIDs:
+		
+		if instance.booted:
 			players = ctl.getRegisteredPlayers(id);
 			
 			for playerdata in players:
