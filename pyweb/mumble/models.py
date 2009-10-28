@@ -167,6 +167,56 @@ class Mumble( models.Model ):
 		return models.Model.save( self );
 	
 	
+	def configureFromMurmur( self ):
+		default = self.ctl.getDefaultConf();
+		conf    = self.ctl.getAllConf( self.srvid );
+		
+		def find_in_dicts( keys, valueIfNotFound=None ):
+			if not isinstance( keys, tuple ):
+				keys = ( keys, );
+			
+			for keyword in keys:
+				if keyword in conf:
+					return conf[keyword];
+			
+			for keyword in keys:
+				keyword = keyword.lower();
+				if keyword in default:
+					return default[keyword];
+			
+			return valueIfNotFound;
+		
+		servername = find_in_dicts( "registername", "noname" );
+		if not servername:
+			# RegistrationName was found in the dicts, but is an empty string
+			servername = "noname";
+		
+		addr =  find_in_dicts( ( "registerhostname", "host" ), "0.0.0.0" );
+		if addr.find( ':' ) != -1:
+			# The addr is a hostname which actually contains a port number, but we already got that from
+			# the port field, so we can simply drop it.
+			addr = addr.split(':')[0];
+		
+		self.name    =  servername;
+		self.addr    =  addr;
+		self.port    =  find_in_dicts( "port"        );
+		self.url     =  find_in_dicts( "registerurl" );
+		self.motd    =  find_in_dicts( "welcometext" );
+		self.passwd  =  find_in_dicts( "password"    );
+		self.supw    =  '';
+		self.users   =  find_in_dicts( "users"       );
+		self.bwidth  =  find_in_dicts( "bandwidth"   );
+		self.sslcrt  =  find_in_dicts( "certificate" );
+		self.sslkey  =  find_in_dicts( "key"         );
+		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
+		self.player  =  find_in_dicts( 'playername'  );
+		self.channel =  find_in_dicts( 'channelname' );
+		self.defchan =  int( find_in_dicts( 'defaultchannel' ) );
+		self.booted  =  ( self.srvid in self.ctl.getBootedServers() );
+		
+		self.save( dontConfigureMurmur=True );
+	
+	
 	def isUserAdmin( self, user ):
 		"""Determine if the given user is an admin on this server."""
 		if user.is_authenticated():

@@ -83,10 +83,7 @@ def find_existing_instances( **kwargs ):
 			if v > 1:
 				print "Successfully connected to Murmur via connection string %s, using %s." % ( dbusName, ctl.method );
 	
-	default = ctl.getDefaultConf();
-	
 	servIDs   = ctl.getAllServers();
-	bootedIDs = ctl.getBootedServers();
 	
 	for id in servIDs:
 		if v > 1:
@@ -95,44 +92,25 @@ def find_existing_instances( **kwargs ):
 		try:
 			instance = models.Mumble.objects.get( dbus=dbusName, srvid=id );
 		except models.Mumble.DoesNotExist:
-			conf   = ctl.getAllConf(id);
-			
-			servername = find_in_dicts( "registername",                conf, default, "noname" );
-			if not servername:
-				# RegistrationName was found in the dicts, but is an empty string
-				servername = "noname";
-			
 			values = {
-				"name":    servername,
 				"srvid":   id,
 				"dbus":    dbusName,
-				"addr":    find_in_dicts( ( "registerhostame", "host" ), conf, default, "0.0.0.0" ),
-				"port":    find_in_dicts( "port",                        conf, default ),
-				"url":     find_in_dicts( "registerurl",                 conf, default ),
-				"motd":    find_in_dicts( "welcometext",                 conf, default ),
-				"passwd":  find_in_dicts( "password",                    conf, default ),
-				"supw":    '',
-				"users":   find_in_dicts( "users",                       conf, default ),
-				"bwidth":  find_in_dicts( "bandwidth",                   conf, default ),
-				"sslcrt":  find_in_dicts( "certificate",                 conf, default ),
-				"sslkey":  find_in_dicts( "key",                         conf, default ),
-				"booted":  ( id in bootedIDs ),
 				}
 			
-			if values['addr'].find( ':' ) != -1:
-				# The addr is a hostname which actually contains a port number, but we already got that from
-				# the port field, so we can simply drop it.
-				values['addr'] = values['addr'].split(':')[0];
-			
 			if v:
-				print 'Found new Murmur "%s" running on %s:%s.' % ( values['name'], values['addr'], values['port'] );
+				print 'Found new Murmur instance... ',
 			
 			# now create a model for the record set.
 			instance = models.Mumble( **values );
-			instance.save( dontConfigureMurmur=True );
 		else:
 			if v > 1:
-				print "This instance is already listed in the database.";
+				print "Syncing Murmur instance... ",
+		
+		instance.configureFromMurmur();
+		print instance.name;
+		
+		instance.save( dontConfigureMurmur=True );
+		
 		
 		# Now search for players on this server that have not yet been registered
 		if v > 1:
