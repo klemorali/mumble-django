@@ -59,10 +59,16 @@
       <h2>{% trans "User Texture" %}</h2>
       <p>
         {% blocktrans with DBaseObject.id as serverid %}
-          You can upload an image that you would like to use as your user texture here.<br />
-          Your current texture is:<br />
-        {% endblocktrans %}
+          You can upload an image that you would like to use as your user texture here.
+        {% endblocktrans %}<br />
+	<br />
+	{% if MumbleAccount.hasTexture %}
+          {% trans "Your current texture is" %}:<br />
           <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" /><br />
+	{% else %}
+	  {% trans "You don't currently have a texture set" %}.<br />
+	{% endif %}
+	<br />
         {% blocktrans with DBaseObject.id as serverid %}
           Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
           a different size, it will be resized accordingly.<br />
