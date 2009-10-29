@@ -267,15 +267,19 @@ msgstr "Benutzertextur"
 
 msgid ""
 "\n"
-"          You can upload an image that you would like to use as your user texture here.<br />\n"
-"          Your current texture is:<br />\n"
+"          You can upload an image that you would like to use as your user texture here.\n"
 "        "
 msgstr ""
 "\n"
 "          Du kannst hier ein Bild hochladen, das als deine Benutzertextur "
-"angezeigt werden soll.<br />\n"
-"          Deine momentane Textur ist diese:<br />\n"
+"angezeigt werden soll.\n"
 "        "
+
+msgid "Your current texture is"
+msgstr "Deine momentane Textur ist diese"
+
+msgid "You don't currently have a texture set"
+msgstr "Du hast momentan keine Textur gesetzt"
 
 msgid "\n"
 "          Hint: The texture image <b>needs</b> to be 600x60 in size. If "

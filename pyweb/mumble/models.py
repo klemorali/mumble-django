@@ -427,6 +427,14 @@ class MumbleUser( models.Model ):
 		"""Read an image from the infile and install it as the user's texture."""
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
 	
+	def hasTexture( self ):
+		try:
+			self.getTexture();
+		except ValueError:
+			return False;
+		else:
+			return True;
+	
 	# Deletion handler
 	
 	@staticmethod
