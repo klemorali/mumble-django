@@ -45,7 +45,7 @@ class Mumble( models.Model ):
 	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN, help_text=_("Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
 	srvid   = models.IntegerField( _('Server ID'),          editable = False );
 	addr    = models.CharField(    _('Server Address'),     max_length = 200, help_text=_("Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list.") );
-	port    = models.IntegerField( _('Server Port'),        help_text=_("Port number to bind to. Use -1 to auto assign one.") );
+	port    = models.IntegerField( _('Server Port'),        help_text=_("Port number to bind to. Use -1 to auto assign one."), default=settings.MUMBLE_DEFAULT_PORT );
 	url     = models.CharField(    _('Website URL'),        max_length = 200, blank = True );
 	motd    = models.TextField(    _('Welcome Message'),                      blank = True );
 	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True, help_text=_("Password required to join. Leave empty for public servers.") );
