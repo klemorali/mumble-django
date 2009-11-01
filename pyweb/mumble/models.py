@@ -27,18 +27,18 @@ from mctl			import *
 
 
 class Mumble( models.Model ):
-	"""Represents a Murmur server instance.
+	""" Represents a Murmur server instance.
 	
-	All configurable settings are represented by a field in this model. To change the
-	settings, just update the appropriate field and call the save() method.
+	    All configurable settings are represented by a field in this model. To change the
+	    settings, just update the appropriate field and call the save() method.
 	
-	To set up a new server instance, instanciate this Model. The first field you should
-	define is the "dbus" field, which tells the connector subsystem how to connect to
-	the Murmurd master process. Set this to the appropriate DBus service name or the
-	Ice proxy string.
+	    To set up a new server instance, instanciate this Model. The first field you should
+	    define is the "dbus" field, which tells the connector subsystem how to connect to
+	    the Murmurd master process. Set this to the appropriate DBus service name or the
+	    Ice proxy string.
 	
-	When an instance of this model is deleted, the according server instance will be
-	deleted as well.
+	    When an instance of this model is deleted, the according server instance will be
+	    deleted as well.
 	"""
 	
 	name    = models.CharField(    _('Server Name'),        max_length = 200 );
@@ -316,16 +316,16 @@ class Mumble( models.Model ):
 
 
 class MumbleUser( models.Model ):
-	"""Represents a User account in Murmur.
+	""" Represents a User account in Murmur.
 	
-	To change an account, simply set the according field in this model and call the save()
-	method to update the account in Murmur and in Django's database. Note that, once saved
-	for the first time, the server field must not be changed. Attempting to do this will
-	result in an AttributeError. To move an account to a new server, recreate it on the
-	new server and delete the old model.
+	    To change an account, simply set the according field in this model and call the save()
+	    method to update the account in Murmur and in Django's database. Note that, once saved
+	    for the first time, the server field must not be changed. Attempting to do this will
+	    result in an AttributeError. To move an account to a new server, recreate it on the
+	    new server and delete the old model.
 	
-	When you delete an instance of this model, the according user account will be deleted
-	in Murmur as well, after revoking the user's admin privileges.
+	    When you delete an instance of this model, the according user account will be deleted
+	    in Murmur as well, after revoking the user's admin privileges.
 	"""
 	
 	mumbleid = models.IntegerField(         _('Mumble player_id'),            editable = False, default = -1 );
