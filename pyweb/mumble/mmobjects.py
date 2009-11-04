@@ -82,10 +82,12 @@ class mmChannel( object ):
 		doc="A string ready to be used in an id property of an HTML tag."
 		);
 	
-	show = property(
+	top_or_not_empty = property(
 		lambda self: self.parent is None or self.parent.chanid == 0 or self.playerCount > 0,
 		doc="True if this channel needs to be shown because it is root, a child of root, or has players."
 		);
+	
+	show =  property( lambda self: settings.SHOW_EMPTY_SUBCHANS or self.top_or_not_empty );
 	
 	def __str__( self ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
