@@ -82,6 +82,9 @@ ACCOUNT_ACTIVATION_DAYS = 30
 # Default mumble port. If your server runs under this port, it will not be included in the links in the Channel Viewer.
 MUMBLE_DEFAULT_PORT = 64738
 
+# Should subchannels be shown, even if there are no players in them?
+SHOW_EMPTY_SUBCHANS = False
+
 # Protect the registration form for private servers?
 # If set to True, people will need to enter the server password in order to create accounts.
 PROTECTED_MODE = False
