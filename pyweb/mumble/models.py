@@ -216,7 +216,7 @@ class Mumble( models.Model ):
 		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
 
 		if self.ctl.getVersion()[:2] == ( 1, 2 ):
-			self.player  =  find_in_dicts( 'username'   );
+			self.player  =  find_in_dicts( ( 'username', 'playername' ) );
 		else:
 			self.player  =  find_in_dicts( 'playername' );
 
