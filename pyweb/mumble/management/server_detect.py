@@ -114,34 +114,12 @@ def find_existing_instances( **kwargs ):
 		instance.save( dontConfigureMurmur=True );
 		
 		# Now search for players on this server that have not yet been registered
-		if v > 1:
-			print "Looking for registered Players on Server id %d." % id;
-		
 		if instance.booted:
-			players = ctl.getRegisteredPlayers(id);
-			
-			for playerdata in players:
-				if playerdata[0] == 0:
-					continue;
-				if v > 1:
-					print "Checking Player with id %d and name '%s'." % ( int(playerdata[0]), playerdata[1] );
-				try:
-					models.MumbleUser.objects.get( server=instance, mumbleid=playerdata[0] );
-				except models.MumbleUser.DoesNotExist:
-					if v:
-						print 'Found new Player "%s".' % playerdata[1];
-					playerinstance = models.MumbleUser(
-						mumbleid = playerdata[0],
-						name     = playerdata[1],
-						password = '',
-						server   = instance,
-						owner    = None
-						);
-					playerinstance.isAdmin = playerinstance.getAdmin();
-					playerinstance.save( dontConfigureMurmur=True );
-				else:
-					if v > 1:
-						print "This player is already listed in the database.";
+			if v > 1:
+				print "Looking for registered Players on Server id %d." % id;
+			instance.readUsersFromMurmur( verbose=v );
+		elif v > 1:
+			print "This server is not running, can't sync players.";
 	
 	if v > 1:
 		print "Successfully finished Servers and Players detection.";

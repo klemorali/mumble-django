@@ -227,6 +227,43 @@ class Mumble( models.Model ):
 		self.save( dontConfigureMurmur=True );
 	
 	
+	def readUsersFromMurmur( self, verbose=0 ):
+		if not self.booted:
+			raise SystemError( "This murmur instance is not currently running, can't sync." );
+		
+		players = self.ctl.getRegisteredPlayers(id);
+		
+		for playerdata in players:
+			if playerdata[0] == 0: # Skip SuperUsers
+				continue;
+			if verbose > 1:
+				print "Checking Player with id %d and name '%s'." % ( int(playerdata[0]), playerdata[1] );
+			
+			try:
+				playerinstance = MumbleUser.objects.get( server=instance, mumbleid=playerdata[0] );
+			
+			except MumbleUser.DoesNotExist:
+				if verbose:
+					print 'Found new Player "%s".' % playerdata[1];
+				
+				playerinstance = models.MumbleUser(
+					mumbleid = playerdata[0],
+					name     = playerdata[1],
+					password = '',
+					server   = instance,
+					owner    = None
+					);
+			
+			else:
+				if verbose > 1:
+					print "This player is already listed in the database.";
+			
+				playerinstance.name = playerdata[1];
+			
+			playerinstance.isAdmin = playerinstance.getAdmin();
+			playerinstance.save( dontConfigureMurmur=True );
+
+	
 	def isUserAdmin( self, user ):
 		"""Determine if the given user is an admin on this server."""
 		if user.is_authenticated():
