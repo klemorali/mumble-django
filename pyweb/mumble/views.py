@@ -201,7 +201,7 @@ def users( request, server ):
 	
 	srv = get_object_or_404( Mumble, id=int(server) );
 	
-	if "resync" in request.GET and request.GET['resync'] == "true":
+	if "resync" in request.POST and request.POST['resync'] == "true":
 		srv.readUsersFromMurmur();
 	
 	if not srv.isUserAdmin( request.user ):

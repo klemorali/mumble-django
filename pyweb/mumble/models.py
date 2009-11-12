@@ -231,7 +231,7 @@ class Mumble( models.Model ):
 		if not self.booted:
 			raise SystemError( "This murmur instance is not currently running, can't sync." );
 		
-		players = self.ctl.getRegisteredPlayers(id);
+		players = self.ctl.getRegisteredPlayers(self.srvid);
 		
 		for playerdata in players:
 			if playerdata[0] == 0: # Skip SuperUsers
@@ -240,17 +240,17 @@ class Mumble( models.Model ):
 				print "Checking Player with id %d and name '%s'." % ( int(playerdata[0]), playerdata[1] );
 			
 			try:
-				playerinstance = MumbleUser.objects.get( server=instance, mumbleid=playerdata[0] );
+				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata[0] );
 			
 			except MumbleUser.DoesNotExist:
 				if verbose:
 					print 'Found new Player "%s".' % playerdata[1];
 				
-				playerinstance = models.MumbleUser(
+				playerinstance = MumbleUser(
 					mumbleid = playerdata[0],
 					name     = playerdata[1],
 					password = '',
-					server   = instance,
+					server   = self,
 					owner    = None
 					);
 			
