@@ -88,8 +88,13 @@ def show( request, server ):
 		# Unregistered users may or may not need a password to register.
 		if settings.PROTECTED_MODE and srv.passwd:
 			unregged_user_form = MumbleUserPasswordForm;
+		# Unregistered users may or may not want to link an existing account
+		elif settings.ALLOW_ACCOUNT_LINKING:
+			unregged_user_form = MumbleLinkForm;
 		else:
 			unregged_user_form = MumbleUserForm;
+		
+
 		
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
@@ -98,6 +103,9 @@ def show( request, server ):
 				regform = unregged_user_form( request.POST );
 				regform.server = srv;
 				if regform.is_valid():
+					# TODO: Check if LinkAcc is True, if yes:
+					# find MumbleUser with mumbleid=regform.mumbleid,
+					# if not exists create, save().
 					model = regform.save( commit=False );
 					model.isAdmin = False;
 					model.server  = srv;
