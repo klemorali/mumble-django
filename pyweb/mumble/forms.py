@@ -91,6 +91,41 @@ class MumbleUserPasswordForm( MumbleUserForm ):
 			del( self.cleaned_data['serverpw'] );
 		return self.cleaned_data;
 
+
+class MumbleUserLinkForm( MumbleUserForm ):
+	""" Special registration form to either register or link an account. """
+	
+	linkacc = forms.BooleanField(
+		label=_('Link account'),
+		help_text=_('The account already exists and belongs to me, just link it instead of creating.'),
+		);	
+	
+	def clean_name( self ):
+		if not self.cleaned_data['linkacc']:
+			return MumbleUserForm.clean_name( self );
+		
+		# Check if user exists
+		name = self.cleaned_data['name'];
+		
+		if len( self.server.ctl.getRegisteredPlayers( self.server.srvid, name ) ) != 1:
+			raise forms.ValidationError( _( "No such user found." ) );
+		
+		return name;
+	
+	def clean_password( self ):
+		if not self.cleaned_data['linkacc']:
+			return MumbleUserForm.clean_password( self );
+		
+		# Validate password with Murmur
+		pw = self.cleaned_data['password'];
+		
+		self.mumbleid = self.server.ctl.verifyPassword( self.server.srvid, self.cleaned_data['name'], pw )
+		if self.mumbleid <= 0:
+			raise forms.ValidationError( _( "The password you entered is incorrect." ) );
+		
+		return pw;
+	
+
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """
 	texturefile = forms.ImageField();
