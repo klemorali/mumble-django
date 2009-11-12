@@ -301,6 +301,13 @@
 										},
 									} );
 								}
+							}, {
+							text:    '{% trans "Resync with Murmur" %}',
+							handler: function(){
+								userAdminStore.reload({
+									params: { 'resync': 'true' },
+									});
+								},
 							}],
 						plugins: [ adminColumn, deleteColumn ],
 						},
