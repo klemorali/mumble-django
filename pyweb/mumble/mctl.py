@@ -91,6 +91,9 @@ class MumbleCtlBase (object):
 	def setTexture(self, srvid, mumbleid, infile):
 		raise NotImplementedError( "mctl::setTexture" );
 	
+	def verifyPassword( self, srvid, username, password ):
+		raise NotImplementedError( "mctl::verifyPassword" );
+	
 	@staticmethod
 	def newInstance( connstring ):
 		""" Create a new CTL object for the given connstring. """

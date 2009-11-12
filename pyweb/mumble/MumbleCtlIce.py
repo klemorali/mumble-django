@@ -250,6 +250,9 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		# finally call murmur and set the texture
 		self._getIceServerObject(srvid).setTexture(mumbleid, texture)
 	
+	def verifyPassword(self, srvid, username, password):
+		return self._getIceServerObject(srvid).verifyPassword(username, password);
+	
 	@staticmethod
 	def setUnicodeFlag(data):
 		ret = ''
