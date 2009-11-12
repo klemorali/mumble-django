@@ -86,8 +86,21 @@ MUMBLE_DEFAULT_PORT = 64738
 SHOW_EMPTY_SUBCHANS = False
 
 # Protect the registration form for private servers?
-# If set to True, people will need to enter the server password in order to create accounts.
+# If set to True, people will need to enter the server password in order to create accounts,
+# and will not be able to link existing accounts.
 PROTECTED_MODE = False
+
+# Account linking allows users who registered their accounts through Mumble instead of using
+# Mumble-Django, to tell MD that this account belongs to them. Then they can use MD to change
+# their passwords.
+# This will of course require them to enter the password that belongs to the Murmur account,
+# and the accounts will only be linked if the password is correct.
+# By default, this is enabled only for non-admin accounts, because if an admin account gets
+# stolen they could easily take over the server. (So make sure the password can't be easily
+# guessed, use at least over 9000 letters, blah blah.)
+# This feature is only available if PROTECTED_MODE is not active.
+ALLOW_ACCOUNT_LINKING = False		# Allow linking in general?
+ALLOW_ACCOUNT_LINKING_ADMINS = False	# Allow linking for Admin accounts?
 
 # Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
 # Mumble-Django should use its own!
