@@ -201,6 +201,9 @@ def users( request, server ):
 	
 	srv = get_object_or_404( Mumble, id=int(server) );
 	
+	if "resync" in request.GET and request.GET['resync'] == "true":
+		srv.readUsersFromMurmur();
+	
 	if not srv.isUserAdmin( request.user ):
 		return HttpResponse(
 			simplejson.dumps({ 'success': False, 'objects': [], 'errormsg': 'Access denied' }),
