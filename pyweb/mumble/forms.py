@@ -125,6 +125,21 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		
 		return pw;
 	
+	def save( self, *args, **kwargs ):
+		if not self.cleaned_data['linkacc']:
+			inst = MumbleUserForm.save( self, *args, **kwargs );
+			inst.isAdmin = False;
+			inst.server  = this.server;
+			return inst;
+		
+		mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
+		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
+			raise SystemError( "Linking Admin accounts is not allowed." );
+		
+		self.instance = mUser;
+		
+		return MumbleUserForm.save( self, *args, **kwargs );
+
 
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """

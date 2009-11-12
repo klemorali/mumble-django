@@ -90,7 +90,7 @@ def show( request, server ):
 			unregged_user_form = MumbleUserPasswordForm;
 		# Unregistered users may or may not want to link an existing account
 		elif settings.ALLOW_ACCOUNT_LINKING:
-			unregged_user_form = MumbleLinkForm;
+			unregged_user_form = MumbleUserLinkForm;
 		else:
 			unregged_user_form = MumbleUserForm;
 		
@@ -107,8 +107,6 @@ def show( request, server ):
 					# find MumbleUser with mumbleid=regform.mumbleid,
 					# if not exists create, save().
 					model = regform.save( commit=False );
-					model.isAdmin = False;
-					model.server  = srv;
 					model.owner   = request.user;
 					model.save();
 					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
