@@ -133,6 +133,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 			mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
 		except MumbleUser.DoesNotExist:
 			mUser = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
+			mUser.isAdmin = mUser.getAdmin();
 			mUser.save( dontConfigureMurmur=True );
 		
 		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
@@ -140,15 +141,6 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		self.instance = mUser;
 		
 		return self.cleaned_data;
-	
-	def save( self, *args, **kwargs ):
-		inst = MumbleUserForm.save( self, *args, **kwargs );
-		
-		if 'linkacc' not in self.data:
-			inst.isAdmin = False;
-			inst.server  = this.server;
-		
-		return inst;
 
 
 class MumbleTextureForm( Form ):
