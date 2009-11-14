@@ -99,7 +99,7 @@ PROTECTED_MODE = False
 # stolen they could easily take over the server. (So make sure the password can't be easily
 # guessed, use at least over 9000 letters, blah blah.)
 # This feature is only available if PROTECTED_MODE is not active.
-ALLOW_ACCOUNT_LINKING = False		# Allow linking in general?
+ALLOW_ACCOUNT_LINKING = True		# Allow linking in general?
 ALLOW_ACCOUNT_LINKING_ADMINS = False	# Allow linking for Admin accounts?
 
 # Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
