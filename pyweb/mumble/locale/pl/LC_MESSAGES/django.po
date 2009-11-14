@@ -35,16 +35,7 @@ msgstr "Użytkownicy online"
 msgid "Channel count"
 msgstr "Kanały"
 
-#: admin.py:42
-msgid "Yes"
-msgstr "Tak"
-
-#: admin.py:43
-msgid "No"
-msgstr "Nie"
-
 #: admin.py:44
-#, fuzzy
 msgid "Public"
 msgstr "Publiczny"
 
@@ -75,9 +66,8 @@ msgid "The password you entered is incorrect."
 msgstr "Wprowadzone hasło jest niepoprawne"
 
 #: forms.py:99
-#, fuzzy
 msgid "Link account"
-msgstr "Konto użytkownika"
+msgstr ""
 
 #: forms.py:100
 msgid ""
@@ -424,10 +414,6 @@ msgstr "Połącz"
 msgid "Channel description"
 msgstr "Opis kanału"
 
-#: templates/mumble.htm:184
-msgid "Delete"
-msgstr ""
-
 #: templates/mumble.htm:220
 msgid "Server Info"
 msgstr "Informacje o serwerze"
@@ -444,26 +430,6 @@ msgstr "Administracja"
 msgid "User List"
 msgstr "Lista użytkowników"
 
-#: templates/mumble.htm:234
-msgid "name"
-msgstr ""
-
-#: templates/mumble.htm:253
-#, fuzzy
-msgid "Change password"
-msgstr "Hasło"
-
-#: templates/mumble.htm:266
-msgid "Add"
-msgstr ""
-
-#: templates/mumble.htm:278
-msgid "Save"
-msgstr ""
-
 #: templates/mumble.htm:305
 msgid "Resync with Murmur"
 msgstr ""
-
-#~ msgid "yes,no"
-#~ msgstr "tak,nie"
