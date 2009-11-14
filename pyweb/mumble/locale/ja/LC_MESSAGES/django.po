@@ -70,25 +70,27 @@ msgstr "パスワードが不正です。"
 
 #: forms.py:99
 msgid "Link account"
-msgstr ""
+msgstr "アカウントリンク"
 
 #: forms.py:100
 msgid ""
 "The account already exists and belongs to me, just link it instead of "
 "creating."
 msgstr ""
+"アカウントは既に存在していて、自分にリンクしています。"
+"リンクの変わりに作成して下さい。"
 
 #: forms.py:112
 msgid "No such user found."
-msgstr ""
+msgstr "ユーザが見つかりません"
 
 #: forms.py:146
 msgid "That account belongs to someone else."
-msgstr ""
+msgstr "このアカウントは既に他のアカウントにリンクされています。"
 
 #: forms.py:149
 msgid "Linking Admin accounts is not allowed."
-msgstr ""
+msgstr "管理者アカウントへのリンクは許可されていません"
 
 #: models.py:44
 msgid "Server Name"
@@ -332,7 +334,7 @@ msgstr "現在の画像"
 
 #: templates/mumble.htm:69
 msgid "You don't currently have a texture set"
-msgstr ""
+msgstr "貴方は画像を持っていません"
 
 #: templates/mumble.htm:72
 msgid ""
@@ -435,8 +437,8 @@ msgstr "管理"
 
 #: templates/mumble.htm:230
 msgid "User List"
-msgstr ""
+msgstr "ユーザ一覧"
 
 #: templates/mumble.htm:305
 msgid "Resync with Murmur"
-msgstr ""
+msgstr "Murmurと再同期"
