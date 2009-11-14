@@ -103,12 +103,10 @@ def show( request, server ):
 				regform = unregged_user_form( request.POST );
 				regform.server = srv;
 				if regform.is_valid():
-					# TODO: Check if LinkAcc is True, if yes:
-					# find MumbleUser with mumbleid=regform.mumbleid,
-					# if not exists create, save().
 					model = regform.save( commit=False );
-					model.owner   = request.user;
-					model.save();
+					model.owner = request.user;
+					# If we're linking accounts, the change is local only.
+					model.save( dontConfigureMurmur=( "linkacc" in regform.data ) );
 					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 				else:
 					displayTab = 1;
