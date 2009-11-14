@@ -167,6 +167,20 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		# finally call murmur and set the texture
 		self._getDbusServerObject(srvid).setTexture(dbus.Int32( mumbleid ), texture)
 	
+	def verifyPassword( self, srvid, username, password ):
+		player = self.getRegisteredPlayers( srvid, username );
+		if not player:
+			return -2;
+		
+		ok = MumbleCtlDbus_118.convertDbusTypeToNative(
+			self._getDbusServerObject(srvid).verifyPassword( dbus.Int32( player[0][0] ), password )
+			);
+		
+		if ok:
+			return player[0][0];
+		else:
+			return -1;
+	
 	@staticmethod
 	def convertDbusTypeToNative(data):
 		#i know dbus.* type is extends python native type.
