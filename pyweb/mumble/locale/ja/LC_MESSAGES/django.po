@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-14 13:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: withgod <withgod@sourceforge.net\n"
+"Last-Translator: withgod <withgod@sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,14 +35,6 @@ msgstr "オンラインのユーザ"
 #: admin.py:38
 msgid "Channel count"
 msgstr "チャンネル数"
-
-#: admin.py:42
-msgid "Yes"
-msgstr ""
-
-#: admin.py:43
-msgid "No"
-msgstr ""
 
 #: admin.py:44
 msgid "Public"
@@ -77,9 +69,8 @@ msgid "The password you entered is incorrect."
 msgstr "パスワードが不正です。"
 
 #: forms.py:99
-#, fuzzy
 msgid "Link account"
-msgstr "ユーザアカウント"
+msgstr ""
 
 #: forms.py:100
 msgid ""
@@ -430,10 +421,6 @@ msgstr "接続"
 msgid "Channel description"
 msgstr "チャンネル説明"
 
-#: templates/mumble.htm:184
-msgid "Delete"
-msgstr ""
-
 #: templates/mumble.htm:220
 msgid "Server Info"
 msgstr "サーバ情報"
@@ -447,25 +434,7 @@ msgid "Administration"
 msgstr "管理"
 
 #: templates/mumble.htm:230
-#, fuzzy
 msgid "User List"
-msgstr "ユーザ"
-
-#: templates/mumble.htm:234
-msgid "name"
-msgstr ""
-
-#: templates/mumble.htm:253
-#, fuzzy
-msgid "Change password"
-msgstr "パスワード"
-
-#: templates/mumble.htm:266
-msgid "Add"
-msgstr ""
-
-#: templates/mumble.htm:278
-msgid "Save"
 msgstr ""
 
 #: templates/mumble.htm:305

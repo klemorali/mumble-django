@@ -35,21 +35,13 @@ msgstr "Benutzer online"
 msgid "Channel count"
 msgstr "Channels"
 
-#: admin.py:42
-msgid "Yes"
-msgstr ""
-
-#: admin.py:43
-msgid "No"
-msgstr ""
-
 #: admin.py:44
 msgid "Public"
 msgstr "Öffentlich"
 
 #: forms.py:53
 msgid "That name is forbidden by the server."
-msgstr ""
+msgstr "Dieser Name wird vom Server nicht erlaubt."
 
 #: forms.py:56 models.py:414
 msgid "Another player already registered that name."
@@ -76,27 +68,28 @@ msgid "The password you entered is incorrect."
 msgstr "Das eingegebene Passwort ist falsch"
 
 #: forms.py:99
-#, fuzzy
 msgid "Link account"
-msgstr "Benutzerkonto"
+msgstr "Accounts verknüpfen"
 
 #: forms.py:100
 msgid ""
 "The account already exists and belongs to me, just link it instead of "
 "creating."
 msgstr ""
+"Dieser Account existiert bereits und gehört mir. Verknüpfe die Konten "
+"nur, anstatt ein neues zu erstellen."
 
 #: forms.py:112
 msgid "No such user found."
-msgstr ""
+msgstr "Benutzer nicht gefunden."
 
 #: forms.py:146
 msgid "That account belongs to someone else."
-msgstr ""
+msgstr "Dieser Account gehört jemand anderem."
 
 #: forms.py:149
 msgid "Linking Admin accounts is not allowed."
-msgstr ""
+msgstr "Admin-Accounts zu verknüpfen ist nicht erlaubt."
 
 #: models.py:44
 msgid "Server Name"
@@ -435,10 +428,6 @@ msgstr "Verbinden"
 msgid "Channel description"
 msgstr "Beschreibung des Kanals"
 
-#: templates/mumble.htm:184
-msgid "Delete"
-msgstr ""
-
 #: templates/mumble.htm:220
 msgid "Server Info"
 msgstr "Server-Infos"
@@ -455,23 +444,6 @@ msgstr "Administration"
 msgid "User List"
 msgstr "Benutzerliste"
 
-#: templates/mumble.htm:234
-msgid "name"
-msgstr ""
-
-#: templates/mumble.htm:253
-#, fuzzy
-msgid "Change password"
-msgstr "Passwort"
-
-#: templates/mumble.htm:266
-msgid "Add"
-msgstr ""
-
-#: templates/mumble.htm:278
-msgid "Save"
-msgstr ""
-
 #: templates/mumble.htm:305
 msgid "Resync with Murmur"
-msgstr ""
+msgstr "Liste neu laden"

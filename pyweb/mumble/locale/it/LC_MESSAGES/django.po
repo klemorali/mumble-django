@@ -35,14 +35,6 @@ msgstr "Utenti online"
 msgid "Channel count"
 msgstr "Quantità canali"
 
-#: admin.py:42
-msgid "Yes"
-msgstr ""
-
-#: admin.py:43
-msgid "No"
-msgstr ""
-
 #: admin.py:44
 msgid "Public"
 msgstr "Publico"
@@ -76,9 +68,8 @@ msgid "The password you entered is incorrect."
 msgstr "La password d'accesso non è corretta."
 
 #: forms.py:99
-#, fuzzy
 msgid "Link account"
-msgstr "Account del utente"
+msgstr ""
 
 #: forms.py:100
 msgid ""
@@ -318,7 +309,6 @@ msgid "User Texture"
 msgstr "Immagine del Utente"
 
 #: templates/mumble.htm:61
-#, fuzzy
 msgid ""
 "\n"
 "          You can upload an image that you would like to use as your user "
@@ -413,7 +403,6 @@ msgid "Channel"
 msgstr "Canale"
 
 #: templates/mumble.htm:132
-#, fuzzy
 msgid "Channel ID"
 msgstr "ID del Canale"
 
@@ -424,10 +413,6 @@ msgstr "Connect"
 #: templates/mumble.htm:137
 msgid "Channel description"
 msgstr "descrizione del canale"
-
-#: templates/mumble.htm:184
-msgid "Delete"
-msgstr ""
 
 #: templates/mumble.htm:220
 msgid "Server Info"
@@ -442,25 +427,7 @@ msgid "Administration"
 msgstr "Amministrazione"
 
 #: templates/mumble.htm:230
-#, fuzzy
 msgid "User List"
-msgstr "Utente"
-
-#: templates/mumble.htm:234
-msgid "name"
-msgstr ""
-
-#: templates/mumble.htm:253
-#, fuzzy
-msgid "Change password"
-msgstr "Login password"
-
-#: templates/mumble.htm:266
-msgid "Add"
-msgstr ""
-
-#: templates/mumble.htm:278
-msgid "Save"
 msgstr ""
 
 #: templates/mumble.htm:305

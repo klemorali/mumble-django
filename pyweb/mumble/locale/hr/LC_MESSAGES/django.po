@@ -35,14 +35,6 @@ msgstr "Korisnici na serveru"
 msgid "Channel count"
 msgstr "Kanali"
 
-#: admin.py:42
-msgid "Yes"
-msgstr ""
-
-#: admin.py:43
-msgid "No"
-msgstr ""
-
 #: admin.py:44
 msgid "Public"
 msgstr "Javni server"
@@ -76,9 +68,8 @@ msgid "The password you entered is incorrect."
 msgstr "Lozinka koju ste unijeli je neispravna."
 
 #: forms.py:99
-#, fuzzy
 msgid "Link account"
-msgstr "Korisnički račun"
+msgstr ""
 
 #: forms.py:100
 msgid ""
@@ -428,10 +419,6 @@ msgstr "Spoji se"
 msgid "Channel description"
 msgstr "Opis kanala"
 
-#: templates/mumble.htm:184
-msgid "Delete"
-msgstr ""
-
 #: templates/mumble.htm:220
 msgid "Server Info"
 msgstr "Informacije o serveru"
@@ -445,25 +432,7 @@ msgid "Administration"
 msgstr "Administracija"
 
 #: templates/mumble.htm:230
-#, fuzzy
 msgid "User List"
-msgstr "Korisnik"
-
-#: templates/mumble.htm:234
-msgid "name"
-msgstr ""
-
-#: templates/mumble.htm:253
-#, fuzzy
-msgid "Change password"
-msgstr "Lozinka"
-
-#: templates/mumble.htm:266
-msgid "Add"
-msgstr ""
-
-#: templates/mumble.htm:278
-msgid "Save"
 msgstr ""
 
 #: templates/mumble.htm:305
