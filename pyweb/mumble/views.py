@@ -94,7 +94,6 @@ def show( request, server ):
 		else:
 			unregged_user_form = MumbleUserForm;
 		
-
 		
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
 			try:
@@ -104,7 +103,8 @@ def show( request, server ):
 				regform.server = srv;
 				if regform.is_valid():
 					model = regform.save( commit=False );
-					model.owner = request.user;
+					model.owner  = request.user;
+					model.server = srv;
 					# If we're linking accounts, the change is local only.
 					model.save( dontConfigureMurmur=( "linkacc" in regform.data ) );
 					return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
