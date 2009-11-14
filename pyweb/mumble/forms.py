@@ -98,6 +98,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 	linkacc = forms.BooleanField(
 		label=_('Link account'),
 		help_text=_('The account already exists and belongs to me, just link it instead of creating.'),
+		required=False,
 		);	
 	
 	def clean_name( self ):
@@ -115,6 +116,11 @@ class MumbleUserLinkForm( MumbleUserForm ):
 	def clean_password( self ):
 		if 'linkacc' not in self.data:
 			return MumbleUserForm.clean_password( self );
+		
+		if 'name' not in self.cleaned_data:
+			# keep clean() from trying to find a user that CAN'T exist
+			self.mumbleid = -10;
+			return '';
 		
 		# Validate password with Murmur
 		pw = self.cleaned_data['password'];
@@ -135,9 +141,12 @@ class MumbleUserLinkForm( MumbleUserForm ):
 			mUser = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
 			mUser.isAdmin = mUser.getAdmin();
 			mUser.save( dontConfigureMurmur=True );
+		else:
+			if mUser.owner is not None:
+				raise forms.ValidationError( _( "That account belongs to someone else." ) );
 		
 		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
-			raise forms.ValidationError( "Linking Admin accounts is not allowed." );
+			raise forms.ValidationError( _( "Linking Admin accounts is not allowed." ) );
 		self.instance = mUser;
 		
 		return self.cleaned_data;
