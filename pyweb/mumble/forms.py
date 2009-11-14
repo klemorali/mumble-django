@@ -101,7 +101,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		);	
 	
 	def clean_name( self ):
-		if not self.cleaned_data['linkacc']:
+		if 'linkacc' not in self.data:
 			return MumbleUserForm.clean_name( self );
 		
 		# Check if user exists
@@ -113,7 +113,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		return name;
 	
 	def clean_password( self ):
-		if not self.cleaned_data['linkacc']:
+		if 'linkacc' not in self.data:
 			return MumbleUserForm.clean_password( self );
 		
 		# Validate password with Murmur
@@ -125,20 +125,25 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		
 		return pw;
 	
-	def save( self, *args, **kwargs ):
-		if not self.cleaned_data['linkacc']:
-			inst = MumbleUserForm.save( self, *args, **kwargs );
-			inst.isAdmin = False;
-			inst.server  = this.server;
-			return inst;
+	def clean( self ):
+		if 'linkacc' not in self.data:
+			return self.cleaned_data;
 		
 		mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
 		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
-			raise SystemError( "Linking Admin accounts is not allowed." );
-		
+			raise forms.ValidationError( "Linking Admin accounts is not allowed." );
 		self.instance = mUser;
 		
-		return MumbleUserForm.save( self, *args, **kwargs );
+		return self.cleaned_data;
+	
+	def save( self, *args, **kwargs ):
+		inst = MumbleUserForm.save( self, *args, **kwargs );
+		
+		if 'linkacc' not in self.data:
+			inst.isAdmin = False;
+			inst.server  = this.server;
+		
+		return inst;
 
 
 class MumbleTextureForm( Form ):
