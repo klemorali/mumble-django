@@ -383,7 +383,7 @@ class MumbleUser( models.Model ):
 	isAdmin  = models.BooleanField(         _('Admin on root channel'),       default = False );
 	
 	class Meta:
-		unique_together     = ( ( 'server', 'owner' ), );
+		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
 		verbose_name        = _( 'User account'  );
 		verbose_name_plural = _( 'User accounts' );
 	
