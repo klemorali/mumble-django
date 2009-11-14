@@ -126,10 +126,15 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		return pw;
 	
 	def clean( self ):
-		if 'linkacc' not in self.data:
+		if 'linkacc' not in self.data or self.mumbleid <= 0:
 			return self.cleaned_data;
 		
-		mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
+		try:
+			mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
+		except MumbleUser.DoesNotExist:
+			mUser = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
+			mUser.save( dontConfigureMurmur=True );
+		
 		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
 			raise forms.ValidationError( "Linking Admin accounts is not allowed." );
 		self.instance = mUser;
