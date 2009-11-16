@@ -7,6 +7,7 @@
  **/
 
 /* Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
+   Copyright (C) 2008-2009, Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -227,10 +228,17 @@ module Murmur
 	sequence<string> NameList;
 	dictionary<int, string> NameMap;
 	dictionary<string, int> IdMap;
-	dictionary<UserInfo, string> UserInfoMap;
 	sequence<byte> Texture;
 	dictionary<string, string> ConfigMap;
 	sequence<string> GroupNameList;
+	sequence<byte> CertificateDer;
+	sequence<CertificateDer> CertificateList;
+
+	/** User information map.
+         * Older versions of ice-php can't handle enums as keys. If you are using one of these, replace 'UserInfo' with 'byte'.
+         */
+
+	dictionary<UserInfo, string> UserInfoMap;
 
 	/** User and subchannel state. Read-only.
          **/
@@ -333,14 +341,19 @@ module Murmur
 		 *  method to fall through to normal database authentication.
 		 *  Note that if authentication succeeds, murmur will create a record of the user in it's database, reserving
 		 *  the username and id so it cannot be used for normal database authentication.
+		 *  The data in the certificate (name, email addresses etc), as well as the list of signing certificates,
+		 *  should only be trusted if certstrong is true.
 		 *
 		 *  @param name Username to authenticate.
 		 *  @param pw Password to authenticate with.
+		 *  @param certificates List of der encoded certificates the user connected with.
+		 *  @param certhash Hash of user certificate, as used by murmur internally when matching.
+		 *  @param certstrong True if certificate was valid and signed by a trusted CA.
 		 *  @param newname Set this to change the username from the supplied one.
 		 *  @param groups List of groups on the root channel that the user will be added to for the duration of the connection.
 		 *  @return UserID of authenticated user, -1 for authentication failures and -2 for unknown user (fallthrough).
 		 */
-		idempotent int authenticate(string name, string pw, out string newname, out GroupNameList groups);
+		idempotent int authenticate(string name, string pw, CertificateList certificates, string certhash, bool certstrong, out string newname, out GroupNameList groups);
 
 		/** Fetch information about a user. This is used to retrieve information like email address, keyhash etc. If you
 		 *  want murmur to take care of this information itself, simply return false to fall through.
@@ -618,6 +631,28 @@ module Murmur
 		 * @param inherit Should this channel inherit ACLs from the parent channel?
 		 */
 		idempotent void setACL(int channelid, ACLList acls, GroupList groups, bool inherit) throws ServerBootedException, InvalidChannelException;
+
+		/** Temporarily add a user to a group on a channel. This state is not saved, and is intended for temporary memberships.
+		 * @param channelid Channel ID of channel to add to. See [Channel::id].
+		 * @param session Connection ID of user. See [User::session].
+		 * @param group Group name to add to.
+		 */
+		idempotent void addUserToGroup(int channelid, int session, string group) throws ServerBootedException, InvalidChannelException, InvalidSessionException;
+
+		/** Remove a user from a temporary group membership on a channel. This state is not saved, and is intended for temporary memberships.
+		 * @param channelid Channel ID of channel to add to. See [Channel::id].
+		 * @param session Connection ID of user. See [User::session].
+		 * @param group Group name to remove from.
+		 */
+		idempotent void removeUserFromGroup(int channelid, int session, string group) throws ServerBootedException, InvalidChannelException, InvalidSessionException;
+
+		/** Redirect whisper targets for user. If set, whenever a user tries to whisper to group "source", the whisper will be redirected to group "target".
+                 * This is intended for context groups.
+		 * @param session Connection ID of user. See [User::session].
+		 * @param source Group name to redirect from.
+		 * @param target Group name to redirect to.
+                 */
+                idempotent void redirectWhisperGroup(int session, string source, string target) throws ServerBootedException, InvalidSessionException;
 
 		/** Map a list of [User::userid] to a matching name.
 		 * @param List of ids.
