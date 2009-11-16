@@ -351,7 +351,7 @@ class Mumble( models.Model ):
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
 		
-		versionstr = "version=%d.%d.%d" % self.version[0:3];
+		versionstr = "version=%d.%d.%d" % tuple(self.version[0:3]);
 		
 		if self.port != settings.MUMBLE_DEFAULT_PORT:
 			return "mumble://%s%s:%d/?%s" % ( userstr, self.addr, self.port, versionstr );

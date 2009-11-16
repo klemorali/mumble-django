@@ -118,7 +118,7 @@ class mmChannel( object ):
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
 		
-		versionstr = "version=%d.%d.%d" % self.server.version[0:3];
+		versionstr = "version=%d.%d.%d" % tuple(self.server.version[0:3]);
 		
 		# create list of all my parents and myself
 		chanlist = self.parentChannels() + [self.name];
