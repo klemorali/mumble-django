@@ -351,10 +351,12 @@ class Mumble( models.Model ):
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
 		
-		if self.port != settings.MUMBLE_DEFAULT_PORT:
-			return "mumble://%s%s:%d/" % ( userstr, self.addr, self.port );
+		versionstr = "version=%d.%d.%d" % self.version[0:3];
 		
-		return "mumble://%s%s/" % ( userstr, self.addr );
+		if self.port != settings.MUMBLE_DEFAULT_PORT:
+			return "mumble://%s%s:%d/?%s" % ( userstr, self.addr, self.port, versionstr );
+		
+		return "mumble://%s%s/?%s" % ( userstr, self.addr, versionstr );
 	
 	connecturl = property( getURL,                          doc="A convenience wrapper for getURL()." );
 	

@@ -118,6 +118,8 @@ class mmChannel( object ):
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
 		
+		versionstr = "version=%d.%d.%d" % self.server.version[0:3];
+		
 		# create list of all my parents and myself
 		chanlist = self.parentChannels() + [self.name];
 		# urlencode channel names
@@ -126,9 +128,9 @@ class mmChannel( object ):
 		chanpath = join( *chanlist );
 		
 		if self.server.port != settings.MUMBLE_DEFAULT_PORT:
-			return "mumble://%s%s:%d/%s" % ( userstr, self.server.addr, self.server.port, chanpath );
+			return "mumble://%s%s:%d/%s?%s" % ( userstr, self.server.addr, self.server.port, chanpath, versionstr );
 		
-		return "mumble://%s%s/%s" % ( userstr, self.server.addr, chanpath );
+		return "mumble://%s%s/%s?%s" % ( userstr, self.server.addr, chanpath, versionstr );
 	
 	connecturl = property( getURL, doc="A convenience wrapper for getURL." );
 	
