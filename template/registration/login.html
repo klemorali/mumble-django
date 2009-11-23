@@ -3,6 +3,14 @@
 
 {% block Headline %}Login{% endblock %}
 
+{% block HeadTag %}
+<script type="text/javascript">
+	Ext.onReady( function(){
+		Ext.fly("id_username").focus();
+	} );
+</script>
+{% endblock %}
+
 {% block Content %}
 
 <h2>Login</h2>

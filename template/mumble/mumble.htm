@@ -218,7 +218,15 @@
 				activeTab: {{ DisplayTab }},
 				items: [
 					{ contentEl: 'mumble_motd',           title: '{% trans "Server Info" %}',    autoScroll: true },
-					{ contentEl: 'mumble_registration',   title: '{% trans "Registration" %}',   autoScroll: true },
+					{	contentEl: 'mumble_registration',
+						title: '{% trans "Registration" %}',
+						autoScroll: true,
+						{% if user.is_authenticated %}
+							listeners: {
+								activate: function(){ Ext.fly("id_name").focus() },
+								},
+						{% endif %}
+					},
 					{% if CurrentUserIsAdmin %}
 						{ contentEl: 'mumble_admin',  title: '{% trans "Administration" %}', autoScroll: true },
 					{% endif %}
