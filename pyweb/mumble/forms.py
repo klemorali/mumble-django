@@ -14,6 +14,7 @@
  *  GNU General Public License for more details.
 """
 
+import socket
 import re
 
 from django			import forms
@@ -27,7 +28,47 @@ class MumbleAdminForm( ModelForm ):
 	""" A Mumble Server admin form intended to be used by the server hoster. """
 	class Meta:
 		model   = Mumble;
-		exclude = ( 'sslcrt', 'sslkey' );
+	
+	def clean_port( self ):
+		port = self.cleaned_data['port'];
+		if port == -1:
+			port = max( [ rec['port'] for rec in Mumble.objects.values('port') ] ) + 1;
+		
+		if port < 1 or port >= 2**16:
+			raise forms.ValidationError(
+				_("Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d") % {
+				'portno':   port,
+				'minrange': 1,
+				'maxrange': 2**16,
+				});
+		return port;
+	
+	def clean( self ):
+		if self.instance.id is not None or 'addr' not in self.cleaned_data or 'port' not in self.cleaned_data:
+			# Editing old instance or previous validation failed already, don't try to bind
+			return self.cleaned_data;
+		
+		# Try to bind to the addr and port to verify that they are available.
+		addr = socket.gethostbyname( self.cleaned_data['addr'] );
+		port = self.cleaned_data['port'];
+		
+		try:
+			socktcp = socket.socket( socket.AF_INET, socket.SOCK_STREAM );
+			socktcp.bind( ( addr, port ) );
+		except socket.error, err:
+			raise forms.ValidationError( err.args[1] );
+		finally:
+			socktcp.close();
+		
+		try:
+			sockudp = socket.socket( socket.AF_INET, socket.SOCK_DGRAM  );
+			sockudp.bind( ( addr, port ) );
+		except socket.error, err:
+			raise forms.ValidationError( err.args[1] );
+		finally:
+			sockudp.close();
+		
+		return self.cleaned_data;
 
 
 class MumbleForm( ModelForm ):

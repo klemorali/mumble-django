@@ -115,12 +115,12 @@ class Mumble( models.Model ):
 			self.srvid = self.ctl.newServer();
 		
 		if self.port == -1:
-			self.port = max( [ mm.port for mm in Mumble.objects.all() ] ) + 1;
+			self.port = max( [ rec['port'] for rec in Mumble.objects.values('port') ] ) + 1;
 		
-		if self.port < 0 or self.port >= 2**16:
+		if self.port < 1 or self.port >= 2**16:
 			raise ValueError( _("Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d") % {
 				'portno': self.port,
-				'minrange': 0,
+				'minrange': 1,
 				'maxrange': 2**16,
 				});
 		
