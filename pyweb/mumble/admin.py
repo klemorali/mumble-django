@@ -17,6 +17,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from forms  import MumbleAdminForm
 from models import *
 
 class MumbleAdmin(admin.ModelAdmin):
@@ -24,6 +25,7 @@ class MumbleAdmin(admin.ModelAdmin):
 	list_filter    = [ 'booted', 'addr' ];
 	search_fields  = [ 'name', 'addr' ];
 	ordering       = [ 'name' ];
+	form           = MumbleAdminForm;
 	
 	def getUsersRegged( self, obj ):
 		return obj.users_regged;
