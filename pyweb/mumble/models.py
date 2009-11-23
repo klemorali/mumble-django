@@ -214,14 +214,17 @@ class Mumble( models.Model ):
 		self.sslcrt  =  find_in_dicts( "certificate" );
 		self.sslkey  =  find_in_dicts( "key"         );
 		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
-
+		
+		pldefault = self._meta.get_field_by_name('player')[0].default;
 		if self.ctl.getVersion()[:2] == ( 1, 2 ):
-			self.player  =  find_in_dicts( ( 'username', 'playername' ) );
+			self.player  =  find_in_dicts( ( 'username', 'playername' ), pldefault );
 		else:
-			self.player  =  find_in_dicts( 'playername' );
-
-		self.channel =  find_in_dicts( 'channelname' );
-		self.defchan =  int( find_in_dicts( 'defaultchannel' ) );
+			self.player  =  find_in_dicts( 'playername', pldefault );
+		
+		chdefault = self._meta.get_field_by_name('channel')[0].default;
+		self.channel =  find_in_dicts( 'channelname', chdefault );
+		
+		self.defchan =  int( find_in_dicts( 'defaultchannel', 0 ) );
 		self.booted  =  ( self.srvid in self.ctl.getBootedServers() );
 		
 		self.save( dontConfigureMurmur=True );
