@@ -120,9 +120,17 @@
           <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined|date }}</li>
         </ul>
       {% endif %}
+      {% if item.mumbleuser and item.mumbleuser.comment %}
+        <fieldset>
+          <legend>{% trans "User Comment" %}</legend>
+          {{ item.mumbleuser.comment|safe }}
+        </fieldset>
+      {% endif %}
       {% if item.mumbleuser and item.mumbleuser.hasTexture %}
-      <h2>{% trans "User Texture" %}</h2>
-      <img src="{% url mumble.views.showTexture DBaseObject.id item.mumbleuser.id %}" alt="user texture" />
+        <fieldset>
+          <legend>{% trans "User Texture" %}</legend>
+          <img src="{% url mumble.views.showTexture DBaseObject.id item.mumbleuser.id %}" alt="user texture" />
+        </fieldset>
       {% endif %}
     </div>
     {% else %}
