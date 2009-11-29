@@ -314,7 +314,17 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		self._getIceServerObject(srvid).unregisterUser(mumbleid)
 	
 	def getRegistration(self, srvid, mumbleid):
-		return self._getIceServerObject( srvid ).getRegistration( mumbleid )
+		from Murmur import UserInfo
+		reg = self._getIceServerObject( srvid ).getRegistration( mumbleid )
+		user = {
+			'name':  reg[UserInfo.UserName],
+			'email': reg[UserInfo.UserEmail],
+			};
+		if UserInfo.UserComment in reg:
+			user['comment'] = reg[UserInfo.UserComment];
+		if UserInfo.UserHash in reg:
+			user['hash'] = reg[UserInfo.UserHash];
+		return user;
 	
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		from Murmur import UserInfo

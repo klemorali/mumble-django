@@ -396,6 +396,10 @@ class MumbleUser( models.Model ):
 	is_channel = False;
 	is_player  = True;
 	
+	def __init__( self, *args, **kwargs ):
+		models.Model.__init__( self, *args, **kwargs );
+		self._registration = None;
+	
 	def __unicode__( self ):
 		return _("Mumble user %(mu)s on %(srv)s owned by Django user %(du)s") % { 'mu': self.name, 'srv': self.server, 'du': self.owner };
 	
@@ -468,6 +472,31 @@ class MumbleUser( models.Model ):
 		ctl.setACL(self.server.srvid, acl);
 		return value;
 	
+	# Registration fetching
+	def getRegistration( self ):
+		"""Retrieve a user's registration from Murmur as a dict."""
+		if not self._registration:
+			self._registration = self.server.ctl.getRegistration( self.server.srvid, self.mumbleid );
+		return self._registration;
+	
+	registration = property( getRegistration, doc=getRegistration.__doc__ );
+	
+	def getComment( self ):
+		"""Retrieve a user's comment, if any."""
+		if "comment" in self.registration:
+			return self.registration["comment"];
+		else:
+			return None;
+	
+	comment = property( getComment, doc=getComment.__doc__ );
+	
+	def getHash( self ):
+		if "hash" in self.registration:
+			return self.registration["hash"];
+		else:
+			return None;
+	
+	hash = property( getHash, doc=getHash.__doc__ );
 	
 	# Texture handlers
 	
