@@ -18,10 +18,15 @@ import os
 
 from mercurial import hg
 
+types_to_check = [ ".py" ];
+
 def checkfile( filename ):
+	if os.path.splitext( filename )[1] not in types_to_check:
+		return True;
 	try:
 		fileproc = os.popen( 'licensecheck %s' % filename );
 		result = fileproc.read().strip();
+		print( "Licensecheck: " + result );
 		return not result.endswith( "*No copyright* UNKNOWN" );
 	finally:
 		fileproc.close();
