@@ -2,6 +2,11 @@
 Mumble-Django changelog
 =======================
 
+Version 1.0, 10 Dec 2009:
+------------------------------
+* Added displaying User Comments.
+* Changed SLICE_VERSION to (1,2,0) because Mumble 1.2.0 has been released today.
+
 Version 0.12, 29 Nov 2009:
 ------------------------------
 * Added Player name validation to the registration.
