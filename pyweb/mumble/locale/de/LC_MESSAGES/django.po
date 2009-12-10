@@ -320,6 +320,9 @@ msgstr ""
 msgid "User Texture"
 msgstr "Benutzertextur"
 
+msgid "User Comment"
+msgstr "Benutzer-Kommentar"
+
 #: templates/mumble.htm:61
 msgid ""
 "\n"
