@@ -316,10 +316,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	def getRegistration(self, srvid, mumbleid):
 		from Murmur import UserInfo
 		reg = self._getIceServerObject( srvid ).getRegistration( mumbleid )
-		user = {
-			'name':  reg[UserInfo.UserName],
-			'email': reg[UserInfo.UserEmail],
-			};
+		user = {};
+		if UserInfo.UserName in reg:
+			user['name'] = reg[UserInfo.UserName];
+		if UserInfo.UserEmail in reg:
+			user['email'] = reg[UserInfo.UserEmail];
 		if UserInfo.UserComment in reg:
 			user['comment'] = reg[UserInfo.UserComment];
 		if UserInfo.UserHash in reg:
