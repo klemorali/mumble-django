@@ -30,45 +30,26 @@ def cmp_names( a, b ):
 class mmChannel( object ):
 	"""Represents a channel in Murmur."""
 	
-	# channels  = list();
-	# subchans  = list();
-	# chanid    = int();
-	# name      = str();
-	# parent    = mmChannel();
-	# linked    = list();
-	# linkedIDs = list();
-	
 	def __init__( self, server, channelObj, parentChan = None ):
 		self.server   = server;
 		self.players  = list();
 		self.subchans = list();
 		self.linked   = list();
 		
-		self.chanid    = channelObj.id;
-		self.name      = channelObj.name;
-		parent         = channelObj.parent;
-		self.linkedIDs = channelObj.links;
-		
-		if hasattr( channelObj, "description" ):
-			self.description = channelObj.description;
-		else:
-			self.description = "";
-		
-		if hasattr( channelObj, "temporary" ):
-			self.temporary = channelObj.temporary;
-		else:
-			self.temporary = False;
-		
-		if hasattr( channelObj, "position" ):
-			self.position = channelObj.position;
-		else:
-			# None would be better imho, but Murmur reports 0 for unknown too.
-			self.position = 0;
+		self.channelObj = channelObj;
+		self.chanid     = channelObj.id;
+		self.linkedIDs  = channelObj.links;
 		
 		self.parent = parentChan;
 		if self.parent is not None:
 			self.parent.subchans.append( self );
 	
+	# Lookup unknown attributes in self.channelObj to automatically include Murmur's fields
+	def __getattr__( self, key ):
+		if hasattr( self.channelObj, key ):
+			return getattr( self.channelObj, key );
+		else:
+			raise AttributeError( "'%s' object has no attribute '%s'" % ( self.__class__.__name__, key ) );
 	
 	def parentChannels( self ):
 		"""Return the names of this channel's parents in the channel tree."""
@@ -154,23 +135,11 @@ class mmChannel( object ):
 		doc="True if this channel is the server's default channel."
 		);
 	
-	def as_dict( self ):
-		if self.parent:
-			parentid = self.parent.chanid;
-		else:
-			parentid = None;
-		
-		return { 'chanid':      self.chanid,
-			 'description': self.description,
-			 'temporary':   self.temporary,
-			 'position':    self.position,
-			 'linked':      [],
-			 'linkedIDs':   [],
-			 'name':        self.name,
-			 'parent':      parentid,
-			 'players':     [ pl.as_dict() for pl in self.players  ],
-			 'subchans':    [ sc.as_dict() for sc in self.subchans ]
-			};
+	def asDict( self ):
+		chandata = self.channelObj.__dict__.copy();
+		chandata['players']  = [ pl.asDict() for pl in self.players  ];
+		chandata['subchans'] = [ sc.asDict() for sc in self.subchans ];
+		return chandata;
 
 
 
@@ -178,52 +147,34 @@ class mmChannel( object ):
 class mmPlayer( object ):
 	"""Represents a Player in Murmur."""
 	
-	# muted        = bool;
-	# deafened     = bool;
-	# suppressed   = bool;
-	# selfmuted    = bool;
-	# selfdeafened = bool;
-	
-	# channel      = mmChannel();
-	# dbaseid      = int();
-	# userid       = int();
-	# name         = str();
-	# onlinesince  = time();
-	# bytesPerSec  = int();
-	
-	# mumbleuser   = models.MumbleUser();
-	
 	def __init__( self, srvInstance, playerObj, playerChan ):
-		self.userid       = playerObj.session;
-		self.muted        = playerObj.mute;
-		self.deafened     = playerObj.deaf;
-		self.suppressed   = playerObj.suppress;
-		self.selfmuted    = playerObj.selfMute;
-		self.selfdeafened = playerObj.selfDeaf;
-		chanID            = playerObj.channel;
-		self.dbaseid      = playerObj.userid;
-		self.name         = playerObj.name;
-		onlinetime        = playerObj.onlinesecs;
-		self.bytesPerSec  = playerObj.bytespersec;
+		self.playerObj    = playerObj;
 		
-		self.onlinesince = datetime.datetime.fromtimestamp( float( time() - onlinetime ) );
-		self.channel = playerChan;
+		self.onlinesince  = datetime.datetime.fromtimestamp( float( time() - playerObj.onlinesecs ) );
+		self.channel      = playerChan;
 		self.channel.players.append( self );
 		
 		if self.isAuthed:
 			from models import Mumble, MumbleUser
 			try:
-				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.dbaseid, server=srvInstance );
+				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.userid, server=srvInstance );
 			except MumbleUser.DoesNotExist:
 				self.mumbleuser = None;
 		else:
 			self.mumbleuser = None;
 	
+	# Lookup unknown attributes in self.playerObj to automatically include Murmur's fields
+	def __getattr__( self, key ):
+		if hasattr( self.playerObj, key ):
+			return getattr( self.playerObj, key );
+		else:
+			raise AttributeError( "'%s' object has no attribute '%s'" % ( self.__class__.__name__, key ) );
+	
 	def __str__( self ):
-		return '<Player "%s" (%d, %d)>' % ( self.name, self.userid, self.dbaseid );
+		return '<Player "%s" (%d, %d)>' % ( self.name, self.session, self.userid );
 	
 	isAuthed = property(
-		lambda self: self.dbaseid != -1,
+		lambda self: self.userid != -1,
 		doc="True if this player is authenticated (+A)."
 		);
 	
@@ -240,7 +191,7 @@ class mmPlayer( object ):
 	playerCount = property( lambda self: -1, doc="Exists only for compatibility to mmChannel." );
 	
 	id = property(
-		lambda self: "player_%d"%self.userid,
+		lambda self: "player_%d"%self.session,
 		doc="A string ready to be used in an id property of an HTML tag."
 		);
 	
@@ -248,27 +199,14 @@ class mmPlayer( object ):
 		""" Call callback on myself. """
 		callback( self, lvl );
 	
-	def as_dict( self ):
-		comment = None;
-		texture = None;
-		if self.mumbleuser:
-			comment = self.mumbleuser.comment;
-			if self.mumbleuser.hasTexture():
-				texture = self.mumbleuser.textureUrl;
+	def asDict( self ):
+		pldata = self.playerObj.__dict__.copy();
 		
-		return { 'bytesPerSec':  self.bytesPerSec,
-			 'dbaseid':      self.dbaseid,
-			 'deafened':     self.deafened,
-			 'muted':        self.muted,
-			 'name':         self.name,
-			 'onlinesince':  self.onlinesince,
-			 'selfdeafened': self.selfdeafened,
-			 'selfmuted':    self.selfmuted,
-			 'suppressed':   self.suppressed,
-			 'userid':       self.userid,
-			 'comment':      comment,
-			 'texture':      texture,
-			};
+		if self.mumbleuser:
+			if self.mumbleuser.hasTexture():
+				pldata['texture'] = self.mumbleuser.textureUrl;
+		
+		return pldata;
 
 
 

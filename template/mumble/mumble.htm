@@ -29,7 +29,7 @@
 	  </ul>
 	  <fieldset>
 	    <legend>{% trans "Welcome message" %}</legend>
-	    {{ DBaseObject.motd|safe }}
+	    {{ DBaseObject.motd|removetags:"script link meta html head body style"|safe }}
 	  </fieldset>
 	</div>
     <div id="mumble_registration" class="mumble-ext">
@@ -105,10 +105,10 @@
         <li>{% trans "Online since" %}   {{ item.onlinesince|time }}</li>
         <li>{% blocktrans with     item.isAuthed|yesno as authed       %}Authenticated:    {{ authed       }}{% endblocktrans %}</li>
         <li>{% blocktrans with      item.isAdmin|yesno as admin        %}Admin:            {{ admin        }}{% endblocktrans %}</li>
-        <li>{% blocktrans with        item.muted|yesno as muted        %}Muted:            {{ muted        }}{% endblocktrans %}</li>
-        <li>{% blocktrans with     item.deafened|yesno as deafened     %}Deafened:         {{ deafened     }}{% endblocktrans %}</li>
-        <li>{% blocktrans with    item.selfmuted|yesno as selfmuted    %}Muted by self:    {{ selfmuted    }}{% endblocktrans %}</li>
-        <li>{% blocktrans with item.selfdeafened|yesno as selfdeafened %}Deafened by self: {{ selfdeafened }}{% endblocktrans %}</li>
+        <li>{% blocktrans with         item.mute|yesno as muted        %}Muted:            {{ muted        }}{% endblocktrans %}</li>
+        <li>{% blocktrans with         item.deaf|yesno as deafened     %}Deafened:         {{ deafened     }}{% endblocktrans %}</li>
+        <li>{% blocktrans with     item.selfMute|yesno as selfmuted    %}Muted by self:    {{ selfmuted    }}{% endblocktrans %}</li>
+        <li>{% blocktrans with     item.selfDeaf|yesno as selfdeafened %}Deafened by self: {{ selfdeafened }}{% endblocktrans %}</li>
       </ul>
       {% if item.mumbleuser and item.mumbleuser.owner %}
         <h2>{% trans "User" %} {{ item.mumbleuser.owner.username|capfirst }}</h2>
@@ -120,10 +120,10 @@
           <li>{% trans "Sign-up date" %}: {{ item.mumbleuser.owner.date_joined|date }}</li>
         </ul>
       {% endif %}
-      {% if item.mumbleuser and item.mumbleuser.comment %}
+      {% if item.comment %}
         <fieldset>
           <legend>{% trans "User Comment" %}</legend>
-          {{ item.mumbleuser.comment|safe }}
+          {{ item.comment|removetags:"script link meta html head body style"|safe }}
         </fieldset>
       {% endif %}
       {% if item.mumbleuser and item.mumbleuser.hasTexture %}
@@ -143,7 +143,7 @@
         {% if item.description %}
           <fieldset>
             <legend>{% trans "Channel description" %}</legend>
-            {{ item.description|safe }}
+            {{ item.description|removetags:"script link meta html head body style"|safe }}
           </fieldset>
         {% endif %}
     </div>
