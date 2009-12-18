@@ -108,7 +108,26 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		return ret;
 	
 	def getPlayers(self, srvid):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers())
+		players = MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers());
+		
+		ret = {};
+		
+		for playerObj in players:
+			ret[ playerObj[0] ] = ObjectInfo(
+				session      = playerObj[0],
+				mute         = playerObj[1],
+				deaf         = playerObj[2],
+				suppress     = playerObj[3],
+				selfMute     = playerObj[4],
+				selfDeaf     = playerObj[5],
+				channel      = playerObj[6],
+				userid       = playerObj[7],
+				name         = playerObj[8],
+				onlinesecs   = playerObj[9],
+				bytespersec  = playerObj[10]
+				);
+		
+		return ret;
 	
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers( filter ) )

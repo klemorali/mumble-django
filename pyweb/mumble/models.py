@@ -338,9 +338,9 @@ class Mumble( models.Model ):
 			self._channels[0].name = self.name;
 			
 			self.players = {};
-			for thePlayer in self.ctl.getPlayers(self.srvid):
+			for thePlayer in self.ctl.getPlayers(self.srvid).values():
 				# Players - Fields: 0 = UserID, 6 = ChannelID
-				self.players[ thePlayer[0] ] = mmPlayer( self, thePlayer, self._channels[ thePlayer[6] ] );
+				self.players[ thePlayer.session ] = mmPlayer( self, thePlayer, self._channels[ thePlayer.channel ] );
 			
 			self._channels[0].sort();
 		

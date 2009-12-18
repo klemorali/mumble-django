@@ -113,14 +113,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def getPlayers(self, srvid):
-		users = self._getIceServerObject(srvid).getPlayers()
-		ret = []
-		
-		for x in users:
-			user = users[x]
-			ret.append([user.session, user.mute, user.deaf, user.suppressed, user.selfMute, user.selfDeaf, user.channel, user.playerid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
-		
-		return ret
+		return self._getIceServerObject(srvid).getPlayers()
 	
 	@protectDjangoErrPage
 	def getDefaultConf(self):
@@ -308,15 +301,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	
 	@protectDjangoErrPage
 	def getPlayers(self, srvid):
-		serv = self._getIceServerObject(srvid);
-		users = serv.getUsers()
-		ret = []
-		
-		for x in users:
-			user = users[x]
-			ret.append([user.session, user.mute, user.deaf, user.suppress, user.selfMute, user.selfDeaf, user.channel, user.userid, self.setUnicodeFlag(user.name), user.onlinesecs, user.bytespersec])
-		
-		return ret
+		return self._getIceServerObject(srvid).getUsers();
 	
 	@protectDjangoErrPage
 	def registerPlayer(self, srvid, name, email, password):
