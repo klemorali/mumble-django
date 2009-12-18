@@ -26,6 +26,7 @@ from mmobjects			import *
 from mctl			import *
 
 
+
 class Mumble( models.Model ):
 	""" Represents a Murmur server instance.
 	
@@ -364,6 +365,12 @@ class Mumble( models.Model ):
 	connecturl = property( getURL,                          doc="A convenience wrapper for getURL()." );
 	
 	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur."              );
+	
+	def as_dict( self ):
+		return { 'name':   self.name,
+			 'id':     self.id,
+			 'root':   self.rootchan.as_dict()
+			};
 
 
 
@@ -508,6 +515,8 @@ class MumbleUser( models.Model ):
 		"""Read an image from the infile and install it as the user's texture."""
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
 	
+	texture = property( getTexture, setTexture, doc="Get the texture as a PIL Image or read from a file (pass the path)." );
+	
 	def hasTexture( self ):
 		try:
 			self.getTexture();
@@ -515,6 +524,14 @@ class MumbleUser( models.Model ):
 			return False;
 		else:
 			return True;
+	
+	def getTextureUrl( self ):
+		""" Get a URL under which the texture can be retrieved. """
+		from views				import showTexture
+		from django.core.urlresolvers		import reverse
+		return reverse( showTexture, kwargs={ 'server': self.server.id, 'userid': self.id } );
+	
+	textureUrl = property( getTextureUrl, doc=getTextureUrl.__doc__ );
 	
 	# Deletion handler
 	
