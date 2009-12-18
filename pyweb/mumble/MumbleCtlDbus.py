@@ -20,6 +20,7 @@ from struct	import pack, unpack
 from zlib	import compress, decompress
 
 from mctl	import MumbleCtlBase
+from utils	import ObjectInfo
 
 import dbus
 from dbus.exceptions import DBusException
@@ -92,7 +93,19 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		self._getDbusServerObject(srvid).unregisterPlayer(dbus.Int32( mumbleid ))
 	
 	def getChannels(self, srvid):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getChannels())
+		chans = MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getChannels())
+		
+		ret = {};
+		
+		for channel in chans:
+			ret[ channel[0] ] = ObjectInfo(
+				id        = channel[0],
+				name      = channel[1],
+				parent    = channel[2],
+				links     = channel[3],
+				);
+		
+		return ret;
 	
 	def getPlayers(self, srvid):
 		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers())

@@ -27,6 +27,17 @@ from mctl		import MumbleCtlBase
 import Ice
 
 
+
+def protectDjangoErrPage( func ):
+	def protection_wrapper( *args, **kwargs ):
+		try:
+			return func( *args, **kwargs );
+		except Ice.Exception, e:
+			raise e;
+	
+	return protection_wrapper;
+
+@protectDjangoErrPage
 def MumbleCtlIce( connstring ):
 	version = settings.SLICE_VERSION;
 	
@@ -54,8 +65,6 @@ def MumbleCtlIce( connstring ):
 		return MumbleCtlIce_118( connstring, meta );
 	elif murmurversion[0] == 1 and murmurversion[1] == 2 and murmurversion[2] == 0:
 		return MumbleCtlIce_120( connstring, meta );
-	
-	
 
 
 
@@ -66,24 +75,29 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		self.proxy = connstring;
 		self.meta  = meta;
 	
+	@protectDjangoErrPage
 	def _getIceServerObject(self, srvid):
 		return self.meta.getServer(srvid);
 	
+	@protectDjangoErrPage
 	def getBootedServers(self):
 		ret = []
 		for x in self.meta.getBootedServers():
 			ret.append(x.id())
 		return ret
 	
+	@protectDjangoErrPage
 	def getVersion( self ):
 		return self.meta.getVersion();
 	
+	@protectDjangoErrPage
 	def getAllServers(self):
 		ret = []
 		for x in self.meta.getAllServers():
 			ret.append(x.id())
 		return ret
 	
+	@protectDjangoErrPage
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter.encode( "UTF-8" ) )
 		ret = []
@@ -93,16 +107,11 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		
 		return ret
 	
+	@protectDjangoErrPage
 	def getChannels(self, srvid):
-		chans = self._getIceServerObject(srvid).getChannels()
-		ret = []
-		
-		for x in chans:
-			chan = chans[x]
-			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links])
-		
-		return ret
+		return self._getIceServerObject(srvid).getChannels();
 	
+	@protectDjangoErrPage
 	def getPlayers(self, srvid):
 		users = self._getIceServerObject(srvid).getPlayers()
 		ret = []
@@ -113,43 +122,55 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		
 		return ret
 	
+	@protectDjangoErrPage
 	def getDefaultConf(self):
 		return self.setUnicodeFlag(self.meta.getDefaultConf())
 	
+	@protectDjangoErrPage
 	def getAllConf(self, srvid):
 		return self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
 	
+	@protectDjangoErrPage
 	def newServer(self):
 		return self.meta.newServer().id()
 	
+	@protectDjangoErrPage
 	def isBooted( self, srvid ):
 		return bool( self._getIceServerObject(srvid).isRunning() );
 	
+	@protectDjangoErrPage
 	def start( self, srvid ):
 		self._getIceServerObject(srvid).start();
 	
+	@protectDjangoErrPage
 	def stop( self, srvid ):
 		self._getIceServerObject(srvid).stop();
 	
+	@protectDjangoErrPage
 	def deleteServer( self, srvid ):
 		if self._getIceServerObject(srvid).isRunning():
 			self._getIceServerObject(srvid).stop()
 		self._getIceServerObject(srvid).delete()
 	
+	@protectDjangoErrPage
 	def setSuperUserPassword(self, srvid, value):
 		self._getIceServerObject(srvid).setSuperuserPassword( value.encode( "UTF-8" ) )
 	
+	@protectDjangoErrPage
 	def setConf(self, srvid, key, value):
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 	
+	@protectDjangoErrPage
 	def registerPlayer(self, srvid, name, email, password):
 		mumbleid = self._getIceServerObject(srvid).registerPlayer( name.encode( "UTF-8" ) )
 		self.setRegistration( srvid, mumbleid, name, email, password );
 		return mumbleid;
 	
+	@protectDjangoErrPage
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getIceServerObject(srvid).unregisterPlayer(mumbleid)
 	
+	@protectDjangoErrPage
 	def getRegistration(self, srvid, mumbleid):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
 		return {
@@ -157,6 +178,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 			'email': user.email,
 			};
 	
+	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
 		user.name  = name.encode( "UTF-8" )
@@ -165,6 +187,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		# update*r*egistration r is lowercase...
 		return self._getIceServerObject(srvid).updateregistration(user)
 	
+	@protectDjangoErrPage
 	def getACL(self, srvid, channelid):
 		import Murmur
 		acls = self._getIceServerObject(srvid).getACL(channelid)
@@ -184,6 +207,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		
 		return ret
 	
+	@protectDjangoErrPage
 	def setACL(self, srvid, acl):
 		import Murmur
 		
@@ -214,6 +238,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		
 		self._getIceServerObject(srvid).setACL( acl.channelId, newacls, newgroups, acl.inherit );
 	
+	@protectDjangoErrPage
 	def getTexture(self, srvid, mumbleid):
 		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
 		if len(texture) == 0:
@@ -233,6 +258,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		# return an 600x60 RGBA image object created from the data
 		return Image.fromstring( "RGBA", ( 600, 60 ), imgdata );
 	
+	@protectDjangoErrPage
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
 		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
@@ -250,6 +276,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		# finally call murmur and set the texture
 		self._getIceServerObject(srvid).setTexture(mumbleid, texture)
 	
+	@protectDjangoErrPage
 	def verifyPassword(self, srvid, username, password):
 		return self._getIceServerObject(srvid).verifyPassword(username, password);
 	
@@ -269,6 +296,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 
 
 class MumbleCtlIce_120(MumbleCtlIce_118):
+	@protectDjangoErrPage
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject( srvid ).getRegisteredUsers( filter.encode( "UTF-8" ) )
 		ret = []
@@ -278,16 +306,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		
 		return ret
 	
-	def getChannels(self, srvid):
-		chans = self._getIceServerObject(srvid).getChannels()
-		ret = []
-		
-		for x in chans:
-			chan = chans[x]
-			ret.append([chan.id, self.setUnicodeFlag(chan.name), chan.parent, chan.links, chan.description])
-		
-		return ret
-	
+	@protectDjangoErrPage
 	def getPlayers(self, srvid):
 		serv = self._getIceServerObject(srvid);
 		users = serv.getUsers()
@@ -299,6 +318,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		
 		return ret
 	
+	@protectDjangoErrPage
 	def registerPlayer(self, srvid, name, email, password):
 		# To get the real values of these ENUM entries, try
 		# Murmur.UserInfo.UserX.value
@@ -310,9 +330,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			};
 		return self._getIceServerObject(srvid).registerUser( user );
 	
+	@protectDjangoErrPage
 	def unregisterPlayer(self, srvid, mumbleid):
 		self._getIceServerObject(srvid).unregisterUser(mumbleid)
 	
+	@protectDjangoErrPage
 	def getRegistration(self, srvid, mumbleid):
 		from Murmur import UserInfo
 		reg = self._getIceServerObject( srvid ).getRegistration( mumbleid )
@@ -327,6 +349,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			user['hash'] = reg[UserInfo.UserHash];
 		return user;
 	
+	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
 		from Murmur import UserInfo
 		user = {
@@ -336,6 +359,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			};
 		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
 	
+	@protectDjangoErrPage
 	def getACL(self, srvid, channelid):
 		import Murmur
 		acls = self._getIceServerObject(srvid).getACL(channelid)
@@ -355,6 +379,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		
 		return ret
 	
+	@protectDjangoErrPage
 	def setACL(self, srvid, acl):
 		import Murmur
 		
