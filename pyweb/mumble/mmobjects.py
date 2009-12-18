@@ -194,7 +194,18 @@ class mmPlayer( object ):
 	# mumbleuser   = models.MumbleUser();
 	
 	def __init__( self, srvInstance, playerObj, playerChan ):
-		( self.userid, self.muted, self.deafened, self.suppressed, self.selfmuted, self.selfdeafened, chanID, self.dbaseid, self.name, onlinetime, self.bytesPerSec ) = playerObj;
+		self.userid       = playerObj.session;
+		self.muted        = playerObj.mute;
+		self.deafened     = playerObj.deaf;
+		self.suppressed   = playerObj.suppress;
+		self.selfmuted    = playerObj.selfMute;
+		self.selfdeafened = playerObj.selfDeaf;
+		chanID            = playerObj.channel;
+		self.dbaseid      = playerObj.userid;
+		self.name         = playerObj.name;
+		onlinetime        = playerObj.onlinesecs;
+		self.bytesPerSec  = playerObj.bytespersec;
+		
 		self.onlinesince = datetime.datetime.fromtimestamp( float( time() - onlinetime ) );
 		self.channel = playerChan;
 		self.channel.players.append( self );
