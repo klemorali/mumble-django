@@ -27,8 +27,15 @@ from mctl		import MumbleCtlBase
 import Ice
 
 
-
 def protectDjangoErrPage( func ):
+	""" Catch and reraise Ice exceptions to prevent the Django page from failing.
+	
+	    Since I need to "import Murmur", Django would try to read a murmur.py file
+	    which doesn't exist, and thereby produce an IndexError exception. This method
+	    erases the exception's traceback, preventing Django from trying to read any
+	    non-existant files and borking.
+	"""
+	
 	def protection_wrapper( *args, **kwargs ):
 		try:
 			return func( *args, **kwargs );
@@ -37,8 +44,14 @@ def protectDjangoErrPage( func ):
 	
 	return protection_wrapper;
 
+
+
 @protectDjangoErrPage
 def MumbleCtlIce( connstring ):
+	""" Choose the correct Ice handler to use (1.1.8 or 1.2.0), and make sure the
+	    Murmur version matches the slice Version.
+	"""
+	
 	version = settings.SLICE_VERSION;
 	
 	slice = settings.SLICE;

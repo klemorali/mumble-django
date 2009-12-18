@@ -27,6 +27,8 @@ from dbus.exceptions import DBusException
 
 
 def MumbleCtlDbus( connstring ):
+	""" Choose the correct DBus handler (1.1.8 or legacy) to use. """
+	
 	meta = dbus.Interface( dbus.SystemBus().get_object( connstring, '/' ), 'net.sourceforge.mumble.Meta' );
 	
 	try:
