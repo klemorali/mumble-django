@@ -44,15 +44,26 @@ class mmChannel( object ):
 		self.subchans = list();
 		self.linked   = list();
 		
-		self.chanid    = channelObj[0];
-		self.name      = channelObj[1];
-		parent         = channelObj[2];
-		self.linkedIDs = channelObj[3];
+		self.chanid    = channelObj.id;
+		self.name      = channelObj.name;
+		parent         = channelObj.parent;
+		self.linkedIDs = channelObj.links;
 		
-		if len( channelObj ) == 5:
-			self.description = channelObj[4];
+		if hasattr( channelObj, "description" ):
+			self.description = channelObj.description;
 		else:
 			self.description = "";
+		
+		if hasattr( channelObj, "temporary" ):
+			self.temporary = channelObj.temporary;
+		else:
+			self.temporary = False;
+		
+		if hasattr( channelObj, "position" ):
+			self.position = channelObj.position;
+		else:
+			# None would be better imho, but Murmur reports 0 for unknown too.
+			self.position = 0;
 		
 		self.parent = parentChan;
 		if self.parent is not None:
@@ -151,6 +162,8 @@ class mmChannel( object ):
 		
 		return { 'chanid':      self.chanid,
 			 'description': self.description,
+			 'temporary':   self.temporary,
+			 'position':    self.position,
 			 'linked':      [],
 			 'linkedIDs':   [],
 			 'name':        self.name,

@@ -297,7 +297,7 @@ class Mumble( models.Model ):
 		"""
 		if self._channels is None:
 			self._channels = {};
-			chanlist = self.ctl.getChannels(self.srvid);
+			chanlist = self.ctl.getChannels(self.srvid).values();
 			links = {};
 			
 			# sometimes, ICE seems to return the Channel list in a weird order.
@@ -308,32 +308,32 @@ class Mumble( models.Model ):
 				itercount += 1;
 				for theChan in chanlist:
 					# Channels - Fields: 0 = ID, 1 = Name, 2 = Parent-ID, 3 = Links
-					if( theChan[2] == -1 ):
+					if( theChan.parent == -1 ):
 						# No parent
-						self._channels[theChan[0]] = mmChannel( self, theChan );
-					elif theChan[2] in self.channels:
+						self._channels[theChan.id] = mmChannel( self, theChan );
+					elif theChan.parent in self.channels:
 						# parent already known
-						self._channels[theChan[0]] = mmChannel( self, theChan, self.channels[theChan[2]] );
+						self._channels[theChan.id] = mmChannel( self, theChan, self.channels[theChan.parent] );
 					else:
 						continue;
 					
 					chanlist.remove( theChan );
 					
-					self._channels[theChan[0]].serverId = self.id;
+					self._channels[theChan.id].serverId = self.id;
 					
 					# process links - if the linked channels are known, link; else save their ids to link later
-					for linked in theChan[3]:
+					for linked in theChan.links:
 						if linked in self._channels:
-							self._channels[theChan[0]].linked.append( self._channels[linked] );
+							self._channels[theChan.id].linked.append( self._channels[linked] );
 						else:
 							if linked not in links:
 								links[linked] = list();
-							links[linked].append( self._channels[theChan[0]] );
+							links[linked].append( self._channels[theChan.id] );
 					
 					# check if earlier round trips saved channel ids to be linked to the current channel
-					if theChan[0] in links:
-						for targetChan in links[theChan[0]]:
-							targetChan.linked.append( self._channels[theChan[0]] );
+					if theChan.id in links:
+						for targetChan in links[theChan.id]:
+							targetChan.linked.append( self._channels[theChan.id] );
 			
 			self._channels[0].name = self.name;
 			
