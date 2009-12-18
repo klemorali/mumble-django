@@ -23,7 +23,6 @@ from os.path			import join
 from django.utils.http		import urlquote
 from django.conf		import settings
 
-
 def cmp_names( a, b ):
 	return cmp( a.name, b.name );
 
@@ -143,6 +142,23 @@ class mmChannel( object ):
 		lambda self: self.server.defchan == self.chanid,
 		doc="True if this channel is the server's default channel."
 		);
+	
+	def as_dict( self ):
+		if self.parent:
+			parentid = self.parent.chanid;
+		else:
+			parentid = None;
+		
+		return { 'chanid':      self.chanid,
+			 'description': self.description,
+			 'linked':      [],
+			 'linkedIDs':   [],
+			 'name':        self.name,
+			 'parent':      parentid,
+			 'players':     [ pl.as_dict() for pl in self.players  ],
+			 'subchans':    [ sc.as_dict() for sc in self.subchans ]
+			};
+
 
 
 
@@ -207,6 +223,28 @@ class mmPlayer( object ):
 	def visit( self, callback, lvl = 0 ):
 		""" Call callback on myself. """
 		callback( self, lvl );
+	
+	def as_dict( self ):
+		comment = None;
+		texture = None;
+		if self.mumbleuser:
+			comment = self.mumbleuser.comment;
+			if self.mumbleuser.hasTexture():
+				texture = self.mumbleuser.textureUrl;
+		
+		return { 'bytesPerSec':  self.bytesPerSec,
+			 'dbaseid':      self.dbaseid,
+			 'deafened':     self.deafened,
+			 'muted':        self.muted,
+			 'name':         self.name,
+			 'onlinesince':  self.onlinesince,
+			 'selfdeafened': self.selfdeafened,
+			 'selfmuted':    self.selfmuted,
+			 'suppressed':   self.suppressed,
+			 'userid':       self.userid,
+			 'comment':      comment,
+			 'texture':      texture,
+			};
 
 
 
