@@ -366,10 +366,10 @@ class Mumble( models.Model ):
 	
 	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur."              );
 	
-	def as_dict( self ):
+	def asDict( self ):
 		return { 'name':   self.name,
 			 'id':     self.id,
-			 'root':   self.rootchan.as_dict()
+			 'root':   self.rootchan.asDict()
 			};
 
 
