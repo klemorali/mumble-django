@@ -14,23 +14,18 @@
  *  GNU General Public License for more details.
 """
 
+import os, stat
+
 from mercurial import hg
 
-def checkincoming( ui, repo, **kwargs ):
-	url = ui.config( 'paths', 'default' );
-	remote = hg.repository( ui, url );
+def checksettings( ui, repo, **kwargs ):
+	modified, added, removed, deleted, unknown, ignored, clean = repo.status();
 	
-	inc = repo.findincoming( remote );
-	
-	if inc:
-		ui.status( 'Found %d incoming changesets.\n' % len(inc) );
-		resp = ui.promptchoice( 'Do you want to abort the commit and pull/update first? [y/N]',
+	if "pyweb/settings.py" in modified + added + removed + deleted:
+		resp = ui.promptchoice( 'You are about to commit settings.py. Do you want to continue? [y/N]',
 			choices=('&yes', '&no'), default=1
 			);
-		return resp == 0;
-	else:
-		ui.status( 'Found no incoming changesets, proceeding to commit.\n' );
-		return False;
+		return resp == 1;
 
 
 
