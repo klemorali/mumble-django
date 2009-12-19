@@ -24,6 +24,7 @@ from django.utils.http		import urlquote
 from django.conf		import settings
 
 def cmp_names( a, b ):
+	""" Compare two objects by their name property. """
 	return cmp( a.name, b.name );
 
 
@@ -222,7 +223,7 @@ class mmPlayer( object ):
 
 
 
-class mmACL:
+class mmACL( object ):
 	"""Represents an ACL for a certain channel."""
 	
 	def __init__( self, channel, aclObj ):
@@ -271,6 +272,7 @@ class mmACL:
 			group.remove.append( userid );
 	
 	def save( self ):
+		""" Send this ACL to Murmur. """
 		return self.channel.server.ctl.setACL(
 			self.channel.server.srvid,
 			self.channel.chanid,

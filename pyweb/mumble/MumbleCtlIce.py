@@ -24,6 +24,8 @@ from django.conf	import settings
 
 from mctl		import MumbleCtlBase
 
+from utils		import ObjectInfo
+
 import Ice
 
 
@@ -113,10 +115,15 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	@protectDjangoErrPage
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject(srvid).getRegisteredPlayers( filter.encode( "UTF-8" ) )
-		ret = []
+		ret = {};
 		
 		for user in users:
-			ret.append([user.playerid, self.setUnicodeFlag(user.name), self.setUnicodeFlag(user.email), self.setUnicodeFlag(user.pw)])
+			ret[user.playerid] = ObjectInfo(
+				userid =     int( user.playerid ),
+				name   = unicode( user.name,  "utf8" ),
+				email  = unicode( user.email, "utf8" ),
+				pw     = unicode( user.pw,    "utf8" )
+				);
 		
 		return ret
 	
@@ -126,7 +133,27 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def getPlayers(self, srvid):
-		return self._getIceServerObject(srvid).getPlayers()
+		users = self._getIceServerObject(srvid).getPlayers()
+		
+		ret = {};
+		
+		for useridx in users:
+			user = users[useridx];
+			ret[ user.session ] = ObjectInfo(
+				session      = user.session,
+				userid       = user.playerid,
+				mute         = user.mute,
+				deaf         = user.deaf,
+				suppress     = user.suppressed,
+				selfMute     = user.selfMute,
+				selfDeaf     = user.selfDeaf,
+				channel      = user.channel,
+				name         = user.name,
+				onlinesecs   = user.onlinesecs,
+				bytespersec  = user.bytespersec
+				);
+		
+		return ret;
 	
 	@protectDjangoErrPage
 	def getDefaultConf(self):
@@ -179,10 +206,12 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	@protectDjangoErrPage
 	def getRegistration(self, srvid, mumbleid):
 		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
-		return {
-			'name':  user.name,
-			'email': user.email,
-			};
+		return ObjectInfo(
+			userid = mumbleid,
+			name   = user.name,
+			email  = user.email,
+			pw     = '',
+			);
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
@@ -292,10 +321,15 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	@protectDjangoErrPage
 	def getRegisteredPlayers(self, srvid, filter = ''):
 		users = self._getIceServerObject( srvid ).getRegisteredUsers( filter.encode( "UTF-8" ) )
-		ret = []
+		ret = {};
 		
 		for id in users:
-			ret.append( [ id, self.setUnicodeFlag( users[id] ) ] );
+			ret[id] = ObjectInfo(
+				userid = id,
+				name   = unicode( users[id],  "utf8" ),
+				email  = '',
+				pw     = ''
+				);
 		
 		return ret
 	
@@ -332,7 +366,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			user['comment'] = reg[UserInfo.UserComment];
 		if UserInfo.UserHash in reg:
 			user['hash'] = reg[UserInfo.UserHash];
-		return user;
+		return ObjectInfo( **user );
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
