@@ -29,7 +29,7 @@ def cmp_names( a, b ):
 
 
 class mmChannel( object ):
-	"""Represents a channel in Murmur."""
+	""" Represents a channel in Murmur. """
 	
 	def __init__( self, server, channelObj, parentChan = None ):
 		self.server   = server;
@@ -55,7 +55,7 @@ class mmChannel( object ):
 			raise AttributeError( "'%s' object has no attribute '%s'" % ( self.__class__.__name__, key ) );
 	
 	def parentChannels( self ):
-		"""Return the names of this channel's parents in the channel tree."""
+		""" Return the names of this channel's parents in the channel tree. """
 		if self.parent is None or self.parent.is_server or self.parent.chanid == 0:
 			return [];
 		return self.parent.parentChannels() + [self.parent.name];
@@ -97,14 +97,14 @@ class mmChannel( object ):
 		return '<Channel "%s" (%d)>' % ( self.name, self.chanid );
 	
 	def sort( self ):
-		"""Sort my subchannels and players, and then iterate over them and sort them recursively."""
+		""" Sort my subchannels and players, and then iterate over them and sort them recursively. """
 		self.subchans.sort( cmp_names );
 		self.players.sort( cmp_names );
 		for sc in self.subchans:
 			sc.sort();
 	
 	def visit( self, callback, lvl = 0 ):
-		"""Call callback on myself, then visit my subchans, then my players."""
+		""" Call callback on myself, then visit my subchans, then my players. """
 		callback( self, lvl );
 		for sc in self.subchans:
 			sc.visit( callback, lvl + 1 );
@@ -113,9 +113,8 @@ class mmChannel( object ):
 	
 	
 	def getURL( self, forUser = None ):
-		"""
-		Create an URL to connect to this channel. The URL is of the form
-		mumble://username@host:port/parentchans/self.name
+		""" Create an URL to connect to this channel. The URL is of the form
+		    mumble://username@host:port/parentchans/self.name
 		"""
 		userstr = "";
 		
@@ -139,7 +138,7 @@ class mmChannel( object ):
 	connecturl = property( getURL, doc="A convenience wrapper for getURL." );
 	
 	def setDefault( self ):
-		"Make this the server's default channel."
+		""" Make this the server's default channel. """
 		self.server.defchan = self.chanid;
 		self.server.save();
 	
@@ -158,7 +157,7 @@ class mmChannel( object ):
 
 
 class mmPlayer( object ):
-	"""Represents a Player in Murmur."""
+	""" Represents a Player in Murmur. """
 	
 	def __init__( self, srvInstance, playerObj, playerChan ):
 		self.playerObj    = playerObj;
@@ -224,7 +223,7 @@ class mmPlayer( object ):
 
 
 class mmACL( object ):
-	"""Represents an ACL for a certain channel."""
+	""" Represents an ACL for a certain channel. """
 	
 	def __init__( self, channel, aclObj ):
 		self.channel = channel;
