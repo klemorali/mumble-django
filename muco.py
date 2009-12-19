@@ -156,8 +156,11 @@ class WndSettings( BaseWindow ):
 			
 			key = self.win.getch();
 			
-			if key == curses.KEY_UP and self.selIdx > 0:
-				self.selIdx -= 1;
+			if key == curses.KEY_UP:
+				if self.selIdx > 0:
+					self.selIdx -= 1;
+				else:
+					return;
 			
 			elif key == curses.KEY_DOWN and self.selIdx < self.selMax:
 				self.selIdx += 1;

@@ -87,7 +87,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		return self.meta.newServer()
 	
 	def registerPlayer(self, srvid, name, email, password):
-		mumbleid = MumbleCtlDbus_118.convertDbusTypeToNative( self._getDbusServerObject(srvid).registerPlayer(name) );
+		mumbleid = int( self._getDbusServerObject(srvid).registerPlayer(name) );
 		self.setRegistration( srvid, mumbleid, name, email, password );
 		return mumbleid;
 	
@@ -95,44 +95,55 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		self._getDbusServerObject(srvid).unregisterPlayer(dbus.Int32( mumbleid ))
 	
 	def getChannels(self, srvid):
-		chans = MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getChannels())
+		chans = self._getDbusServerObject(srvid).getChannels()
 		
 		ret = {};
 		
 		for channel in chans:
 			ret[ channel[0] ] = ObjectInfo(
-				id        = channel[0],
-				name      = channel[1],
-				parent    = channel[2],
-				links     = channel[3],
+				id     = int(channel[0]),
+				name   = str(channel[1]),
+				parent = int(channel[2]),
+				links  = [ int(lnk) for lnk in channel[3] ],
 				);
 		
 		return ret;
 	
 	def getPlayers(self, srvid):
-		players = MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getPlayers());
+		players = self._getDbusServerObject(srvid).getPlayers();
 		
 		ret = {};
 		
 		for playerObj in players:
-			ret[ playerObj[0] ] = ObjectInfo(
-				session      = playerObj[0],
-				mute         = playerObj[1],
-				deaf         = playerObj[2],
-				suppress     = playerObj[3],
-				selfMute     = playerObj[4],
-				selfDeaf     = playerObj[5],
-				channel      = playerObj[6],
-				userid       = playerObj[7],
-				name         = playerObj[8],
-				onlinesecs   = playerObj[9],
-				bytespersec  = playerObj[10]
+			ret[ int(playerObj[0]) ] = ObjectInfo(
+				session      =  int( playerObj[0] ),
+				mute         = bool( playerObj[1] ),
+				deaf         = bool( playerObj[2] ),
+				suppress     = bool( playerObj[3] ),
+				selfMute     = bool( playerObj[4] ),
+				selfDeaf     = bool( playerObj[5] ),
+				channel      =  int( playerObj[6] ),
+				userid       =  int( playerObj[7] ),
+				name         =  str( playerObj[8] ),
+				onlinesecs   =  int( playerObj[9] ),
+				bytespersec  =  int( playerObj[10] )
 				);
 		
 		return ret;
 	
 	def getRegisteredPlayers(self, srvid, filter = ''):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers( filter ) )
+		users = self._getDbusServerObject(srvid).getRegisteredPlayers( filter );
+		ret = {};
+		
+		for user in users:
+			ret[int(user[0])] = ObjectInfo(
+				userid =     int( user[0] ),
+				name   = unicode( user[1] ),
+				email  = unicode( user[2] ),
+				pw     = unicode( user[3] )
+				);
+		
+		return ret
 	
 	def getACL(self, srvid, channelid):
 		raw_acls, raw_groups, raw_inherit = self._getDbusServerObject(srvid).getACL(channelid)
@@ -244,11 +255,11 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 			return -2;
 		
 		ok = MumbleCtlDbus_118.convertDbusTypeToNative(
-			self._getDbusServerObject(srvid).verifyPassword( dbus.Int32( player[0][0] ), password )
+			self._getDbusServerObject(srvid).verifyPassword( dbus.Int32( player[0].userid ), password )
 			);
 		
 		if ok:
-			return player[0][0];
+			return player[0].userid;
 		else:
 			return -1;
 	

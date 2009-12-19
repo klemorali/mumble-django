@@ -237,22 +237,24 @@ class Mumble( models.Model ):
 		
 		players = self.ctl.getRegisteredPlayers(self.srvid);
 		
-		for playerdata in players:
-			if playerdata[0] == 0: # Skip SuperUsers
+		for idx in players:
+			playerdata = players[idx];
+			
+			if playerdata.userid == 0: # Skip SuperUsers
 				continue;
 			if verbose > 1:
-				print "Checking Player with id %d and name '%s'." % ( int(playerdata[0]), playerdata[1] );
+				print "Checking Player with id %d and name '%s'." % ( playerdata.userid, playerdata.name );
 			
 			try:
-				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata[0] );
+				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid );
 			
 			except MumbleUser.DoesNotExist:
 				if verbose:
-					print 'Found new Player "%s".' % playerdata[1];
+					print 'Found new Player "%s".' % playerdata.name;
 				
 				playerinstance = MumbleUser(
-					mumbleid = playerdata[0],
-					name     = playerdata[1],
+					mumbleid = playerdata.userid,
+					name     = playerdata.name,
 					password = '',
 					server   = self,
 					owner    = None
@@ -262,7 +264,7 @@ class Mumble( models.Model ):
 				if verbose > 1:
 					print "This player is already listed in the database.";
 			
-				playerinstance.name = playerdata[1];
+				playerinstance.name = playerdata.name;
 			
 			playerinstance.isAdmin = playerinstance.getAdmin();
 			playerinstance.save( dontConfigureMurmur=True );
@@ -290,10 +292,10 @@ class Mumble( models.Model ):
 	
 	# Channel list
 	def getChannels( self ):
-		"""Query the channels from Murmur and create a tree structure.
+		""" Query the channels from Murmur and create a tree structure.
 		
-		Again, this will only be done for the first call to this function. Subsequent
-		calls will simply return the list created last time.
+		    Again, this will only be done for the first call to this function. Subsequent
+		    calls will simply return the list created last time.
 		"""
 		if self._channels is None:
 			self._channels = {};
@@ -507,6 +509,7 @@ class MumbleUser( models.Model ):
 	texture = property( getTexture, setTexture, doc="Get the texture as a PIL Image or read from a file (pass the path)." );
 	
 	def hasTexture( self ):
+		""" Check if this user has a texture set. """
 		try:
 			self.getTexture();
 		except ValueError:
