@@ -446,38 +446,27 @@ class MumbleUser( models.Model ):
 		# Don't save the users' passwords, we don't need them anyway
 		self.password = '';
 		
-		self.setAdmin( self.isAdmin );
+		self.aclAdmin = self.isAdmin;
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
 	
 	
 	# Admin handlers
-	
 	def getAdmin( self ):
 		"""Get ACL of root Channel, get the admin group and see if this user is in it."""
-		acl = mmACL( 0, self.server.ctl.getACL(self.server.srvid, 0) );
-		
-		if not hasattr( acl, "admingroup" ):
-			raise ReferenceError( _( "The admin group was not found in the ACL's groups list!" ) );
-		return self.mumbleid in acl.admingroup['add'];
+		return self.server.rootchan.acl.groupHasMember( "admin", self.mumbleid );
 	
 	def setAdmin( self, value ):
 		"""Set or revoke this user's membership in the admin group on the root channel."""
-		ctl = self.server.ctl;
-		acl = mmACL( 0, ctl.getACL(self.server.srvid, 0) );
-		
-		if not hasattr( acl, "admingroup" ):
-			raise ReferenceError( _( "The admin group was not found in the ACL's groups list!" ) );
-		
-		if value != ( self.mumbleid in acl.admingroup['add'] ):
-			if value:
-				acl.admingroup['add'].append( self.mumbleid );
-			else:
-				acl.admingroup['add'].remove( self.mumbleid );
-		
-		ctl.setACL(self.server.srvid, acl);
+		if value:
+			self.server.rootchan.acl.groupAddMember( "admin", self.mumbleid );
+		else:
+			self.server.rootchan.acl.groupRemoveMember( "admin", self.mumbleid );
+		self.server.rootchan.acl.save();
 		return value;
+	
+	aclAdmin = property( getAdmin, setAdmin, doc="Wrapper around getAdmin/setAdmin (not a database field like isAdmin)" );
 	
 	# Registration fetching
 	def getRegistration( self ):

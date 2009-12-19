@@ -135,10 +135,47 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getRegisteredPlayers( filter ) )
 	
 	def getACL(self, srvid, channelid):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self._getDbusServerObject(srvid).getACL(channelid))
+		raw_acls, raw_groups, raw_inherit = self._getDbusServerObject(srvid).getACL(channelid)
+		
+		acls =  [ ObjectInfo(
+				applyHere = bool(rule[0]),
+				applySubs = bool(rule[1]),
+				inherited = bool(rule[2]),
+				userid    =  int(rule[3]),
+				group     =  str(rule[4]),
+				allow     =  int(rule[5]),
+				deny      =  int(rule[6]),
+				)
+			for rule in raw_acls
+			];
+		
+		groups = [ ObjectInfo(
+				name        =  str(group[0]),
+				inherited   = bool(group[1]),
+				inherit     = bool(group[2]),
+				inheritable = bool(group[3]),
+				add         = [ int(usrid) for usrid in group[4] ],
+				remove      = [ int(usrid) for usrid in group[5] ],
+				members     = [ int(usrid) for usrid in group[6] ],
+				)
+			for group in raw_groups
+			];
+		
+		return acls, groups, bool(raw_inherit);
 	
-	def setACL(self, srvid, acl):
-		self._getDbusServerObject(srvid).setACL(*acl.pack())
+	def setACL(self, srvid, channelid, acls, groups, inherit):
+		# Pack acl ObjectInfo into a tuple and send that over dbus
+		dbus_acls = [
+			( rule.applyHere, rule.applySubs, rule.inherited, rule.userid, rule.group, rule.allow, rule.deny )
+			for rule in acls
+			];
+		
+		dbus_groups = [
+			( group.name, group.inherited, group.inherit, group.inheritable, group.add, group.remove, group.members )
+			for group in groups
+			];
+		
+		return self._getDbusServerObject(srvid).setACL( channelid, dbus_acls, dbus_groups, inherit );
 	
 	def getBootedServers(self):
 		return MumbleCtlDbus_118.convertDbusTypeToNative(self.meta.getBootedServers())
