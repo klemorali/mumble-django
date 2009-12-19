@@ -82,7 +82,7 @@ class MumbleCtlBase (object):
 	def getACL(self, srvid, channelid):
 		raise NotImplementedError( "mctl::getACL" );
 	
-	def setACL(self, srvid, acl):
+	def setACL(self, srvid, channelid, acl, groups, inherit):
 		raise NotImplementedError( "mctl::setACL" );
 	
 	def getTexture(self, srvid, mumbleid):

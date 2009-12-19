@@ -43,6 +43,8 @@ class mmChannel( object ):
 		self.parent = parentChan;
 		if self.parent is not None:
 			self.parent.subchans.append( self );
+		
+		self._acl = None;
 	
 	# Lookup unknown attributes in self.channelObj to automatically include Murmur's fields
 	def __getattr__( self, key ):
@@ -56,6 +58,16 @@ class mmChannel( object ):
 		if self.parent is None or self.parent.is_server or self.parent.chanid == 0:
 			return [];
 		return self.parent.parentChannels() + [self.parent.name];
+	
+	
+	def getACL( self ):
+		""" Retrieve the ACL for this channel. """
+		if not self._acl:
+			self._acl = mmACL( self, self.server.ctl.getACL( self.server.srvid, self.chanid ) );
+		
+		return self._acl;
+	
+	acl = property( getACL, doc=getACL.__doc__ );
 	
 	
 	is_server  = False;
@@ -213,34 +225,56 @@ class mmPlayer( object ):
 class mmACL:
 	"""Represents an ACL for a certain channel."""
 	
-	def __init__( self, channelId, aclObj ):
-		aclsrc, groupsrc, inherit = aclObj;
+	def __init__( self, channel, aclObj ):
+		self.channel = channel;
+		self.acls, self.groups, self.inherit = aclObj;
 		
-		self.channelId = channelId;
+		self.groups_dict = {};
 		
-		self.acls = [];
-		for line in aclsrc:
-			acl = {};
-			acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] = line;
-			self.acls.append( acl );
-		
-		self.groups = [];
-		for line in groupsrc:
-			group = {};
-			group['name'], group['inherited'], group['inherit'], group['inheritable'], group['add'], group['remove'], group['members'] = line;
-			self.groups.append( group );
-			if group['name'] == "admin":
-				self.admingroup = group;
-		
-		self.inherit = inherit;
+		for group in self.groups:
+			self.groups_dict[ group.name ] = group;
 	
-	def pack( self ):
-		""" Pack the information in this ACL up in a way that it can be passed to DBus. """
-		return (
-			self.channelId,
-			[( acl['applyHere'], acl['applySubs'], acl['inherited'], acl['playerid'], acl['group'], acl['allow'], acl['deny'] ) for acl in self.acls ],
-			[( group['name'], group['inherited'], group['inherit'], group['inheritable'], group['add'], group['remove'], group['members'] ) for group in self.groups ],
-			self.inherit
+	def groupHasMember( self, name, userid ):
+		""" Checks if the given userid is a member of the given group in this channel. """
+		if name not in self.groups_dict:
+			raise ReferenceError( "No such group '%s'" % name );
+		
+		return userid in self.groups_dict[name].add or userid in self.groups_dict[name].members;
+	
+	def groupAddMember( self, name, userid ):
+		""" Make sure this userid is a member of the group in this channel (and subs). """
+		if name not in self.groups_dict:
+			raise ReferenceError( "No such group '%s'" % name );
+		
+		group = self.groups_dict[name];
+		
+		# if neither inherited nor to be added, add
+		if userid not in group.members and userid not in group.add:
+			group.add.append( userid );
+		
+		# if to be removed, unremove
+		if userid in group.remove:
+			group.remove.remove( userid );
+	
+	def groupRemoveMember( self, name, userid ):
+		""" Make sure this userid is NOT a member of the group in this channel (and subs). """
+		if name not in self.groups_dict:
+			raise ReferenceError( "No such group '%s'" % name );
+		
+		group = self.groups_dict[name];
+		
+		# if added here, unadd
+		if userid in group.add:
+			group.add.remove( userid );
+		# if member and not in remove, add to remove
+		elif userid in group.members and userid not in group.remove:
+			group.remove.append( userid );
+	
+	def save( self ):
+		return self.channel.server.ctl.setACL(
+			self.channel.server.srvid,
+			self.channel.chanid,
+			self.acls, self.groups, self.inherit
 			);
 
 
