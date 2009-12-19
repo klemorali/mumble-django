@@ -215,10 +215,12 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		user = self._getIceServerObject(srvid).getRegistration(mumbleid)
-		user.name  = name.encode( "UTF-8" )
-		user.email = email.encode( "UTF-8" )
-		user.pw    = password.encode( "UTF-8" )
+		from Murmur import Player
+		user = Player()
+		user.playerid = mumbleid;
+		user.name     = name.encode( "UTF-8" )
+		user.email    = email.encode( "UTF-8" )
+		user.pw       = password.encode( "UTF-8" )
 		# update*r*egistration r is lowercase...
 		return self._getIceServerObject(srvid).updateregistration(user)
 	
