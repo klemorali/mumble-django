@@ -14,8 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-from unittest			import TestCase
-
+from django.test		import TestCase
 from django.conf		import settings
 
 from models			import *
@@ -74,6 +73,10 @@ class DataReading( TestCase ):
 	""" Tests reading data from murmur using the low-level CTL methods. """
 	
 	def setUp( self ):
+		# BIG FAT WARNING: This sucks ass, because it assumes the tester has a
+		# Murmur database like the one I have.
+		# I definitely need to prepare Murmur somehow before running these tests.
+		# Just don't yet know how.
 		self.murmur = Mumble.objects.get(id=1);
 	
 	
