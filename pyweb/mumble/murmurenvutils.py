@@ -15,11 +15,13 @@
 """
 
 import os, subprocess, signal
+from select		import select
 from os.path		import join, exists
 from shutil		import copyfile
 
 from django.conf	import settings
 
+from utils		import ObjectInfo
 
 def get_available_versions():
 	""" Return murmur versions installed inside the LAB_DIR. """
@@ -116,9 +118,52 @@ def run_murmur( version ):
 				stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
 				cwd=murmur_root
 				);
+			
+			# Check capabilities by waiting for certain lines to show up.
+			capa = ObjectInfo( has_dbus=False, has_ice=False, has_instance=False, has_users=False );
+			
+			def canRead( self, timeout=1 ):
+				rdy_read, rdy_write, rdy_other = select( [self.stdout], [], [], timeout );
+				return self.stdout in rdy_read;
+			
+			setattr(subprocess.Popen, 'canRead', canRead)
+			
+			while process.canRead(0.5):
+				line = process.stdout.readline();
+				if   line == 'DBus registration succeeded\n':
+					capa.has_dbus = True;
+				elif line == 'MurmurIce: Endpoint "tcp -h 127.0.0.1 -p 6502" running\n':
+					capa.has_ice = True;
+				elif line == '1 => Server listening on 0.0.0.0:64738\n':
+					capa.has_instance = True;
+				elif "> Authenticated\n" in line:
+					capa.has_users = True;
+			
+			process.capabilities = capa;
+			
 			return process;
 	
 	raise EnvironmentError( "Murmur binary not found. (Tried %s)" % unicode(binary_candidates) );
+
+
+def wait_for_user( process, timeout=1 ):
+	""" Wait for a user to connect. This call will consume any output from murmur
+	    until a line indicating a user's attempt to connect has been found.
+	
+	    The timeout parameter specifies how long (in seconds) to wait for input.
+	    It defaults to 1 second. If you set this to 0 it will return at the end
+	    of input (and thereby tell you if a player has already connected). If
+	    you set this to None, the call will block until a player has connected.
+	
+	    Returns True if a user has connected before the timeout has been hit,
+	    False otherwise.
+	"""
+	while process.canRead( timeout ):
+		line = process.stdout.readline();
+		if "> Authenticated\n" in line:
+			process.capabilities.has_users = True;
+			return True;
+	return False;
 
 
 def kill_murmur( process ):
