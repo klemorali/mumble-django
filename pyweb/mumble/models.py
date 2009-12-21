@@ -217,10 +217,7 @@ class Mumble( models.Model ):
 		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
 		
 		pldefault = self._meta.get_field_by_name('player')[0].default;
-		if self.ctl.getVersion()[:2] == ( 1, 2 ):
-			self.player  =  find_in_dicts( ( 'username', 'playername' ), pldefault );
-		else:
-			self.player  =  find_in_dicts( 'playername', pldefault );
+		self.player  =  find_in_dicts( ( 'username', 'playername' ), pldefault );
 		
 		chdefault = self._meta.get_field_by_name('channel')[0].default;
 		self.channel =  find_in_dicts( 'channelname', chdefault );

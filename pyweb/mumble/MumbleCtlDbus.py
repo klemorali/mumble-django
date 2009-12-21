@@ -56,16 +56,32 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		return dbus.Interface( dbus.SystemBus().get_object( self.dbus_base, '/%d' % srvid ), 'net.sourceforge.mumble.Murmur' );
 	
 	def getVersion( self ):
-		return MumbleCtlDbus_118.convertDbusTypeToNative( self.meta.getVersion() )
+		return MumbleCtlDbus_118.convertDbusTypeToNative( self.meta.getVersion() );
 	
 	def getAllConf(self, srvid):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self.meta.getAllConf(dbus.Int32(srvid)))
+		conf = self.meta.getAllConf(dbus.Int32(srvid))
+		
+		info = {};
+		for key in conf:
+			if key == "playername":
+				info['username'] = conf[key];
+			else:
+				info[str(key)] = conf[key];
+		return info;
 	
 	def setConf(self, srvid, key, value):
 		self.meta.setConf(dbus.Int32( srvid ), key, value)
 	
 	def getDefaultConf(self):
-		return MumbleCtlDbus_118.convertDbusTypeToNative(self.meta.getDefaultConf())
+		conf = self.meta.getDefaultConf()
+		
+		info = {};
+		for key in conf:
+			if key == "playername":
+				info['username'] = conf[key];
+			else:
+				info[str(key)] = conf[key];
+		return info;
 	
 	def start( self, srvid ):
 		self.meta.start( srvid );

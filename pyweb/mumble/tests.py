@@ -184,7 +184,7 @@ class DataReading( TestCase ):
 			self.assert_( hasattr( rule, "deny"      ) );
 		
 		for grp in groups:
-			if self.murmur.ctl.method == "ICE" and self.murmur.version[:2] == ( 1, 2 ):
+			if self.murmur.ctl.method == "ICE":
 				import Murmur
 				self.assertEquals( type( grp ), Murmur.Group );
 			else:

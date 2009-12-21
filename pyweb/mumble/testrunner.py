@@ -69,9 +69,11 @@ def run_mumble_tests( verbosity=1, interactive=True ):
 				
 				os.environ['MURMUR_CONNSTR'] = connstrings[method];
 				settings.DEFAULT_CONN        = connstrings[method];
+				settings.SLICE_VERSION       = [ int(dgt) for dgt in version.split('.') ];
 				
-				print "Waiting for user to connect (60 seconds)."
-				wait_for_user( process, timeout=60 );
+				if not process.capabilities.has_users:
+					print "Waiting for user to connect (60 seconds)."
+					wait_for_user( process, timeout=60 );
 				
 				wr_failed_tests += django_run_tests( ('mumble',), verbosity, interactive, [] );
 			else:
@@ -81,7 +83,10 @@ def run_mumble_tests( verbosity=1, interactive=True ):
 	
 	failed_tests = 0;
 	
+	from mctl import MumbleCtlBase
+	
 	for version in get_available_versions():
+		MumbleCtlBase.clearCache();
 		failed_tests += run_callback( version, django_run_tests_wrapper, version );
 	
 	return failed_tests;
