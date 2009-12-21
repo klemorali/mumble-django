@@ -180,6 +180,10 @@ TEMPLATE_DIRS = (
 	join( MUMBLE_DJANGO_ROOT, 'template' ),
 )
 
+TEST_RUNNER = 'mumble.tests.run_tests'
+TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' );
+TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' );
+
 INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.admin',
