@@ -66,9 +66,6 @@ def run_callback( version, callback, *args, **kwargs ):
 	
 	try:
 		result = callback( process, *args, **kwargs );
-	except Exception, err:
-		raise err;
-	else:
 		if type(result) == tuple:
 			if result[1]:
 				update_dbase( version );
@@ -130,6 +127,7 @@ def run_murmur( version ):
 			
 			while process.canRead(0.5):
 				line = process.stdout.readline();
+				#print "read line:", line
 				if   line == 'DBus registration succeeded\n':
 					capa.has_dbus = True;
 				elif line == 'MurmurIce: Endpoint "tcp -h 127.0.0.1 -p 6502" running\n':

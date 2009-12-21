@@ -116,6 +116,10 @@ class MumbleCtlBase (object):
 		
 		MumbleCtlBase.cache[connstring] = ctl;
 		return ctl;
+	
+	@staticmethod
+	def clearCache():
+		MumbleCtlBase.cache = {};
 
 
 
