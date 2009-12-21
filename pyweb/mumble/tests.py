@@ -17,12 +17,9 @@
 import os
 
 from django.test		import TestCase
-from django.test.simple 	import run_tests as django_run_tests
-from django.conf		import settings
 
 from models			import *
 from utils			import ObjectInfo
-from murmurenvutils		import get_available_versions, run_callback
 
 
 class InstancesHandling( TestCase ):
@@ -202,50 +199,4 @@ class DataReading( TestCase ):
 			self.assert_( hasattr( grp,  "members"     ) );
 
 
-def run_tests( test_labels, verbosity=1, interactive=True, extra_tests=[] ):
-	""" Run the Django built in testing framework, but before testing the mumble
-	    app, allow Murmur to be set up correctly.
-	"""
-	
-	if not test_labels:
-		test_labels = [ appname.split('.')[-1] for appname in settings.INSTALLED_APPS ];
-	
-	# No need to sync any murmur servers for the other apps
-	os.environ['MURMUR_CONNSTR'] = '';
-	
-	# The easy way: mumble is not being tested.
-	if "mumble" not in test_labels:
-		return django_run_tests( test_labels, verbosity, interactive, extra_tests );
-	
-	# First run everything apart from mumble. mumble will be tested separately, so Murmur
-	# can be set up properly first.
-	
-	test_labels.remove( "mumble" );
-	failed_tests = django_run_tests( test_labels, verbosity, interactive, extra_tests );
-	
-	failed_tests += run_mumble_tests( verbosity, interactive );
-	
-	return failed_tests;
-
-
-def run_mumble_tests( verbosity=1, interactive=True ):
-	
-	connstrings = {
-		'DBus': 'net.sourceforge.mumble.murmur',
-		'Ice':  'Meta:tcp -h 127.0.0.1 -p 6502',
-		};
-	
-	failed_tests = 0;
-	
-	def django_run_tests_wrapper( process ):
-		return django_run_tests( ('mumble',), verbosity, interactive, [] ), False;
-	
-	for version in get_available_versions():
-		for method in connstrings:
-			print "Testing mumble %s via %s" % ( version, method );
-			os.environ['MURMUR_CONNSTR'] = connstrings[method];
-			settings.DEFAULT_CONN        = connstrings[method];
-			failed_tests += run_callback( version, django_run_tests_wrapper );
-	
-	return failed_tests;
 
