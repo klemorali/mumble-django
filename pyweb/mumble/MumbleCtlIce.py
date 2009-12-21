@@ -359,16 +359,12 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	def getRegistration(self, srvid, mumbleid):
 		from Murmur import UserInfo
 		reg = self._getIceServerObject( srvid ).getRegistration( mumbleid )
-		user = {};
-		if UserInfo.UserName in reg:
-			user['name'] = reg[UserInfo.UserName];
-		if UserInfo.UserEmail in reg:
-			user['email'] = reg[UserInfo.UserEmail];
-		if UserInfo.UserComment in reg:
-			user['comment'] = reg[UserInfo.UserComment];
-		if UserInfo.UserHash in reg:
-			user['hash'] = reg[UserInfo.UserHash];
-		return ObjectInfo( **user );
+		user = ObjectInfo( userid=mumbleid, name="", email="", comment="", hash="", pw="" );
+		if UserInfo.UserName    in reg: user.name    = reg[UserInfo.UserName];
+		if UserInfo.UserEmail   in reg: user.email   = reg[UserInfo.UserEmail];
+		if UserInfo.UserComment in reg: user.comment = reg[UserInfo.UserComment];
+		if UserInfo.UserHash    in reg: user.hash    = reg[UserInfo.UserHash];
+		return user;
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
