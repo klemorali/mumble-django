@@ -26,7 +26,7 @@ from mctl		import MumbleCtlBase
 
 from utils		import ObjectInfo
 
-import Ice
+import Ice, sys
 
 
 def protectDjangoErrPage( func ):
@@ -54,32 +54,41 @@ def MumbleCtlIce( connstring ):
 	    Murmur version matches the slice Version.
 	"""
 	
-	version = settings.SLICE_VERSION;
+	candidates = (
+		( settings.SLICE_VERSION, settings.SLICE ),
+		( ( 1, 1, 8 ), None ),
+		( ( 1, 2, 0 ), None ),
+		);
 	
-	slice = settings.SLICE;
-	if not slice:
-		slice = join(
-			settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
-			'Murmur_%d-%d-%d.ice' % (version[0], version[1], version[2] )
-			);
+	for version, slice in candidates:
+		if not slice:
+			slice = join(
+				settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
+				'Murmur_%d-%d-%d.ice' % (version[0], version[1], version[2] )
+				);
+		
+		Ice.loadSlice( slice )
+		ice = Ice.initialize()
+		import Murmur
+		prx = ice.stringToProxy( connstring.encode("utf-8") )
+		meta = Murmur.MetaPrx.checkedCast(prx)
+		
+		murmurversion = meta.getVersion();
+		
+		if   murmurversion[0] != version[0] or murmurversion[1] != version[1] or murmurversion[2] != version[2]:
+			# Version mismatch. Use sys.modules.pop fakery to unload the Module, and allow
+			# a later iteration to run Ice's "from nowhere import Murmur" fakery again.
+			# Two wrongs don't make a right, but at least it works. (I really do miss DBus.)
+			ice.destroy();
+			sys.modules.pop("Murmur");
+		
+		elif murmurversion[0] == murmurversion[1] == 1 and murmurversion[2] <= 8:
+			return MumbleCtlIce_118( connstring, meta );
+		
+		elif murmurversion[0] == 1 and murmurversion[1] == 2 and murmurversion[2] == 0:
+			return MumbleCtlIce_120( connstring, meta );
 	
-	Ice.loadSlice( slice )
-	ice = Ice.initialize()
-	import Murmur
-	prx = ice.stringToProxy( connstring.encode("utf-8") )
-	meta = Murmur.MetaPrx.checkedCast(prx)
-	
-	murmurversion = meta.getVersion();
-	
-	if murmurversion[0] != version[0] or murmurversion[1] != version[1] or murmurversion[2] != version[2]:
-		raise TypeError(
-			"Detected Murmur version %d.%d.%d, for which I am not configured." % ( murmurversion[0], murmurversion[1], murmurversion[2] )
-			);
-	
-	if murmurversion[0] == murmurversion[1] == 1 and murmurversion[2] <= 8:
-		return MumbleCtlIce_118( connstring, meta );
-	elif murmurversion[0] == 1 and murmurversion[1] == 2 and murmurversion[2] == 0:
-		return MumbleCtlIce_120( connstring, meta );
+	raise EnvironmentError( "Could not find a Slice matching your version of Murmur." );
 
 
 
@@ -215,8 +224,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		from Murmur import Player
-		user = Player()
+		import Murmur
+		user = Murmur.Player()
 		user.playerid = mumbleid;
 		user.name     = name.encode( "UTF-8" )
 		user.email    = email.encode( "UTF-8" )
@@ -343,11 +352,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	def registerPlayer(self, srvid, name, email, password):
 		# To get the real values of these ENUM entries, try
 		# Murmur.UserInfo.UserX.value
-		from Murmur import UserInfo
+		import Murmur
 		user = {
-			UserInfo.UserName:     name.encode( "UTF-8" ),
-			UserInfo.UserEmail:    email.encode( "UTF-8" ),
-			UserInfo.UserPassword: password.encode( "UTF-8" ),
+			Murmur.UserInfo.UserName:     name.encode( "UTF-8" ),
+			Murmur.UserInfo.UserEmail:    email.encode( "UTF-8" ),
+			Murmur.UserInfo.UserPassword: password.encode( "UTF-8" ),
 			};
 		return self._getIceServerObject(srvid).registerUser( user );
 	
@@ -357,22 +366,22 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	
 	@protectDjangoErrPage
 	def getRegistration(self, srvid, mumbleid):
-		from Murmur import UserInfo
 		reg = self._getIceServerObject( srvid ).getRegistration( mumbleid )
 		user = ObjectInfo( userid=mumbleid, name="", email="", comment="", hash="", pw="" );
-		if UserInfo.UserName    in reg: user.name    = reg[UserInfo.UserName];
-		if UserInfo.UserEmail   in reg: user.email   = reg[UserInfo.UserEmail];
-		if UserInfo.UserComment in reg: user.comment = reg[UserInfo.UserComment];
-		if UserInfo.UserHash    in reg: user.hash    = reg[UserInfo.UserHash];
+		import Murmur
+		if Murmur.UserInfo.UserName    in reg: user.name    = reg[Murmur.UserInfo.UserName];
+		if Murmur.UserInfo.UserEmail   in reg: user.email   = reg[Murmur.UserInfo.UserEmail];
+		if Murmur.UserInfo.UserComment in reg: user.comment = reg[Murmur.UserInfo.UserComment];
+		if Murmur.UserInfo.UserHash    in reg: user.hash    = reg[Murmur.UserInfo.UserHash];
 		return user;
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		from Murmur import UserInfo
+		import Murmur
 		user = {
-			UserInfo.UserName:     name.encode( "UTF-8" ),
-			UserInfo.UserEmail:    email.encode( "UTF-8" ),
-			UserInfo.UserPassword: password.encode( "UTF-8" ),
+			Murmur.UserInfo.UserName:     name.encode( "UTF-8" ),
+			Murmur.UserInfo.UserEmail:    email.encode( "UTF-8" ),
+			Murmur.UserInfo.UserPassword: password.encode( "UTF-8" ),
 			};
 		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
 	
