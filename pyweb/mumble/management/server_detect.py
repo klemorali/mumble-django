@@ -50,6 +50,8 @@ def find_existing_instances( **kwargs ):
 		if not triedEnviron and 'MURMUR_CONNSTR' in os.environ:
 			dbusName = os.environ['MURMUR_CONNSTR'];
 			triedEnviron = True;
+			if v > 1:
+				print "Trying environment setting", dbusName;
 		else:
 			print "--- Murmur connection info ---"
 			print "  1) DBus -- net.sourceforge.mumble.murmur"
@@ -98,7 +100,7 @@ def find_existing_instances( **kwargs ):
 				}
 			
 			if v > 1:
-				print 'Found new Murmur instance... ',
+				print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName ),
 			
 			# now create a model for the record set.
 			instance = models.Mumble( **values );
