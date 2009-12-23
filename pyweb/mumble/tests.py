@@ -55,10 +55,17 @@ class InstancesHandling( TestCase ):
 	
 	def testAddrPortUnique( self ):
 		try:
-			duplicate = Mumble( name="#another unit testing instance#", addr="0.0.0.0", port=31337 );
+			duplicate = Mumble(
+				name="#another unit testing instance#",
+				addr=self.murmur.addr, port=self.murmur.port,
+				dbus=settings.DEFAULT_CONN
+				);
 			if duplicate.ctl.method == "ICE":
 				import Murmur
 				self.assertRaises( Murmur.ServerFailureException, duplicate.save );
+			elif self.murmur.version[:2] == [ 1, 2 ]:
+				from dbus import DBusException
+				self.assertRaises( DBusException, duplicate.save );
 			else:
 				from sqlite3 import IntegrityError
 				self.assertRaises( IntegrityError, duplicate.save );
