@@ -36,6 +36,7 @@ from mmobjects				import *
 def redir( request ):
 	""" Redirect to the servers list. """
 	if request.META['HTTP_USER_AGENT'].startswith( 'BlackBerry' ) or \
+	   "Opera Mobi" in request.META['HTTP_USER_AGENT'] or \
 	   "Opera Mini" in request.META['HTTP_USER_AGENT'] or \
 	   "Windows CE" in request.META['HTTP_USER_AGENT'] or \
 	   "MIDP" in request.META['HTTP_USER_AGENT'] or \
