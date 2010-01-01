@@ -3,11 +3,11 @@
 {% block Headline %}
 Configured Mumble Servers
 {% endblock %}
-{% block Content %}
+{% block LeftColumn %}
 <div class="rahmen">
   <ul>
   {% for mumble in MumbleObjects %}
-    <li><a href="{% url mumble.views.show mumble.id %}">{{mumble.name}}</a></li>
+    <li><a href="{% url mumble.views.mobile_show mumble.id %}">{{mumble.name}}</a></li>
   {% endfor %}
   </ul>
 </div>
