@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Mumble Administration</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/mumble/style.css"  />
+    <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}/mumble/mumble.16x16.png" />
+
+    {% block HeadTag %}
+    {% endblock %}
+  </head>
+  <body bgcolor="#3B69AD">
+    <div id="mobilecontent">
+        {% block LeftColumn %}
+        {% endblock %}
+    </div>
+    <!-- footer -->
+    <div id="footerpanel">
+      <a href="http://bitbucket.org/Svedrin/mumble-django" target="_blank">Mumble-Django</a>
+    </div>
+  </body>
+</html>

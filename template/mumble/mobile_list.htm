@@ -1,0 +1,14 @@
+{% extends "mobile_index.htm" %}
+{% load mumble_extras %}
+{% block Headline %}
+Configured Mumble Servers
+{% endblock %}
+{% block Content %}
+<div class="rahmen">
+  <ul>
+  {% for mumble in MumbleObjects %}
+    <li><a href="{% url mumble.views.show mumble.id %}">{{mumble.name}}</a></li>
+  {% endfor %}
+  </ul>
+</div>
+{% endblock %}
