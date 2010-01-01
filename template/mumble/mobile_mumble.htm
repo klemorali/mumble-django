@@ -1,0 +1,9 @@
+{% extends "mobile_index.htm" %}
+{% load mumble_extras %}
+{% load i18n %}
+{% block Headline %}
+  {{ DBaseObject.name }}
+{% endblock %}
+{% block LeftColumn %}
+  {{ DBaseObject|chanview:MumbleAccount }}
+{% endblock %}

@@ -35,7 +35,10 @@ from mmobjects				import *
 
 def redir( request ):
 	""" Redirect to the servers list. """
-	return HttpResponseRedirect( reverse( mumbles ) );
+	if request.META['HTTP_USER_AGENT'].startswith( 'BlackBerry' ):
+		return HttpResponseRedirect( reverse( mobile_mumbles ) );
+	else:
+		return HttpResponseRedirect( reverse( mumbles ) );
 
 def mumbles( request ):
 	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
@@ -46,6 +49,22 @@ def mumbles( request ):
 	
 	return render_to_response(
 		'mumble/list.htm',
+		{ 'MumbleObjects': mumbles,
+		  'MumbleActive':  True,
+		  'MEDIA_URL':     settings.MEDIA_URL,
+		},
+		context_instance = RequestContext(request)
+		);
+
+def mobile_mumbles( request ):
+	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
+	mumbles = get_list_or_404( Mumble );
+	
+	if len(mumbles) == 1:
+		return HttpResponseRedirect( reverse( mobile_show, kwargs={ 'server': mumbles[0].id, } ) );
+	
+	return render_to_response(
+		'mumble/mobile_list.htm',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
 		  'MEDIA_URL':     settings.MEDIA_URL,
@@ -168,6 +187,31 @@ def show( request, server ):
 		},
 		context_instance = RequestContext(request)
 		);
+
+def mobile_show( request, server ):
+	""" Display the channel list for the given Server ID. """
+	
+	srv = get_object_or_404( Mumble, id=server );
+	
+	user = None;
+	if request.user.is_authenticated():
+		try:
+			user = MumbleUser.objects.get( server=srv, owner=request.user );
+		except MumbleUser.DoesNotExist:
+			pass;
+	
+	return render_to_response(
+		'mumble/mobile_mumble.htm',
+		{
+			'MEDIA_URL':    settings.MEDIA_URL,
+			'DBaseObject':  srv,
+			'MumbleActive': True,
+			'MumbleAccount':user,
+		},
+		context_instance = RequestContext(request)
+		);
+	
+
 
 
 def showTexture( request, server, userid = None ):
