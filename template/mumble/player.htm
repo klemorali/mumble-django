@@ -2,7 +2,7 @@
 <div class="mumble" style="background-image: url( {{ MEDIA_URL }}/mumble/linie_v.png )">
   <span class="mumble">
     {% if Player.isAuthed %}
-      <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="Authenticated" />
+    <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="Authenticated" />
     {% endif %}
     {% if Player.mute or Player.suppress %}
       <img src="{{ MEDIA_URL }}/mumble/muted_server.png" alt="muted" title="Muted by server" />
@@ -15,6 +15,9 @@
     {% endif %}
     {% if Player.selfDeaf %}
       <img src="{{ MEDIA_URL }}/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
+    {% endif %}
+    {% if Player.hasComment %}
+      <img src="{{ MEDIA_URL }}/mumble/comment.png" alt="has comment" title="has a User Comment set" />
     {% endif %}
   </span>
   <span>

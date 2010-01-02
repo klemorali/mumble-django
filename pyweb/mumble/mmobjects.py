@@ -185,6 +185,11 @@ class mmPlayer( object ):
 	def __str__( self ):
 		return '<Player "%s" (%d, %d)>' % ( self.name, self.session, self.userid );
 	
+	hasComment = property(
+		lambda self: hasattr( self.playerObj, "comment" ) and bool(self.playerObj.comment),
+		doc="True if this player has a comment set."
+		);
+	
 	isAuthed = property(
 		lambda self: self.userid != -1,
 		doc="True if this player is authenticated (+A)."
