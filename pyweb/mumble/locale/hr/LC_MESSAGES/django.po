@@ -1,6 +1,6 @@
 # Croatian translation file for Mumble-Django.
 #
-# Copyright (C) 2009, Vid "Night" Marić <nightcooki3@gmail.com>
+# Copyright (C) 2009, Vid "Night" Marić <vid_maric@yahoo.com>
 #
 # Mumble-Django is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ msgstr "Korisnici na serveru"
 
 #: admin.py:38
 msgid "Channel count"
-msgstr "Kanali"
+msgstr "Broj kanala"
 
 #: admin.py:44
 msgid "Public"
@@ -41,7 +41,7 @@ msgstr "Javni server"
 
 #: forms.py:53
 msgid "That name is forbidden by the server."
-msgstr ""
+msgstr "Ime je zabranjeno na serveru."
 
 #: forms.py:56 models.py:414
 msgid "Another player already registered that name."
@@ -69,25 +69,25 @@ msgstr "Lozinka koju ste unijeli je neispravna."
 
 #: forms.py:99
 msgid "Link account"
-msgstr ""
+msgstr "Povezani račun"
 
 #: forms.py:100
 msgid ""
 "The account already exists and belongs to me, just link it instead of "
 "creating."
-msgstr ""
+msgstr "Ovaj račun već postoji. Povežite ga umjesto da radite novi račun."
 
 #: forms.py:112
 msgid "No such user found."
-msgstr ""
+msgstr "Korisnik nije pronađen."
 
 #: forms.py:146
 msgid "That account belongs to someone else."
-msgstr ""
+msgstr "Ovaj račun pripada drugome korisniku."
 
 #: forms.py:149
 msgid "Linking Admin accounts is not allowed."
-msgstr ""
+msgstr "Povezivanje administratorskih računa nije dozvoljeno."
 
 #: models.py:44
 msgid "Server Name"
@@ -244,7 +244,7 @@ msgstr "Django korisniku %(du)s pripada Mumble račun %(mu)s na serveru %(srv)s"
 
 #: models.py:446 models.py:455
 msgid "The admin group was not found in the ACL's groups list!"
-msgstr "Grupa administratora nije pronaÄ‘ena u ACL listi grupa!"
+msgstr "Grupa administratora nije pronađena u ACL listi grupa!"
 
 #: models.py:503
 msgid "This field must not be updated once the record has been saved."
@@ -433,8 +433,8 @@ msgstr "Administracija"
 
 #: templates/mumble.htm:230
 msgid "User List"
-msgstr ""
+msgstr "Lista korisnika"
 
 #: templates/mumble.htm:305
 msgid "Resync with Murmur"
-msgstr ""
+msgstr "Resinkroniziraj s Murmurom"
