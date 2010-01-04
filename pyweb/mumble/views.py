@@ -41,6 +41,19 @@ def redir( request ):
 	   "Windows CE" in request.META['HTTP_USER_AGENT'] or \
 	   "MIDP" in request.META['HTTP_USER_AGENT'] or \
 	   "Palm" in request.META['HTTP_USER_AGENT'] or \
+	   "NetFront" in request.META['HTTP_USER_AGENT'] or \
+	   "Nokia" in request.META['HTTP_USER_AGENT'] or \
+	   "Symbian" in request.META['HTTP_USER_AGENT'] or \
+	   "UP.Browser" in request.META['HTTP_USER_AGENT'] or \
+	   "UP.Link" in request.META['HTTP_USER_AGENT'] or \
+	   "WinWAP" in request.META['HTTP_USER_AGENT'] or \
+	   "Android" in request.META['HTTP_USER_AGENT'] or \
+	   "DoCoMo" in request.META['HTTP_USER_AGENT'] or \
+	   "KDDI-" in request.META['HTTP_USER_AGENT'] or \
+	   "Softbank" in request.META['HTTP_USER_AGENT'] or \
+	   "J-Phone" in request.META['HTTP_USER_AGENT'] or \
+	   "IEMobile" in request.META['HTTP_USER_AGENT'] or \
+	   "iPod" in request.META['HTTP_USER_AGENT'] or \
 	   "iPhone" in request.META['HTTP_USER_AGENT']:
 		return HttpResponseRedirect( reverse( mobile_mumbles ) );
 	else:
