@@ -3,8 +3,10 @@
     <title>Mumble Administration</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-	<!-- for iphone/ipod -->
-	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+    <!-- for iphone/ipod -->
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <link rel="apple-touch-icon" href="{{ MEDIA_URL }}/mumble/mumble.64x64.png" />
+    <link rel="apple-mobile-web-app-capable" content="yes" />
 
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
@@ -20,8 +22,11 @@
         {% endblock %}
     </div>
     <!-- footer -->
-    <div id="footerpanel">
-      <a href="http://bitbucket.org/Svedrin/mumble-django" target="_blank" style="color:white">Mumble-Django</a>
+    <div id="footerpanel" style="color:white">
+      <ul>
+        <li><a href="{% url mumble.views.redir %}" style="color:white">Home</a></li>
+        <li><a href="http://bitbucket.org/Svedrin/mumble-django" style="color:white" target="_blank">Mumble-Django</a></li>
+      </ul>
     </div>
   </body>
 </html>
