@@ -70,6 +70,9 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		return info;
 	
 	def setConf(self, srvid, key, value):
+		if key == "username":
+			key = "playername";
+		
 		self.meta.setConf(dbus.Int32( srvid ), key, value)
 	
 	def getDefaultConf(self):

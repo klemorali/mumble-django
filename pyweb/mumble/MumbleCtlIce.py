@@ -170,7 +170,15 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def getAllConf(self, srvid):
-		return self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+		conf = self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+		
+		info = {};
+		for key in conf:
+			if key == "playername":
+				info['username'] = conf[key];
+			else:
+				info[str(key)] = conf[key];
+		return info;
 	
 	@protectDjangoErrPage
 	def newServer(self):
@@ -200,6 +208,9 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setConf(self, srvid, key, value):
+		if key == "username":
+			key = "playername";
+		
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 	
 	@protectDjangoErrPage
@@ -384,6 +395,27 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 			Murmur.UserInfo.UserPassword: password.encode( "UTF-8" ),
 			};
 		return self._getIceServerObject( srvid ).updateRegistration( mumbleid, user )
+	
+	@protectDjangoErrPage
+	def getAllConf(self, srvid):
+		conf = self.setUnicodeFlag(self._getIceServerObject(srvid).getAllConf())
+		
+		info = {};
+		for key in conf:
+			if key == "playername" and conf[key]:
+				# Buggy database transition from 1.1.8 -> 1.2.0
+				# Store username as "username" field and set playername field to empty
+				info['username'] = conf[key];
+				self.setConf( srvid, "playername", "" );
+				self.setConf( srvid, "username",   conf[key] );
+			else:
+				info[str(key)] = conf[key];
+		
+		return info;
+	
+	@protectDjangoErrPage
+	def setConf(self, srvid, key, value):
+		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 	
 	@protectDjangoErrPage
 	def getACL(self, srvid, channelid):
