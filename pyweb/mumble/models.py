@@ -134,12 +134,7 @@ class Mumble( models.Model ):
 		self.ctl.setConf( self.srvid,     'certificate',         self.sslcrt );
 		self.ctl.setConf( self.srvid,     'key',                 self.sslkey );
 		self.ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
-		
-		if self.ctl.getVersion()[:2] == ( 1, 2 ):
-			self.ctl.setConf( self.srvid,     'username',    self.player );
-		else:
-			self.ctl.setConf( self.srvid,     'playername',  self.player );
-		
+		self.ctl.setConf( self.srvid,     'username',            self.player );
 		self.ctl.setConf( self.srvid,     'channelname',         self.channel );
 		self.ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
 		
@@ -217,7 +212,7 @@ class Mumble( models.Model ):
 		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
 		
 		pldefault = self._meta.get_field_by_name('player')[0].default;
-		self.player  =  find_in_dicts( ( 'username', 'playername' ), pldefault );
+		self.player  =  find_in_dicts( 'username', pldefault );
 		
 		chdefault = self._meta.get_field_by_name('channel')[0].default;
 		self.channel =  find_in_dicts( 'channelname', chdefault );
