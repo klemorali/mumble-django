@@ -169,3 +169,78 @@ def kill_murmur( process ):
 	return os.kill( process.pid, signal.SIGTERM );
 
 
+class MumbleCommandWrapper_noargs( object ):
+	""" Mixin used to run a standard Django command inside MurmurEnvUtils.
+	
+	    To modify a standard Django command for MEU, you will need to create
+	    a new command and derive its Command class from the wrapper, and the
+	    Command class of the original command:
+	
+	    from django.core.management.commands.shell  import Command as ShellCommand
+	    from mumble.murmurenvutils                  import MumbleCommandWrapper
+	
+	    class Command( MumbleCommandWrapper, ShellCommand ):
+	        pass
+	
+	    That will run the original command, after the user has had the chance to
+	    select the version of Murmur to run.
+	"""
+	
+	def _choose_version( self ):
+		print "Choose version:";
+		
+		vv = get_available_versions();
+		for idx in range(len(vv)):
+			print "  #%d %s" % ( idx, vv[idx] );
+		
+		chosen = int( raw_input("#> ") );
+		
+		return vv[chosen];
+	
+	def handle_noargs( self, **options ):
+		self.origOpts = options;
+		
+		run_callback( self._choose_version(), self.runOrig );
+	
+	def runOrig( self, proc ):
+		super( MumbleCommandWrapper_noargs, self ).handle_noargs( **self.origOpts );
+
+
+class MumbleCommandWrapper( object ):
+	""" Mixin used to run a standard Django command inside MurmurEnvUtils.
+	
+	    To modify a standard Django command for MEU, you will need to create
+	    a new command and derive its Command class from the wrapper, and the
+	    Command class of the original command:
+	
+	    from django.core.management.commands.shell  import Command as ShellCommand
+	    from mumble.murmurenvutils                  import MumbleCommandWrapper
+	
+	    class Command( MumbleCommandWrapper, ShellCommand ):
+	        pass
+	
+	    That will run the original command, after the user has had the chance to
+	    select the version of Murmur to run.
+	"""
+	
+	def _choose_version( self ):
+		print "Choose version:";
+		
+		vv = get_available_versions();
+		for idx in range(len(vv)):
+			print "  #%d %s" % ( idx, vv[idx] );
+		
+		chosen = int( raw_input("#> ") );
+		
+		return vv[chosen];
+	
+	def handle( self, *args, **options ):
+		self.origArgs = args;
+		self.origOpts = options;
+		
+		run_callback( self._choose_version(), self.runOrig );
+	
+	def runOrig( self, proc ):
+		super( MumbleCommandWrapper, self ).handle( *self.origArgs, **self.origOpts );
+
+
