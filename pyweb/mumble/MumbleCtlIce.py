@@ -58,6 +58,7 @@ def MumbleCtlIce( connstring ):
 		( settings.SLICE_VERSION, settings.SLICE ),
 		( ( 1, 1, 8 ), None ),
 		( ( 1, 2, 0 ), None ),
+		( ( 1, 2, 1 ), None ),
 		);
 	
 	for version, slice in candidates:
@@ -85,7 +86,7 @@ def MumbleCtlIce( connstring ):
 		elif murmurversion[0] == murmurversion[1] == 1 and murmurversion[2] <= 8:
 			return MumbleCtlIce_118( connstring, meta );
 		
-		elif murmurversion[0] == 1 and murmurversion[1] == 2 and murmurversion[2] == 0:
+		elif murmurversion[0] == 1 and murmurversion[1] == 2:
 			return MumbleCtlIce_120( connstring, meta );
 	
 	raise EnvironmentError( "Could not find a Slice matching your version of Murmur." );
