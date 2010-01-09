@@ -2,6 +2,16 @@
 Mumble-Django changelog
 =======================
 
+Version 1.1, 9 Jan 2010:
+------------------------------
+* Fixed crash when someone registered without an email address.
+* Set default connstring to Ice.
+* Improved internal handling of data provided by Murmur.
+* Added unit test facility and a few more management commands.
+* Added stripped-down views for mobile phone devices.
+* Updated the icons to those from Murmur 1.2.0.
+* Added the slice for Murmur 1.2.1.
+
 Version 1.0, 10 Dec 2009:
 ------------------------------
 * Added displaying User Comments.
