@@ -190,4 +190,5 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'registration',
 	'mumble',
+	'rosetta',
 )
