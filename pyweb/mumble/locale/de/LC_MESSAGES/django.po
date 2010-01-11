@@ -371,33 +371,28 @@ msgstr "Online seit"
 
 #: templates/mumble.htm:106
 #, python-format
-msgid "Authenticated:    %(authed)s"
-msgstr "Authentifiziert: %(authed)s"
-
-#: templates/mumble.htm:107
-#, python-format
-msgid "Admin:            %(admin)s"
-msgstr "Administrator:   %(admin)s"
+msgid "Authenticated"
+msgstr "Authentifiziert"
 
 #: templates/mumble.htm:108
 #, python-format
-msgid "Muted:            %(muted)s"
-msgstr "Stummgestellt:   %(muted)s"
+msgid "Muted"
+msgstr "Stummgestellt"
 
 #: templates/mumble.htm:109
 #, python-format
-msgid "Deafened:         %(deafened)s"
-msgstr "Taubgestellt:    %(deafened)s"
+msgid "Deafened"
+msgstr "Taubgestellt"
 
 #: templates/mumble.htm:110
 #, python-format
-msgid "Muted by self:    %(selfmuted)s"
-msgstr "Selbst stummgestellt: %(selfmuted)s"
+msgid "Muted by self"
+msgstr "Selbst stummgestellt"
 
 #: templates/mumble.htm:111
 #, python-format
-msgid "Deafened by self: %(selfdeafened)s"
-msgstr "Selbst taubgestellt: %(selfdeafened)s"
+msgid "Deafened by self"
+msgstr "Selbst taubgestellt"
 
 #: templates/mumble.htm:114
 msgid "User"
@@ -410,10 +405,6 @@ msgstr "Vollständiger Name"
 #: templates/mumble.htm:119
 msgid "Admin"
 msgstr "Administrator"
-
-#: templates/mumble.htm:120
-msgid "Sign-up date"
-msgstr "Datum der Registrierung"
 
 #: templates/mumble.htm:130
 msgid "Channel"

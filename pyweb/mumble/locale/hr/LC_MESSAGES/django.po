@@ -1,27 +1,28 @@
 # Croatian translation file for Mumble-Django.
-#
+# 
 # Copyright (C) 2009, Vid "Night" Marić <vid_maric@yahoo.com>
-#
+# 
 # Mumble-Django is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#
+# 
 # This package is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-14 13:57+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Vid Marić <vid_maric@yahoo.com>\n"
+"PO-Revision-Date: 2010-01-11 14:11\n"
+"Last-Translator: <de@de.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.5.1\n"
 
 #: admin.py:30
 msgid "Registered users"
@@ -56,12 +57,8 @@ msgid "Server Password"
 msgstr "Lozinka servera"
 
 #: forms.py:76
-msgid ""
-"This server is private and protected mode is active. Please enter the server "
-"password."
-msgstr ""
-"Ovo je privatan server i potrebna vam je lozinka za pristup. Molimo vas "
-"unesite lozinku."
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Ovo je privatan server i potrebna vam je lozinka za pristup. Molimo vas unesite lozinku."
 
 #: forms.py:84 forms.py:130
 msgid "The password you entered is incorrect."
@@ -72,9 +69,7 @@ msgid "Link account"
 msgstr "Povezani račun"
 
 #: forms.py:100
-msgid ""
-"The account already exists and belongs to me, just link it instead of "
-"creating."
+msgid "The account already exists and belongs to me, just link it instead of creating."
 msgstr "Ovaj račun već postoji. Povežite ga umjesto da radite novi račun."
 
 #: forms.py:112
@@ -98,12 +93,8 @@ msgid "DBus or ICE base"
 msgstr "DBus ili ICE"
 
 #: models.py:45
-msgid ""
-"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
-"-p 6502' for Ice."
-msgstr ""
-"Primjeri: 'net.sourceforge.mumble.murmur' za DBus ili 'Meta:tcp -h 127.0.0.1 "
-"-p 6502' za Ice."
+msgid "Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice."
+msgstr "Primjeri: 'net.sourceforge.mumble.murmur' za DBus ili 'Meta:tcp -h 127.0.0.1 -p 6502' za Ice."
 
 #: models.py:46
 msgid "Server ID"
@@ -114,12 +105,8 @@ msgid "Server Address"
 msgstr "Adresa servera"
 
 #: models.py:47
-msgid ""
-"Hostname or IP address to bind to. You should use a hostname here, because "
-"it will appear on the global server list."
-msgstr ""
-"Ime poslužitelja (hostname) ili IP adresa adresa za spajanje. Koristite ime "
-"poslužitelja ovdje zato što će se pojaviti na globalnoj listi servera."
+msgid "Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list."
+msgstr "Ime poslužitelja (hostname) ili IP adresa adresa za spajanje. Koristite ime poslužitelja ovdje zato što će se pojaviti na globalnoj listi servera."
 
 #: models.py:48
 msgid "Server Port"
@@ -139,8 +126,7 @@ msgstr "Poruka dobrodošlice"
 
 #: models.py:51
 msgid "Password required to join. Leave empty for public servers."
-msgstr ""
-"Lozinka za pristup serveru. Ostaviti prazno ako se spajate na javni server."
+msgstr "Lozinka za pristup serveru. Ostaviti prazno ako se spajate na javni server."
 
 #: models.py:52
 msgid "Superuser Password"
@@ -183,12 +169,8 @@ msgid "Default channel"
 msgstr "Početni kanal"
 
 #: models.py:60
-msgid ""
-"Enter the ID of the default channel here. The Channel viewer displays the ID "
-"to server admins on the channel detail page."
-msgstr ""
-"Unesite ID početnog kanala. Prikaz kanala pokazuje ID administratorima "
-"servera na stranici s detaljima kanala."
+msgid "Enter the ID of the default channel here. The Channel viewer displays the ID to server admins on the channel detail page."
+msgstr "Unesite ID početnog kanala. Prikaz kanala pokazuje ID administratorima servera na stranici s detaljima kanala."
 
 #: models.py:61
 msgid "Boot Server"
@@ -204,9 +186,7 @@ msgstr "Instance servera"
 
 #: models.py:121
 #, python-format
-msgid ""
-"Port number %(portno)d is not within the allowed range %(minrange)d - %"
-"(maxrange)d"
+msgid "Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d"
 msgstr "Port %(portno)d nije u dozvoljenom opsegu %(minrange)d - %(maxrange)d"
 
 #: models.py:378
@@ -254,19 +234,15 @@ msgstr "Ovo polje ne smije biti ažurirano nakon što je zapis spremljen."
 msgid ""
 "\n"
 "      <b>Hint:</b><br />\n"
-"      This area is used to display additional information for each channel "
-"and player, but requires JavaScript to be\n"
-"      displayed correctly. You will not see the detail pages, but you can "
-"use all links and forms\n"
+"      This area is used to display additional information for each channel and player, but requires JavaScript to be\n"
+"      displayed correctly. You will not see the detail pages, but you can use all links and forms\n"
 "      that are displayed.\n"
 "      "
 msgstr ""
 "\n"
 "      <b>Savjet:</b><br />\n"
-"      Ovdje se prikazuju dodatne informacije za svaki kanali svakog igrača "
-"te zahtjeva JavaScript kako bi\n"
-"      se informacije pravilno prikazale. Nećete vidjeti stranicu s "
-"detaljima, ali možete koristiti sve linkove i forme.\n"
+"      Ovdje se prikazuju dodatne informacije za svaki kanali svakog igrača te zahtjeva JavaScript kako bi\n"
+"      se informacije pravilno prikazale. Nećete vidjeti stranicu s detaljima, ali možete koristiti sve linkove i forme.\n"
 "      "
 
 #: templates/mumble.htm:26
@@ -297,13 +273,11 @@ msgstr "Nemate račun na ovom serveru"
 #, python-format
 msgid ""
 "\n"
-"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able "
-"to register an account on this Mumble server.</p>\n"
+"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able to register an account on this Mumble server.</p>\n"
 "    "
 msgstr ""
 "\n"
-"      <p>Morate biti <a href=\"%(login_url)s\">prijavljeni (ulogirani)</a> "
-"kako bi ste napravili račun na ovom Mumble serveru.</p>\n"
+"      <p>Morate biti <a href=\"%(login_url)s\">prijavljeni (ulogirani)</a> kako bi ste napravili račun na ovom Mumble serveru.</p>\n"
 "    "
 
 #: templates/mumble.htm:59 templates/mumble.htm.py:124
@@ -312,16 +286,13 @@ msgid "User Texture"
 msgstr "Korisnička slika"
 
 #: templates/mumble.htm:61
-#, fuzzy
 msgid ""
 "\n"
-"          You can upload an image that you would like to use as your user "
-"texture here.\n"
+"          You can upload an image that you would like to use as your user texture here.\n"
 "        "
 msgstr ""
 "\n"
-"          Možete postaviti sliku za koju bi htjeli da zamjeni vašekorisničko "
-"ime u Mumble transparentu (overlay).\n"
+"          Možete postaviti sliku za koju bi htjeli da zamjeni vašekorisničko ime u Mumble transparentu (overlay).\n"
 "        "
 
 #: templates/mumble.htm:66
@@ -335,14 +306,12 @@ msgstr ""
 #: templates/mumble.htm:72
 msgid ""
 "\n"
-"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you "
-"upload an image with\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with\n"
 "          a different size, it will be resized accordingly.<br />\n"
 "        "
 msgstr ""
 "\n"
-"          Savjet: Slika <b>mora</b> biti veličine 600x60. Ako odaberete "
-"sliku drugačije veličine, veličina će biti promjenjena u 600x60.<br />\n"
+"          Savjet: Slika <b>mora</b> biti veličine 600x60. Ako odaberete sliku drugačije veličine, veličina će biti promjenjena u 600x60.<br />\n"
 "        "
 
 #: templates/mumble.htm:89
@@ -359,33 +328,28 @@ msgstr "Na serveru od"
 
 #: templates/mumble.htm:106
 #, python-format
-msgid "Authenticated:    %(authed)s"
-msgstr "Registriran korisnik: %(authed)s"
-
-#: templates/mumble.htm:107
-#, python-format
-msgid "Admin:            %(admin)s"
-msgstr "Administrator:   %(admin)s"
+msgid "Authenticated"
+msgstr "Registriran korisnik"
 
 #: templates/mumble.htm:108
 #, python-format
-msgid "Muted:            %(muted)s"
-msgstr "Utišan mikrofon:   %(muted)s"
+msgid "Muted"
+msgstr "Utišan mikrofon"
 
 #: templates/mumble.htm:109
 #, python-format
-msgid "Deafened:         %(deafened)s"
-msgstr "Utišani zvučnici / slušalice:    %(deafened)s"
+msgid "Deafened"
+msgstr "Utišani zvučnici / slušalice"
 
 #: templates/mumble.htm:110
 #, python-format
-msgid "Muted by self:    %(selfmuted)s"
-msgstr "Samo-utišan mikrofon: %(selfmuted)s"
+msgid "Muted by self"
+msgstr "Samo-utišan mikrofon"
 
 #: templates/mumble.htm:111
 #, python-format
-msgid "Deafened by self: %(selfdeafened)s"
-msgstr "Samo-utišani zvučnici / slušalice: %(selfdeafened)s"
+msgid "Deafened by self"
+msgstr "Samo-utišani zvučnici / slušalice"
 
 #: templates/mumble.htm:114
 msgid "User"

@@ -67,7 +67,7 @@ def mumbles( request ):
 		return HttpResponseRedirect( reverse( show, kwargs={ 'server': mumbles[0].id, } ) );
 	
 	return render_to_response(
-		'mumble/list.htm',
+		'mumble/list.html',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
 		  'MEDIA_URL':     settings.MEDIA_URL,
@@ -83,7 +83,7 @@ def mobile_mumbles( request ):
 		return HttpResponseRedirect( reverse( mobile_show, kwargs={ 'server': mumbles[0].id, } ) );
 	
 	return render_to_response(
-		'mumble/mobile_list.htm',
+		'mumble/mobile_list.html',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
 		  'MEDIA_URL':     settings.MEDIA_URL,
@@ -189,7 +189,7 @@ def show( request, server ):
 	login_url = reverse( auth_views.login );
 	
 	return render_to_response(
-		'mumble/mumble.htm',
+		'mumble/mumble.html',
 		{
 			'MEDIA_URL':    settings.MEDIA_URL,
 			'login_url':    "%s?next=%s" % ( login_url, show_url ),
@@ -220,7 +220,7 @@ def mobile_show( request, server ):
 			pass;
 	
 	return render_to_response(
-		'mumble/mobile_mumble.htm',
+		'mumble/mobile_mumble.html',
 		{
 			'MEDIA_URL':    settings.MEDIA_URL,
 			'DBaseObject':  srv,

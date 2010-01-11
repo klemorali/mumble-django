@@ -354,33 +354,28 @@ msgstr "Czas online"
 
 #: templates/mumble.htm:106
 #, python-format
-msgid "Authenticated:    %(authed)s"
-msgstr "Zarejestrowany: %(authed)s"
-
-#: templates/mumble.htm:107
-#, python-format
-msgid "Admin:            %(admin)s"
-msgstr "Administrator:   %(admin)s"
+msgid "Authenticated"
+msgstr "Zarejestrowany"
 
 #: templates/mumble.htm:108
 #, python-format
-msgid "Muted:            %(muted)s"
-msgstr "Wyciszony mikrofon:   %(muted)s"
+msgid "Muted"
+msgstr "Wyciszony mikrofon"
 
 #: templates/mumble.htm:109
 #, python-format
-msgid "Deafened:         %(deafened)s"
-msgstr "Wyciszone słuchawki:    %(deafened)s"
+msgid "Deafened"
+msgstr "Wyciszone słuchawki"
 
 #: templates/mumble.htm:110
 #, python-format
-msgid "Muted by self:    %(selfmuted)s"
-msgstr "Wyciszył mikrofon: %(selfmuted)s"
+msgid "Muted by self"
+msgstr "Wyciszył mikrofon"
 
 #: templates/mumble.htm:111
 #, python-format
-msgid "Deafened by self: %(selfdeafened)s"
-msgstr "Wyciszył słuchawki: %(selfdeafened)s"
+msgid "Deafened by self"
+msgstr "Wyciszył słuchawki"
 
 #: templates/mumble.htm:114
 msgid "User"

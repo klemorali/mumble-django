@@ -1,23 +1,24 @@
 {% load mumble_extras %}
+{% load i18n %}
 <div class="mumble" style="background-image: url( {{ MEDIA_URL }}/mumble/linie_v.png )">
   <span class="mumble">
     {% if Player.isAuthed %}
-    <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="Authenticated" />
+    <img src="{{ MEDIA_URL }}/mumble/authenticated.png" alt="authed" title="{% trans "Authenticated" %}" />
     {% endif %}
     {% if Player.mute or Player.suppress %}
-      <img src="{{ MEDIA_URL }}/mumble/muted_server.png" alt="muted" title="Muted by server" />
+      <img src="{{ MEDIA_URL }}/mumble/muted_server.png" alt="muted" title="{% trans "Muted" %}" />
     {% endif %}
     {% if Player.deaf %}
-      <img src="{{ MEDIA_URL }}/mumble/deafened_server.png" alt="deafened" title="Deafened by server" />
+      <img src="{{ MEDIA_URL }}/mumble/deafened_server.png" alt="deafened" title="{% trans "Deafened" %}" />
     {% endif %}
     {% if Player.selfMute %}
-      <img src="{{ MEDIA_URL }}/mumble/muted_self.png" alt="self-muted" title="Muted by themselves" />
+      <img src="{{ MEDIA_URL }}/mumble/muted_self.png" alt="self-muted" title="{% trans "Muted by self" %}" />
     {% endif %}
     {% if Player.selfDeaf %}
-      <img src="{{ MEDIA_URL }}/mumble/deafened_self.png" alt="self-deafened" title="Deafened by themselves" />
+      <img src="{{ MEDIA_URL }}/mumble/deafened_self.png" alt="self-deafened" title="{% trans "Deafened by self" %}" />
     {% endif %}
     {% if Player.hasComment %}
-      <img src="{{ MEDIA_URL }}/mumble/comment.png" alt="has comment" title="has a User Comment set" />
+      <img src="{{ MEDIA_URL }}/mumble/comment.png" alt="has comment" title="{% trans "has a User Comment set" %}" />
     {% endif %}
   </span>
   <span>
