@@ -149,11 +149,9 @@ MEDIA_URL = MUMBLE_DJANGO_URL+'static/'
 # URL prefix for admin media -- CSS, JavaScript and images.
 ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
 
-# URL to the login view - will be resolved on-demand
-from deferred_resolver import ViewResolver
-LOGIN_URL = ViewResolver( "django.contrib.auth.views.login" )
-LOGIN_REDIRECT_URL = ViewResolver( "views.profile" )
-
+# URL to the login view
+LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login';
+LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile';
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
