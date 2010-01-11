@@ -354,33 +354,28 @@ msgstr "Online da"
 
 #: templates/mumble.htm:106
 #, python-format
-msgid "Authenticated:    %(authed)s"
-msgstr "Authenticated:    %(authed)s"
-
-#: templates/mumble.htm:107
-#, python-format
-msgid "Admin:            %(admin)s"
-msgstr "Amministratore:   %(admin)s"
+msgid "Authenticated"
+msgstr "Authenticated"
 
 #: templates/mumble.htm:108
 #, python-format
-msgid "Muted:            %(muted)s"
-msgstr "Muto:   %(muted)s"
+msgid "Muted"
+msgstr "Muto"
 
 #: templates/mumble.htm:109
 #, python-format
-msgid "Deafened:         %(deafened)s"
-msgstr "Sordo:    %(deafened)s"
+msgid "Deafened"
+msgstr "Sordo"
 
 #: templates/mumble.htm:110
 #, python-format
-msgid "Muted by self:    %(selfmuted)s"
-msgstr "Mutato solo: %(selfmuted)s"
+msgid "Muted by self"
+msgstr "Mutato solo"
 
 #: templates/mumble.htm:111
 #, python-format
-msgid "Deafened by self: %(selfdeafened)s"
-msgstr "Rintronarsi: %(selfdeafened)s"
+msgid "Deafened by self"
+msgstr "Rintronarsi"
 
 #: templates/mumble.htm:114
 msgid "User"

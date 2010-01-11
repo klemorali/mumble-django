@@ -363,33 +363,28 @@ msgstr "接続開始時間"
 
 #: templates/mumble.htm:106
 #, python-format
-msgid "Authenticated:    %(authed)s"
-msgstr "登録済み: %(authed)s"
-
-#: templates/mumble.htm:107
-#, python-format
-msgid "Admin:            %(admin)s"
-msgstr "管理者:   %(admin)s"
+msgid "Authenticated"
+msgstr "登録済み"
 
 #: templates/mumble.htm:108
 #, python-format
-msgid "Muted:            %(muted)s"
-msgstr "発言禁止:   %(muted)s"
+msgid "Muted"
+msgstr "発言禁止"
 
 #: templates/mumble.htm:109
 #, python-format
-msgid "Deafened:         %(deafened)s"
-msgstr "聴取禁止:    %(deafened)s"
+msgid "Deafened"
+msgstr "聴取禁止"
 
 #: templates/mumble.htm:110
 #, python-format
-msgid "Muted by self:    %(selfmuted)s"
-msgstr "自分で発言禁止: %(selfmuted)s"
+msgid "Muted by self"
+msgstr "自分で発言禁止"
 
 #: templates/mumble.htm:111
 #, python-format
-msgid "Deafened by self: %(selfdeafened)s"
-msgstr "自分で聴取禁止: %(selfdeafened)s"
+msgid "Deafened by self"
+msgstr "自分で聴取禁止"
 
 #: templates/mumble.htm:114
 msgid "User"

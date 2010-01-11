@@ -1,8 +1,9 @@
-{% extends "index.htm" %}
+{% extends "index.html" %}
 {% load mumble_extras %}
-{% block Headline %}
-  Imprint
-{% endblock %}
+{% load i18n %}
+
+{% block Headline %}{% trans "Imprint" %}{% endblock %}
+
 {% block Content %}
 <div class="rahmen">
   <p>
