@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
- *  Copyright (C) 2010, mbonetti <http://code.google.com/u/mbonetti/>
+ *  Copyright (C) 2010, Marco Bonetti <mbonetti@gmail.com>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
