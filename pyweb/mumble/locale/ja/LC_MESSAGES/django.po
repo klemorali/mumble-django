@@ -1,28 +1,29 @@
 # Japanese translation file for Mumble-Django.
-#
+# 
 #   Copyright (C) 2009, withgod                   <withgod@sourceforge.net>
 #                       Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
-#
+# 
 # Mumble-Django is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#
+# 
 # This package is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-14 13:57+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: withgod <withgod@sourceforge.net>\n"
+"PO-Revision-Date: 2010-01-11 16:09\n"
+"Last-Translator: <nocontents@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.5.1\n"
 
 #: admin.py:30
 msgid "Registered users"
@@ -42,7 +43,7 @@ msgstr "公開"
 
 #: forms.py:53
 msgid "That name is forbidden by the server."
-msgstr ""
+msgstr "その名前はサーバによって不可視にされています"
 
 #: forms.py:56 models.py:414
 msgid "Another player already registered that name."
@@ -57,12 +58,8 @@ msgid "Server Password"
 msgstr "サーバパスワード"
 
 #: forms.py:76
-msgid ""
-"This server is private and protected mode is active. Please enter the server "
-"password."
-msgstr ""
-"本サーバをプライベート及びプロテクトモードで利用する場合は、パスワードを入力"
-"してください。"
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "本サーバをプライベート及びプロテクトモードで利用する場合は、パスワードを入力してください。"
 
 #: forms.py:84 forms.py:130
 msgid "The password you entered is incorrect."
@@ -73,12 +70,8 @@ msgid "Link account"
 msgstr "アカウントリンク"
 
 #: forms.py:100
-msgid ""
-"The account already exists and belongs to me, just link it instead of "
-"creating."
-msgstr ""
-"アカウントは既に存在していて、自分にリンクしています。"
-"リンクの変わりに作成して下さい。"
+msgid "The account already exists and belongs to me, just link it instead of creating."
+msgstr "アカウントは既に存在していて、自分にリンクしています。リンクの変わりに作成して下さい。"
 
 #: forms.py:112
 msgid "No such user found."
@@ -101,12 +94,8 @@ msgid "DBus or ICE base"
 msgstr "DBusもしくはICE"
 
 #: models.py:45
-msgid ""
-"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
-"-p 6502' for Ice."
-msgstr ""
-"例: DBusなら'net.sourceforge.mumble.murmur' Iceなら'Meta:tcp -h 127.0.0.1 -p "
-"6502'"
+msgid "Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice."
+msgstr "例: DBusなら'net.sourceforge.mumble.murmur' Iceなら'Meta:tcp -h 127.0.0.1 -p 6502'"
 
 #: models.py:46
 msgid "Server ID"
@@ -117,12 +106,8 @@ msgid "Server Address"
 msgstr "サーバアドレス"
 
 #: models.py:47
-msgid ""
-"Hostname or IP address to bind to. You should use a hostname here, because "
-"it will appear on the global server list."
-msgstr ""
-"利用するホスト名もしくはIPアドレス. ホスト名も利用することが出来ます。 サーバ"
-"一覧に表示されます。."
+msgid "Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list."
+msgstr "利用するホスト名もしくはIPアドレス. ホスト名も利用することが出来ます。 サーバ一覧に表示されます。."
 
 #: models.py:48
 msgid "Server Port"
@@ -130,8 +115,7 @@ msgstr "サーバポート"
 
 #: models.py:48
 msgid "Port number to bind to. Use -1 to auto assign one."
-msgstr ""
-"利用するポート番号を指定します、-1を指定すると空いているポートを利用します。"
+msgstr "利用するポート番号を指定します、-1を指定すると空いているポートを利用します。"
 
 #: models.py:49
 msgid "Website URL"
@@ -143,8 +127,7 @@ msgstr "サーバメッセージ"
 
 #: models.py:51
 msgid "Password required to join. Leave empty for public servers."
-msgstr ""
-"サーバに参加するにはパスワードが必要。空白にすると公開サーバになります。"
+msgstr "サーバに参加するにはパスワードが必要。空白にすると公開サーバになります。"
 
 #: models.py:52
 msgid "Superuser Password"
@@ -187,12 +170,8 @@ msgid "Default channel"
 msgstr "デフォルトチャンネル"
 
 #: models.py:60
-msgid ""
-"Enter the ID of the default channel here. The Channel viewer displays the ID "
-"to server admins on the channel detail page."
-msgstr ""
-"接続開始時に利用されるデフォルトチャンネルIDを指定して下さい。チャンネル表示"
-"一覧にて チャンネル詳細を確認すればチャンネルIDを調べられます。."
+msgid "Enter the ID of the default channel here. The Channel viewer displays the ID to server admins on the channel detail page."
+msgstr "接続開始時に利用されるデフォルトチャンネルIDを指定して下さい。チャンネル表示一覧にて チャンネル詳細を確認すればチャンネルIDを調べられます。."
 
 #: models.py:61
 msgid "Boot Server"
@@ -208,12 +187,8 @@ msgstr "全サーバインスタンス"
 
 #: models.py:121
 #, python-format
-msgid ""
-"Port number %(portno)d is not within the allowed range %(minrange)d - %"
-"(maxrange)d"
-msgstr ""
-"ポート番号 %(portno)d は許可されていません、次の範囲が許可されています %"
-"(minrange)d - %(maxrange)d"
+msgid "Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d"
+msgstr "ポート番号 %(portno)d は許可されていません、次の範囲が許可されています %(minrange)d - %(maxrange)d"
 
 #: models.py:378
 msgid "Mumble player_id"
@@ -260,19 +235,15 @@ msgstr "この項目はアップデート出来ません."
 msgid ""
 "\n"
 "      <b>Hint:</b><br />\n"
-"      This area is used to display additional information for each channel "
-"and player, but requires JavaScript to be\n"
-"      displayed correctly. You will not see the detail pages, but you can "
-"use all links and forms\n"
+"      This area is used to display additional information for each channel and player, but requires JavaScript to be\n"
+"      displayed correctly. You will not see the detail pages, but you can use all links and forms\n"
 "      that are displayed.\n"
 "      "
 msgstr ""
 "\n"
 "      <b>ヒント:</b><br />\n"
-"      このエリアはチャンネル情報をやプレーヤー情報を表示するのにjavascriptが"
-"必要です\n"
-"      javascriptをオンにしないと、すべての情報を閲覧することは出来ませ"
-"ん。      "
+"      このエリアはチャンネル情報をやプレーヤー情報を表示するのにjavascriptが必要です\n"
+"      javascriptをオンにしないと、すべての情報を閲覧することは出来ません。      "
 
 #: templates/mumble.htm:26
 msgid "Website"
@@ -302,13 +273,11 @@ msgstr "アカウントは登録されていません"
 #, python-format
 msgid ""
 "\n"
-"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able "
-"to register an account on this Mumble server.</p>\n"
+"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able to register an account on this Mumble server.</p>\n"
 "    "
 msgstr ""
 "\n"
-"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able "
-"to register an account on this Mumble server.</p>\n"
+"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able to register an account on this Mumble server.</p>\n"
 "    "
 
 #: templates/mumble.htm:59 templates/mumble.htm.py:124
@@ -317,16 +286,13 @@ msgid "User Texture"
 msgstr "ユーザ画像"
 
 #: templates/mumble.htm:61
-#, fuzzy
 msgid ""
 "\n"
-"          You can upload an image that you would like to use as your user "
-"texture here.\n"
+"          You can upload an image that you would like to use as your user texture here.\n"
 "        "
 msgstr ""
 "\n"
-"          任意のユーザ画像をここから登録することがきます。\n"
-"        "
+"任意のユーザ画像をここから登録することがきます。"
 
 #: templates/mumble.htm:66
 msgid "Your current texture is"
@@ -339,14 +305,12 @@ msgstr "貴方は画像を持っていません"
 #: templates/mumble.htm:72
 msgid ""
 "\n"
-"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you "
-"upload an image with\n"
+"          Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with\n"
 "          a different size, it will be resized accordingly.<br />\n"
 "        "
 msgstr ""
 "\n"
-"          ヒント: 画像は600x60である<b>必要</b>があります。そのサイズを超えた"
-"り収まらない 場合は、リサイズが行われます。 <br />\n"
+"          ヒント: 画像は600x60である<b>必要</b>があります。そのサイズを超えたり収まらない 場合は、リサイズが行われます。 <br />\n"
 "        "
 
 #: templates/mumble.htm:89
