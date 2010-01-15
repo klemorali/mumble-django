@@ -14,10 +14,6 @@
  *  GNU General Public License for more details.
 """
 
-def media_url(request):
-	from django.conf import settings
-	return { 'MEDIA_URL': settings.MEDIA_URL }
-
 def installed_apps(request):
 	from django.conf import settings
 	return { 'ROSETTA_INSTALLED': "rosetta" in settings.INSTALLED_APPS }
