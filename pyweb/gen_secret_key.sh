@@ -2,7 +2,7 @@
 #
 #  Update settings.py with an automatically generated Secret Key.
 #
-#  Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+#  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
 #
 #  Mumble-Django is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
