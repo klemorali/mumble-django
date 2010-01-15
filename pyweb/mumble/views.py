@@ -70,7 +70,6 @@ def mumbles( request ):
 		'mumble/list.html',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
-		  'MEDIA_URL':     settings.MEDIA_URL,
 		},
 		context_instance = RequestContext(request)
 		);
@@ -86,7 +85,6 @@ def mobile_mumbles( request ):
 		'mumble/mobile_list.html',
 		{ 'MumbleObjects': mumbles,
 		  'MumbleActive':  True,
-		  'MEDIA_URL':     settings.MEDIA_URL,
 		},
 		context_instance = RequestContext(request)
 		);
@@ -191,7 +189,6 @@ def show( request, server ):
 	return render_to_response(
 		'mumble/mumble.html',
 		{
-			'MEDIA_URL':    settings.MEDIA_URL,
 			'login_url':    "%s?next=%s" % ( login_url, show_url ),
 			'DBaseObject':  srv,
 			'ChannelTable': channelTable,
@@ -222,7 +219,6 @@ def mobile_show( request, server ):
 	return render_to_response(
 		'mumble/mobile_mumble.html',
 		{
-			'MEDIA_URL':    settings.MEDIA_URL,
 			'DBaseObject':  srv,
 			'MumbleActive': True,
 			'MumbleAccount':user,
