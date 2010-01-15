@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
  *  Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  *
@@ -21,17 +22,16 @@ from django.conf            import settings
 register = template.Library();
 
 
-
 ### FILTER: trunc -- converts "a very very extaordinary long text" to "a very very extra..."
+@register.filter
 def trunc( string, maxlen = 50 ):
 	if len(string) < maxlen:
 		return string;
 	return string[:(maxlen - 3)] + "...";
 
-register.filter( 'trunc', trunc );
-
 
 ### FILTER: chanview -- renders an mmChannel / mmPlayer object with the correct template.
+@register.filter
 def chanview( obj, user = None ):
 	if obj.is_server:
 		return render_to_string( 'mumble/server.html',  { 'Server':  obj, 'MumbleAccount': user, 'MEDIA_URL': settings.MEDIA_URL } );
@@ -40,13 +40,8 @@ def chanview( obj, user = None ):
 	elif obj.is_player:
 		return render_to_string( 'mumble/player.html',  { 'Player':  obj, 'MumbleAccount': user, 'MEDIA_URL': settings.MEDIA_URL } );
 
-register.filter( 'chanview', chanview );
-
 
 ### FILTER: chanurl -- creates a connection URL and takes the user's login into account
+@register.filter
 def chanurl( obj, user ):
 	return obj.getURL( user );
-
-register.filter( 'chanurl', chanurl );
-
-
