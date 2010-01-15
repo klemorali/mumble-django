@@ -199,5 +199,8 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'registration',
 	'mumble',
-	'rosetta',
+	# If you have django-rosetta installed, uncomment the next line. The URL
+	# and a link in the main template will then be added automatically.
+	#    http://code.google.com/p/django-rosetta
+	#'rosetta',
 )
