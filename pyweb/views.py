@@ -30,7 +30,6 @@ from mumble.models			import Mumble, MumbleUser
 def profile( request ):
 	userdata = {
 		"ProfileActive": True,
-		'MEDIA_URL':    settings.MEDIA_URL,
 		"mumbleaccs":	MumbleUser.objects.filter(	owner  = request.user ),
 #		"gbposts": 	Entry.objects.filter(		author = request.user ).count(),
 #		"gbcomments": 	Comment.objects.filter(		author = request.user ).count(),
@@ -47,5 +46,4 @@ def profile( request ):
 def imprint( request ):
 	return render_to_response(
 		'registration/imprint.html',
-		{ 'MEDIA_URL':    settings.MEDIA_URL, },
 		context_instance = RequestContext(request) );

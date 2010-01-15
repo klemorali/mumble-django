@@ -30,7 +30,9 @@
           {% endif %}
           {% if user.is_staff %}
             <a href="{% url admin:index %}" target="_blank">{% trans "Administration" %}</a> |
-            <a href="{% url rosetta.views.home %}" target="_blank">{% trans "Edit translations" %}</a> |
+            {% if ROSETTA_INSTALLED %}
+              <a href="{% url rosetta.views.home %}" target="_blank">{% trans "Edit translations" %}</a> |
+            {% endif %}
           {% endif %}
           <a href="{% url views.imprint %}">{% trans "Imprint" %}</a>
         </div>

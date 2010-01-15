@@ -178,6 +178,15 @@ TEMPLATE_DIRS = (
 	join( MUMBLE_DJANGO_ROOT, 'pyweb', 'templates' ),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+	"django.core.context_processors.auth",
+	"django.core.context_processors.debug",
+	"django.core.context_processors.i18n",
+	"django.core.context_processors.media",
+	'processors.media_url',
+	'processors.installed_apps',
+	);
+
 TEST_RUNNER = 'mumble.testrunner.run_tests'
 TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' );
 TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' );
