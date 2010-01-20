@@ -14,26 +14,17 @@
  *  GNU General Public License for more details.
 """
 
-from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
+from django.shortcuts			import render_to_response
 from django.template			import RequestContext
-from django.http			import HttpResponseRedirect
-from django.core.urlresolvers		import reverse
 from django.contrib.auth.decorators	import login_required
-from django.contrib.auth.models		import User
-from django.conf			import settings
 
-from mumble.models			import Mumble, MumbleUser
-#from guestbook.models			import Entry, Comment
-#from forum.models			import Post
+from mumble.models			import MumbleUser
 
 @login_required
 def profile( request ):
 	userdata = {
 		"ProfileActive": True,
 		"mumbleaccs":	MumbleUser.objects.filter(	owner  = request.user ),
-#		"gbposts": 	Entry.objects.filter(		author = request.user ).count(),
-#		"gbcomments": 	Comment.objects.filter(		author = request.user ).count(),
-#		"forumposts": 	Post.objects.filter(		author = request.user ).count(),
 		};
 	
 	return render_to_response(

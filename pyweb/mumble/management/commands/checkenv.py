@@ -118,7 +118,7 @@ class Command( BaseCommand ):
 		else:
 			for mumble in mm:
 				try:
-					ctl = mumble.ctl;
+					mumble.getCtl();
 				except Exception, err:
 					raise TestFailed(
 						"Connecting to Murmur `%s` (%s) failed: %s" % ( mumble.name, mumble.dbus, err )

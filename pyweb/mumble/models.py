@@ -22,8 +22,8 @@ from django.db			import models
 from django.db.models		import signals
 from django.conf		import settings
 
-from mmobjects			import *
-from mctl			import *
+from mumble.mmobjects		import mmChannel, mmPlayer
+from mumble.mctl		import MumbleCtlBase
 
 
 
@@ -43,22 +43,30 @@ class Mumble( models.Model ):
 	"""
 	
 	name    = models.CharField(    _('Server Name'),        max_length = 200 );
-	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN, help_text=_("Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
+	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN, help_text=_(
+		"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
 	srvid   = models.IntegerField( _('Server ID'),          editable = False );
-	addr    = models.CharField(    _('Server Address'),     max_length = 200, help_text=_("Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list.") );
-	port    = models.IntegerField( _('Server Port'),        help_text=_("Port number to bind to. Use -1 to auto assign one."), default=settings.MUMBLE_DEFAULT_PORT );
+	addr    = models.CharField(    _('Server Address'),     max_length = 200, help_text=_(
+		"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
+		"global server list.") );
+	port    = models.IntegerField( _('Server Port'),        default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
+		"Port number to bind to. Use -1 to auto assign one.") );
 	url     = models.CharField(    _('Website URL'),        max_length = 200, blank = True );
 	motd    = models.TextField(    _('Welcome Message'),                      blank = True );
-	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True, help_text=_("Password required to join. Leave empty for public servers.") );
+	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True, help_text=_(
+		"Password required to join. Leave empty for public servers.") );
 	supw    = models.CharField(    _('Superuser Password'), max_length = 200, blank = True );
 	users   = models.IntegerField( _('Max. Users'),                           blank = True, null = True );
 	bwidth  = models.IntegerField( _('Bandwidth [Bps]'),                      blank = True, null = True );
 	sslcrt  = models.TextField(    _('SSL Certificate'),                      blank = True );
 	sslkey  = models.TextField(    _('SSL Key'),            blank = True    );
-	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False,  help_text=_("If on, IP adresses of the clients are not logged.") );
+	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False,  help_text=_(
+		"If on, IP adresses of the clients are not logged.") );
 	player  = models.CharField(    _('Player name regex'),  max_length=200,   default=r'[-=\w\[\]\{\}\(\)\@\|\.]+'   );
 	channel = models.CharField(    _('Channel name regex'), max_length=200,   default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
-	defchan = models.IntegerField( _('Default channel'),    default=0,        help_text=_("Enter the ID of the default channel here. The Channel viewer displays the ID to server admins on the channel detail page."));
+	defchan = models.IntegerField( _('Default channel'),    default=0,        help_text=_(
+		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
+		"server admins on the channel detail page."));
 	booted  = models.BooleanField( _('Boot Server'),        default = True  );
 	
 	class Meta:
@@ -81,7 +89,8 @@ class Mumble( models.Model ):
 	users_regged = property( lambda self: self.mumbleuser_set.count(),           doc="Number of registered users." );
 	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." );
 	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." );
-	is_public    = property( lambda self: self.passwd == '',                     doc="False if a password is needed to join this server." );
+	is_public    = property( lambda self: self.passwd == '',
+			doc="False if a password is needed to join this server." );
 	
 	is_server  = True;
 	is_channel = False;
@@ -402,7 +411,11 @@ class MumbleUser( models.Model ):
 		self._registration = None;
 	
 	def __unicode__( self ):
-		return _("Mumble user %(mu)s on %(srv)s owned by Django user %(du)s") % { 'mu': self.name, 'srv': self.server, 'du': self.owner };
+		return _("Mumble user %(mu)s on %(srv)s owned by Django user %(du)s") % {
+			'mu':  self.name,
+			'srv': self.server,
+			'du':  self.owner
+			};
 	
 	def save( self, dontConfigureMurmur=False ):
 		"""Save the settings in this model to Murmur."""
@@ -498,7 +511,9 @@ class MumbleUser( models.Model ):
 		"""Read an image from the infile and install it as the user's texture."""
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
 	
-	texture = property( getTexture, setTexture, doc="Get the texture as a PIL Image or read from a file (pass the path)." );
+	texture = property( getTexture, setTexture,
+		doc="Get the texture as a PIL Image or read from a file (pass the path)."
+		);
 	
 	def hasTexture( self ):
 		""" Check if this user has a texture set. """

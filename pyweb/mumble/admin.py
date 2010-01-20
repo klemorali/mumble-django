@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 from forms  import MumbleAdminForm
-from models import *
+from models import Mumble, MumbleUser
 
 class MumbleAdmin(admin.ModelAdmin):
 	list_display   = [ 'name', 'addr', 'port', 'booted', 'getIsPublic', 'getUsersRegged', 'getUsersOnline', 'getChannelCnt' ];

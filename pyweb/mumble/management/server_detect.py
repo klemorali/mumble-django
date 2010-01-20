@@ -17,7 +17,7 @@
 import os
 
 from mumble			import models
-from mumble.mctl		import *
+from mumble.mctl		import MumbleCtlBase
 
 def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	if not isinstance( keys, tuple ):

@@ -14,11 +14,10 @@
  *  GNU General Public License for more details.
 """
 
-import os
-
+from django.conf		import settings
 from django.test		import TestCase
 
-from models			import *
+from models			import Mumble
 from utils			import ObjectInfo
 
 
