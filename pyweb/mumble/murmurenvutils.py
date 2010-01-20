@@ -91,7 +91,7 @@ def update_dbase( version ):
 	if not exists( murmurfile ):
 		raise EnvironmentError( "Murmur's database could not be found: '%s' does not exist!" % murmurfile );
 	dbasefile = join( settings.TEST_MURMUR_FILES_DIR, "murmur-%s.db3" % version );
-	copyfile( dbasefile, target );
+	copyfile( murmurfile, dbasefile );
 
 
 def run_murmur( version ):
@@ -105,8 +105,6 @@ def run_murmur( version ):
 		raise EnvironmentError( "This version could not be found: '%s' does not exist!" % murmur_root );
 	
 	binary_candidates = ( 'murmur.64', 'murmur.x86', 'murmurd' );
-	
-	files = os.listdir( murmur_root );
 	
 	for binname in binary_candidates:
 		if exists( join( murmur_root, binname ) ):

@@ -14,8 +14,6 @@
  *  GNU General Public License for more details.
 """
 
-import mctl
-
 import datetime
 from time			import time
 from os.path			import join
@@ -167,7 +165,7 @@ class mmPlayer( object ):
 		self.channel.players.append( self );
 		
 		if self.isAuthed:
-			from models import Mumble, MumbleUser
+			from models import MumbleUser
 			try:
 				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.userid, server=srvInstance );
 			except MumbleUser.DoesNotExist:

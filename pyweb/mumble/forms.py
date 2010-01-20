@@ -18,10 +18,11 @@ import socket
 import re
 
 from django			import forms
+from django.conf		import settings
 from django.forms		import Form, ModelForm
 from django.utils.translation	import ugettext_lazy as _
 
-from models			import *
+from models			import Mumble, MumbleUser
 
 
 class MumbleAdminForm( ModelForm ):

@@ -16,7 +16,6 @@
 
 import simplejson
 from StringIO				import StringIO
-from os.path				import join
 
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
 from django.template			import RequestContext
@@ -29,8 +28,8 @@ from django.core.urlresolvers		import reverse
 from django.contrib.auth		import views as auth_views
 
 from models				import Mumble, MumbleUser
-from forms				import *
-from mmobjects				import *
+from forms				import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
+from forms				import MumbleUserLinkForm, MumbleTextureForm
 
 
 def redir( request ):
@@ -177,11 +176,11 @@ def show( request, server ):
 	
 	# ChannelTable is a somewhat misleading name, as it actually contains channels and players.
 	channelTable = [];
-	for id in srv.channels:
-		if id != 0 and srv.channels[id].show:
-			channelTable.append( srv.channels[id] );
-	for id in srv.players:
-		channelTable.append( srv.players[id] );
+	for cid in srv.channels:
+		if cid != 0 and srv.channels[cid].show:
+			channelTable.append( srv.channels[cid] );
+	for pid in srv.players:
+		channelTable.append( srv.players[pid] );
 	
 	show_url = reverse( show, kwargs={ 'server': srv.id } );
 	login_url = reverse( auth_views.login );
@@ -250,9 +249,9 @@ def showTexture( request, server, userid = None ):
 	except ValueError:
 		raise Http404();
 	else:
-		buffer = StringIO();
-		img.save( buffer, "PNG" );
-		return HttpResponse( buffer.getvalue(), "image/png" );
+		buf = StringIO();
+		img.save( buf, "PNG" );
+		return HttpResponse( buf.getvalue(), "image/png" );
 
 
 @login_required

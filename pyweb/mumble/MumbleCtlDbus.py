@@ -32,7 +32,7 @@ def MumbleCtlDbus( connstring ):
 	meta = dbus.Interface( dbus.SystemBus().get_object( connstring, '/' ), 'net.sourceforge.mumble.Meta' );
 	
 	try:
-		version = meta.getVersion();
+		meta.getVersion();
 	except DBusException:
 		return MumbleCtlDbus_Legacy( connstring, meta );
 	else:
@@ -306,7 +306,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 			elif data.__class__  is dbus.Int32 or data.__class__ is dbus.UInt32:
 				ret = int(data)
 			elif data.__class__ is dbus.Byte:
-				ret = byte(data)
+				ret = int(data)
 		return ret
 
 
