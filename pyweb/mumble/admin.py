@@ -17,36 +17,66 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from forms  import MumbleAdminForm
-from models import Mumble, MumbleUser
+from mumble.forms  import MumbleAdminForm
+from mumble.models import Mumble, MumbleUser
 
 class MumbleAdmin(admin.ModelAdmin):
-	list_display   = [ 'name', 'addr', 'port', 'booted', 'getIsPublic', 'getUsersRegged', 'getUsersOnline', 'getChannelCnt' ];
+	""" Specification for the "Server administration" admin section. """
+	
+	list_display   = [ 'name', 'addr', 'port', 'booted', 'get_is_public',
+			   'get_users_regged', 'get_users_online', 'get_channel_count' ];
 	list_filter    = [ 'booted', 'addr' ];
 	search_fields  = [ 'name', 'addr' ];
 	ordering       = [ 'name' ];
 	form           = MumbleAdminForm;
 	
-	def getUsersRegged( self, obj ):
-		return obj.users_regged;
-	getUsersRegged.short_description = _( 'Registered users' );
 	
-	def getUsersOnline( self, obj ):
-		return obj.users_online;
-	getUsersOnline.short_description = _( 'Online users' );
+	def get_users_regged( self, obj ):
+		""" Populates the "Registered users" column. """
+		if obj.booted:
+			return obj.users_regged;
+		else:
+			return '-';
 	
-	def getChannelCnt( self, obj ):
-		return obj.channel_cnt;
-	getChannelCnt.short_description = _( 'Channel count' );
+	get_users_regged.short_description = _( 'Registered users' );
 	
-	def getIsPublic( self, obj ):
-		if obj.is_public:
-			return _( 'Yes' );
-		return _( 'No' );
-	getIsPublic.short_description = _( 'Public' );
 	
+	def get_users_online( self, obj ):
+		""" Populates the "Online users" column. """
+		if obj.booted:
+			return obj.users_online;
+		else:
+			return '-';
+	
+	get_users_online.short_description = _( 'Online users' );
+	
+	
+	def get_channel_count( self, obj ):
+		""" Populates the "Channel Count" column. """
+		if obj.booted:
+			return obj.channel_cnt;
+		else:
+			return '-';
+	
+	get_channel_count.short_description = _( 'Channel count' );
+	
+	
+	def get_is_public( self, obj ):
+		""" Populates the "Public" column. """
+		if obj.booted:
+			if obj.is_public:
+				return _( 'Yes' );
+			else:
+				return _( 'No' );
+		else:
+			return '-';
+	
+	get_is_public.short_description = _( 'Public' );
+
 
 class MumbleUserAdmin(admin.ModelAdmin):
+	""" Specification for the "Registered users" admin section. """
+	
 	list_display   = [ 'owner', 'server', 'name', 'isAdmin' ];
 	list_filter    = [ 'server' ];
 	search_fields  = [ 'owner__username', 'name' ];
