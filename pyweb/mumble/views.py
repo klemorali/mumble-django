@@ -58,31 +58,22 @@ def redir( request ):
 	else:
 		return HttpResponseRedirect( reverse( mumbles ) );
 
-def mumbles( request ):
-	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
-	mumbles = get_list_or_404( Mumble );
-	
-	if len(mumbles) == 1:
-		return HttpResponseRedirect( reverse( show, kwargs={ 'server': mumbles[0].id, } ) );
-	
-	return render_to_response(
-		'mumble/list.html',
-		{ 'MumbleObjects': mumbles,
-		  'MumbleActive':  True,
-		},
-		context_instance = RequestContext(request)
-		);
-
 def mobile_mumbles( request ):
+	return mumbles( request, mobile=True );
+
+def mumbles( request, mobile=False ):
 	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
-	mumbles = get_list_or_404( Mumble );
+	mms = get_list_or_404( Mumble );
 	
-	if len(mumbles) == 1:
-		return HttpResponseRedirect( reverse( mobile_show, kwargs={ 'server': mumbles[0].id, } ) );
+	if len(mms) == 1:
+		return HttpResponseRedirect( reverse(
+			{ False: show, True: mobile_show }[mobile],
+			kwargs={ 'server': mms[0].id, }
+			) );
 	
 	return render_to_response(
-		'mumble/mobile_list.html',
-		{ 'MumbleObjects': mumbles,
+		'mumble/%s.html' % { False: 'list', True: 'mobile_list' }[mobile],
+		{ 'MumbleObjects': mms,
 		  'MumbleActive':  True,
 		},
 		context_instance = RequestContext(request)
