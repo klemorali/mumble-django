@@ -461,14 +461,14 @@ class MumbleUser( models.Model ):
 	# Admin handlers
 	def getAdmin( self ):
 		"""Get ACL of root Channel, get the admin group and see if this user is in it."""
-		return self.server.rootchan.acl.groupHasMember( "admin", self.mumbleid );
+		return self.server.rootchan.acl.group_has_member( "admin", self.mumbleid );
 	
 	def setAdmin( self, value ):
 		"""Set or revoke this user's membership in the admin group on the root channel."""
 		if value:
-			self.server.rootchan.acl.groupAddMember( "admin", self.mumbleid );
+			self.server.rootchan.acl.group_add_member( "admin", self.mumbleid );
 		else:
-			self.server.rootchan.acl.groupRemoveMember( "admin", self.mumbleid );
+			self.server.rootchan.acl.group_remove_member( "admin", self.mumbleid );
 		self.server.rootchan.acl.save();
 		return value;
 	
