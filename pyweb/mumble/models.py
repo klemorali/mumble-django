@@ -74,41 +74,10 @@ class Mumble( models.Model ):
 		verbose_name        = _('Server instance');
 		verbose_name_plural = _('Server instances');
 	
-	def __init__( self, *args, **kwargs ):
-		models.Model.__init__( self, *args, **kwargs );
-		self._ctl      = None;
-		self._channels = None;
-		self._rootchan = None;
-	
 	def __unicode__( self ):
 		if not self.id:
 			return u'Murmur "%s" (NOT YET CREATED)' % self.name;
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
-	
-	
-	users_regged = property( lambda self: self.mumbleuser_set.count(),           doc="Number of registered users." );
-	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." );
-	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." );
-	is_public    = property( lambda self: self.passwd == '',
-			doc="False if a password is needed to join this server." );
-	
-	is_server  = True;
-	is_channel = False;
-	is_player  = False;
-	
-	
-	# Ctl instantiation
-	def getCtl( self ):
-		"""Instantiate and return a MumbleCtl object for this server.
-		
-		Only one instance will be created, and reused on subsequent calls.
-		"""
-		if not self._ctl:
-			self._ctl = MumbleCtlBase.newInstance( self.dbus );
-		return self._ctl;
-	
-	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
-	
 	
 	def save( self, dontConfigureMurmur=False ):
 		"""
@@ -175,6 +144,37 @@ class Mumble( models.Model ):
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
+	
+	
+	def __init__( self, *args, **kwargs ):
+		models.Model.__init__( self, *args, **kwargs );
+		self._ctl      = None;
+		self._channels = None;
+		self._rootchan = None;
+	
+	
+	users_regged = property( lambda self: self.mumbleuser_set.count(),           doc="Number of registered users." );
+	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." );
+	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." );
+	is_public    = property( lambda self: self.passwd == '',
+			doc="False if a password is needed to join this server." );
+	
+	is_server  = True;
+	is_channel = False;
+	is_player  = False;
+	
+	
+	# Ctl instantiation
+	def getCtl( self ):
+		"""Instantiate and return a MumbleCtl object for this server.
+		
+		Only one instance will be created, and reused on subsequent calls.
+		"""
+		if not self._ctl:
+			self._ctl = MumbleCtlBase.newInstance( self.dbus );
+		return self._ctl;
+	
+	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
 	
 	
 	def configureFromMurmur( self ):
@@ -390,12 +390,12 @@ class MumbleUser( models.Model ):
 	    in Murmur as well, after revoking the user's admin privileges.
 	"""
 	
-	mumbleid = models.IntegerField(         _('Mumble player_id'),            editable = False, default = -1 );
-	name     = models.CharField(            _('User name and Login'),         max_length = 200 );
-	password = models.CharField(            _('Login password'),              max_length = 200, blank=True );
-	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance') );
-	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),  null=True, blank=True   );
-	isAdmin  = models.BooleanField(         _('Admin on root channel'),       default = False );
+	mumbleid = models.IntegerField(         _('Mumble player_id'),             editable = False, default = -1 );
+	name     = models.CharField(            _('User name and Login'),          max_length = 200 );
+	password = models.CharField(            _('Login password'),               max_length = 200, blank=True );
+	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance'), related_name="mumbleuser_set" );
+	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),   related_name="mumbleuser_set", null=True, blank=True );
+	isAdmin  = models.BooleanField(         _('Admin on root channel'),        default = False );
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
@@ -405,10 +405,6 @@ class MumbleUser( models.Model ):
 	is_server  = False;
 	is_channel = False;
 	is_player  = True;
-	
-	def __init__( self, *args, **kwargs ):
-		models.Model.__init__( self, *args, **kwargs );
-		self._registration = None;
 	
 	def __unicode__( self ):
 		return _("Mumble user %(mu)s on %(srv)s owned by Django user %(du)s") % {
@@ -458,6 +454,9 @@ class MumbleUser( models.Model ):
 		# Now allow django to save the record set
 		return models.Model.save( self );
 	
+	def __init__( self, *args, **kwargs ):
+		models.Model.__init__( self, *args, **kwargs );
+		self._registration = None;
 	
 	# Admin handlers
 	def getAdmin( self ):
