@@ -22,7 +22,7 @@ from django.conf		import settings
 from django.forms		import Form, ModelForm
 from django.utils.translation	import ugettext_lazy as _
 
-from models			import Mumble, MumbleUser
+from mumble.models		import Mumble, MumbleUser
 
 
 class MumbleAdminForm( ModelForm ):
@@ -31,6 +31,8 @@ class MumbleAdminForm( ModelForm ):
 		model   = Mumble;
 	
 	def clean_port( self ):
+		""" If portno == -1 autoassign, and check if the port number is valid. """
+		
 		port = self.cleaned_data['port'];
 		if port == -1:
 			port = max( [ rec['port'] for rec in Mumble.objects.values('port') ] ) + 1;
@@ -45,11 +47,12 @@ class MumbleAdminForm( ModelForm ):
 		return port;
 	
 	def clean( self ):
+		""" Try to bind to the addr and port to verify that they are available. """
+		
 		if self.instance.id is not None or 'addr' not in self.cleaned_data or 'port' not in self.cleaned_data:
 			# Editing old instance or previous validation failed already, don't try to bind
 			return self.cleaned_data;
 		
-		# Try to bind to the addr and port to verify that they are available.
 		addr = socket.gethostbyname( self.cleaned_data['addr'] );
 		port = self.cleaned_data['port'];
 		
@@ -88,8 +91,18 @@ class MumbleForm( ModelForm ):
 class MumbleUserForm( ModelForm ):
 	""" The user registration form used to register an account. """
 	
+	def __init__( self, *args, **kwargs ):
+		ModelForm.__init__( self, *args, **kwargs );
+		self.server = None;
+	
 	def clean_name( self ):
+		""" Check if the desired name is forbidden or taken. """
+		
 		name = self.cleaned_data['name'];
+		
+		if self.server is None:
+			raise AttributeError( "You need to set the form's server attribute to the server instance "
+				"for validation to work." );
 		
 		if self.server.player and re.compile( self.server.player ).match( name ) is None:
 			raise forms.ValidationError( _( "That name is forbidden by the server." ) );
@@ -100,10 +113,11 @@ class MumbleUserForm( ModelForm ):
 		return name;
 	
 	def clean_password( self ):
-		pw = self.cleaned_data['password'];
-		if not pw:
+		""" Verify a password has been given. """
+		passwd = self.cleaned_data['password'];
+		if not passwd:
 			raise forms.ValidationError( _( "Cannot register player without a password!" ) );
-		return pw;
+		return passwd;
 	
 	class Meta:
 		model   = MumbleUser;
@@ -120,14 +134,14 @@ class MumbleUserPasswordForm( MumbleUserForm ):
 		);
 	
 	def clean_serverpw( self ):
-		# Validate the password
+		""" Validate the password """
 		serverpw = self.cleaned_data['serverpw'];
 		if self.server.passwd != serverpw:
 			raise forms.ValidationError( _( "The password you entered is incorrect." ) );
 		return serverpw;
 	
 	def clean( self ):
-		# prevent save() from trying to store the password in the Model instance
+		""" prevent save() from trying to store the password in the Model instance. """
 		# clean() will be called after clean_serverpw(), so it has already been validated here.
 		if 'serverpw' in self.cleaned_data:
 			del( self.cleaned_data['serverpw'] );
@@ -143,7 +157,12 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		required=False,
 		);	
 	
+	def __init__( self, *args, **kwargs ):
+		MumbleUserForm.__init__( self, *args, **kwargs );
+		self.mumbleid = None;
+	
 	def clean_name( self ):
+		""" Check if the target account exists in Murmur. """
 		if 'linkacc' not in self.data:
 			return MumbleUserForm.clean_name( self );
 		
@@ -156,6 +175,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		return name;
 	
 	def clean_password( self ):
+		""" Verify that the password is correct. """
 		if 'linkacc' not in self.data:
 			return MumbleUserForm.clean_password( self );
 		
@@ -165,31 +185,32 @@ class MumbleUserLinkForm( MumbleUserForm ):
 			return '';
 		
 		# Validate password with Murmur
-		pw = self.cleaned_data['password'];
+		passwd = self.cleaned_data['password'];
 		
-		self.mumbleid = self.server.ctl.verifyPassword( self.server.srvid, self.cleaned_data['name'], pw )
+		self.mumbleid = self.server.ctl.verifyPassword( self.server.srvid, self.cleaned_data['name'], passwd )
 		if self.mumbleid <= 0:
 			raise forms.ValidationError( _( "The password you entered is incorrect." ) );
 		
-		return pw;
+		return passwd;
 	
 	def clean( self ):
+		""" Create the MumbleUser instance to save in. """
 		if 'linkacc' not in self.data or self.mumbleid <= 0:
 			return self.cleaned_data;
 		
 		try:
-			mUser = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
+			m_user = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
 		except MumbleUser.DoesNotExist:
-			mUser = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
-			mUser.isAdmin = mUser.getAdmin();
-			mUser.save( dontConfigureMurmur=True );
+			m_user = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
+			m_user.isAdmin = m_user.getAdmin();
+			m_user.save( dontConfigureMurmur=True );
 		else:
-			if mUser.owner is not None:
+			if m_user.owner is not None:
 				raise forms.ValidationError( _( "That account belongs to someone else." ) );
 		
-		if mUser.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
+		if m_user.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
 			raise forms.ValidationError( _( "Linking Admin accounts is not allowed." ) );
-		self.instance = mUser;
+		self.instance = m_user;
 		
 		return self.cleaned_data;
 
