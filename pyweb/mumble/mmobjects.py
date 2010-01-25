@@ -21,42 +21,41 @@ from os.path			import join
 from django.utils.http		import urlquote
 from django.conf		import settings
 
-def cmp_names( a, b ):
+def cmp_names( left, rite ):
 	""" Compare two objects by their name property. """
-	return cmp( a.name, b.name );
+	return cmp( left.name, rite.name );
 
 
 class mmChannel( object ):
 	""" Represents a channel in Murmur. """
 	
-	def __init__( self, server, channelObj, parentChan = None ):
+	def __init__( self, server, channel_obj, parent_chan = None ):
 		self.server   = server;
 		self.players  = list();
 		self.subchans = list();
 		self.linked   = list();
 		
-		self.channelObj = channelObj;
-		self.chanid     = channelObj.id;
-		self.linkedIDs  = channelObj.links;
+		self.channel_obj = channel_obj;
+		self.chanid      = channel_obj.id;
 		
-		self.parent = parentChan;
+		self.parent = parent_chan;
 		if self.parent is not None:
 			self.parent.subchans.append( self );
 		
 		self._acl = None;
 	
-	# Lookup unknown attributes in self.channelObj to automatically include Murmur's fields
+	# Lookup unknown attributes in self.channel_obj to automatically include Murmur's fields
 	def __getattr__( self, key ):
-		if hasattr( self.channelObj, key ):
-			return getattr( self.channelObj, key );
+		if hasattr( self.channel_obj, key ):
+			return getattr( self.channel_obj, key );
 		else:
 			raise AttributeError( "'%s' object has no attribute '%s'" % ( self.__class__.__name__, key ) );
 	
-	def parentChannels( self ):
+	def parent_channels( self ):
 		""" Return the names of this channel's parents in the channel tree. """
 		if self.parent is None or self.parent.is_server or self.parent.chanid == 0:
 			return [];
-		return self.parent.parentChannels() + [self.parent.name];
+		return self.parent.parent_channels() + [self.parent.name];
 	
 	
 	def getACL( self ):
@@ -98,31 +97,31 @@ class mmChannel( object ):
 		""" Sort my subchannels and players, and then iterate over them and sort them recursively. """
 		self.subchans.sort( cmp_names );
 		self.players.sort( cmp_names );
-		for sc in self.subchans:
-			sc.sort();
+		for subc in self.subchans:
+			subc.sort();
 	
 	def visit( self, callback, lvl = 0 ):
 		""" Call callback on myself, then visit my subchans, then my players. """
 		callback( self, lvl );
-		for sc in self.subchans:
-			sc.visit( callback, lvl + 1 );
-		for pl in self.players:
-			pl.visit( callback, lvl + 1 );
+		for subc in self.subchans:
+			subc.visit( callback, lvl + 1 );
+		for plr in self.players:
+			plr.visit( callback, lvl + 1 );
 	
 	
-	def getURL( self, forUser = None ):
+	def getURL( self, for_user = None ):
 		""" Create an URL to connect to this channel. The URL is of the form
 		    mumble://username@host:port/parentchans/self.name
 		"""
 		userstr = "";
 		
-		if forUser is not None:
-			userstr = "%s@" % forUser.name;
+		if for_user is not None:
+			userstr = "%s@" % for_user.name;
 		
 		versionstr = "version=%d.%d.%d" % tuple(self.server.version[0:3]);
 		
 		# create list of all my parents and myself
-		chanlist = self.parentChannels() + [self.name];
+		chanlist = self.parent_channels() + [self.name];
 		# urlencode channel names
 		chanlist = [ urlquote( chan ) for chan in chanlist ];
 		# create a path by joining the channel names
@@ -146,7 +145,7 @@ class mmChannel( object ):
 		);
 	
 	def asDict( self ):
-		chandata = self.channelObj.__dict__.copy();
+		chandata = self.channel_obj.__dict__.copy();
 		chandata['players']  = [ pl.asDict() for pl in self.players  ];
 		chandata['subchans'] = [ sc.asDict() for sc in self.subchans ];
 		return chandata;
@@ -157,26 +156,26 @@ class mmChannel( object ):
 class mmPlayer( object ):
 	""" Represents a Player in Murmur. """
 	
-	def __init__( self, srvInstance, playerObj, playerChan ):
-		self.playerObj    = playerObj;
+	def __init__( self, server, player_obj, player_chan ):
+		self.player_obj    = player_obj;
 		
-		self.onlinesince  = datetime.datetime.fromtimestamp( float( time() - playerObj.onlinesecs ) );
-		self.channel      = playerChan;
+		self.onlinesince  = datetime.datetime.fromtimestamp( float( time() - player_obj.onlinesecs ) );
+		self.channel      = player_chan;
 		self.channel.players.append( self );
 		
 		if self.isAuthed:
-			from models import MumbleUser
+			from mumble.models import MumbleUser
 			try:
-				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.userid, server=srvInstance );
+				self.mumbleuser = MumbleUser.objects.get( mumbleid=self.userid, server=server );
 			except MumbleUser.DoesNotExist:
 				self.mumbleuser = None;
 		else:
 			self.mumbleuser = None;
 	
-	# Lookup unknown attributes in self.playerObj to automatically include Murmur's fields
+	# Lookup unknown attributes in self.player_obj to automatically include Murmur's fields
 	def __getattr__( self, key ):
-		if hasattr( self.playerObj, key ):
-			return getattr( self.playerObj, key );
+		if hasattr( self.player_obj, key ):
+			return getattr( self.player_obj, key );
 		else:
 			raise AttributeError( "'%s' object has no attribute '%s'" % ( self.__class__.__name__, key ) );
 	
@@ -184,7 +183,7 @@ class mmPlayer( object ):
 		return '<Player "%s" (%d, %d)>' % ( self.name, self.session, self.userid );
 	
 	hasComment = property(
-		lambda self: hasattr( self.playerObj, "comment" ) and bool(self.playerObj.comment),
+		lambda self: hasattr( self.player_obj, "comment" ) and bool(self.player_obj.comment),
 		doc="True if this player has a comment set."
 		);
 	
@@ -215,7 +214,7 @@ class mmPlayer( object ):
 		callback( self, lvl );
 	
 	def asDict( self ):
-		pldata = self.playerObj.__dict__.copy();
+		pldata = self.player_obj.__dict__.copy();
 		
 		if self.mumbleuser:
 			if self.mumbleuser.hasTexture():
@@ -228,23 +227,23 @@ class mmPlayer( object ):
 class mmACL( object ):
 	""" Represents an ACL for a certain channel. """
 	
-	def __init__( self, channel, aclObj ):
+	def __init__( self, channel, acl_obj ):
 		self.channel = channel;
-		self.acls, self.groups, self.inherit = aclObj;
+		self.acls, self.groups, self.inherit = acl_obj;
 		
 		self.groups_dict = {};
 		
 		for group in self.groups:
 			self.groups_dict[ group.name ] = group;
 	
-	def groupHasMember( self, name, userid ):
+	def group_has_member( self, name, userid ):
 		""" Checks if the given userid is a member of the given group in this channel. """
 		if name not in self.groups_dict:
 			raise ReferenceError( "No such group '%s'" % name );
 		
 		return userid in self.groups_dict[name].add or userid in self.groups_dict[name].members;
 	
-	def groupAddMember( self, name, userid ):
+	def group_add_member( self, name, userid ):
 		""" Make sure this userid is a member of the group in this channel (and subs). """
 		if name not in self.groups_dict:
 			raise ReferenceError( "No such group '%s'" % name );
@@ -259,7 +258,7 @@ class mmACL( object ):
 		if userid in group.remove:
 			group.remove.remove( userid );
 	
-	def groupRemoveMember( self, name, userid ):
+	def group_remove_member( self, name, userid ):
 		""" Make sure this userid is NOT a member of the group in this channel (and subs). """
 		if name not in self.groups_dict:
 			raise ReferenceError( "No such group '%s'" % name );
