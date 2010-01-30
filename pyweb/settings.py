@@ -198,8 +198,22 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'registration',
 	'mumble',
-	# If you have django-rosetta installed, uncomment the next line. The URL
-	# and a link in the main template will then be added automatically.
-	#    http://code.google.com/p/django-rosetta
-	#'rosetta',
 )
+
+
+def modprobe( name ):
+	""" Try to import the named module, and if that works add it to INSTALLED_APPS. """
+	global INSTALLED_APPS
+	try:
+		__import__( name )
+	except ImportError:
+		pass
+	else:
+		INSTALLED_APPS += ( name, )
+
+# Check if rosetta is available.
+#    http://code.google.com/p/django-rosetta
+modprobe( "rosetta" )
+
+# Check if django_extensions is available.
+modprobe( "django_extensions" )
