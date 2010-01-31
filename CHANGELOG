@@ -2,6 +2,13 @@
 Mumble-Django changelog
 =======================
 
+Version 1.2, 31 Jan 2010:
+------------------------------
+* Cleaned up the code a lot.
+* Don't link to non-booted server instances to prevent the user from getting an
+  exception message.
+* Add detection for django-rosetta and django-extensions to settings.py.
+
 Version 1.1, 9 Jan 2010:
 ------------------------------
 * Fixed crash when someone registered without an email address.
