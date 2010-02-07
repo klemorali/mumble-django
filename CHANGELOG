@@ -2,6 +2,12 @@
 Mumble-Django changelog
 =======================
 
+Version 1.3, 7 Feb 2010:
+------------------------------
+* Added getslice command that downloads the current HEAD slice version from
+  Mumble's Git repository.
+* Added slice for 1.2.2 and updated settings.SLICE_VERSION accordingly.
+
 Version 1.2, 31 Jan 2010:
 ------------------------------
 * Cleaned up the code a lot.
