@@ -54,7 +54,7 @@ if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 
 # The ICE interface version to use.
 #SLICE_VERSION = (1, 1, 8)
-SLICE_VERSION = (1, 2, 0)
+SLICE_VERSION = (1, 2, 2)
 # Murmur 1.2.0 is incompatible with 1.1.8, that's why this needs to be configured here.
 # If you have <=1.1.8 and 1.2.0 servers running simultaneously, consider using DBus for
 # the <=1.1.8 servers and ICE for 1.2.0. That way, you will be able to manage both server
