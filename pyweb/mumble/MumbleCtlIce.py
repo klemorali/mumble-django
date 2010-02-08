@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
 """
 
+from os			import listdir
 from os.path		import join
 from PIL		import Image
 from struct		import pack, unpack
@@ -26,7 +27,7 @@ from mctl		import MumbleCtlBase
 
 from utils		import ObjectInfo
 
-import Ice, sys
+import Ice, sys, re
 
 
 def protectDjangoErrPage( func ):
@@ -50,55 +51,51 @@ def protectDjangoErrPage( func ):
 
 @protectDjangoErrPage
 def MumbleCtlIce( connstring ):
-	""" Choose the correct Ice handler to use (1.1.8 or 1.2.0), and make sure the
+	""" Choose the correct Ice handler to use (1.1.8 or 1.2.x), and make sure the
 	    Murmur version matches the slice Version.
 	"""
 	
-	candidates = (
-		( settings.SLICE_VERSION, settings.SLICE ),
-		( ( 1, 1, 8 ), None ),
-		( ( 1, 2, 0 ), None ),
-		( ( 1, 2, 1 ), None ),
-		);
+	version = settings.SLICE_VERSION
+	slicefile = settings.SLICE
 	
-	for version, slice in candidates:
-		if not slice:
-			slice = join(
-				settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
-				'Murmur_%d-%d-%d.ice' % (version[0], version[1], version[2] )
-				);
-		
-		Ice.loadSlice( slice )
-		ice = Ice.initialize()
-		import Murmur
-		prx = ice.stringToProxy( connstring.encode("utf-8") )
-		meta = Murmur.MetaPrx.checkedCast(prx)
-		
-		murmurversion = meta.getVersion();
-		
-		if   murmurversion[0] != version[0] or murmurversion[1] != version[1] or murmurversion[2] != version[2]:
-			# Version mismatch. Use sys.modules.pop fakery to unload the Module, and allow
-			# a later iteration to run Ice's "from nowhere import Murmur" fakery again.
-			# Two wrongs don't make a right, but at least it works. (I really do miss DBus.)
-			ice.destroy();
-			sys.modules.pop("Murmur");
-		
-		elif murmurversion[0] == murmurversion[1] == 1 and murmurversion[2] <= 8:
-			return MumbleCtlIce_118( connstring, meta );
-		
-		elif murmurversion[0] == 1 and murmurversion[1] == 2:
-			return MumbleCtlIce_120( connstring, meta );
+	if not slicefile:
+		slicefile = join( settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
+			'Murmur_%d-%d-%d.ice' % version
+			);
 	
-	raise EnvironmentError( "Could not find a Slice matching your version of Murmur." );
+	Ice.loadSlice( slicefile )
+	ice    = Ice.initialize()
+	
+	import Murmur
+	
+	prx    = ice.stringToProxy( connstring.encode("utf-8") )
+	meta   = Murmur.MetaPrx.checkedCast(prx)
+	
+	murmurversion = meta.getVersion()[:3]
+	
+	if   murmurversion != version:
+		raise EnvironmentError(
+			"Murmur is version %d.%d.%d, but I am configured for %d.%d.%d. Please update your settings." %
+			tuple( murmurversion + version )
+			);
+	
+	elif murmurversion == (1, 1, 8):
+		return MumbleCtlIce_118( connstring, module, meta );
+	
+	elif murmurversion[:2] == (1, 2):
+		return MumbleCtlIce_120( connstring, module, meta );
+	
+	
 
 
 
 class MumbleCtlIce_118(MumbleCtlBase):
 	method = "ICE";
 	
-	def __init__( self, connstring, meta ):
-		self.proxy = connstring;
-		self.meta  = meta;
+	def __init__( self, connstring, module, meta ):
+		self.proxy  = connstring;
+		self.module = module;
+		self.meta   = meta;
 	
 	@protectDjangoErrPage
 	def _getIceServerObject(self, srvid):
@@ -236,8 +233,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		import Murmur
-		user = Murmur.Player()
+		#import Murmur
+		user = self.module.Player()
 		user.playerid = mumbleid;
 		user.name     = name.encode( "UTF-8" )
 		user.email    = email.encode( "UTF-8" )
@@ -266,12 +263,12 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setACL(self, srvid, channelid, acls, groups, inherit):
-		import Murmur
+		#import Murmur
 		
 		ice_acls = [];
 		
 		for rule in acls:
-			ice_rule = Murmur.ACL();
+			ice_rule = self.module.ACL();
 			ice_rule.applyHere = rule.applyHere;
 			ice_rule.applySubs = rule.applySubs;
 			ice_rule.inherited = rule.inherited;
