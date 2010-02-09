@@ -2,6 +2,18 @@
 Mumble-Django changelog
 =======================
 
+Version 1.4, 9 Feb 2010:
+------------------------------
+* Remove automatic Murmur version detection, as it isn't possible with Ice.
+  http://www.zeroc.com/forums/help-center/4781-multiple-connections-different-server-versions.html
+* Remove packaged slices for Murmur, due to the massive overhead the packaging
+  creates compared to the little gain - whether people need to configure the slice
+  version or path doesn't really matter anyway.
+* Enhance checkenv command to check:
+  - for the root directory's permissions.
+  - if the slice file is configured and readable.
+* Remove getslice command which is now unnecessary.
+
 Version 1.3, 7 Feb 2010:
 ------------------------------
 * Added getslice command that downloads the current HEAD slice version from
