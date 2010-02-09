@@ -73,7 +73,8 @@ def MumbleCtlIce( connstring ):
 	
 	murmurversion = meta.getVersion()[:3]
 	
-	if   murmurversion != version:
+	# If a slice file has been configured, we assume the version is correct.
+	if   settings.SLICE is None and murmurversion != version:
 		raise EnvironmentError(
 			"Murmur is version %d.%d.%d, but I am configured for %d.%d.%d. Please update your settings." %
 			tuple( murmurversion + version )
