@@ -23,4 +23,4 @@ print sha1( sys.stdin.read() ).hexdigest();'
 KEY=` dd if=/dev/urandom bs=64 count=1 2>/dev/null | python -c "$HASHSCRIPT" `
 SECKEY="SECRET_KEY = '$KEY'"
 
-sed -ie "s/^SECRET_KEY.*/${SECKEY}/" settings.py
+sed -i "s/^SECRET_KEY.*/${SECKEY}/" settings.py
