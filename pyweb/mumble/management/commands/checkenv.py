@@ -23,17 +23,56 @@ from django.conf			import settings
 
 from mumble.models			import Mumble
 
+
 class TestFailed( Exception ):
 	pass;
 
 class Command( BaseCommand ):
 	def handle(self, **options):
+		self.check_slice();
+		self.check_rootdir();
 		self.check_dbase();
 		self.check_sites();
 		self.check_mumbles();
 		self.check_admins();
 		self.check_secret_key();
 	
+	def check_slice( self ):
+		print "Checking slice file...",
+		if settings.SLICE is None:
+			raise TestFailed( "You don't have set the SLICE variable in settings.py." )
+		
+		try:
+			fd = open( settings.SLICE, "rb" )
+			slice = fd.read()
+			fd.close()
+		except IOError, err:
+			raise TestFailed( "Failed opening the slice file: %s" % err )
+		
+		print "[ OK ]"
+	
+	def check_rootdir( self ):
+		print "Checking root directory access...",
+		if not os.path.exists( settings.MUMBLE_DJANGO_ROOT ):
+			raise TestFailed( "The mumble-django root directory does not exist." );
+		
+		elif settings.DATABASE_ENGINE != "sqlite3":
+			print "not using sqlite [ OK ]"
+		
+		else:
+			statinfo = os.stat( settings.MUMBLE_DJANGO_ROOT );
+			
+			if statinfo.st_uid == 0:
+				raise TestFailed(
+					"The mumble-django root directory belongs to user root. This is "
+					"most certainly not what you want because it will prevent your "
+					"web server from being able to write to the database. Please check." );
+			
+			elif not os.access( settings.MUMBLE_DJANGO_ROOT, os.W_OK ):
+				raise TestFailed( "The mumble-django root directory is not writable." );
+			
+			else:
+				print "[ OK ]";
 	
 	def check_dbase( self ):
 		print "Checking database access...",
