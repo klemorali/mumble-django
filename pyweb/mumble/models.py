@@ -80,9 +80,8 @@ class Mumble( models.Model ):
 		return u'Murmur "%s" (%d)' % ( self.name, self.srvid );
 	
 	def save( self, dontConfigureMurmur=False ):
-		"""
-		Save the options configured in this model instance not only to Django's database,
-		but to Murmur as well.
+		""" Save the options configured in this model instance not only to Django's database,
+		    but to Murmur as well.
 		"""
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing servers.
@@ -166,9 +165,9 @@ class Mumble( models.Model ):
 	
 	# Ctl instantiation
 	def getCtl( self ):
-		"""Instantiate and return a MumbleCtl object for this server.
+		""" Instantiate and return a MumbleCtl object for this server.
 		
-		Only one instance will be created, and reused on subsequent calls.
+		    Only one instance will be created, and reused on subsequent calls.
 		"""
 		if not self._ctl:
 			self._ctl = MumbleCtlBase.newInstance( self.dbus );
@@ -272,7 +271,7 @@ class Mumble( models.Model ):
 
 	
 	def isUserAdmin( self, user ):
-		"""Determine if the given user is an admin on this server."""
+		""" Determine if the given user is an admin on this server. """
 		if user.is_authenticated():
 			try:
 				return self.mumbleuser_set.get( owner=user ).getAdmin();
@@ -283,7 +282,7 @@ class Mumble( models.Model ):
 	
 	# Deletion handler
 	def deleteServer( self ):
-		"""Delete this server instance from Murmur."""
+		""" Delete this server instance from Murmur. """
 		self.ctl.deleteServer(self.srvid)
 	
 	@staticmethod
@@ -353,7 +352,7 @@ class Mumble( models.Model ):
 	rootchan = property( lambda self: self.channels[0],     doc="A convenience wrapper for getChannels()[0]." );
 	
 	def getURL( self, forUser = None ):
-		"""Create an URL of the form mumble://username@host:port/ for this server."""
+		""" Create an URL of the form mumble://username@host:port/ for this server. """
 		userstr = "";
 		if forUser is not None:
 			userstr = "%s@" % forUser.name;
@@ -414,7 +413,7 @@ class MumbleUser( models.Model ):
 			};
 	
 	def save( self, dontConfigureMurmur=False ):
-		"""Save the settings in this model to Murmur."""
+		""" Save the settings in this model to Murmur. """
 		if dontConfigureMurmur:
 			# skip murmur configuration, e.g. because we're inserting models for existing players.
 			return models.Model.save( self );
@@ -460,11 +459,11 @@ class MumbleUser( models.Model ):
 	
 	# Admin handlers
 	def getAdmin( self ):
-		"""Get ACL of root Channel, get the admin group and see if this user is in it."""
+		""" Get ACL of root Channel, get the admin group and see if this user is in it. """
 		return self.server.rootchan.acl.group_has_member( "admin", self.mumbleid );
 	
 	def setAdmin( self, value ):
-		"""Set or revoke this user's membership in the admin group on the root channel."""
+		""" Set or revoke this user's membership in the admin group on the root channel. """
 		if value:
 			self.server.rootchan.acl.group_add_member( "admin", self.mumbleid );
 		else:
@@ -476,7 +475,7 @@ class MumbleUser( models.Model ):
 	
 	# Registration fetching
 	def getRegistration( self ):
-		"""Retrieve a user's registration from Murmur as a dict."""
+		""" Retrieve a user's registration from Murmur as a dict. """
 		if not self._registration:
 			self._registration = self.server.ctl.getRegistration( self.server.srvid, self.mumbleid );
 		return self._registration;
@@ -484,7 +483,7 @@ class MumbleUser( models.Model ):
 	registration = property( getRegistration, doc=getRegistration.__doc__ );
 	
 	def getComment( self ):
-		"""Retrieve a user's comment, if any."""
+		""" Retrieve a user's comment, if any. """
 		if "comment" in self.registration:
 			return self.registration["comment"];
 		else:
@@ -493,6 +492,7 @@ class MumbleUser( models.Model ):
 	comment = property( getComment, doc=getComment.__doc__ );
 	
 	def getHash( self ):
+		""" Retrieve a user's hash, if any. """
 		if "hash" in self.registration:
 			return self.registration["hash"];
 		else:
@@ -503,11 +503,11 @@ class MumbleUser( models.Model ):
 	# Texture handlers
 	
 	def getTexture( self ):
-		"""Get the user texture as a PIL Image."""
+		""" Get the user texture as a PIL Image. """
 		return self.server.ctl.getTexture(self.server.srvid, self.mumbleid);
 	
 	def setTexture( self, infile ):
-		"""Read an image from the infile and install it as the user's texture."""
+		""" Read an image from the infile and install it as the user's texture. """
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
 	
 	texture = property( getTexture, setTexture,
@@ -538,7 +538,7 @@ class MumbleUser( models.Model ):
 		kwargs['instance'].unregister();
 	
 	def unregister( self ):
-		"""Delete this user account from Murmur."""
+		""" Delete this user account from Murmur. """
 		if self.getAdmin():
 			self.setAdmin( False );
 		self.server.ctl.unregisterPlayer(self.server.srvid, self.mumbleid)
