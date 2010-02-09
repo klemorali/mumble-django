@@ -81,10 +81,10 @@ def MumbleCtlIce( connstring ):
 			);
 	
 	elif murmurversion == (1, 1, 8):
-		return MumbleCtlIce_118( connstring, module, meta );
+		return MumbleCtlIce_118( connstring, meta );
 	
 	elif murmurversion[:2] == (1, 2):
-		return MumbleCtlIce_120( connstring, module, meta );
+		return MumbleCtlIce_120( connstring, meta );
 	
 	
 
@@ -93,9 +93,8 @@ def MumbleCtlIce( connstring ):
 class MumbleCtlIce_118(MumbleCtlBase):
 	method = "ICE";
 	
-	def __init__( self, connstring, module, meta ):
+	def __init__( self, connstring, meta ):
 		self.proxy  = connstring;
-		self.module = module;
 		self.meta   = meta;
 	
 	@protectDjangoErrPage
@@ -234,8 +233,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setRegistration(self, srvid, mumbleid, name, email, password):
-		#import Murmur
-		user = self.module.Player()
+		import Murmur
+		user = Murmur.Player()
 		user.playerid = mumbleid;
 		user.name     = name.encode( "UTF-8" )
 		user.email    = email.encode( "UTF-8" )
@@ -264,12 +263,12 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	
 	@protectDjangoErrPage
 	def setACL(self, srvid, channelid, acls, groups, inherit):
-		#import Murmur
+		import Murmur
 		
 		ice_acls = [];
 		
 		for rule in acls:
-			ice_rule = self.module.ACL();
+			ice_rule = Murmur.ACL();
 			ice_rule.applyHere = rule.applyHere;
 			ice_rule.applySubs = rule.applySubs;
 			ice_rule.inherited = rule.inherited;
