@@ -18,10 +18,17 @@
 #################################################################
 #################################################################
 ##                                                             ##
+## The slice to use for communication over ZeroC Ice.          ##
+## This must be set to the path to the Murmur.ice file that    ##
+## resides in your Murmur directory.                           ##
+SLICE = '/usr/share/slice/Murmur.ice'                          ##
+##                                                             ##
+#################################################################
+##                                                             ##
 ##  The path inside the VirtualHost that M-D lives in:         ##
 ##                                                             ##
-MUMBLE_DJANGO_URL  = '/';                                      ##
-#MUMBLE_DJANGO_URL  = '/mumble-django/';                       ##
+MUMBLE_DJANGO_URL  = '/'                                       ##
+#MUMBLE_DJANGO_URL  = '/mumble-django/'                        ##
 ##                                                             ##
 ##  Make sure you use a trailing slash!                        ##
 ##                                                             ##
@@ -33,10 +40,10 @@ MUMBLE_DJANGO_URL  = '/';                                      ##
 ##  extracted Mumble-Django.                                   ##
 ##                                                             ##
 ##  Default: Auto Detection                                    ##
-MUMBLE_DJANGO_ROOT = None;                                     ##
+MUMBLE_DJANGO_ROOT = None                                      ##
 ##  Examples:                                                  ##
-#MUMBLE_DJANGO_ROOT = '/srv/mumble-django';                    ##
-#MUMBLE_DJANGO_ROOT = 'c:/web/mumble-django';                  ##
+#MUMBLE_DJANGO_ROOT = '/srv/mumble-django'                     ##
+#MUMBLE_DJANGO_ROOT = 'c:/web/mumble-django'                   ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
@@ -50,21 +57,6 @@ MUMBLE_DJANGO_ROOT = None;                                     ##
 from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
-
-
-# The ICE interface version to use. This variable is only used if SLICE is set to None.
-#SLICE_VERSION = (1, 1, 8)
-SLICE_VERSION = (1, 2, 2)
-# Murmur 1.2.0 is incompatible with 1.1.8, that's why this needs to be configured here.
-# If you have <=1.1.8 and 1.2.x servers running simultaneously, consider using DBus for
-# the <=1.1.8 servers and ICE for 1.2.x. That way, you will be able to manage both server
-# versions with the same install of Mumble-Django, without losing any functionality.
-
-# The slice to use for communication over ZeroC ICE.
-# This can be set to the path to the Murmur.ice file that resides in your Murmur directory.
-# Default: None -- use the slices shipped with MD. If you choose to do this, make sure you
-#          set the SLICE_VERSION variable above!
-SLICE = None
 
 
 # The default connection string to set for newly created instances.
