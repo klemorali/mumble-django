@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-from os.path		import join, exists
+from os.path		import exists
 from PIL		import Image
 from struct		import pack, unpack
 from zlib		import compress, decompress
@@ -26,7 +26,7 @@ from mctl		import MumbleCtlBase
 
 from utils		import ObjectInfo
 
-import Ice, sys, re
+import Ice
 
 
 def protectDjangoErrPage( func ):
@@ -39,6 +39,7 @@ def protectDjangoErrPage( func ):
 	"""
 	
 	def protection_wrapper( *args, **kwargs ):
+		""" Call the original function and catch Ice exceptions. """
 		try:
 			return func( *args, **kwargs );
 		except Ice.Exception, e:
@@ -75,9 +76,6 @@ def MumbleCtlIce( connstring ):
 	
 	elif murmurversion[:2] == (1, 2):
 		return MumbleCtlIce_120( connstring, meta );
-	
-	
-
 
 
 class MumbleCtlIce_118(MumbleCtlBase):
