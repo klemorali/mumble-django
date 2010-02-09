@@ -91,20 +91,7 @@ Copyright:
     <Copyright © 2005-2009, Martin Skilnand>
     All rights reserved.
 
-
-The files pyweb/mumble/Murmur_1-1-8.ice and pyweb/mumble/Murmur_1-2-0.ice are
-being shipped with Murmur versions 1.1.8 and 1.2.0 respectively, and contain the
-interface definitions for the Ice interface.
-
-Upstream Author:
-    Thorvald Natvig <thorvald@natvig.com>
-
-Copyright:
-    Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
-    All rights reserved.
-
-
-License of Mumble (valid for both the images and Murmur*.ice):
+License:
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions

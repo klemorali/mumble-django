@@ -15,8 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-from os			import listdir
-from os.path		import join
+from os.path		import join, exists
 from PIL		import Image
 from struct		import pack, unpack
 from zlib		import compress, decompress
@@ -55,15 +54,13 @@ def MumbleCtlIce( connstring ):
 	    Murmur version matches the slice Version.
 	"""
 	
-	version = settings.SLICE_VERSION
-	slicefile = settings.SLICE
+	if not settings.SLICE:
+		raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
 	
-	if not slicefile:
-		slicefile = join( settings.MUMBLE_DJANGO_ROOT, 'pyweb', 'mumble',
-			'Murmur_%d-%d-%d.ice' % version
-			);
+	if not exists( settings.SLICE ):
+		raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % settings.SLICE )
 	
-	Ice.loadSlice( slicefile )
+	Ice.loadSlice( settings.SLICE )
 	ice    = Ice.initialize()
 	
 	import Murmur
@@ -73,14 +70,7 @@ def MumbleCtlIce( connstring ):
 	
 	murmurversion = meta.getVersion()[:3]
 	
-	# If a slice file has been configured, we assume the version is correct.
-	if   settings.SLICE is None and murmurversion != version:
-		raise EnvironmentError(
-			"Murmur is version %d.%d.%d, but I am configured for %d.%d.%d. Please update your settings." %
-			tuple( murmurversion + version )
-			);
-	
-	elif murmurversion == (1, 1, 8):
+	if   murmurversion == (1, 1, 8):
 		return MumbleCtlIce_118( connstring, meta );
 	
 	elif murmurversion[:2] == (1, 2):
