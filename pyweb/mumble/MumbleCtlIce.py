@@ -61,6 +61,12 @@ def MumbleCtlIce( connstring ):
 	if not exists( settings.SLICE ):
 		raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % settings.SLICE )
 	
+	if " " in settings.SLICE:
+		raise EnvironmentError( "You have a space char in your Slice path. This will confuse Ice, please check." )
+	
+	if not settings.SLICE.endswith( ".ice" ):
+		raise EnvironmentError( "The slice file name MUST end with '.ice'." )
+	
 	Ice.loadSlice( settings.SLICE )
 	ice    = Ice.initialize()
 	
