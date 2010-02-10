@@ -42,12 +42,21 @@ class Command( BaseCommand ):
 		if settings.SLICE is None:
 			raise TestFailed( "You don't have set the SLICE variable in settings.py." )
 		
+		if " " in settings.SLICE:
+			raise TestFailed( "You have a space char in your Slice path. This will confuse Ice, please check." )
+		
+		if not settings.SLICE.endswith( ".ice" ):
+			raise TestFailed( "The slice file name MUST end with '.ice'." )
+		
 		try:
 			fd = open( settings.SLICE, "rb" )
 			slice = fd.read()
 			fd.close()
 		except IOError, err:
 			raise TestFailed( "Failed opening the slice file: %s" % err )
+		
+		import Ice
+		Ice.loadSlice( settings.SLICE )
 		
 		print "[ OK ]"
 	
