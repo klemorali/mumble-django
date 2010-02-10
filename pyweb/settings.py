@@ -145,8 +145,25 @@ ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
 LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login';
 LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile';
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'u-mp185msk#z4%s(do2^5405)y5d!9adbn92)apu_p^qvqh10v'
+
+# Automatically generate a .secret.txt file containing the SECRET_KEY.
+# Shamelessly stolen from ByteFlow: <http://www.byteflow.su>
+try:
+	SECRET_KEY
+except NameError:
+	SECRET_FILE = join(MUMBLE_DJANGO_ROOT, '.secret.txt')
+	try:
+		SECRET_KEY = open(SECRET_FILE).read().strip()
+	except IOError:
+		try:
+			from random import choice
+			SECRET_KEY = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+			secret = file(SECRET_FILE, 'w')
+			secret.write(SECRET_KEY)
+			secret.close()
+		except IOError:
+			Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
+
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

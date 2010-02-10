@@ -4,4 +4,4 @@ syntax: glob
 *.db3
 *~
 .directory
-
+.secret.txt
