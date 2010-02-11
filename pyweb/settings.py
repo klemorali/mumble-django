@@ -94,6 +94,15 @@ PROTECTED_MODE = False
 ALLOW_ACCOUNT_LINKING = True		# Allow linking in general?
 ALLOW_ACCOUNT_LINKING_ADMINS = False	# Allow linking for Admin accounts?
 
+# Warning and Critical levels for the Munin plugin. These will be multiplied with the
+# server instance's slot count to calculate the real levels.
+MUNIN_WARNING  = 0.80
+MUNIN_CRITICAL = 0.95
+# The graph title.
+MUNIN_TITLE    = 'Mumble Users'
+# see <http://munin.projects.linpro.no/wiki/graph_category_list> for a list of valid categories.
+MUNIN_CATEGORY = 'network'
+
 # Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
 # Mumble-Django should use its own!
 DATABASE_ENGINE = 'sqlite3'
