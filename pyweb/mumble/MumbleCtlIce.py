@@ -59,7 +59,6 @@ def MumbleCtlIce( connstring ):
 		import Murmur
 	
 	except ImportError:
-		print "Loading Slice!"
 		if not settings.SLICE:
 			raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
 		
