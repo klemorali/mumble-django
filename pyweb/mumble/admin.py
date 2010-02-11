@@ -77,10 +77,16 @@ class MumbleAdmin(admin.ModelAdmin):
 class MumbleUserAdmin(admin.ModelAdmin):
 	""" Specification for the "Registered users" admin section. """
 	
-	list_display   = [ 'owner', 'server', 'name', 'isAdmin' ];
+	list_display   = [ 'owner', 'server', 'name', 'get_acl_admin' ];
 	list_filter    = [ 'server' ];
 	search_fields  = [ 'owner__username', 'name' ];
 	ordering       = [ 'owner__username' ];
+	
+	def get_acl_admin( self, obj ):
+		return obj.aclAdmin
+	
+	get_acl_admin.short_description = _('Admin on root channel')
+	get_acl_admin.boolean = True
 
 
 admin.site.register( Mumble, MumbleAdmin );
