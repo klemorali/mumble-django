@@ -55,22 +55,27 @@ def MumbleCtlIce( connstring ):
 	    Murmur version matches the slice Version.
 	"""
 	
-	if not settings.SLICE:
-		raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
+	try:
+		import Murmur
 	
-	if not exists( settings.SLICE ):
-		raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % settings.SLICE )
-	
-	if " " in settings.SLICE:
-		raise EnvironmentError( "You have a space char in your Slice path. This will confuse Ice, please check." )
-	
-	if not settings.SLICE.endswith( ".ice" ):
-		raise EnvironmentError( "The slice file name MUST end with '.ice'." )
-	
-	Ice.loadSlice( settings.SLICE )
-	ice    = Ice.initialize()
-	
-	import Murmur
+	except ImportError:
+		print "Loading Slice!"
+		if not settings.SLICE:
+			raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
+		
+		if not exists( settings.SLICE ):
+			raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % settings.SLICE )
+		
+		if " " in settings.SLICE:
+			raise EnvironmentError( "You have a space char in your Slice path. This will confuse Ice, please check." )
+		
+		if not settings.SLICE.endswith( ".ice" ):
+			raise EnvironmentError( "The slice file name MUST end with '.ice'." )
+		
+		Ice.loadSlice( settings.SLICE )
+		ice    = Ice.initialize()
+		
+		import Murmur
 	
 	prx    = ice.stringToProxy( connstring.encode("utf-8") )
 	meta   = Murmur.MetaPrx.checkedCast(prx)
