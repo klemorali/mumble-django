@@ -39,18 +39,29 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 # Uncomment this line to point the egg cache to /tmp.
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
+from django.conf   import settings
 from mumble.models import *
+
+warn  = getattr( settings, "MUNIN_WARNING",  0.80 )
+crit  = getattr( settings, "MUNIN_CRITICAL", 0.95 )
+title = getattr( settings, "MUNIN_TITLE",    "Mumble Users" )
+categ = getattr( settings, "MUNIN_CATEGORY", "network"      )
+
 
 mm = Mumble.objects.filter( booted = True ).order_by( "id" );
 
 if sys.argv[-1] == 'config':
 	print "graph_vlabel Users"
 	print "graph_args --base 1000"
-	print "graph_title Mumble Users"
-	print "graph_category network"
+	print "graph_title", title
+	print "graph_category", categ
 	
 	for mumble in mm:
-		print "%d.label %s" % ( mumble.id, mumble.name.replace( '#', '' ) );
+		print "srv%d.label %s" % ( mumble.id, mumble.name.replace( '#', '' ) );
+		print "srv%d.info %s"  % ( mumble.id, mumble.connecturl );
+		if mumble.users:
+			print "srv%d.warning %d"  % ( mumble.id, int( mumble.users * warn ) );
+			print "srv%d.critical %d" % ( mumble.id, int( mumble.users * crit ) );
 
 
 elif sys.argv[-1] == 'autoconf':
@@ -69,5 +80,5 @@ elif sys.argv[-1] == 'autoconf':
 
 else:
 	for mumble in mm:
-		print "%d.value %d" % ( mumble.id, len( mumble.ctl.getPlayers( mumble.srvid ) ) );
+		print "srv%d.value %d" % ( mumble.id, len( mumble.ctl.getPlayers( mumble.srvid ) ) );
 
