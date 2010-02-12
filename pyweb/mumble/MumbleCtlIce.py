@@ -72,10 +72,10 @@ def MumbleCtlIce( connstring ):
 			raise EnvironmentError( "The slice file name MUST end with '.ice'." )
 		
 		Ice.loadSlice( settings.SLICE )
-		ice    = Ice.initialize()
 		
 		import Murmur
 	
+	ice    = Ice.initialize()
 	prx    = ice.stringToProxy( connstring.encode("utf-8") )
 	meta   = Murmur.MetaPrx.checkedCast(prx)
 	
