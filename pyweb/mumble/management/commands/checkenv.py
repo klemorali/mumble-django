@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-import os
+import os, Ice
 
 from django.core.management.base	import BaseCommand
 from django.contrib.auth.models 	import User
@@ -167,7 +167,7 @@ class Command( BaseCommand ):
 			for mumble in mm:
 				try:
 					mumble.getCtl();
-				except Exception, err:
+				except Ice.Exception, err:
 					raise TestFailed(
 						"Connecting to Murmur `%s` (%s) failed: %s" % ( mumble.name, mumble.dbus, err )
 						);
