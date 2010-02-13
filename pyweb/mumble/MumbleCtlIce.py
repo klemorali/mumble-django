@@ -202,6 +202,13 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		self._getIceServerObject(srvid).setSuperuserPassword( value.encode( "UTF-8" ) )
 	
 	@protectDjangoErrPage
+	def getConf(self, srvid, key):
+		if key == "username":
+			key = "playername";
+		
+		return self._getIceServerObject(srvid).getConf( key )
+	
+	@protectDjangoErrPage
 	def setConf(self, srvid, key, value):
 		if key == "username":
 			key = "playername";
@@ -407,6 +414,10 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 				info[str(key)] = conf[key];
 		
 		return info;
+	
+	@protectDjangoErrPage
+	def getConf(self, srvid, key):
+		return self._getIceServerObject(srvid).getConf( key )
 	
 	@protectDjangoErrPage
 	def setConf(self, srvid, key, value):
