@@ -16,8 +16,11 @@
 
 import os
 
-from mumble			import models
-from mumble.mctl		import MumbleCtlBase
+from django.conf	import settings
+
+from mumble		import models
+from mumble.mctl	import MumbleCtlBase
+
 
 def find_in_dicts( keys, conf, default, valueIfNotFound=None ):
 	if not isinstance( keys, tuple ):
@@ -66,7 +69,9 @@ def find_existing_instances( **kwargs ):
 		
 		if not dbusName:
 			if v:
-				print 'Be sure to run "python manage.py syncdb" with Murmur running before trying to use this app! Otherwise, existing Murmur servers won\'t be configurable!';
+				print 'Be sure to run "python manage.py syncdb" with Murmur running before'
+				print "trying to use this app! Otherwise, existing Murmur servers won't be"
+				print 'configurable!';
 			return False;
 		elif dbusName == "1":
 			dbusName = "net.sourceforge.mumble.murmur";
@@ -74,7 +79,7 @@ def find_existing_instances( **kwargs ):
 			dbusName = "Meta:tcp -h 127.0.0.1 -p 6502";
 		
 		try:
-			ctl = MumbleCtlBase.newInstance( dbusName );
+			ctl = MumbleCtlBase.newInstance( dbusName, settings.SLICE );
 		except Exception, instance:
 			if v:
 				print "Unable to connect using name %s. The error was:" % dbusName;
