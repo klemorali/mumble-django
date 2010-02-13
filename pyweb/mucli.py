@@ -15,6 +15,9 @@
  *  GNU General Public License for more details.
 """
 
+DEFAULT_CONNSTRING = 'Meta:tcp -h 127.0.0.1 -p 6502'
+DEFAULT_SLICEFILE  = '/usr/share/slice/Murmur.ice'
+
 import os, sys
 import inspect
 
@@ -43,12 +46,12 @@ parser.add_option( "-d", "--django-settings",
 	)
 
 parser.add_option( "-c", "--connstring",
-	help="connection string to use. Default is 'Meta:tcp -h 127.0.0.1 -p 6502'.",
+	help="connection string to use. Default is '%s'." % DEFAULT_CONNSTRING,
 	default=None
 	)
 
 parser.add_option( "-s", "--slice",
-	help="path to the slice file. Default is '/usr/share/slice/Murmur.ice'.",
+	help="path to the slice file. Default is '%s'." % DEFAULT_SLICEFILE,
 	default=None
 	)
 
@@ -86,12 +89,12 @@ else:
 	if options.connstring is None:
 		if options.verbose:
 			print >> sys.stderr, "Setting default connstring"
-		options.connstring = 'Meta:tcp -h 127.0.0.1 -p 6502'
+		options.connstring = DEFAULT_CONNSTRING
 	
 	if options.slice is None:
 		if options.verbose:
 			print >> sys.stderr, "Setting default slice"
-		options.slice = '/usr/share/slice/Murmur.ice'
+		options.slice = DEFAULT_SLICEFILE
 
 
 if options.encoding is None:
