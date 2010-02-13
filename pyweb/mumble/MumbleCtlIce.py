@@ -20,8 +20,6 @@ from PIL		import Image
 from struct		import pack, unpack
 from zlib		import compress, decompress
 
-from django.conf	import settings
-
 from mctl		import MumbleCtlBase
 
 from utils		import ObjectInfo
@@ -44,13 +42,14 @@ def protectDjangoErrPage( func ):
 			return func( *args, **kwargs );
 		except Ice.Exception, e:
 			raise e;
+	protection_wrapper.innerfunc = func
 	
 	return protection_wrapper;
 
 
 
 @protectDjangoErrPage
-def MumbleCtlIce( connstring ):
+def MumbleCtlIce( connstring, slicefile ):
 	""" Choose the correct Ice handler to use (1.1.8 or 1.2.x), and make sure the
 	    Murmur version matches the slice Version.
 	"""
@@ -59,19 +58,19 @@ def MumbleCtlIce( connstring ):
 		import Murmur
 	
 	except ImportError:
-		if not settings.SLICE:
+		if not slicefile:
 			raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
 		
-		if not exists( settings.SLICE ):
-			raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % settings.SLICE )
+		if not exists( slicefile ):
+			raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % slicefile )
 		
-		if " " in settings.SLICE:
+		if " " in slicefile:
 			raise EnvironmentError( "You have a space char in your Slice path. This will confuse Ice, please check." )
 		
-		if not settings.SLICE.endswith( ".ice" ):
+		if not slicefile.endswith( ".ice" ):
 			raise EnvironmentError( "The slice file name MUST end with '.ice'." )
 		
-		Ice.loadSlice( settings.SLICE )
+		Ice.loadSlice( slicefile )
 		
 		import Murmur
 	

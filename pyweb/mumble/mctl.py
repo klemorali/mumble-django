@@ -95,7 +95,7 @@ class MumbleCtlBase (object):
 		raise NotImplementedError( "mctl::verifyPassword" );
 	
 	@staticmethod
-	def newInstance( connstring ):
+	def newInstance( connstring, slicefile ):
 		""" Create a new CTL object for the given connstring. """
 		
 		# check cache
@@ -112,7 +112,7 @@ class MumbleCtlBase (object):
 			ctl = MumbleCtlDbus( connstring )
 		else:
 			from MumbleCtlIce import MumbleCtlIce
-			ctl = MumbleCtlIce( connstring )
+			ctl = MumbleCtlIce( connstring, slicefile )
 		
 		MumbleCtlBase.cache[connstring] = ctl;
 		return ctl;
