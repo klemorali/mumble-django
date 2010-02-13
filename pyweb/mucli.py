@@ -33,9 +33,7 @@ If you do not specify a data type, string will be assumed, otherwise
 interprets each of 'True', 'true', '1', 'Yes', 'yes' as True, everything else
 as False.
 
-
-    Example: int:4 float:3.5 string:oh:hai foobar
-"""
+    Example: int:4 float:3.5 string:oh:hai foobar bool:yes"""
 
 parser = OptionParser(usage=usage)
 
