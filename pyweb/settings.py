@@ -208,7 +208,7 @@ TEST_RUNNER = 'mumble.testrunner.run_tests'
 TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' );
 TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' );
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
 	'django.contrib.auth',
 	'django.contrib.admin',
 	'django.contrib.contenttypes',
@@ -216,18 +216,17 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'registration',
 	'mumble',
-)
+]
 
 
 def modprobe( name ):
 	""" Try to import the named module, and if that works add it to INSTALLED_APPS. """
-	global INSTALLED_APPS
 	try:
 		__import__( name )
 	except ImportError:
 		pass
 	else:
-		INSTALLED_APPS += ( name, )
+		INSTALLED_APPS.append( name, )
 
 # Check if rosetta is available.
 #    http://code.google.com/p/django-rosetta
