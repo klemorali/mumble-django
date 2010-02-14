@@ -322,3 +322,45 @@ def djangousers( request ):
 		);
 
 
+def mmng_tree( request, server ):
+	""" JSONify the channel tree to initialize the client's tree structure. """
+	
+	srv = get_object_or_404( Mumble, id=int(server) );
+	
+	chanlist = []
+	userlist = []
+	
+	for chanid in srv.channels:
+		channel = srv.channels[chanid]
+		state = None # "removed"
+		chanlist.append({
+			"type":     "channel",
+			"id":       channel.chanid,
+			"name":     channel.name,
+			"parent":   channel.parent and channel.parent.chanid or -1,
+			"position": channel.position,
+			"state":    state == None and (channel.temporary and "temporary" or "permanent") or state
+			})
+	
+	for sessionid in srv.players:
+		user = srv.players[sessionid]
+		userlist.append({
+			"type":    "player",
+			"name":    user.name,
+			"channel": user.channel.chanid,
+			"mute":    user.mute or user.selfMute or user.suppress,
+			"deaf":    user.deaf or user.selfDeaf or user.suppress,
+			"online":  user.onlinesecs,
+			"state":   "online" # "offline"
+			})
+	
+	if "callback" in request.GET:
+		prefix = request.GET["callback"]
+	else:
+		prefix = ""
+	
+	return HttpResponse(
+		prefix + "(" + simplejson.dumps( { 'channels': chanlist, 'users': userlist } ) + ")",
+		mimetype='text/javascript'
+		);
+
