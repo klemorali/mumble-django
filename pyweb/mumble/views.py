@@ -323,7 +323,13 @@ def djangousers( request ):
 
 
 def mmng_tree( request, server ):
-	""" JSONify the channel tree to initialize the client's tree structure. """
+	""" Return a JSON representation of the channel tree suitable for
+	    Murmur Manager:
+	      http://github.com/cheald/murmur-manager/tree/master/widget/
+	
+	    To make the client widget query this view, set the URL attribute
+	    to "http://<mumble-django base URL>/mumble"
+	"""
 	
 	srv = get_object_or_404( Mumble, id=int(server) );
 	
@@ -332,7 +338,6 @@ def mmng_tree( request, server ):
 	
 	for chanid in srv.channels:
 		channel = srv.channels[chanid]
-		state = None # "removed"
 		
 		if channel.parent is not None:
 			parent = channel.parent.chanid
@@ -345,7 +350,7 @@ def mmng_tree( request, server ):
 			"name":     channel.name,
 			"parent":   parent,
 			"position": channel.position,
-			"state":    state == None and (channel.temporary and "temporary" or "permanent") or state
+			"state":    channel.temporary and "temporary" or "permanent"
 			})
 	
 	for sessionid in srv.players:
@@ -357,7 +362,7 @@ def mmng_tree( request, server ):
 			"mute":    user.mute or user.selfMute or user.suppress,
 			"deaf":    user.deaf or user.selfDeaf or user.suppress,
 			"online":  user.onlinesecs,
-			"state":   "online" # "offline"
+			"state":   "online"
 			})
 	
 	if "callback" in request.GET:
