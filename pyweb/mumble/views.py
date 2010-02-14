@@ -333,11 +333,17 @@ def mmng_tree( request, server ):
 	for chanid in srv.channels:
 		channel = srv.channels[chanid]
 		state = None # "removed"
+		
+		if channel.parent is not None:
+			parent = channel.parent.chanid
+		else:
+			parent = -1
+		
 		chanlist.append({
 			"type":     "channel",
 			"id":       channel.chanid,
 			"name":     channel.name,
-			"parent":   channel.parent and channel.parent.chanid or -1,
+			"parent":   parent,
 			"position": channel.position,
 			"state":    state == None and (channel.temporary and "temporary" or "permanent") or state
 			})
