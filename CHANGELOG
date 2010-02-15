@@ -2,6 +2,25 @@
 Mumble-Django changelog
 =======================
 
+Version 1.5, 15 Feb 2010:
+------------------------------
+* Add a few checks for common problems in the Slice path, like spaces or the file
+  name not ending with `.ice', to prevent nonsense Exceptions from Ice.
+* Change the Ice CTL to only load the slice when there is no "Murmur" module.
+* Replace SECRET_KEY variable with code to automatically generate it and store it
+  in .secret.txt.
+* Fix a bug in the Munin plugin that caused Munin to only graph the alphabetically
+  first server instance.
+* Display the aclAdmin property in the Admin instead of using isAdmin, to display
+  changes in the ACLs directly.
+* Change the CTL mechanism to be completely independent from MD, thereby making it
+  easily reusable.
+* Add view to feed Antiarc's AJAX channel viewer with data. See here for more details:
+  http://github.com/cheald/murmur-manager/tree/master/widget/
+* Add a script that provides a CLI for the CTL objects, allowing to change Murmur's
+  configuration directly from the shell.
+* Change the `default channel' field to a DropDown list.
+
 Version 1.4, 9 Feb 2010:
 ------------------------------
 * Remove automatic Murmur version detection, as it isn't possible with Ice.
