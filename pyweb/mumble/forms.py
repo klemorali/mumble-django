@@ -25,8 +25,27 @@ from django.utils.translation	import ugettext_lazy as _
 from mumble.models		import Mumble, MumbleUser
 
 
+def populate_channel_choices( form ):
+	""" Populate the `default channel' field's choices """
+	choices = [ ('', '----------') ]
+	
+	def add_item( item, level ):
+		if item.is_server or item.is_channel:
+			choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
+	
+	form.instance.rootchan.visit(add_item)
+	
+	form.fields['defchan'].choices = choices
+
+
 class MumbleAdminForm( ModelForm ):
 	""" A Mumble Server admin form intended to be used by the server hoster. """
+	defchan = forms.TypedChoiceField( choices=(), coerce=int )
+	
+	def __init__( self, *args, **kwargs ):
+		ModelForm.__init__( self, *args, **kwargs )
+		populate_channel_choices( self )
+	
 	class Meta:
 		model   = Mumble;
 	
@@ -83,6 +102,13 @@ class MumbleForm( ModelForm ):
 	Server hosters are expected to use the Django admin application instead, where everything
 	can be configured freely.
 	"""
+	
+	defchan = forms.TypedChoiceField( choices=(), coerce=int )
+	
+	def __init__( self, *args, **kwargs ):
+		ModelForm.__init__( self, *args, **kwargs )
+		populate_channel_choices( self )
+	
 	class Meta:
 		model   = Mumble;
 		exclude = ( 'dbus', 'booted', 'addr', 'port', 'users', 'bwidth', 'sslcrt', 'sslkey', );
