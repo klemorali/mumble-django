@@ -226,7 +226,7 @@ def modprobe( name ):
 	except ImportError:
 		pass
 	else:
-		INSTALLED_APPS.append( name, )
+		INSTALLED_APPS.append( name )
 
 # Check if rosetta is available.
 #    http://code.google.com/p/django-rosetta
