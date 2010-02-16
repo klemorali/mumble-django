@@ -28,11 +28,17 @@ from mumble.mctl		import MumbleCtlBase
 
 def mk_config_property( field, doc="" ):
 	""" Create a property for the given config field. """
-	return property(
-		lambda self: self.getConf( field ),
-		lambda self, value: self.setConf( field, value ),
-		doc=doc
-		)
+	
+	def get_field( self ):
+		if self.id is not None:
+			return self.getConf( field )
+		else:
+			return None
+	
+	def set_field( self, value ):
+		self.setConf( field, value )
+	
+	return property( get_field, set_field, doc=doc )
 
 
 class Mumble( models.Model ):
@@ -60,6 +66,7 @@ class Mumble( models.Model ):
 	port    = models.IntegerField( _('Server Port'),        default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
 		"Port number to bind to. Use -1 to auto assign one.") );
 	
+	
 	supw    = property( lambda self: '',
 			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
 			doc='Superuser Password'
@@ -72,14 +79,21 @@ class Mumble( models.Model ):
 	bwidth  = mk_config_property( "bandwidth",	"Bandwidth [Bps]" )
 	sslcrt  = mk_config_property( "certificate",	"SSL Certificate" )
 	sslkey  = mk_config_property( "key",		"SSL Key" )
-	obfsc   = mk_config_property( "obfuscate",	"IP Obfuscation" )
 	player  = mk_config_property( "username",	"Player name regex" )
 	channel = mk_config_property( "channelname",	"Channel name regex" )
 	defchan = mk_config_property( "defaultchannel", "Default channel" )
 	
-	
+	obfsc   = property(
+		lambda self: ( self.getConf( "obfuscate" ) == "true" ) if self.id is not None else None,
+		lambda self, value: self.setConf( "obfuscate", str(value).lower() ),
+		doc="IP Obfuscation"
+		)
+
 	def getBooted( self ):
-		return self.ctl.isBooted( self.srvid );
+		if self.id is not None:
+			return self.ctl.isBooted( self.srvid );
+		else:
+			return False
 	
 	def setBooted( self, value ):
 		if value != self.getBooted():
@@ -127,7 +141,6 @@ class Mumble( models.Model ):
 		self.ctl.setConf( self.srvid,     'port',                str(self.port) );
 		self.ctl.setConf( self.srvid,     'registername',        self.name );
 		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
-		self.ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
 		
 		# registerHostname needs to take the port no into account
 		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
