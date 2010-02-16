@@ -23,13 +23,19 @@ from mumble.models import Mumble, MumbleUser
 class MumbleAdmin(admin.ModelAdmin):
 	""" Specification for the "Server administration" admin section. """
 	
-	list_display   = [ 'name', 'addr', 'port', 'booted', 'get_is_public',
+	list_display   = [ 'name', 'addr', 'port', 'get_booted', 'get_is_public',
 			   'get_users_regged', 'get_users_online', 'get_channel_count' ];
-	list_filter    = [ 'booted', 'addr' ];
-	search_fields  = [ 'name', 'addr' ];
+	list_filter    = [ 'addr' ];
+	search_fields  = [ 'name', 'addr', 'port' ];
 	ordering       = [ 'name' ];
 	form           = MumbleAdminForm;
 	
+	
+	def get_booted( self, obj ):
+		return obj.booted
+	
+	get_booted.short_description = _('Boot Server')
+	get_booted.boolean = True
 	
 	def get_users_regged( self, obj ):
 		""" Populates the "Registered users" column. """
