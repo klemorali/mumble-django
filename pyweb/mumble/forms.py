@@ -268,6 +268,13 @@ class MumbleUserLinkForm( MumbleUserForm ):
 		return self.cleaned_data;
 
 
+class MumbleUserAdminForm( PropertyModelForm ):
+	aclAdmin = forms.BooleanField( label=_('Admin on root channel'), required=False );
+	
+	class Meta:
+		model   = Mumble;
+
+
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """
 	texturefile = forms.ImageField();

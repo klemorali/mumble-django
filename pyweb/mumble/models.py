@@ -266,7 +266,6 @@ class Mumble( models.Model ):
 			
 				playerinstance.name = playerdata.name;
 			
-			playerinstance.isAdmin = playerinstance.getAdmin();
 			playerinstance.save( dontConfigureMurmur=True );
 
 	
@@ -394,7 +393,6 @@ class MumbleUser( models.Model ):
 	password = models.CharField(            _('Login password'),               max_length = 200, blank=True );
 	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance'), related_name="mumbleuser_set" );
 	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),   related_name="mumbleuser_set", null=True, blank=True );
-	isAdmin  = models.BooleanField(         _('Admin on root channel'),        default = False );
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
@@ -447,8 +445,6 @@ class MumbleUser( models.Model ):
 		
 		# Don't save the users' passwords, we don't need them anyway
 		self.password = '';
-		
-		self.aclAdmin = self.isAdmin;
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
