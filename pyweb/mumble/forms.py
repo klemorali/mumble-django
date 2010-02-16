@@ -55,30 +55,19 @@ class PropertyModelForm( ModelForm ):
 		return inst
 
 
-def populate_channel_choices( form ):
-	""" Populate the `default channel' field's choices """
-	choices = [ ('', '----------') ]
+class MumbleForm( PropertyModelForm ):
+	""" The Mumble Server admin form that allows to configure settings which do
+	    not necessarily have to be reserved to the server hoster.
 	
-	def add_item( item, level ):
-		if item.is_server or item.is_channel:
-			choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
-	
-	form.instance.rootchan.visit(add_item)
-	
-	form.fields['defchan'].choices = choices
-
-
-class MumbleAdminForm( PropertyModelForm ):
-	""" A Mumble Server admin form intended to be used by the server hoster. """
+	    Server hosters are expected to use the Django admin application instead,
+	    where everything can be configured freely.
+	"""
 	
 	url     = forms.CharField( required=False )
 	motd    = forms.CharField( required=False, widget=forms.Textarea )
 	passwd  = forms.CharField( required=False, help_text=_(
 		"Password required to join. Leave empty for public servers.") )
-	users   = forms.IntegerField( required=False )
-	bwidth  = forms.IntegerField( required=False )
-	sslcrt  = forms.CharField( required=False, widget=forms.Textarea )
-	sslkey  = forms.CharField( required=False, widget=forms.Textarea )
+	supw    = forms.CharField( required=False )
 	obfsc   = forms.BooleanField( required=False, help_text=_(
 		"If on, IP adresses of the clients are not logged.") )
 	player  = forms.CharField( required=False )
@@ -87,13 +76,36 @@ class MumbleAdminForm( PropertyModelForm ):
 		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
 		"server admins on the channel detail page.") )
 	
-	
 	def __init__( self, *args, **kwargs ):
 		PropertyModelForm.__init__( self, *args, **kwargs )
-		populate_channel_choices( self )
+		
+		# Populate the `default channel' field's choices
+		choices = [ ('', '----------') ]
+		
+		def add_item( item, level ):
+			if item.is_server or item.is_channel:
+				choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
+		
+		self.instance.rootchan.visit(add_item)
+		self.fields['defchan'].choices = choices
 	
 	class Meta:
 		model   = Mumble;
+		exclude = ( 'dbus', 'addr', 'port', );
+
+
+class MumbleAdminForm( MumbleForm ):
+	""" A Mumble Server admin form intended to be used by the server hoster. """
+	
+	users   = forms.IntegerField( required=False )
+	bwidth  = forms.IntegerField( required=False )
+	sslcrt  = forms.CharField( required=False, widget=forms.Textarea )
+	sslkey  = forms.CharField( required=False, widget=forms.Textarea )
+	booted  = forms.BooleanField( required=False )
+	
+	
+	class Meta:
+		exclude = None
 	
 	def clean_port( self ):
 		""" If portno == -1 autoassign, and check if the port number is valid. """
@@ -138,26 +150,6 @@ class MumbleAdminForm( PropertyModelForm ):
 			sockudp.close();
 		
 		return self.cleaned_data;
-
-
-class MumbleForm( ModelForm ):
-	"""
-	The Mumble Server admin form that allows to configure settings which do not necessarily
-	have to be reserved to the server hoster.
-	
-	Server hosters are expected to use the Django admin application instead, where everything
-	can be configured freely.
-	"""
-	
-	defchan = forms.TypedChoiceField( choices=(), coerce=int )
-	
-	def __init__( self, *args, **kwargs ):
-		ModelForm.__init__( self, *args, **kwargs )
-		populate_channel_choices( self )
-	
-	class Meta:
-		model   = Mumble;
-		exclude = ( 'dbus', 'booted', 'addr', 'port', 'users', 'bwidth', 'sslcrt', 'sslkey', );
 
 
 class MumbleUserForm( ModelForm ):
