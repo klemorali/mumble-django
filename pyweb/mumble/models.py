@@ -59,9 +59,11 @@ class Mumble( models.Model ):
 		"global server list.") );
 	port    = models.IntegerField( _('Server Port'),        default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
 		"Port number to bind to. Use -1 to auto assign one.") );
-	supw    = models.CharField(    _('Superuser Password'), max_length = 200, blank = True );
-	booted  = models.BooleanField( _('Boot Server'),        default = True  );
 	
+	supw    = property( lambda self: '',
+			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
+			doc='Superuser Password'
+			)
 	
 	url     = mk_config_property( "registerurl",	"Website URL" )
 	motd    = mk_config_property( "welcometext",	"Welcome Message" )
@@ -74,6 +76,19 @@ class Mumble( models.Model ):
 	player  = mk_config_property( "username",	"Player name regex" )
 	channel = mk_config_property( "channelname",	"Channel name regex" )
 	defchan = mk_config_property( "defaultchannel", "Default channel" )
+	
+	
+	def getBooted( self ):
+		return self.ctl.isBooted( self.srvid );
+	
+	def setBooted( self, value ):
+		if value != self.getBooted():
+			if value:
+				self.ctl.start( self.srvid );
+			else:
+				self.ctl.stop( self.srvid );
+	
+	booted  = property( getBooted, setBooted, doc="Boot Server" )
 	
 	class Meta:
 		unique_together     = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
@@ -112,24 +127,7 @@ class Mumble( models.Model ):
 		self.ctl.setConf( self.srvid,     'port',                str(self.port) );
 		self.ctl.setConf( self.srvid,     'registername',        self.name );
 		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
-		self.ctl.setConf( self.srvid,     'welcometext',         self.motd );
-		self.ctl.setConf( self.srvid,     'password',            self.passwd );
-		self.ctl.setConf( self.srvid,     'certificate',         self.sslcrt );
-		self.ctl.setConf( self.srvid,     'key',                 self.sslkey );
 		self.ctl.setConf( self.srvid,     'obfuscate',           str(self.obfsc).lower() );
-		self.ctl.setConf( self.srvid,     'username',            self.player );
-		self.ctl.setConf( self.srvid,     'channelname',         self.channel );
-		self.ctl.setConf( self.srvid,     'defaultchannel',      str(self.defchan) );
-		
-		if self.users is not None:
-			self.ctl.setConf( self.srvid, 'users',               str(self.users) );
-		else:
-			self.ctl.setConf( self.srvid, 'users',               '' );
-		
-		if self.bwidth is not None:
-			self.ctl.setConf( self.srvid, 'bandwidth',           str(self.bwidth) );
-		else:
-			self.ctl.setConf( self.srvid, 'bandwidth',           '' );
 		
 		# registerHostname needs to take the port no into account
 		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
@@ -221,24 +219,6 @@ class Mumble( models.Model ):
 		self.name    =  servername;
 		self.addr    =  addr;
 		self.port    =  find_in_dicts( "port"        );
-		self.url     =  find_in_dicts( "registerurl" );
-		self.motd    =  find_in_dicts( "welcometext" );
-		self.passwd  =  find_in_dicts( "password"    );
-		self.supw    =  '';
-		self.users   =  find_in_dicts( "users"       );
-		self.bwidth  =  find_in_dicts( "bandwidth"   );
-		self.sslcrt  =  find_in_dicts( "certificate" );
-		self.sslkey  =  find_in_dicts( "key"         );
-		self.obfsc   =  bool( find_in_dicts( 'obfuscate' ) );
-		
-		pldefault = self._meta.get_field_by_name('player')[0].default;
-		self.player  =  find_in_dicts( 'username', pldefault );
-		
-		chdefault = self._meta.get_field_by_name('channel')[0].default;
-		self.channel =  find_in_dicts( 'channelname', chdefault );
-		
-		self.defchan =  int( find_in_dicts( 'defaultchannel', 0 ) );
-		self.booted  =  ( self.srvid in self.ctl.getBootedServers() );
 		
 		self.save( dontConfigureMurmur=True );
 	
