@@ -84,7 +84,7 @@ class MumbleForm( PropertyModelForm ):
 		"If on, IP adresses of the clients are not logged.") )
 	player  = forms.CharField( required=False )
 	channel = forms.CharField( required=False )
-	defchan = forms.TypedChoiceField( choices=(), coerce=int, help_text=_(
+	defchan = forms.TypedChoiceField( choices=(), coerce=int, required=False, help_text=_(
 		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
 		"server admins on the channel detail page.") )
 	
@@ -94,11 +94,13 @@ class MumbleForm( PropertyModelForm ):
 		# Populate the `default channel' field's choices
 		choices = [ ('', '----------') ]
 		
-		def add_item( item, level ):
-			if item.is_server or item.is_channel:
-				choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
+		if self.instance and self.instance.srvid is not None and self.instance.booted:
+			def add_item( item, level ):
+				if item.is_server or item.is_channel:
+					choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
+			
+			self.instance.rootchan.visit(add_item)
 		
-		self.instance.rootchan.visit(add_item)
 		self.fields['defchan'].choices = choices
 	
 	class Meta:
