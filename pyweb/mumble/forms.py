@@ -33,7 +33,6 @@ class PropertyModelForm( ModelForm ):
 	
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs );
-		
 		instfields = self.instance._meta.get_all_field_names()
 		
 		for fldname in self.fields:
@@ -46,13 +45,26 @@ class PropertyModelForm( ModelForm ):
 	def save( self, commit=True ):
 		inst = ModelForm.save( self, commit=commit )
 		
+		if commit:
+			self.save_to_model( inst )
+		else:
+			# Update when the model has been saved.
+			from django.db.models import signals
+			self._update_inst = inst
+			signals.post_save.connect( self.save_listener, sender=inst.__class__ )
+		
+		return inst
+	
+	def save_listener( self, **kwargs ):
+		if kwargs['instance'] is self._update_inst:
+			self.save_to_model( self._update_inst )
+	
+	def save_to_model( self, inst ):
 		instfields = inst._meta.get_all_field_names()
 		
 		for fldname in self.fields:
 			if fldname not in instfields:
 				setattr( inst, fldname, self.cleaned_data[fldname] )
-		
-		return inst
 
 
 class MumbleForm( PropertyModelForm ):
