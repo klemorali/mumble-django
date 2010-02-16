@@ -25,6 +25,33 @@ from django.utils.translation	import ugettext_lazy as _
 from mumble.models		import Mumble, MumbleUser
 
 
+class PropertyModelForm( ModelForm ):
+	""" ModelForm that gets/sets fields that are not within the model's
+	    fields as model attributes. Necessary to get forms that manipulate
+	    properties.
+	"""
+	
+	def __init__( self, *args, **kwargs ):
+		ModelForm.__init__( self, *args, **kwargs );
+		
+		instfields = self.instance._meta.get_all_field_names()
+		
+		for fldname in self.fields:
+			if fldname not in instfields:
+				self.fields[fldname].initial = getattr( self.instance, fldname )
+	
+	def save( self, commit=True ):
+		inst = ModelForm.save( self, commit=commit )
+		
+		instfields = inst._meta.get_all_field_names()
+		
+		for fldname in self.fields:
+			if fldname not in instfields:
+				setattr( inst, fldname, self.cleaned_data[fldname] )
+		
+		return inst
+
+
 def populate_channel_choices( form ):
 	""" Populate the `default channel' field's choices """
 	choices = [ ('', '----------') ]
