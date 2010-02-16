@@ -17,7 +17,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from mumble.forms  import MumbleAdminForm
+from mumble.forms  import MumbleAdminForm, MumbleUserAdminForm
 from mumble.models import Mumble, MumbleUser
 
 class MumbleAdmin(admin.ModelAdmin):
@@ -81,6 +81,8 @@ class MumbleUserAdmin(admin.ModelAdmin):
 	list_filter    = [ 'server' ];
 	search_fields  = [ 'owner__username', 'name' ];
 	ordering       = [ 'owner__username' ];
+	
+	form = MumbleUserAdminForm
 	
 	def get_acl_admin( self, obj ):
 		return obj.aclAdmin
