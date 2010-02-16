@@ -212,7 +212,8 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	def setConf(self, srvid, key, value):
 		if key == "username":
 			key = "playername";
-		
+		if value is None:
+			value = ''
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 	
 	@protectDjangoErrPage
@@ -421,6 +422,8 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	
 	@protectDjangoErrPage
 	def setConf(self, srvid, key, value):
+		if value is None:
+			value = ''
 		self._getIceServerObject(srvid).setConf( key, value.encode( "UTF-8" ) )
 	
 	@protectDjangoErrPage
