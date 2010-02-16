@@ -26,6 +26,14 @@ from mumble.mmobjects		import mmChannel, mmPlayer
 from mumble.mctl		import MumbleCtlBase
 
 
+def mk_config_property( field, doc="" ):
+	""" Create a property for the given config field. """
+	return property(
+		lambda self: self.getConf( field ),
+		lambda self, value: self.setConf( field, value ),
+		doc=doc
+		)
+
 
 class Mumble( models.Model ):
 	""" Represents a Murmur server instance.
@@ -51,23 +59,21 @@ class Mumble( models.Model ):
 		"global server list.") );
 	port    = models.IntegerField( _('Server Port'),        default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
 		"Port number to bind to. Use -1 to auto assign one.") );
-	url     = models.CharField(    _('Website URL'),        max_length = 200, blank = True );
-	motd    = models.TextField(    _('Welcome Message'),                      blank = True );
-	passwd  = models.CharField(    _('Server Password'),    max_length = 200, blank = True, help_text=_(
-		"Password required to join. Leave empty for public servers.") );
 	supw    = models.CharField(    _('Superuser Password'), max_length = 200, blank = True );
-	users   = models.IntegerField( _('Max. Users'),                           blank = True, null = True );
-	bwidth  = models.IntegerField( _('Bandwidth [Bps]'),                      blank = True, null = True );
-	sslcrt  = models.TextField(    _('SSL Certificate'),                      blank = True );
-	sslkey  = models.TextField(    _('SSL Key'),            blank = True    );
-	obfsc   = models.BooleanField( _('IP Obfuscation'),     default = False,  help_text=_(
-		"If on, IP adresses of the clients are not logged.") );
-	player  = models.CharField(    _('Player name regex'),  max_length=200,   default=r'[-=\w\[\]\{\}\(\)\@\|\.]+'   );
-	channel = models.CharField(    _('Channel name regex'), max_length=200,   default=r'[ \-=\w\#\[\]\{\}\(\)\@\|]+' );
-	defchan = models.IntegerField( _('Default channel'),    default=0,        help_text=_(
-		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
-		"server admins on the channel detail page."));
 	booted  = models.BooleanField( _('Boot Server'),        default = True  );
+	
+	
+	url     = mk_config_property( "registerurl",	"Website URL" )
+	motd    = mk_config_property( "welcometext",	"Welcome Message" )
+	passwd  = mk_config_property( "password",	"Server Password" )
+	users   = mk_config_property( "users",		"Max. Users" )
+	bwidth  = mk_config_property( "bandwidth",	"Bandwidth [Bps]" )
+	sslcrt  = mk_config_property( "certificate",	"SSL Certificate" )
+	sslkey  = mk_config_property( "key",		"SSL Key" )
+	obfsc   = mk_config_property( "obfuscate",	"IP Obfuscation" )
+	player  = mk_config_property( "username",	"Player name regex" )
+	channel = mk_config_property( "channelname",	"Channel name regex" )
+	defchan = mk_config_property( "defaultchannel", "Default channel" )
 	
 	class Meta:
 		unique_together     = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
@@ -175,6 +181,12 @@ class Mumble( models.Model ):
 	
 	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
 	
+	
+	def getConf( self, field ):
+		return self.ctl.getConf( self.srvid, field )
+	
+	def setConf( self, field, value ):
+		return self.ctl.setConf( self.srvid, field, value )
 	
 	def configureFromMurmur( self ):
 		default = self.ctl.getDefaultConf();

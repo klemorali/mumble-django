@@ -39,6 +39,9 @@ class PropertyModelForm( ModelForm ):
 		for fldname in self.fields:
 			if fldname not in instfields:
 				self.fields[fldname].initial = getattr( self.instance, fldname )
+				docstr = getattr( self.instance.__class__, fldname ).__doc__
+				if docstr:
+					self.fields[fldname].label = _( docstr )
 	
 	def save( self, commit=True ):
 		inst = ModelForm.save( self, commit=commit )
@@ -65,12 +68,28 @@ def populate_channel_choices( form ):
 	form.fields['defchan'].choices = choices
 
 
-class MumbleAdminForm( ModelForm ):
+class MumbleAdminForm( PropertyModelForm ):
 	""" A Mumble Server admin form intended to be used by the server hoster. """
-	defchan = forms.TypedChoiceField( choices=(), coerce=int )
+	
+	url     = forms.CharField( required=False )
+	motd    = forms.CharField( required=False, widget=forms.Textarea )
+	passwd  = forms.CharField( required=False, help_text=_(
+		"Password required to join. Leave empty for public servers.") )
+	users   = forms.IntegerField( required=False )
+	bwidth  = forms.IntegerField( required=False )
+	sslcrt  = forms.CharField( required=False, widget=forms.Textarea )
+	sslkey  = forms.CharField( required=False, widget=forms.Textarea )
+	obfsc   = forms.BooleanField( required=False, help_text=_(
+		"If on, IP adresses of the clients are not logged.") )
+	player  = forms.CharField( required=False )
+	channel = forms.CharField( required=False )
+	defchan = forms.TypedChoiceField( choices=(), coerce=int, help_text=_(
+		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
+		"server admins on the channel detail page.") )
+	
 	
 	def __init__( self, *args, **kwargs ):
-		ModelForm.__init__( self, *args, **kwargs )
+		PropertyModelForm.__init__( self, *args, **kwargs )
 		populate_channel_choices( self )
 	
 	class Meta:
