@@ -20,6 +20,7 @@ DEFAULT_SLICEFILE  = '/usr/share/slice/Murmur.ice'
 
 import os, sys
 import inspect
+import getpass
 
 from optparse		import OptionParser
 from mumble.mctl	import MumbleCtlBase
@@ -46,6 +47,16 @@ parser.add_option( "-d", "--django-settings",
 parser.add_option( "-c", "--connstring",
 	help="connection string to use. Default is '%s'." % DEFAULT_CONNSTRING,
 	default=None
+	)
+
+parser.add_option( "-i", "--icesecret",
+	help="Ice secret to use in the connection. Also see --asksecret.",
+	default=None
+	)
+
+parser.add_option( "-a", "--asksecret",
+	help="Ask for the Ice secret on the shell instead of taking it from the command line.",
+	action="store_true", default=False
 	)
 
 parser.add_option( "-s", "--slice",
@@ -109,8 +120,10 @@ if options.verbose:
 	print >> sys.stderr, "    Slice:      %s" % options.slice
 	print >> sys.stderr, "Encoding:       %s" % options.encoding
 
+if options.asksecret or options.icesecret == '':
+	options.icesecret = getpass.getpass( "Ice secret: " )
 
-ctl = MumbleCtlBase.newInstance( connstring=options.connstring, slicefile=options.slice )
+ctl = MumbleCtlBase.newInstance( options.connstring, options.slice, options.icesecret )
 
 
 if not progargs:
