@@ -16,7 +16,6 @@
 
 import datetime
 from time			import time
-from os.path			import join
 
 from django.utils.http		import urlquote
 from django.conf		import settings
@@ -113,24 +112,21 @@ class mmChannel( object ):
 		""" Create an URL to connect to this channel. The URL is of the form
 		    mumble://username@host:port/parentchans/self.name
 		"""
-		userstr = "";
+		from urlparse import urlunsplit
+		versionstr = "version=%d.%d.%d" % tuple(self.server.version[:3]);
+		
+		if self.parent is not None:
+			chanlist = self.parent_channels() + [self.name];
+			chanlist = [ urlquote( chan ) for chan in chanlist ];
+			urlpath  = "/".join( chanlist );
+		else:
+			urlpath  = "";
 		
 		if for_user is not None:
-			userstr = "%s@" % for_user.name;
-		
-		versionstr = "version=%d.%d.%d" % tuple(self.server.version[0:3]);
-		
-		# create list of all my parents and myself
-		chanlist = self.parent_channels() + [self.name];
-		# urlencode channel names
-		chanlist = [ urlquote( chan ) for chan in chanlist ];
-		# create a path by joining the channel names
-		chanpath = join( *chanlist );
-		
-		if self.server.port != settings.MUMBLE_DEFAULT_PORT:
-			return "mumble://%s%s:%d/%s?%s" % ( userstr, self.server.addr, self.server.port, chanpath, versionstr );
-		
-		return "mumble://%s%s/%s?%s" % ( userstr, self.server.addr, chanpath, versionstr );
+			netloc = "%s@%s" % ( for_user.name, self.server.netloc );
+			return urlunsplit(( "mumble", netloc, urlpath, versionstr, "" ))
+		else:
+			return urlunsplit(( "mumble", self.server.netloc, urlpath, versionstr, "" ))
 	
 	connecturl = property( getURL, doc="A convenience wrapper for getURL." );
 	
