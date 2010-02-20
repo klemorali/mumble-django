@@ -36,7 +36,7 @@ def mk_config_property( field, doc="" ):
 			return None
 	
 	def set_field( self, value ):
-		self.setConf( field, value )
+		self.setConf( field, str(value) )
 	
 	return property( get_field, set_field, doc=doc )
 
@@ -56,16 +56,20 @@ class Mumble( models.Model ):
 	    deleted as well.
 	"""
 	
-	name    = models.CharField(    _('Server Name'),        max_length = 200 );
-	dbus    = models.CharField(    _('DBus or ICE base'),   max_length = 200, default = settings.DEFAULT_CONN, help_text=_(
-		"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
-	srvid   = models.IntegerField( _('Server ID'),          editable = False );
-	addr    = models.CharField(    _('Server Address'),     max_length = 200, help_text=_(
-		"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
-		"global server list.") );
-	port    = models.IntegerField( _('Server Port'),        default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
-		"Port number to bind to. Use -1 to auto assign one.") );
-	
+	name    = models.CharField(    _('Server Name'),            max_length=200 );
+	dbus    = models.CharField(    _('DBus or ICE base'),       max_length=200, default=settings.DEFAULT_CONN, help_text=_(
+			"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
+	srvid   = models.IntegerField( _('Server ID'),              editable=False );
+	addr    = models.CharField(    _('Server Address'),         max_length=200, help_text=_(
+			"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
+			"global server list.") );
+	port    = models.IntegerField( _('Server Port'),            default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
+			"Port number to bind to. Use -1 to auto assign one.") );
+	display = models.CharField(    _('Server Display Address'), max_length=200, blank=True, help_text=_(
+			"This field is only relevant if you are located behind a NAT, and names the Hostname or IP address "
+			"to use in the Channel Viewer and for the global server list registration. If not given, the addr "
+			"and port fields are used. If display and bind ports are equal, you can omit it here.") );
+	secret  = models.CharField(    _('Ice Secret'),             max_length=200, blank=True );
 	
 	supw    = property( lambda self: '',
 			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
@@ -88,7 +92,7 @@ class Mumble( models.Model ):
 		lambda self, value: self.setConf( "obfuscate", str(value).lower() ),
 		doc="IP Obfuscation"
 		)
-
+	
 	def getBooted( self ):
 		if self.id is not None:
 			return self.ctl.isBooted( self.srvid );
@@ -137,26 +141,10 @@ class Mumble( models.Model ):
 				'maxrange': 2**16,
 				});
 		
-		self.ctl.setConf( self.srvid,     'host',                socket.gethostbyname( self.addr ) );
-		self.ctl.setConf( self.srvid,     'port',                str(self.port) );
-		self.ctl.setConf( self.srvid,     'registername',        self.name );
-		self.ctl.setConf( self.srvid,     'registerurl',         self.url );
-		
-		# registerHostname needs to take the port no into account
-		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
-			self.ctl.setConf( self.srvid, 'registerhostname',    "%s:%d" % ( self.addr, self.port ) );
-		else:
-			self.ctl.setConf( self.srvid, 'registerhostname',    self.addr );
-		
-		if self.supw:
-			self.ctl.setSuperUserPassword( self.srvid, self.supw );
-			self.supw = '';
-		
-		if self.booted != self.ctl.isBooted( self.srvid ):
-			if self.booted:
-				self.ctl.start( self.srvid );
-			else:
-				self.ctl.stop( self.srvid );
+		self.ctl.setConf( self.srvid, 'host',             socket.gethostbyname(self.addr) );
+		self.ctl.setConf( self.srvid, 'port',             str(self.port) );
+		self.ctl.setConf( self.srvid, 'registername',     self.name );
+		self.ctl.setConf( self.srvid, 'registerhostname', self.netloc );
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
@@ -355,22 +343,39 @@ class Mumble( models.Model ):
 	channels = property( getChannels,                       doc="A convenience wrapper for getChannels()."    );
 	rootchan = property( lambda self: self.channels[0],     doc="A convenience wrapper for getChannels()[0]." );
 	
+	def getNetloc( self ):
+		""" Return the address from the Display field (if any), or the server address.
+		    Users from outside a NAT will need to use the Display address to connect
+		    to this server instance.
+		"""
+		if self.display:
+			if ":" in self.display:
+				return self.display;
+			else:
+				daddr = self.display;
+		else:
+			daddr = self.addr;
+		
+		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
+			return "%s:%d" % (daddr, self.port);
+		else:
+			return daddr;
+	
+	netloc = property( getNetloc, doc=getNetloc.__doc__ );
+	
 	def getURL( self, forUser = None ):
 		""" Create an URL of the form mumble://username@host:port/ for this server. """
-		userstr = "";
+		from urlparse import urlunsplit
+		versionstr = "version=%d.%d.%d" % tuple(self.version[:3]);
 		if forUser is not None:
-			userstr = "%s@" % forUser.name;
-		
-		versionstr = "version=%d.%d.%d" % tuple(self.version[0:3]);
-		
-		if self.port != settings.MUMBLE_DEFAULT_PORT:
-			return "mumble://%s%s:%d/?%s" % ( userstr, self.addr, self.port, versionstr );
-		
-		return "mumble://%s%s/?%s" % ( userstr, self.addr, versionstr );
+			netloc = "%s@%s" % ( forUser.name, self.netloc );
+			return urlunsplit(( "mumble", netloc, "", versionstr, "" ))
+		else:
+			return urlunsplit(( "mumble", self.netloc, "", versionstr, "" ))
 	
-	connecturl = property( getURL,                          doc="A convenience wrapper for getURL()." );
+	connecturl = property( getURL,                          doc=getURL.__doc__ );
 	
-	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur."              );
+	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur." );
 	
 	def asDict( self ):
 		return { 'name':   self.name,
@@ -472,7 +477,7 @@ class MumbleUser( models.Model ):
 		self.server.rootchan.acl.save();
 		return value;
 	
-	aclAdmin = property( getAdmin, setAdmin, doc="Wrapper around getAdmin/setAdmin (not a database field like isAdmin)" );
+	aclAdmin = property( getAdmin, setAdmin, doc='Admin on root channel' );
 	
 	# Registration fetching
 	def getRegistration( self ):
