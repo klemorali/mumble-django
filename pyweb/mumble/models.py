@@ -26,17 +26,26 @@ from mumble.mmobjects		import mmChannel, mmPlayer
 from mumble.mctl		import MumbleCtlBase
 
 
-def mk_config_property( field, doc="" ):
+def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerce=str, set_none='' ):
 	""" Create a property for the given config field. """
 	
 	def get_field( self ):
 		if self.id is not None:
-			return self.getConf( field )
-		else:
-			return None
+			val = self.getConf( field );
+			if val is None or val == '':
+				return get_none
+			if callable(get_coerce):
+				return get_coerce( val )
+			return val
+		return None
 	
 	def set_field( self, value ):
-		self.setConf( field, str(value) )
+		if value is None:
+			self.setConf( field, set_none )
+		elif callable(set_coerce):
+			self.setConf( field, set_coerce(value) )
+		else:
+			self.setConf( field, value )
 	
 	return property( get_field, set_field, doc=doc )
 
@@ -108,13 +117,13 @@ class Mumble( models.Model ):
 	url     = mk_config_property( "registerurl",	"Website URL" )
 	motd    = mk_config_property( "welcometext",	"Welcome Message" )
 	passwd  = mk_config_property( "password",	"Server Password" )
-	users   = mk_config_property( "users",		"Max. Users" )
-	bwidth  = mk_config_property( "bandwidth",	"Bandwidth [Bps]" )
+	users   = mk_config_property( "users",		"Max. Users",		get_coerce=int )
+	bwidth  = mk_config_property( "bandwidth",	"Bandwidth [Bps]",	get_coerce=int )
 	sslcrt  = mk_config_property( "certificate",	"SSL Certificate" )
 	sslkey  = mk_config_property( "key",		"SSL Key" )
 	player  = mk_config_property( "username",	"Player name regex" )
 	channel = mk_config_property( "channelname",	"Channel name regex" )
-	defchan = mk_config_property( "defaultchannel", "Default channel" )
+	defchan = mk_config_property( "defaultchannel", "Default channel",	get_coerce=int )
 	
 	obfsc   = property(
 		lambda self: ( self.getConf( "obfuscate" ) == "true" ) if self.id is not None else None,
