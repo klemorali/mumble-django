@@ -24,7 +24,7 @@ from mctl		import MumbleCtlBase
 
 from utils		import ObjectInfo
 
-import Ice
+import Ice, IcePy, tempfile
 
 
 def protectDjangoErrPage( func ):
@@ -47,7 +47,6 @@ def protectDjangoErrPage( func ):
 	return protection_wrapper;
 
 
-
 @protectDjangoErrPage
 def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	""" Choose the correct Ice handler to use (1.1.8 or 1.2.x), and make sure the
@@ -60,30 +59,51 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	    exports a getSlice method to retrieve the Slice from.
 	"""
 	
-	try:
-		import Murmur
-	
-	except ImportError:
-		if not slicefile:
-			raise EnvironmentError( "You didn't configure a slice file. Please set the SLICE variable in settings.py." )
-		
-		if not exists( slicefile ):
-			raise EnvironmentError( "The slice file does not exist: '%s' - please check the settings." % slicefile )
-		
-		if " " in slicefile:
-			raise EnvironmentError( "You have a space char in your Slice path. This will confuse Ice, please check." )
-		
-		if not slicefile.endswith( ".ice" ):
-			raise EnvironmentError( "The slice file name MUST end with '.ice'." )
-		
-		Ice.loadSlice( slicefile )
-		
-		import Murmur
-	
 	ice = Ice.initialize()
 	if icesecret:
-		ice.getImplicitContext().put("secret", icesecret)
-	prx  = ice.stringToProxy( connstring.encode("utf-8") )
+		ice.getImplicitContext().put( "secret", icesecret.encode("utf-8") )
+	prx = ice.stringToProxy( connstring.encode("utf-8") )
+	
+	try:
+		import Murmur
+	except ImportError:
+		# Try loading the Slice from Murmur directly via its getSlice method.
+		# See scripts/testdynamic.py in Mumble's Git repository.
+		try:
+			slice = IcePy.Operation( 'getSlice',
+				Ice.OperationMode.Idempotent, Ice.OperationMode.Idempotent,
+				True, (), (), (), IcePy._t_string, ()
+				).invoke(prx, ((), None))
+		except Ice.OperationNotExistException:
+			if not slicefile:
+				raise EnvironmentError(
+					"You didn't configure a slice file. Please set the SLICE variable in settings.py." )
+			if not exists( slicefile ):
+				raise EnvironmentError(
+					"The slice file does not exist: '%s' - please check the settings." % slicefile )
+			if " " in slicefile:
+				raise EnvironmentError(
+					"You have a space char in your Slice path. This will confuse Ice, please check." )
+			if not slicefile.endswith( ".ice" ):
+				raise EnvironmentError( "The slice file name MUST end with '.ice'." )
+			
+			try:
+				Ice.loadSlice( slicefile )
+			except RuntimeError:
+				raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
+		else:
+			slicetemp = tempfile.NamedTemporaryFile( suffix='.ice' )
+			try:
+				slicetemp.write( slice )
+				slicetemp.flush()
+				Ice.loadSlice( slicetemp.name )
+			except RuntimeError:
+				raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
+			finally:
+				slicetemp.close()
+		
+		import Murmur
+	
 	meta = Murmur.MetaPrx.checkedCast(prx)
 	
 	murmurversion = meta.getVersion()[:3]
