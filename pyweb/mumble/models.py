@@ -434,6 +434,18 @@ class Mumble( models.Model ):
 
 
 
+def mk_registration_property( field, doc="" ):
+	""" Create a property for the given registration field. """
+	
+	def get_field( self ):
+		if "comment" in self.registration:
+			return self.registration["comment"];
+		else:
+			return None;
+	
+	return property( get_field, doc=doc )
+
+
 class MumbleUser( models.Model ):
 	""" Represents a User account in Murmur.
 	
@@ -528,6 +540,7 @@ class MumbleUser( models.Model ):
 	
 	aclAdmin = property( getAdmin, setAdmin, doc='Admin on root channel' );
 	
+	
 	# Registration fetching
 	def getRegistration( self ):
 		""" Retrieve a user's registration from Murmur as a dict. """
@@ -537,26 +550,11 @@ class MumbleUser( models.Model ):
 	
 	registration = property( getRegistration, doc=getRegistration.__doc__ );
 	
-	def getComment( self ):
-		""" Retrieve a user's comment, if any. """
-		if "comment" in self.registration:
-			return self.registration["comment"];
-		else:
-			return None;
+	comment = mk_registration_property( "comment", doc="The user's comment." );
+	hash    = mk_registration_property( "comment", doc="The user's hash."    );
 	
-	comment = property( getComment, doc=getComment.__doc__ );
-	
-	def getHash( self ):
-		""" Retrieve a user's hash, if any. """
-		if "hash" in self.registration:
-			return self.registration["hash"];
-		else:
-			return None;
-	
-	hash = property( getHash, doc=getHash.__doc__ );
 	
 	# Texture handlers
-	
 	def getTexture( self ):
 		""" Get the user texture as a PIL Image. """
 		return self.server.ctl.getTexture(self.server.srvid, self.mumbleid);
@@ -586,8 +584,8 @@ class MumbleUser( models.Model ):
 	
 	textureUrl = property( getTextureUrl, doc=getTextureUrl.__doc__ );
 	
-	# Deletion handler
 	
+	# Deletion handler
 	@staticmethod
 	def pre_delete_listener( **kwargs ):
 		kwargs['instance'].unregister();
