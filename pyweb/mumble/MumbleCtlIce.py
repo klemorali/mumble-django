@@ -82,7 +82,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 				Ice.OperationMode.Idempotent, Ice.OperationMode.Idempotent,
 				True, (), (), (), IcePy._t_string, ()
 				).invoke(prx, ((), None))
-		except Ice.OperationNotExistException:
+		except (TypeError, Ice.OperationNotExistException):
 			if not slicefile:
 				raise EnvironmentError(
 					"You didn't configure a slice file. Please set the SLICE variable in settings.py." )
