@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-import os
+import os, getpass
 
 from django.conf	import settings
 
@@ -78,8 +78,10 @@ def find_existing_instances( **kwargs ):
 		elif dbusName == "2":
 			dbusName = "Meta:tcp -h 127.0.0.1 -p 6502";
 		
+		icesecret = getpass.getpass("Please enter the Ice secret (if any): ");
+		
 		try:
-			ctl = MumbleCtlBase.newInstance( dbusName, settings.SLICE );
+			ctl = MumbleCtlBase.newInstance( dbusName, settings.SLICE, icesecret );
 		except Exception, instance:
 			if v:
 				print "Unable to connect using name %s. The error was:" % dbusName;
@@ -108,7 +110,6 @@ def find_existing_instances( **kwargs ):
 			values = {
 				"server":  meta,
 				"srvid":   id,
-				"dbus":    dbusName,
 				}
 			
 			if v > 1:
