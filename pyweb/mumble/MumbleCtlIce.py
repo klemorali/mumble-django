@@ -59,9 +59,17 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	    exports a getSlice method to retrieve the Slice from.
 	"""
 	
-	ice = Ice.initialize()
+	prop = Ice.createProperties([])
+	prop.setProperty("Ice.ImplicitContext", "Shared")
+	
+	idd = Ice.InitializationData()
+	idd.properties = prop
+	
+	ice = Ice.initialize(idd)
+	
 	if icesecret:
 		ice.getImplicitContext().put( "secret", icesecret.encode("utf-8") )
+	
 	prx = ice.stringToProxy( connstring.encode("utf-8") )
 	
 	try:
