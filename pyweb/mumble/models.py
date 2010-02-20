@@ -117,26 +117,26 @@ class Mumble( models.Model ):
 	
 	supw    = property( lambda self: '',
 			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
-			doc='Superuser Password'
+			doc=_('Superuser Password')
 			)
 	
-	url     = mk_config_property( "registerurl",	"Website URL" )
-	motd    = mk_config_property( "welcometext",	"Welcome Message" )
-	passwd  = mk_config_property( "password",	"Server Password" )
-	users   = mk_config_property( "users",		"Max. Users",		get_coerce=int )
-	bwidth  = mk_config_property( "bandwidth",	"Bandwidth [Bps]",	get_coerce=int )
-	sslcrt  = mk_config_property( "certificate",	"SSL Certificate" )
-	sslkey  = mk_config_property( "key",		"SSL Key" )
-	player  = mk_config_property( "username",	"Player name regex" )
-	channel = mk_config_property( "channelname",	"Channel name regex" )
-	defchan = mk_config_property( "defaultchannel", "Default channel",	get_coerce=int )
-	timeout = mk_config_property( "timeout",	"Timeout",		get_coerce=int )
+	url     = mk_config_property( "registerurl",	_("Website URL") )
+	motd    = mk_config_property( "welcometext",	_("Welcome Message") )
+	passwd  = mk_config_property( "password",	_("Server Password") )
+	users   = mk_config_property( "users",		_("Max. Users"),	get_coerce=int )
+	bwidth  = mk_config_property( "bandwidth",	_("Bandwidth [Bps]"),	get_coerce=int )
+	sslcrt  = mk_config_property( "certificate",	_("SSL Certificate") )
+	sslkey  = mk_config_property( "key",		_("SSL Key") )
+	player  = mk_config_property( "username",	_("Player name regex") )
+	channel = mk_config_property( "channelname",	_("Channel name regex") )
+	defchan = mk_config_property( "defaultchannel", _("Default channel"),	get_coerce=int )
+	timeout = mk_config_property( "timeout",	_("Timeout"),		get_coerce=int )
 	
-	obfsc   = mk_config_bool_property( "obfuscate",         "IP Obfuscation" )
-	certreq = mk_config_bool_property( "certrequired",      "Require Certificate" )
-	textlen = mk_config_bool_property( "textmessagelength", "Maximum length of text messages" )
-	html    = mk_config_bool_property( "allowhtml",         "Allow HTML to be used in messages" )
-	bonjour = mk_config_bool_property( "bonjour",           "Publish this server via Bonjour" )
+	obfsc   = mk_config_bool_property( "obfuscate",         _("IP Obfuscation") )
+	certreq = mk_config_bool_property( "certrequired",      _("Require Certificate") )
+	textlen = mk_config_bool_property( "textmessagelength", _("Maximum length of text messages") )
+	html    = mk_config_bool_property( "allowhtml",         _("Allow HTML to be used in messages") )
+	bonjour = mk_config_bool_property( "bonjour",           _("Publish this server via Bonjour") )
 	
 	def getBooted( self ):
 		if self.id is not None:
@@ -472,6 +472,9 @@ class MumbleUser( models.Model ):
 	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance'), related_name="mumbleuser_set" );
 	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),   related_name="mumbleuser_set", null=True, blank=True );
 	
+	comment = mk_registration_property( _("comment"), doc="The user's comment." );
+	hash    = mk_registration_property( _("hash"),    doc="The user's hash."    );
+	
 	class Meta:
 		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
 		verbose_name        = _( 'User account'  );
@@ -556,10 +559,6 @@ class MumbleUser( models.Model ):
 		return self._registration;
 	
 	registration = property( getRegistration, doc=getRegistration.__doc__ );
-	
-	comment = mk_registration_property( "comment", doc="The user's comment." );
-	hash    = mk_registration_property( "comment", doc="The user's hash."    );
-	
 	
 	# Texture handlers
 	def getTexture( self ):
