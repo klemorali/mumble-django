@@ -49,6 +49,12 @@ def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerc
 	
 	return property( get_field, set_field, doc=doc )
 
+def mk_config_bool_property( field, doc="" ):
+	return mk_config_property( field, doc=doc,
+		get_coerce = lambda value: value == "true",
+		set_coerce = lambda value: str(value).lower()
+		);
+
 
 class MumbleServer( models.Model ):
 	""" Represents a Murmur server installation. """
@@ -124,12 +130,13 @@ class Mumble( models.Model ):
 	player  = mk_config_property( "username",	"Player name regex" )
 	channel = mk_config_property( "channelname",	"Channel name regex" )
 	defchan = mk_config_property( "defaultchannel", "Default channel",	get_coerce=int )
+	timeout = mk_config_property( "timeout",	"Timeout",		get_coerce=int )
 	
-	obfsc   = property(
-		lambda self: ( self.getConf( "obfuscate" ) == "true" ) if self.id is not None else None,
-		lambda self, value: self.setConf( "obfuscate", str(value).lower() ),
-		doc="IP Obfuscation"
-		)
+	obfsc   = mk_config_bool_property( "obfuscate",         "IP Obfuscation" )
+	certreq = mk_config_bool_property( "certrequired",      "Require Certificate" )
+	textlen = mk_config_bool_property( "textmessagelength", "Maximum length of text messages" )
+	html    = mk_config_bool_property( "allowhtml",         "Allow HTML to be used in messages" )
+	bonjour = mk_config_bool_property( "bonjour",           "Publish this server via Bonjour" )
 	
 	def getBooted( self ):
 		if self.id is not None:

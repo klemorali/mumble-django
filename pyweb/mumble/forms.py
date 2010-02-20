@@ -86,9 +86,11 @@ class MumbleForm( PropertyModelForm ):
 		"If on, IP adresses of the clients are not logged.") )
 	player  = forms.CharField( required=False )
 	channel = forms.CharField( required=False )
-	defchan = forms.TypedChoiceField( choices=(), coerce=int, required=False, help_text=_(
-		"Enter the ID of the default channel here. The Channel viewer displays the ID to "
-		"server admins on the channel detail page.") )
+	defchan = forms.TypedChoiceField( choices=(), coerce=int, required=False )
+	timeout = forms.IntegerField( required=False )
+	certreq = forms.BooleanField( required=False )
+	textlen = forms.IntegerField( required=False )
+	html    = forms.BooleanField( required=False )
 	
 	def __init__( self, *args, **kwargs ):
 		PropertyModelForm.__init__( self, *args, **kwargs )
@@ -118,7 +120,7 @@ class MumbleAdminForm( MumbleForm ):
 	sslcrt  = forms.CharField( required=False, widget=forms.Textarea )
 	sslkey  = forms.CharField( required=False, widget=forms.Textarea )
 	booted  = forms.BooleanField( required=False )
-	
+	bonjour = forms.BooleanField( required=False )
 	
 	class Meta:
 		fields  = None
