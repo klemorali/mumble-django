@@ -40,7 +40,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
 from django.conf   import settings
-from mumble.models import *
+from mumble.models import MumbleServer, Mumble
 
 warn  = getattr( settings, "MUNIN_WARNING",  0.80 )
 crit  = getattr( settings, "MUNIN_CRITICAL", 0.95 )
@@ -48,7 +48,12 @@ title = getattr( settings, "MUNIN_TITLE",    "Mumble Users" )
 categ = getattr( settings, "MUNIN_CATEGORY", "network"      )
 
 
-mm = Mumble.objects.filter( booted = True ).order_by( "id" );
+def get_running_instances():
+	for server in MumbleServer.objects.all():
+		runinst = server.ctl.getBootedServers()
+		for inst in server.mumble_set.filter( srvid__in=runinst ):
+			yield inst
+
 
 if sys.argv[-1] == 'config':
 	print "graph_vlabel Users"
@@ -56,7 +61,7 @@ if sys.argv[-1] == 'config':
 	print "graph_title", title
 	print "graph_category", categ
 	
-	for mumble in mm:
+	for mumble in get_running_instances():
 		print "srv%d.label %s" % ( mumble.id, mumble.name.replace( '#', '' ) );
 		print "srv%d.info %s"  % ( mumble.id, mumble.connecturl );
 		if mumble.users:
@@ -65,13 +70,13 @@ if sys.argv[-1] == 'config':
 
 
 elif sys.argv[-1] == 'autoconf':
-	if mm.count() == 0:
+	if Mumble.objects.count() == 0:
 		print "no (no servers configured)";
 	else:
 		# check if connecting works
 		try:
-			for mumble in mm:
-				mumble.getCtl();
+			for mumble in get_running_instances():
+				mumble.ctl
 		except Exception, instance:
 			print "no (can't connect to server %s: %s)" % ( mumble.name, instance );
 		else:
@@ -79,6 +84,6 @@ elif sys.argv[-1] == 'autoconf':
 
 
 else:
-	for mumble in mm:
+	for mumble in get_running_instances():
 		print "srv%d.value %d" % ( mumble.id, len( mumble.ctl.getPlayers( mumble.srvid ) ) );
 

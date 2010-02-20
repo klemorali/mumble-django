@@ -166,10 +166,10 @@ class Command( BaseCommand ):
 		else:
 			for mumble in mm:
 				try:
-					mumble.getCtl();
+					mumble.ctl
 				except Ice.Exception, err:
 					raise TestFailed(
-						"Connecting to Murmur `%s` (%s) failed: %s" % ( mumble.name, mumble.dbus, err )
+						"Connecting to Murmur `%s` (%s) failed: %s" % ( mumble.name, mumble.server, err )
 						);
 			print "[ OK ]";
 	
