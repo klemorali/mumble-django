@@ -234,3 +234,5 @@ modprobe( "rosetta" )
 
 # Check if django_extensions is available.
 modprobe( "django_extensions" )
+
+modprobe( "django_evolution" )
