@@ -33,10 +33,12 @@ class PropertyModelForm( ModelForm ):
 	
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs );
-		instfields = self.instance._meta.get_all_field_names()
 		
-		for fldname in self.fields:
-			if fldname not in instfields:
+		if self.instance:
+			instfields = self.instance._meta.get_all_field_names()
+			for fldname in self.fields:
+				if fldname in instfields:
+					continue
 				self.fields[fldname].initial = getattr( self.instance, fldname )
 				docstr = getattr( self.instance.__class__, fldname ).__doc__
 				if docstr:
@@ -294,7 +296,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 
 
 class MumbleUserAdminForm( PropertyModelForm ):
-	aclAdmin = forms.BooleanField( label=_('Admin on root channel'), required=False );
+	aclAdmin = forms.BooleanField( required=False );
 	
 	class Meta:
 		model   = Mumble;
