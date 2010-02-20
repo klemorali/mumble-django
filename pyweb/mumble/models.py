@@ -213,38 +213,54 @@ class Mumble( models.Model ):
 		return self.ctl.setConf( self.srvid, field, value )
 	
 	def configureFromMurmur( self ):
-		default = self.ctl.getDefaultConf();
-		conf    = self.ctl.getAllConf( self.srvid );
+		conf = self.ctl.getAllConf( self.srvid );
 		
-		def find_in_dicts( keys, valueIfNotFound=None ):
-			if not isinstance( keys, tuple ):
-				keys = ( keys, );
-			
-			for keyword in keys:
-				if keyword in conf:
-					return conf[keyword];
-			
-			for keyword in keys:
-				keyword = keyword.lower();
-				if keyword in default:
-					return default[keyword];
-			
-			return valueIfNotFound;
+		if "registername" not in conf or not conf["registername"]:
+			self.name = "noname";
+		else:
+			self.name = conf["registername"];
 		
-		servername = find_in_dicts( "registername", "noname" );
-		if not servername:
-			# RegistrationName was found in the dicts, but is an empty string
-			servername = "noname";
+		if "registerhostname" in conf:
+			if ':' in conf["registerhostname"]:
+				regname, regport = conf["registerhostname"].split(':')
+				regport = int(regport)
+			else:
+				regname = conf["registerhostname"]
+				regport = settings.MUMBLE_DEFAULT_PORT
+		else:
+			regname = None
+			regport = settings.MUMBLE_DEFAULT_PORT
 		
-		addr =  find_in_dicts( ( "registerhostname", "host" ), "0.0.0.0" );
-		if addr.find( ':' ) != -1:
-			# The addr is a hostname which actually contains a port number, but we already got that from
-			# the port field, so we can simply drop it.
-			addr = addr.split(':')[0];
+		if "host" in conf:
+			addr = conf["host"]
+		else:
+			addr = None
 		
-		self.name    =  servername;
-		self.addr    =  addr;
-		self.port    =  find_in_dicts( "port"        );
+		if "port" in conf:
+			self.port = int(conf["port"])
+		else:
+			self.port = settings.MUMBLE_DEFAULT_PORT
+		
+		if regname and addr:
+			if regport == self.port:
+				if socket.gethostbyname(regname) == socket.gethostbyname(addr):
+					self.display = ''
+					self.addr = regname
+				else:
+					self.display = regname
+					self.addr = addr
+			else:
+				self.display = conf["registerhostname"]
+				self.addr = addr
+		elif regname and not addr:
+			self.display = regname
+			self.addr    = '0.0.0.0'
+		elif addr and not regname:
+			self.display = ''
+			self.addr    = addr
+		else:
+			self.display = ''
+			self.addr    = '0.0.0.0'
 		
 		self.save( dontConfigureMurmur=True );
 	
