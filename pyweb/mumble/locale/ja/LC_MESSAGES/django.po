@@ -1,6 +1,6 @@
 # Japanese translation file for Mumble-Django.
 #
-#   Copyright (C) 2009, withgod                   <withgod@sourceforge.net>
+#   Copyright (C) 2009, withgod                   <noname@withgod.jp>
 #                       Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
 #
 # Mumble-Django is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-20 16:27+0100\n"
 "PO-Revision-Date: 2010-01-11 16:09\n"
-"Last-Translator: <nocontents@gmail.com>\n"
+"Last-Translator: <noname@withgod.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -141,7 +141,7 @@ msgstr ""
 
 #: models.py:64
 msgid "Ice Secret"
-msgstr ""
+msgstr "Ice Secret"
 
 #: models.py:67
 #, fuzzy
@@ -194,6 +194,8 @@ msgid ""
 "server list registration. If not given, the addr and port fields are used. "
 "If display and bind ports are equal, you can omit it here."
 msgstr ""
+"本項目は、NATの内側等にあるサーバに適切です。"
+"ホスト名もしくはIPアドレスを、チャンネルビューアや、サーバリスト登録に使います。 "
 
 #: models.py:120
 msgid "Superuser Password"
@@ -237,7 +239,7 @@ msgstr "デフォルトチャンネル"
 
 #: models.py:133
 msgid "Timeout"
-msgstr ""
+msgstr "タイムアウト"
 
 #: models.py:135
 msgid "IP Obfuscation"
@@ -250,15 +252,15 @@ msgstr "SSL認証"
 
 #: models.py:137
 msgid "Maximum length of text messages"
-msgstr ""
+msgstr "テキストメッセージの最大文字数"
 
 #: models.py:138
 msgid "Allow HTML to be used in messages"
-msgstr ""
+msgstr "HTMLメッセージを許可する"
 
 #: models.py:139
 msgid "Publish this server via Bonjour"
-msgstr ""
+msgstr "Bonjourでこのサーバを公開する"
 
 #: models.py:158 models.py:472
 msgid "Server instance"
@@ -290,11 +292,11 @@ msgstr "アカウントの所有者"
 
 #: models.py:475
 msgid "comment"
-msgstr ""
+msgstr "コメント"
 
 #: models.py:476
 msgid "hash"
-msgstr ""
+msgstr "ハッシュ"
 
 #: models.py:480
 msgid "User account"
@@ -360,8 +362,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able "
-"to register an account on this Mumble server.</p>\n"
+"      <p><a href=\"%(login_url)s\">ログイン</a>してから "
+"ユーザをこのMumbleサーバに登録する必要があります</p>\n"
 "    "
 
 #: templates/mumble/mumble.html:59 templates/mumble/mumble.html.py:131
@@ -471,7 +473,7 @@ msgstr "チャンネル説明"
 
 #: templates/mumble/mumble.html:192
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: templates/mumble/mumble.html:228
 msgid "Server Info"
@@ -491,7 +493,7 @@ msgstr "ユーザ一覧"
 
 #: templates/mumble/mumble.html:249
 msgid "name"
-msgstr ""
+msgstr "名前"
 
 #: templates/mumble/mumble.html:269
 #, fuzzy
@@ -500,11 +502,11 @@ msgstr "パスワード"
 
 #: templates/mumble/mumble.html:282
 msgid "Add"
-msgstr ""
+msgstr "追加"
 
 #: templates/mumble/mumble.html:294
 msgid "Save"
-msgstr ""
+msgstr "セーブ"
 
 #: templates/mumble/mumble.html:320
 msgid "Resync with Murmur"
@@ -512,11 +514,11 @@ msgstr "Murmurと再同期"
 
 #: templates/mumble/player.html:12
 msgid "Suppressed"
-msgstr ""
+msgstr "鎮められた"
 
 #: templates/mumble/player.html:24
 msgid "has a User Comment set"
-msgstr ""
+msgstr "コメントをセットされています"
 
 #~ msgid ""
 #~ "Enter the ID of the default channel here. The Channel viewer displays the "
