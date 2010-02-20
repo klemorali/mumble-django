@@ -175,7 +175,7 @@ class Mumble( models.Model ):
 		    Only one instance will be created, and reused on subsequent calls.
 		"""
 		if not self._ctl:
-			self._ctl = MumbleCtlBase.newInstance( self.dbus, settings.SLICE );
+			self._ctl = MumbleCtlBase.newInstance( self.dbus, settings.SLICE, self.secret );
 		return self._ctl;
 	
 	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );

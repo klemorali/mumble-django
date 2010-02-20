@@ -107,7 +107,7 @@ class MumbleForm( PropertyModelForm ):
 	
 	class Meta:
 		model   = Mumble;
-		exclude = ( 'dbus', 'addr', 'port', );
+		exclude = ( 'dbus', 'addr', 'port', 'secret' );
 
 
 class MumbleAdminForm( MumbleForm ):

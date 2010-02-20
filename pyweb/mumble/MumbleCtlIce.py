@@ -49,9 +49,15 @@ def protectDjangoErrPage( func ):
 
 
 @protectDjangoErrPage
-def MumbleCtlIce( connstring, slicefile ):
+def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	""" Choose the correct Ice handler to use (1.1.8 or 1.2.x), and make sure the
 	    Murmur version matches the slice Version.
+	
+	    Optional parameters are the path to the slice file and the Ice secret
+	    necessary to authenticate to Murmur.
+	
+	    The path can be omitted only if running Murmur 1.2.3 or later, which
+	    exports a getSlice method to retrieve the Slice from.
 	"""
 	
 	try:
@@ -74,9 +80,11 @@ def MumbleCtlIce( connstring, slicefile ):
 		
 		import Murmur
 	
-	ice    = Ice.initialize()
-	prx    = ice.stringToProxy( connstring.encode("utf-8") )
-	meta   = Murmur.MetaPrx.checkedCast(prx)
+	ice = Ice.initialize()
+	if icesecret:
+		ice.getImplicitContext().put("secret", icesecret)
+	prx  = ice.stringToProxy( connstring.encode("utf-8") )
+	meta = Murmur.MetaPrx.checkedCast(prx)
 	
 	murmurversion = meta.getVersion()[:3]
 	
