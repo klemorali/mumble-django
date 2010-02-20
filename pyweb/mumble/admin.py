@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 from mumble.forms  import MumbleAdminForm, MumbleUserAdminForm
-from mumble.models import Mumble, MumbleUser
+from mumble.models import MumbleServer, Mumble, MumbleUser
 
 class MumbleAdmin(admin.ModelAdmin):
 	""" Specification for the "Server administration" admin section. """
@@ -97,5 +97,6 @@ class MumbleUserAdmin(admin.ModelAdmin):
 	get_acl_admin.boolean = True
 
 
-admin.site.register( Mumble, MumbleAdmin );
-admin.site.register( MumbleUser, MumbleUserAdmin );
+admin.site.register( MumbleServer );
+admin.site.register( Mumble,      MumbleAdmin );
+admin.site.register( MumbleUser,  MumbleUserAdmin );
