@@ -92,14 +92,21 @@ def find_existing_instances( **kwargs ):
 	
 	servIDs   = ctl.getAllServers();
 	
+	try:
+		meta = models.MumbleServer.objects.get( dbus=dbusName );
+	except models.MumbleServer.DoesNotExist:
+		meta = models.MumbleServer( dbus=dbusName );
+		meta.save();
+	
 	for id in servIDs:
 		if v > 1:
 			print "Checking Murmur instance with id %d." % id;
 		# first check that the server has not yet been inserted into the DB
 		try:
-			instance = models.Mumble.objects.get( dbus=dbusName, srvid=id );
+			instance = models.Mumble.objects.get( server=meta, srvid=id );
 		except models.Mumble.DoesNotExist:
 			values = {
+				"server":  meta,
 				"srvid":   id,
 				"dbus":    dbusName,
 				}

@@ -107,7 +107,7 @@ class MumbleForm( PropertyModelForm ):
 	
 	class Meta:
 		model   = Mumble;
-		exclude = ( 'dbus', 'addr', 'port', 'secret' );
+		fields  = ['name'];
 
 
 class MumbleAdminForm( MumbleForm ):
@@ -121,6 +121,7 @@ class MumbleAdminForm( MumbleForm ):
 	
 	
 	class Meta:
+		fields  = None
 		exclude = None
 	
 	def clean_port( self ):

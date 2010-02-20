@@ -41,6 +41,37 @@ def mk_config_property( field, doc="" ):
 	return property( get_field, set_field, doc=doc )
 
 
+class MumbleServer( models.Model ):
+	""" Represents a Murmur server installation. """
+	
+	dbus    = models.CharField( _('DBus or ICE base'), max_length=200, unique=True, default=settings.DEFAULT_CONN, help_text=_(
+			"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
+	secret  = models.CharField( _('Ice Secret'),       max_length=200, blank=True );
+	
+	class Meta:
+		verbose_name        = _('Mumble Server');
+		verbose_name_plural = _('Mumble Servers');
+	
+	def __init__( self, *args, **kwargs ):
+		models.Model.__init__( self, *args, **kwargs );
+		self._ctl = None;
+	
+	def __unicode__( self ):
+		return self.dbus;
+	
+	# Ctl instantiation
+	def getCtl( self ):
+		""" Instantiate and return a MumbleCtl object for this server.
+		
+		    Only one instance will be created, and reused on subsequent calls.
+		"""
+		if not self._ctl:
+			self._ctl = MumbleCtlBase.newInstance( self.dbus, settings.SLICE, self.secret );
+		return self._ctl;
+	
+	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
+
+
 class Mumble( models.Model ):
 	""" Represents a Murmur server instance.
 	
@@ -56,9 +87,8 @@ class Mumble( models.Model ):
 	    deleted as well.
 	"""
 	
+	server  = models.ForeignKey(   MumbleServer );
 	name    = models.CharField(    _('Server Name'),            max_length=200 );
-	dbus    = models.CharField(    _('DBus or ICE base'),       max_length=200, default=settings.DEFAULT_CONN, help_text=_(
-			"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice.") );
 	srvid   = models.IntegerField( _('Server ID'),              editable=False );
 	addr    = models.CharField(    _('Server Address'),         max_length=200, help_text=_(
 			"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
@@ -69,7 +99,6 @@ class Mumble( models.Model ):
 			"This field is only relevant if you are located behind a NAT, and names the Hostname or IP address "
 			"to use in the Channel Viewer and for the global server list registration. If not given, the addr "
 			"and port fields are used. If display and bind ports are equal, you can omit it here.") );
-	secret  = models.CharField(    _('Ice Secret'),             max_length=200, blank=True );
 	
 	supw    = property( lambda self: '',
 			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
@@ -109,7 +138,7 @@ class Mumble( models.Model ):
 	booted  = property( getBooted, setBooted, doc="Boot Server" )
 	
 	class Meta:
-		unique_together     = ( ( 'dbus', 'srvid' ), ( 'addr', 'port' ), );
+		unique_together     = ( ( 'server', 'srvid' ), ( 'addr', 'port' ), );
 		verbose_name        = _('Server instance');
 		verbose_name_plural = _('Server instances');
 	
@@ -152,7 +181,6 @@ class Mumble( models.Model ):
 	
 	def __init__( self, *args, **kwargs ):
 		models.Model.__init__( self, *args, **kwargs );
-		self._ctl      = None;
 		self._channels = None;
 		self._rootchan = None;
 	
@@ -167,19 +195,7 @@ class Mumble( models.Model ):
 	is_channel = False;
 	is_player  = False;
 	
-	
-	# Ctl instantiation
-	def getCtl( self ):
-		""" Instantiate and return a MumbleCtl object for this server.
-		
-		    Only one instance will be created, and reused on subsequent calls.
-		"""
-		if not self._ctl:
-			self._ctl = MumbleCtlBase.newInstance( self.dbus, settings.SLICE, self.secret );
-		return self._ctl;
-	
-	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
-	
+	ctl = property( lambda self: self.server.ctl );
 	
 	def getConf( self, field ):
 		return self.ctl.getConf( self.srvid, field )
@@ -382,6 +398,14 @@ class Mumble( models.Model ):
 			 'id':     self.id,
 			 'root':   self.rootchan.asDict()
 			};
+	
+	# "server" field protection
+	def __setattr__( self, name, value ):
+		if name == 'server':
+			if self.id is not None and self.server != value:
+				raise AttributeError( _( "This field must not be updated once the record has been saved." ) );
+		
+		models.Model.__setattr__( self, name, value );
 
 
 
@@ -551,7 +575,6 @@ class MumbleUser( models.Model ):
 	
 	
 	# "server" field protection
-	
 	def __setattr__( self, name, value ):
 		if name == 'server':
 			if self.id is not None and self.server != value:
