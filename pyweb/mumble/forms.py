@@ -285,7 +285,6 @@ class MumbleUserLinkForm( MumbleUserForm ):
 			m_user = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid );
 		except MumbleUser.DoesNotExist:
 			m_user = MumbleUser( server=self.server, name=self.cleaned_data['name'], mumbleid=self.mumbleid );
-			m_user.isAdmin = m_user.getAdmin();
 			m_user.save( dontConfigureMurmur=True );
 		else:
 			if m_user.owner is not None:
