@@ -8,4 +8,4 @@ SELECT
   "mumble_mumble"."port",
   ''
 FROM "mumble_mumble" INNER JOIN "mumble_mumbleserver"
-WHERE "mumble_mumbleserver"."dbus" = "mumble_mumble"."dbus"
+WHERE "mumble_mumbleserver"."dbus" = "mumble_mumble"."dbus";
