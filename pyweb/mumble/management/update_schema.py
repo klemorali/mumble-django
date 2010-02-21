@@ -26,8 +26,6 @@ from mumble.management.server_detect import find_existing_instances
 
 
 def update_schema( **kwargs ):
-	cursor = connection.cursor()
-	
 	scriptpath = join(
 		settings.MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql", {
 			'postgresql_psycopg2': 'pgsql',
@@ -41,11 +39,14 @@ def update_schema( **kwargs ):
 	scripts.sort()
 	
 	for filename in scripts:
+		cursor = connection.cursor()
+		
 		scriptfile = open( os.path.join( scriptpath, filename ), "r" )
 		try:
 			stmt = scriptfile.read()
 			cursor.execute( stmt )
-			transaction.commit()
+			if "postgresql" in settings.DATABASE_ENGINE:
+				transaction.commit()
 		
 		except IOError, err:
 			print "Error reading file '%s':" % filename
@@ -54,9 +55,11 @@ def update_schema( **kwargs ):
 		except cursor.db.connection.Error, err:
 			print "Error executing file '%s':" % filename
 			print err
-			transaction.rollback()
+			if "postgresql" in settings.DATABASE_ENGINE:
+				transaction.rollback()
 		
 		finally:
 			scriptfile.close()
+			cursor.close()
 	
 	find_existing_instances( **kwargs )
