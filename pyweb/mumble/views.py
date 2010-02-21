@@ -278,12 +278,10 @@ def users( request, server ):
 			
 			mu.name     = record['name'];
 			mu.password = record['password'];
-			mu.isAdmin  = record['admin'];
-			
 			if record['owner']:
 				mu.owner = User.objects.get( id=int(record['owner']) );
-			
 			mu.save();
+			mu.aclAdmin = record['admin'];
 	
 	users = [];
 	for mu in srv.mumbleuser_set.all():
@@ -296,7 +294,7 @@ def users( request, server ):
 			'name':     mu.name,
 			'password': None,
 			'owner':    owner,
-			'admin':    mu.getAdmin(),
+			'admin':    mu.aclAdmin,
 			} );
 	
 	return HttpResponse(
