@@ -97,7 +97,9 @@ def find_existing_instances( **kwargs ):
 	try:
 		meta = models.MumbleServer.objects.get( dbus=dbusName );
 	except models.MumbleServer.DoesNotExist:
-		meta = models.MumbleServer( dbus=dbusName, secret=icesecret );
+		meta = models.MumbleServer( dbus=dbusName );
+	finally:
+		meta.secret = icesecret;
 		meta.save();
 	
 	for id in servIDs:
