@@ -16,6 +16,7 @@
 
 import os, getpass
 
+from django.db		import DatabaseError
 from django.conf	import settings
 
 from mumble		import models
@@ -123,12 +124,31 @@ def find_existing_instances( **kwargs ):
 			if v > 1:
 				print "Syncing Murmur instance... ",
 		
-		instance.configureFromMurmur();
 		
 		if v > 1:
 			print instance.name;
 		
-		instance.save( dontConfigureMurmur=True );
+		try:
+			instance.configureFromMurmur();
+		except DatabaseError, err:
+			try:
+				# Find instances with the same address/port
+				dup = models.Mumble.objects.get( addr=instance.addr, port=instance.port )
+			except Mumble.DoesNotExist:
+				# None exist - this must've been something else.
+				raise err
+			else:
+				print "ERROR: There is already another server instance registered"
+				print "       on the same address and port."
+				print "      New Server Name:", instance.name
+				print "              Address:", instance.addr
+				print "                 Port:", instance.port
+				print "    Connection string:", instance.server.dbus
+				print "Duplicate Server Name:", dup.name
+				print "              Address:", dup.addr
+				print "                 Port:", dup.port
+				print "    Connection string:", dup.server.dbus
+				return False
 		
 		# Now search for players on this server that have not yet been registered
 		if instance.booted:
