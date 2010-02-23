@@ -235,9 +235,9 @@ class Mumble( models.Model ):
 		else:
 			self.name = conf["registername"];
 		
-		defaultport = settings.MUMBLE_DEFAULT_PORT + self.srvid
+		defaultport = settings.MUMBLE_DEFAULT_PORT + self.srvid - 1
 		
-		if "registerhostname" in conf:
+		if "registerhostname" in conf and conf["registerhostname"]:
 			if ':' in conf["registerhostname"]:
 				regname, regport = conf["registerhostname"].split(':')
 				regport = int(regport)
@@ -248,12 +248,12 @@ class Mumble( models.Model ):
 			regname = None
 			regport = defaultport
 		
-		if "host" in conf:
+		if "host" in conf and conf["host"]:
 			addr = conf["host"]
 		else:
 			addr = None
 		
-		if "port" in conf:
+		if "port" in conf and conf["port"]:
 			self.port = int(conf["port"])
 		else:
 			self.port = defaultport
