@@ -105,10 +105,10 @@ class Mumble( models.Model ):
 	server  = models.ForeignKey(   MumbleServer );
 	name    = models.CharField(    _('Server Name'),            max_length=200 );
 	srvid   = models.IntegerField( _('Server ID'),              editable=False );
-	addr    = models.CharField(    _('Server Address'),         max_length=200, help_text=_(
+	addr    = models.CharField(    _('Server Address'),         max_length=200, blank=True, help_text=_(
 			"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
 			"global server list.") );
-	port    = models.IntegerField( _('Server Port'),            default=settings.MUMBLE_DEFAULT_PORT, help_text=_(
+	port    = models.IntegerField( _('Server Port'),            blank=True, null=True, help_text=_(
 			"Port number to bind to. Use -1 to auto assign one.") );
 	display = models.CharField(    _('Server Display Address'), max_length=200, blank=True, help_text=_(
 			"This field is only relevant if you are located behind a NAT, and names the Hostname or IP address "
@@ -154,7 +154,7 @@ class Mumble( models.Model ):
 	booted  = property( getBooted, setBooted, doc="Boot Server" )
 	
 	class Meta:
-		unique_together     = ( ( 'server', 'srvid' ), ( 'addr', 'port' ), );
+		unique_together     = ( ( 'server', 'srvid' ), );
 		verbose_name        = _('Server instance');
 		verbose_name_plural = _('Server instances');
 	
@@ -176,28 +176,20 @@ class Mumble( models.Model ):
 		if self.id is None:
 			self.srvid = self.ctl.newServer();
 		
-		if self.port == -1:
-			self.port = max( [ rec['port'] for rec in Mumble.objects.values('port') ] ) + 1;
+		self.ctl.setConf( self.srvid, 'registername', self.name );
 		
-		if self.port < 1 or self.port >= 2**16:
-			raise ValueError( _("Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d") % {
-				'portno': self.port,
-				'minrange': 1,
-				'maxrange': 2**16,
-				});
-		
-		if self.addr != '0.0.0.0':
+		if self.addr and self.addr != '0.0.0.0':
 			self.ctl.setConf( self.srvid, 'host', socket.gethostbyname(self.addr) );
 		else:
 			self.ctl.setConf( self.srvid, 'host', '' );
 		
-		if self.port != settings.MUMBLE_DEFAULT_PORT + self.srvid:
+		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT + self.srvid - 1:
 			self.ctl.setConf( self.srvid, 'port', str(self.port) );
 		else:
 			self.ctl.setConf( self.srvid, 'port', '' );
 		
-		self.ctl.setConf( self.srvid, 'registername',     self.name );
-		self.ctl.setConf( self.srvid, 'registerhostname', self.netloc );
+		if self.netloc:
+			self.ctl.setConf( self.srvid, 'registerhostname', self.netloc );
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
@@ -235,18 +227,16 @@ class Mumble( models.Model ):
 		else:
 			self.name = conf["registername"];
 		
-		defaultport = settings.MUMBLE_DEFAULT_PORT + self.srvid - 1
-		
 		if "registerhostname" in conf and conf["registerhostname"]:
 			if ':' in conf["registerhostname"]:
 				regname, regport = conf["registerhostname"].split(':')
 				regport = int(regport)
 			else:
 				regname = conf["registerhostname"]
-				regport = defaultport
+				regport = None
 		else:
 			regname = None
-			regport = defaultport
+			regport = None
 		
 		if "host" in conf and conf["host"]:
 			addr = conf["host"]
@@ -256,7 +246,7 @@ class Mumble( models.Model ):
 		if "port" in conf and conf["port"]:
 			self.port = int(conf["port"])
 		else:
-			self.port = defaultport
+			self.port = None
 		
 		if regname and addr:
 			if regport == self.port:
@@ -271,13 +261,13 @@ class Mumble( models.Model ):
 				self.addr = addr
 		elif regname and not addr:
 			self.display = regname
-			self.addr    = '0.0.0.0'
+			self.addr    = ''
 		elif addr and not regname:
 			self.display = ''
 			self.addr    = addr
 		else:
 			self.display = ''
-			self.addr    = '0.0.0.0'
+			self.addr    = ''
 		
 		self.save( dontConfigureMurmur=True );
 	
