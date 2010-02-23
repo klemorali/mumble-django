@@ -287,6 +287,9 @@ class Mumble( models.Model ):
 			raise SystemError( "This murmur instance is not currently running, can't sync." );
 		
 		players = self.ctl.getRegisteredPlayers(self.srvid);
+		known_ids = [rec["mumbleid"]
+			for rec in MumbleUser.objects.filter( server=self ).values( "mumbleid" )
+			]
 		
 		for idx in players:
 			playerdata = players[idx];
@@ -294,12 +297,9 @@ class Mumble( models.Model ):
 			if playerdata.userid == 0: # Skip SuperUsers
 				continue;
 			if verbose > 1:
-				print "Checking Player with id %d and name '%s'." % ( playerdata.userid, playerdata.name );
+				print "Checking Player with id %d." % playerdata.userid;
 			
-			try:
-				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid );
-			
-			except MumbleUser.DoesNotExist:
+			if playerdata.userid not in known_ids:
 				if verbose:
 					print 'Found new Player "%s".' % playerdata.name;
 				
@@ -313,8 +313,8 @@ class Mumble( models.Model ):
 			
 			else:
 				if verbose > 1:
-					print "This player is already listed in the database.";
-			
+					print "Player '%s' is already listed in the database." % playerdata.name;
+				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid );
 				playerinstance.name = playerdata.name;
 			
 			playerinstance.save( dontConfigureMurmur=True );
