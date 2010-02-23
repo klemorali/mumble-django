@@ -186,8 +186,16 @@ class Mumble( models.Model ):
 				'maxrange': 2**16,
 				});
 		
-		self.ctl.setConf( self.srvid, 'host',             socket.gethostbyname(self.addr) );
-		self.ctl.setConf( self.srvid, 'port',             str(self.port) );
+		if self.addr != '0.0.0.0':
+			self.ctl.setConf( self.srvid, 'host', socket.gethostbyname(self.addr) );
+		else:
+			self.ctl.setConf( self.srvid, 'host', '' );
+		
+		if self.port != settings.MUMBLE_DEFAULT_PORT + self.srvid:
+			self.ctl.setConf( self.srvid, 'port', str(self.port) );
+		else:
+			self.ctl.setConf( self.srvid, 'port', '' );
+		
 		self.ctl.setConf( self.srvid, 'registername',     self.name );
 		self.ctl.setConf( self.srvid, 'registerhostname', self.netloc );
 		
@@ -227,16 +235,18 @@ class Mumble( models.Model ):
 		else:
 			self.name = conf["registername"];
 		
+		defaultport = settings.MUMBLE_DEFAULT_PORT + self.srvid
+		
 		if "registerhostname" in conf:
 			if ':' in conf["registerhostname"]:
 				regname, regport = conf["registerhostname"].split(':')
 				regport = int(regport)
 			else:
 				regname = conf["registerhostname"]
-				regport = settings.MUMBLE_DEFAULT_PORT
+				regport = defaultport
 		else:
 			regname = None
-			regport = settings.MUMBLE_DEFAULT_PORT
+			regport = defaultport
 		
 		if "host" in conf:
 			addr = conf["host"]
@@ -246,7 +256,7 @@ class Mumble( models.Model ):
 		if "port" in conf:
 			self.port = int(conf["port"])
 		else:
-			self.port = settings.MUMBLE_DEFAULT_PORT
+			self.port = defaultport
 		
 		if regname and addr:
 			if regport == self.port:
