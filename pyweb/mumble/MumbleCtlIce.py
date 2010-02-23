@@ -396,7 +396,11 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	
 	@protectDjangoErrPage
 	def getPlayers(self, srvid):
-		return self._getIceServerObject(srvid).getUsers();
+		userdata = self._getIceServerObject(srvid).getUsers();
+		for key in userdata:
+			if isinstance( userdata[key], str ):
+				userdata[key] = userdata[key].decode( "UTF-8" )
+		return userdata
 	
 	@protectDjangoErrPage
 	def registerPlayer(self, srvid, name, email, password):
