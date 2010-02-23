@@ -110,7 +110,7 @@ if options.encoding is None:
 	try:
 		locale = os.environ['LANG']
 		_, options.encoding = locale.split('.')
-	except KeyError, ValueError:
+	except (KeyError, ValueError):
 		options.encoding = "UTF-8"
 
 
