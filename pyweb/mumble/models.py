@@ -26,7 +26,7 @@ from mumble.mmobjects		import mmChannel, mmPlayer
 from mumble.mctl		import MumbleCtlBase
 
 
-def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerce=str, set_none='' ):
+def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerce=unicode, set_none='' ):
 	""" Create a property for the given config field. """
 	
 	def get_field( self ):
@@ -152,7 +152,7 @@ class Mumble( models.Model ):
 			else:
 				self.ctl.stop( self.srvid );
 	
-	booted  = property( getBooted, setBooted, doc="Boot Server" )
+	booted  = property( getBooted, setBooted, doc=_("Boot Server") )
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'srvid' ), );
