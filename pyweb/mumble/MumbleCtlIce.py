@@ -15,7 +15,8 @@
  *  GNU General Public License for more details.
 """
 
-from os.path		import exists
+from os.path		import exists, join
+from os			import name as os_name
 from PIL		import Image
 from struct		import pack, unpack
 from zlib		import compress, decompress
@@ -100,15 +101,30 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 			except RuntimeError:
 				raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
 		else:
-			slicetemp = tempfile.NamedTemporaryFile( suffix='.ice' )
-			try:
-				slicetemp.write( slice )
-				slicetemp.flush()
-				Ice.loadSlice( slicetemp.name )
-			except RuntimeError:
-				raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
-			finally:
-				slicetemp.close()
+			if os_name == "nt":
+				# It weren't Windows if it didn't need to be treated differently. *sigh*
+				temppath = join( tempfile.gettempdir(), "Murmur.ice" )
+				slicetemp = open( temppath, "w+b" )
+				try:
+					slicetemp.write( slice )
+				finally:
+					slicetemp.close()
+				try:
+					Ice.loadSlice( temppath )
+				except RuntimeError:
+					raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
+				finally:
+					os.unlink(temppath)
+			else:
+				slicetemp = tempfile.NamedTemporaryFile( suffix='.ice' )
+				try:
+					slicetemp.write( slice )
+					slicetemp.flush()
+					Ice.loadSlice( slicetemp.name )
+				except RuntimeError:
+					raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
+				finally:
+					slicetemp.close()
 		
 		import Murmur
 	
