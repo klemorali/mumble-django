@@ -19,7 +19,7 @@ import os, getpass
 from django.db		import DatabaseError
 from django.conf	import settings
 
-from mumble		import models
+from mumble.models	import MumbleServer, Mumble
 from mumble.mctl	import MumbleCtlBase
 
 
@@ -96,9 +96,9 @@ def find_existing_instances( **kwargs ):
 	servIDs   = ctl.getAllServers();
 	
 	try:
-		meta = models.MumbleServer.objects.get( dbus=dbusName );
-	except models.MumbleServer.DoesNotExist:
-		meta = models.MumbleServer( dbus=dbusName );
+		meta = MumbleServer.objects.get( dbus=dbusName );
+	except MumbleServer.DoesNotExist:
+		meta = MumbleServer( dbus=dbusName );
 	finally:
 		meta.secret = icesecret;
 		meta.save();
@@ -108,8 +108,8 @@ def find_existing_instances( **kwargs ):
 			print "Checking Murmur instance with id %d." % id;
 		# first check that the server has not yet been inserted into the DB
 		try:
-			instance = models.Mumble.objects.get( server=meta, srvid=id );
-		except models.Mumble.DoesNotExist:
+			instance = Mumble.objects.get( server=meta, srvid=id );
+		except Mumble.DoesNotExist:
 			values = {
 				"server":  meta,
 				"srvid":   id,
@@ -119,7 +119,7 @@ def find_existing_instances( **kwargs ):
 				print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName ),
 			
 			# now create a model for the record set.
-			instance = models.Mumble( **values );
+			instance = Mumble( **values );
 		else:
 			if v > 1:
 				print "Syncing Murmur instance... ",
@@ -133,7 +133,7 @@ def find_existing_instances( **kwargs ):
 		except DatabaseError, err:
 			try:
 				# Find instances with the same address/port
-				dup = models.Mumble.objects.get( addr=instance.addr, port=instance.port )
+				dup = Mumble.objects.get( addr=instance.addr, port=instance.port )
 			except Mumble.DoesNotExist:
 				# None exist - this must've been something else.
 				print "Server ID / Name: %d / %s" % ( instance.srvid, instance.name )
