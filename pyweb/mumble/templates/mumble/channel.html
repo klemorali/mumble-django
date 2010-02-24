@@ -6,9 +6,15 @@
   {% else %}
     <img src="{{ MEDIA_URL }}/mumble/channel.png" alt="channel" />
   {% endif %}
-  <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
-    {{ Channel.name|trunc:30 }}
-  </a>
+  {% if Channel.server.netloc %}
+    <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
+      {{ Channel.name|trunc:30 }}
+    </a>
+  {% else %}
+    <a class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
+      {{ Channel.name|trunc:30 }}
+    </a>
+  {% endif %}
   {% for sub in Channel.subchans %}
     {% if sub.show %}
       {{ sub|chanview:MumbleAccount }}
