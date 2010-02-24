@@ -16,7 +16,7 @@
 """
 
 from os.path		import exists, join
-from os			import name as os_name
+from os			import unlink, name as os_name
 from PIL		import Image
 from struct		import pack, unpack
 from zlib		import compress, decompress
@@ -114,7 +114,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 				except RuntimeError:
 					raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
 				finally:
-					os.unlink(temppath)
+					unlink(temppath)
 			else:
 				slicetemp = tempfile.NamedTemporaryFile( suffix='.ice' )
 				try:
