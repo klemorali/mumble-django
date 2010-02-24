@@ -137,6 +137,7 @@ class Mumble( models.Model ):
 	textlen = mk_config_bool_property( "textmessagelength", _("Maximum length of text messages") )
 	html    = mk_config_bool_property( "allowhtml",         _("Allow HTML to be used in messages") )
 	bonjour = mk_config_bool_property( "bonjour",           _("Publish this server via Bonjour") )
+	autoboot= mk_config_bool_property( "boot",              _("Boot Server when Murmur starts") )
 	
 	def getBooted( self ):
 		if self.id is not None:
