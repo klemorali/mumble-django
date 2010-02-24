@@ -6,6 +6,5 @@ CREATE TABLE "mumble_mumble_new" (
     "addr" varchar(200) NOT NULL,
     "port" integer NOT NULL,
     "display" varchar(200) NOT NULL,
-    UNIQUE ("server_id", "srvid"),
-    UNIQUE ("addr", "port")
+    UNIQUE ("server_id", "srvid")
 );

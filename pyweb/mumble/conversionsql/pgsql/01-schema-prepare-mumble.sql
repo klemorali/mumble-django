@@ -5,3 +5,5 @@ ALTER TABLE "mumble_mumble"
         ADD "display" varchar(200);
 
 CREATE INDEX "mumble_mumble_server_id" ON "mumble_mumble" ("server_id");
+
+ALTER TABLE "mumble_mumble" DROP CONSTRAINT "mumble_mumble_addr_key";
