@@ -115,12 +115,13 @@ class MumbleForm( PropertyModelForm ):
 class MumbleAdminForm( MumbleForm ):
 	""" A Mumble Server admin form intended to be used by the server hoster. """
 	
-	users   = forms.IntegerField( required=False )
-	bwidth  = forms.IntegerField( required=False )
-	sslcrt  = forms.CharField( required=False, widget=forms.Textarea )
-	sslkey  = forms.CharField( required=False, widget=forms.Textarea )
-	booted  = forms.BooleanField( required=False )
-	bonjour = forms.BooleanField( required=False )
+	users    = forms.IntegerField( required=False )
+	bwidth   = forms.IntegerField( required=False )
+	sslcrt   = forms.CharField( required=False, widget=forms.Textarea )
+	sslkey   = forms.CharField( required=False, widget=forms.Textarea )
+	booted   = forms.BooleanField( required=False )
+	autoboot = forms.BooleanField( required=False )
+	bonjour  = forms.BooleanField( required=False )
 	
 	class Meta:
 		fields  = None
