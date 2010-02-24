@@ -191,6 +191,8 @@ class Mumble( models.Model ):
 		
 		if self.netloc:
 			self.ctl.setConf( self.srvid, 'registerhostname', self.netloc );
+		else:
+			self.ctl.setConf( self.srvid, 'registerhostname', '' );
 		
 		# Now allow django to save the record set
 		return models.Model.save( self );
