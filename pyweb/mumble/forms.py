@@ -22,7 +22,7 @@ from django.conf		import settings
 from django.forms		import Form, ModelForm
 from django.utils.translation	import ugettext_lazy as _
 
-from mumble.models		import Mumble, MumbleUser
+from mumble.models		import MumbleServer, Mumble, MumbleUser
 
 
 class PropertyModelForm( ModelForm ):
@@ -40,9 +40,9 @@ class PropertyModelForm( ModelForm ):
 				if fldname in instfields:
 					continue
 				self.fields[fldname].initial = getattr( self.instance, fldname )
-				docstr = getattr( self.instance.__class__, fldname ).__doc__
-				if docstr:
-					self.fields[fldname].label = docstr
+				prop = getattr( self.instance.__class__, fldname )
+				if prop.__doc__:
+					self.fields[fldname].label = prop.__doc__
 	
 	def save( self, commit=True ):
 		inst = ModelForm.save( self, commit=commit )
@@ -142,6 +142,23 @@ class MumbleAdminForm( MumbleForm ):
 					});
 			return port;
 		return None
+
+
+class MumbleServerForm( ModelForm ):
+	defaultconf = forms.CharField( required=False, widget=forms.Textarea )
+	
+	def __init__( self, *args, **kwargs ):
+		ModelForm.__init__( self, *args, **kwargs )
+		
+		if self.instance:
+			confstr = ""
+			conf = self.instance.defaultconf
+			for field in conf:
+				confstr += "%s: %s\n" % ( field, conf[field] )
+			self.fields["defaultconf"].initial = confstr
+	
+	class Meta:
+		model = MumbleServer
 
 
 class MumbleUserForm( ModelForm ):

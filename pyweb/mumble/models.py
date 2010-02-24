@@ -69,7 +69,8 @@ class MumbleServer( models.Model ):
 	
 	def __init__( self, *args, **kwargs ):
 		models.Model.__init__( self, *args, **kwargs );
-		self._ctl = None;
+		self._ctl  = None;
+		self._conf = None;
 	
 	def __unicode__( self ):
 		return self.dbus;
@@ -85,6 +86,17 @@ class MumbleServer( models.Model ):
 		return self._ctl;
 	
 	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
+	
+	def getDefaultConf( self, field=None ):
+		if self._conf is None:
+			self._conf = self.ctl.getDefaultConf()
+		if field is None:
+			return self._conf
+		if field in self._conf:
+			return self._conf[field]
+		return None
+	
+	defaultconf = property( getDefaultConf, doc="The default config dictionary." )
 
 
 class Mumble( models.Model ):
@@ -109,7 +121,7 @@ class Mumble( models.Model ):
 			"Hostname or IP address to bind to. You should use a hostname here, because it will appear on the "
 			"global server list.") );
 	port    = models.IntegerField( _('Server Port'),            blank=True, null=True, help_text=_(
-			"Port number to bind to. Use -1 to auto assign one.") );
+			"Port number to bind to. Leave empty to auto assign one.") );
 	display = models.CharField(    _('Server Display Address'), max_length=200, blank=True, help_text=_(
 			"This field is only relevant if you are located behind a NAT, and names the Hostname or IP address "
 			"to use in the Channel Viewer and for the global server list registration. If not given, the addr "
