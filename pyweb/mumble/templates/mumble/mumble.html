@@ -21,7 +21,9 @@
     <div id="mumble_ext_container"></div>
 	<div id="mumble_motd" class="mumble-ext x-hide-display">
 	  <ul>
-	    <li>{% trans "Server Address" %}: <a href="{{ DBaseObject.connecturl }}">{{ DBaseObject.connecturl }}</a></li>
+	    {% if DBaseObject.connecturl %}
+	      <li>{% trans "Server Address" %}: <a href="{{ DBaseObject.connecturl }}">{{ DBaseObject.connecturl }}</a></li>
+	    {% endif %}
 	    {% if DBaseObject.url %}
 	      <li>{% trans "Website" %}: {{ DBaseObject.url|urlize }}</li>
 	    {% endif %}

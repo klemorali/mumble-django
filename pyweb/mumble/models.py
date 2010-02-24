@@ -414,6 +414,8 @@ class Mumble( models.Model ):
 	
 	def getURL( self, forUser = None ):
 		""" Create an URL of the form mumble://username@host:port/ for this server. """
+		if not self.netloc:
+			return None
 		from urlparse import urlunsplit
 		versionstr = "version=%d.%d.%d" % tuple(self.version[:3]);
 		if forUser is not None:
