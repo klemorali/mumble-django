@@ -14,6 +14,7 @@
  *  GNU General Public License for more details.
 """
 
+from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,13 +27,26 @@ class MumbleServerAdmin(admin.ModelAdmin):
 class MumbleAdmin(admin.ModelAdmin):
 	""" Specification for the "Server administration" admin section. """
 	
-	list_display   = [ 'name', 'addr', 'port', 'get_booted', 'get_is_public',
+	list_display   = [ 'name', 'srvid', 'get_addr', 'get_port', 'get_booted', 'get_is_public',
 			   'get_users_regged', 'get_users_online', 'get_channel_count' ];
-	list_filter    = [ 'addr' ];
+	list_filter    = [ 'addr', 'server' ];
 	search_fields  = [ 'name', 'addr', 'port' ];
 	ordering       = [ 'name' ];
 	form           = MumbleAdminForm;
 	
+	
+	def get_addr( self, obj ):
+		if not obj.addr:
+			return "*"
+	
+	get_addr.short_description = _('Server Address')
+	
+	def get_port( self, obj ):
+		if not obj.port:
+			return "< %d >" % (settings.MUMBLE_DEFAULT_PORT + obj.srvid - 1)
+		return obj.port
+	
+	get_port.short_description = _('Server Port')
 	
 	def get_booted( self, obj ):
 		return obj.booted
