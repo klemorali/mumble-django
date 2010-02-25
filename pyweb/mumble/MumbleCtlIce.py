@@ -135,8 +135,11 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	if   murmurversion == (1, 1, 8):
 		return MumbleCtlIce_118( connstring, meta );
 	
-	elif murmurversion[:2] == (1, 2):
+	elif murmurversion[:2] == (1, 2) and murmurversion[:3] < 2:
 		return MumbleCtlIce_120( connstring, meta );
+	
+	else:
+		return MumbleCtlIce_122( connstring, meta );
 
 
 class MumbleCtlIce_118(MumbleCtlBase):
@@ -492,4 +495,32 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	@protectDjangoErrPage
 	def setACL(self, srvid, channelid, acls, groups, inherit):
 		return self._getIceServerObject(srvid).setACL( channelid, acls, groups, inherit );
+
+
+class MumbleCtlIce_122(MumbleCtlIce_120):
+	@protectDjangoErrPage
+	def getTexture(self, srvid, mumbleid):
+		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
+		if len(texture) == 0:
+			raise ValueError( "No Texture has been set." );
+		imgdata = ""
+		for idx in range( 0, len(texture)-4, 4 ):
+			bgra = unpack( "4B", texture[idx:idx+4] );
+			imgdata += pack( "4B",  bgra[2], bgra[1], bgra[0], bgra[3] );
+		# return an 600x60 RGBA image object created from the data
+		return Image.fromstring( "RGBA", ( 88, 60 ), imgdata );
+	
+	@protectDjangoErrPage
+	def setTexture(self, srvid, mumbleid, infile):
+		# open image, convert to RGBA, and resize to 600x60
+		img = Image.open( infile ).convert( "RGBA" ).transform( ( 88, 60 ), Image.EXTENT, ( 0, 0, 88, 60 ) );
+		# iterate over the list and pack everything into a string
+		bgrastring = "";
+		for ent in list( img.getdata() ):
+			# ent is in RGBA format, but Murmur wants BGRA (ARGB inverse), so stuff needs
+			# to be reordered when passed to pack()
+			bgrastring += pack( "4B",  ent[2], ent[1], ent[0], ent[3] );
+		# finally call murmur and set the texture
+		self._getIceServerObject(srvid).setTexture(mumbleid, bgrastring)
+
 
