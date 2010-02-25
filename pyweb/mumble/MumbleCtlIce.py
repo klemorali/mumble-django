@@ -19,7 +19,7 @@ from os.path		import exists, join
 from os			import unlink, name as os_name
 from PIL		import Image
 from struct		import pack, unpack
-from zlib		import compress, decompress
+from zlib		import compress, decompress, error
 
 from mctl		import MumbleCtlBase
 
@@ -343,7 +343,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
 		if len(texture) == 0:
 			raise ValueError( "No Texture has been set." );
 		# this returns a list of bytes.
-		decompressed = decompress( texture );
+		try:
+			decompressed = decompress( texture );
+		except error, err:
+			raise ValueError( err )
 		# iterate over 4 byte chunks of the string
 		imgdata = "";
 		for idx in range( 0, len(decompressed), 4 ):
