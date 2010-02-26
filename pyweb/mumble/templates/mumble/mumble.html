@@ -335,7 +335,7 @@
             ]
           },
           {% for item in ChannelTable %}
-            { contentEl: 'mumble_{{ item.id }}', id: 'carditem_{{ item.id }}' },
+            { contentEl: 'mumble_{{ item.id }}', id: 'carditem_{{ item.id }}' }{% if not forloop.last %},{% endif %}
           {% endfor %}
           ]
         });
