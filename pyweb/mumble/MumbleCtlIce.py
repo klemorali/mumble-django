@@ -517,7 +517,6 @@ class MumbleCtlIce_122(MumbleCtlIce_120):
 class MumbleCtlIce_123(MumbleCtlIce_120):
 	@protectDjangoErrPage
 	def getTexture(self, srvid, mumbleid):
-		import sys
 		texture = self._getIceServerObject(srvid).getTexture(mumbleid)
 		if len(texture) == 0:
 			raise ValueError( "No Texture has been set." );
