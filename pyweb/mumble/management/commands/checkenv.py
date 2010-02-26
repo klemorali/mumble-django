@@ -28,6 +28,8 @@ class TestFailed( Exception ):
 	pass;
 
 class Command( BaseCommand ):
+	help = "Run a few tests on Mumble-Django's setup."
+	
 	def handle(self, **options):
 		try:
 			import Ice
