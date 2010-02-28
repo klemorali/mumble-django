@@ -22,6 +22,8 @@ admin.autodiscover()
 
 from django.conf import settings
 
+handler404 = 'django.views.defaults.page_not_found'
+handler500 = 'django.views.defaults.server_error'
 
 urlpatterns = patterns('',
 	(r'^/?$',               'mumble.views.redir' ),
@@ -46,7 +48,7 @@ if "rosetta" in settings.INSTALLED_APPS:
 	)
 
 # Development stuff
-if settings.DEBUG:
+if settings.DEBUG or True:
 	urlpatterns += patterns('',
 		(r'^%s(?P<path>.*)$' % settings.MEDIA_URL[1:],
 		'django.views.static.serve',
