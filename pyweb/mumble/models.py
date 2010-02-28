@@ -328,6 +328,8 @@ class Mumble( models.Model ):
 	def isUserAdmin( self, user ):
 		""" Determine if the given user is an admin on this server. """
 		if user.is_authenticated():
+			if user.is_superuser:
+				return True;
 			try:
 				return self.mumbleuser_set.get( owner=user ).getAdmin();
 			except MumbleUser.DoesNotExist:
