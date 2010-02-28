@@ -2,6 +2,25 @@
 Mumble-Django changelog
 =======================
 
+Version 2.0beta1, 28 Feb 2010:
+------------------------------
+* Remove a lot of columns from MDs database and replace them with properties. That
+  way, MD will be far more easily extendable in the future without requiring a
+  database update; and it reduces redundancy.
+  The database will be converted automatically, but keeping Backups is not a bad
+  idea. :)
+* Fix a few bugs that caused the default channel selector to break the creation of
+  new server instances.
+* Merge mumble-django-nat into the main branch.
+* Add support for Murmur installations protected by an Ice secret.
+* Add automatically fetching the slice using Murmur's getSlice method.
+* Add getslice management command that checks if the slice can be fetched using
+  Murmur's getSlice method.
+* Add support for new configuration fields in Murmur.
+* Adapt to the new texture handling introduced in Murmur 1.2.2.
+* Add kicking users.
+* Various minor bug fixes.
+
 Version 1.5, 15 Feb 2010:
 ------------------------------
 * Add a few checks for common problems in the Slice path, like spaces or the file
