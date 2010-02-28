@@ -164,6 +164,8 @@ class MumbleServerForm( ModelForm ):
 class MumbleUserForm( ModelForm ):
 	""" The user registration form used to register an account. """
 	
+	password = forms.CharField( widget=forms.PasswordInput )
+	
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs );
 		self.server = None;
@@ -289,6 +291,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
 
 class MumbleUserAdminForm( PropertyModelForm ):
 	aclAdmin = forms.BooleanField( required=False );
+	password = forms.CharField( widget=forms.PasswordInput )
 	
 	class Meta:
 		model   = Mumble;
