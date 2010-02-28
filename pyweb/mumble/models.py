@@ -457,6 +457,9 @@ class Mumble( models.Model ):
 				raise AttributeError( _( "This field must not be updated once the record has been saved." ) );
 		
 		models.Model.__setattr__( self, name, value );
+	
+	def kickUser( self, sessionid, reason="" ):
+		return self.ctl.kickUser( self.srvid, sessionid, reason );
 
 
 
