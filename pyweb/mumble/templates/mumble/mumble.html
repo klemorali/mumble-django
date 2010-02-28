@@ -137,6 +137,26 @@
           <img src="{% url mumble.views.showTexture DBaseObject.id item.mumbleuser.id %}" alt="user texture" />
         </fieldset>
       {% endif %}
+      {% if CurrentUserIsAdmin or user.is_staff %}
+        <fieldset>
+          <legend>{% trans "Kick user" %}</legend>
+          <form action="{% url mumble.views.show DBaseObject.id %}" method="POST">
+            <input type="hidden" name="mode"    value="kick" />
+            <input type="hidden" name="session" value="{{ item.session }}" />
+            <ul>
+              <li>
+                <label for="inp_reason">{% trans "Reason" %}</label>
+                <input type="text"   name="reason"  value="" id="inp_reason" />
+              </li>
+              <li>
+                <input type="checkbox" name="ban"   value="1" id="inp_ban" />
+                <label for="inp_ban">{% trans "Ban user" %}</label>
+              </li>
+            </ul>
+            <input type="submit" value="{% trans "Kick user" %}" />
+          </form>
+        </fieldset>
+      {% endif %}
     </div>
     {% else %}
     <div id="mumble_{{ item.id }}" class="mumble-ext x-hide-display">

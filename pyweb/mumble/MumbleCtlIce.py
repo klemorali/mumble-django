@@ -501,6 +501,18 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	@protectDjangoErrPage
 	def setACL(self, srvid, channelid, acls, groups, inherit):
 		return self._getIceServerObject(srvid).setACL( channelid, acls, groups, inherit );
+	
+	@protectDjangoErrPage
+	def getBans(self, srvid):
+		return self._getIceServerObject(srvid).getBans();
+	
+	@protectDjangoErrPage
+	def setBans(self, srvid, bans):
+		return self._getIceServerObject(srvid).setBans(bans);
+	
+	@protectDjangoErrPage
+	def kickUser(self, srvid, userid, reason=""):
+		return self._getIceServerObject(srvid).kickUser( userid, reason.encode("UTF-8") );
 
 
 class MumbleCtlIce_122(MumbleCtlIce_120):

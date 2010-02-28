@@ -29,7 +29,7 @@ from django.contrib.auth		import views as auth_views
 
 from models				import Mumble, MumbleUser
 from forms				import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
-from forms				import MumbleUserLinkForm, MumbleTextureForm
+from forms				import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
 
 
 def redir( request ):
@@ -164,6 +164,12 @@ def show( request, server ):
 	else:
 		regform = None;
 		textureform = None;
+	
+	if isAdmin:
+		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'kick':
+			kickform = MumbleKickForm( request.POST );
+			if kickform.is_valid():
+				srv.kickUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
 	
 	# ChannelTable is a somewhat misleading name, as it actually contains channels and players.
 	channelTable = [];

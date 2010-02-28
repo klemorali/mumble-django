@@ -297,6 +297,12 @@ class MumbleUserAdminForm( PropertyModelForm ):
 		model   = Mumble;
 
 
+class MumbleKickForm( Form ):
+	session = forms.IntegerField();
+	ban	= forms.BooleanField( required=False );
+	reason	= forms.CharField( required=False );
+
+
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """
 	texturefile = forms.ImageField();
