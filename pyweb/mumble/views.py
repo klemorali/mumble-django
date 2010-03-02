@@ -16,6 +16,7 @@
 
 import simplejson
 from StringIO				import StringIO
+from PIL				import Image
 
 from django.shortcuts			import render_to_response, get_object_or_404, get_list_or_404
 from django.template			import RequestContext
@@ -156,7 +157,7 @@ def show( request, server ):
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'texture' and registered:
 			textureform = MumbleTextureForm( request.POST, request.FILES );
 			if textureform.is_valid():
-				user.setTexture( request.FILES['texturefile'] );
+				user.setTexture( Image.open( request.FILES['texturefile'] ) );
 				return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 		else:
 			textureform = MumbleTextureForm();

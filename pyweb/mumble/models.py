@@ -592,12 +592,12 @@ class MumbleUser( models.Model ):
 		""" Get the user texture as a PIL Image. """
 		return self.server.ctl.getTexture(self.server.srvid, self.mumbleid);
 	
-	def setTexture( self, infile ):
-		""" Read an image from the infile and install it as the user's texture. """
-		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, infile)
+	def setTexture( self, image ):
+		""" Install the given image as the user's texture. """
+		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, image)
 	
 	texture = property( getTexture, setTexture,
-		doc="Get the texture as a PIL Image or read from a file (pass the path)."
+		doc="Get the texture as a PIL Image or set the Image as the texture."
 		);
 	
 	def hasTexture( self ):
