@@ -201,6 +201,8 @@ class mmPlayer( object ):
 	def getIpAsString( self ):
 		""" Get the client's IPv6 address, in a pretty format. """
 		ip = self.player_obj.address;
+		if max( ip[:10] ) == 0 and ip[10:12] == (255, 255):
+			return "%d.%d.%d.%d" % tuple( ip[12:] );
 		# colon-separated string:
 		ipstr = ':'.join([ ("%02x%02x" % (int(ip[idx]), int(ip[idx+1])))
 			for idx in range(0, len(ip), 2) ]);
