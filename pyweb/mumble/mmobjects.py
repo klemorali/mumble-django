@@ -203,9 +203,9 @@ class mmPlayer( object ):
 		ip = self.player_obj.address;
 		if max( ip[:10] ) == 0 and ip[10:12] == (255, 255):
 			return "%d.%d.%d.%d" % tuple( ip[12:] );
+		ip6addr = [(hi << 8 | lo) for (hi, lo) in zip(addr[0::2], addr[1::2])]
 		# colon-separated string:
-		ipstr = ':'.join([ ("%x" % ((int(ip[idx])<<8) | int(ip[idx+1])))
-			for idx in range(0, len(ip), 2) ]);
+		ipstr = ':'.join([ ("%x" % part) for part in ip6addr ]);
 		# 0:0:0 -> ::
 		return re.sub( "((^|:)(0:)+)", '::', ipstr, 1 );
 	
