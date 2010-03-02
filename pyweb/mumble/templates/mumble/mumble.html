@@ -114,6 +114,9 @@
         <li>{% trans "Deafened"         %}: {{     item.deaf|yesno   }}</li>
         <li>{% trans "Muted by self"    %}: {{ item.selfMute|yesno   }}</li>
         <li>{% trans "Deafened by self" %}: {{ item.selfDeaf|yesno   }}</li>
+        {% if CurrentUserIsAdmin or user.is_staff %}
+          <li>{% trans "IP Address" %}: {{ item.ipaddress }}</li>
+        {% endif %}
       </ul>
       {% if item.mumbleuser and item.mumbleuser.owner %}
         <h2>{% trans "User" %} {{ item.mumbleuser.owner.username|capfirst }}</h2>

@@ -15,6 +15,7 @@
 """
 
 import datetime
+import re
 from time			import time
 
 from django.utils.http		import urlquote
@@ -196,6 +197,17 @@ class mmPlayer( object ):
 	is_server  = False;
 	is_channel = False;
 	is_player  = True;
+	
+	def getIpAsString( self ):
+		""" Get the client's IPv6 address, in a pretty format. """
+		ip = self.player_obj.address;
+		# colon-separated string:
+		ipstr = ':'.join([ ("%02x%02x" % (int(ip[idx]), int(ip[idx+1])))
+			for idx in range(0, len(ip), 2) ]);
+		# 0000:0000:0000 -> ::
+		return re.sub( "((^|:)(0000:)+)", '::', ipstr );
+	
+	ipaddress = property( getIpAsString );
 	
 	# kept for compatibility to mmChannel (useful for traversal funcs)
 	playerCount = property( lambda self: -1, doc="Exists only for compatibility to mmChannel." );
