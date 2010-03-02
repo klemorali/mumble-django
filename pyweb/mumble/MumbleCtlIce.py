@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
 """
 
+from StringIO		import StringIO
 from os.path		import exists, join
 from os			import unlink, name as os_name
 from PIL		import Image
@@ -372,7 +373,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
 	@protectDjangoErrPage
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
-		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
+		img = infile.convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
 		# iterate over the list and pack everything into a string
 		bgrastring = "";
 		for ent in list( img.getdata() ):
@@ -522,8 +523,10 @@ class MumbleCtlIce_122(MumbleCtlIce_120):
 	
 	@protectDjangoErrPage
 	def setTexture(self, srvid, mumbleid, infile):
-		img = open( infile, "rb" )
-		self._getIceServerObject(srvid).setTexture(mumbleid, img)
+		buf = StringIO()
+		infile.save( buf, "PNG" )
+		buf.seek(0)
+		self._getIceServerObject(srvid).setTexture(mumbleid, buf.read())
 
 
 class MumbleCtlIce_123(MumbleCtlIce_120):
@@ -534,7 +537,7 @@ class MumbleCtlIce_123(MumbleCtlIce_120):
 	
 	@protectDjangoErrPage
 	def getTexture(self, srvid, mumbleid):
-		texture = self.getRawTexture(srvid, mumbleid);
+		texture = self.getRawTexture(srvid, mumbleid)
 		if len(texture) == 0:
 			raise ValueError( "No Texture has been set." );
 		from StringIO import StringIO
@@ -542,8 +545,9 @@ class MumbleCtlIce_123(MumbleCtlIce_120):
 	
 	@protectDjangoErrPage
 	def setTexture(self, srvid, mumbleid, infile):
-		# open image, convert to RGBA, and resize to 600x60
-		img = open( infile, "rb" )
-		self._getIceServerObject(srvid).setTexture(mumbleid, img)
+		buf = StringIO()
+		infile.save( buf, "PNG" )
+		buf.seek(0)
+		self._getIceServerObject(srvid).setTexture(mumbleid, buf.read())
 
 

@@ -261,7 +261,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 	
 	def setTexture(self, srvid, mumbleid, infile):
 		# open image, convert to RGBA, and resize to 600x60
-		img = Image.open( infile ).convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
+		img = infile.convert( "RGBA" ).transform( ( 600, 60 ), Image.EXTENT, ( 0, 0, 600, 60 ) );
 		# iterate over the list and pack everything into a string
 		bgrastring = "";
 		for ent in list( img.getdata() ):
