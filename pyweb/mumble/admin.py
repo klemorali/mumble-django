@@ -27,13 +27,18 @@ class MumbleServerAdmin(admin.ModelAdmin):
 class MumbleAdmin(admin.ModelAdmin):
 	""" Specification for the "Server administration" admin section. """
 	
-	list_display   = [ 'name', 'srvid', 'get_addr', 'get_port', 'get_booted', 'get_is_public',
-			   'get_users_regged', 'get_users_online', 'get_channel_count' ];
+	list_display   = [ 'name', 'srvid', 'get_addr', 'get_port', 'get_murmur_online', 'get_booted',
+			   'get_is_public', 'get_users_regged', 'get_users_online', 'get_channel_count' ];
 	list_filter    = [ 'addr', 'server' ];
 	search_fields  = [ 'name', 'addr', 'port' ];
 	ordering       = [ 'name' ];
 	form           = MumbleAdminForm;
 	
+	def get_murmur_online( self, obj ):
+		return obj.server.online
+	
+	get_murmur_online.short_description = _('Master is running')
+	get_murmur_online.boolean = True
 	
 	def get_addr( self, obj ):
 		if not obj.addr:
@@ -51,7 +56,7 @@ class MumbleAdmin(admin.ModelAdmin):
 	def get_booted( self, obj ):
 		return obj.booted
 	
-	get_booted.short_description = _('Boot Server')
+	get_booted.short_description = _('Instance is running')
 	get_booted.boolean = True
 	
 	def get_users_regged( self, obj ):
