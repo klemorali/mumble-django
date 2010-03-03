@@ -16,7 +16,7 @@
 
 import socket, Ice
 
-from django.utils.translation	import ugettext_lazy as _
+from django.utils.translation	import ugettext_noop, ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db			import models
 from django.db.models		import signals
@@ -88,6 +88,7 @@ class MumbleServer( models.Model ):
 	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
 	
 	def getDefaultConf( self, field=None ):
+		""" Get a field from the default conf dictionary, or None if the field isn't set. """
 		if self._conf is None:
 			self._conf = self.ctl.getDefaultConf()
 		if field is None:
@@ -97,6 +98,7 @@ class MumbleServer( models.Model ):
 		return None
 	
 	def isOnline( self ):
+		""" Return true if this server process is running. """
 		try:
 			self.ctl
 		except Ice.ConnectionRefusedException:
@@ -141,24 +143,24 @@ class Mumble( models.Model ):
 			doc=_('Superuser Password')
 			)
 	
-	url     = mk_config_property( "registerurl",	_("Website URL") )
-	motd    = mk_config_property( "welcometext",	_("Welcome Message") )
-	passwd  = mk_config_property( "password",	_("Server Password") )
-	users   = mk_config_property( "users",		_("Max. Users"),	get_coerce=int )
-	bwidth  = mk_config_property( "bandwidth",	_("Bandwidth [Bps]"),	get_coerce=int )
-	sslcrt  = mk_config_property( "certificate",	_("SSL Certificate") )
-	sslkey  = mk_config_property( "key",		_("SSL Key") )
-	player  = mk_config_property( "username",	_("Player name regex") )
-	channel = mk_config_property( "channelname",	_("Channel name regex") )
-	defchan = mk_config_property( "defaultchannel", _("Default channel"),	get_coerce=int )
-	timeout = mk_config_property( "timeout",	_("Timeout"),		get_coerce=int )
+	url     = mk_config_property( "registerurl",	ugettext_noop("Website URL") )
+	motd    = mk_config_property( "welcometext",	ugettext_noop("Welcome Message") )
+	passwd  = mk_config_property( "password",	ugettext_noop("Server Password") )
+	users   = mk_config_property( "users",		ugettext_noop("Max. Users"),		get_coerce=int )
+	bwidth  = mk_config_property( "bandwidth",	ugettext_noop("Bandwidth [Bps]"),	get_coerce=int )
+	sslcrt  = mk_config_property( "certificate",	ugettext_noop("SSL Certificate") )
+	sslkey  = mk_config_property( "key",		ugettext_noop("SSL Key") )
+	player  = mk_config_property( "username",	ugettext_noop("Player name regex") )
+	channel = mk_config_property( "channelname",	ugettext_noop("Channel name regex") )
+	defchan = mk_config_property( "defaultchannel", ugettext_noop("Default channel"),	get_coerce=int )
+	timeout = mk_config_property( "timeout",	ugettext_noop("Timeout"),		get_coerce=int )
 	
-	obfsc   = mk_config_bool_property( "obfuscate",         _("IP Obfuscation") )
-	certreq = mk_config_bool_property( "certrequired",      _("Require Certificate") )
-	textlen = mk_config_bool_property( "textmessagelength", _("Maximum length of text messages") )
-	html    = mk_config_bool_property( "allowhtml",         _("Allow HTML to be used in messages") )
-	bonjour = mk_config_bool_property( "bonjour",           _("Publish this server via Bonjour") )
-	autoboot= mk_config_bool_property( "boot",              _("Boot Server when Murmur starts") )
+	obfsc   = mk_config_bool_property( "obfuscate",         ugettext_noop("IP Obfuscation") )
+	certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
+	textlen = mk_config_bool_property( "textmessagelength", ugettext_noop("Maximum length of text messages") )
+	html    = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
+	bonjour = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
+	autoboot= mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
 	
 	def getBooted( self ):
 		if self.id is not None:
@@ -176,7 +178,7 @@ class Mumble( models.Model ):
 			else:
 				self.ctl.stop( self.srvid );
 	
-	booted  = property( getBooted, setBooted, doc=_("Boot Server") )
+	booted  = property( getBooted, setBooted, doc=ugettext_noop("Boot Server") )
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'srvid' ), );
@@ -438,7 +440,7 @@ class Mumble( models.Model ):
 		else:
 			return daddr;
 	
-	netloc = property( getNetloc, doc=getNetloc.__doc__ );
+	netloc = property( getNetloc );
 	
 	def getURL( self, forUser = None ):
 		""" Create an URL of the form mumble://username@host:port/ for this server. """
@@ -506,8 +508,8 @@ class MumbleUser( models.Model ):
 	server   = models.ForeignKey(   Mumble, verbose_name=_('Server instance'), related_name="mumbleuser_set" );
 	owner    = models.ForeignKey(   User,   verbose_name=_('Account owner'),   related_name="mumbleuser_set", null=True, blank=True );
 	
-	comment = mk_registration_property( _("comment"), doc="The user's comment." );
-	hash    = mk_registration_property( _("hash"),    doc="The user's hash."    );
+	comment = mk_registration_property( "comment", doc=ugettext_noop("The user's comment.") );
+	hash    = mk_registration_property( "hash",    doc=ugettext_noop("The user's hash.")    );
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
@@ -587,7 +589,7 @@ class MumbleUser( models.Model ):
 		self.server.rootchan.acl.save();
 		return value;
 	
-	aclAdmin = property( getAdmin, setAdmin, doc='Admin on root channel' );
+	aclAdmin = property( getAdmin, setAdmin, doc=ugettext_noop('Admin on root channel') );
 	
 	
 	# Registration fetching
@@ -627,7 +629,7 @@ class MumbleUser( models.Model ):
 		from django.core.urlresolvers		import reverse
 		return reverse( showTexture, kwargs={ 'server': self.server.id, 'userid': self.id } );
 	
-	textureUrl = property( getTextureUrl, doc=getTextureUrl.__doc__ );
+	textureUrl = property( getTextureUrl );
 	
 	
 	# Deletion handler
