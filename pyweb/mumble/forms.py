@@ -42,7 +42,7 @@ class PropertyModelForm( ModelForm ):
 				self.fields[fldname].initial = getattr( self.instance, fldname )
 				prop = getattr( self.instance.__class__, fldname )
 				if prop.__doc__:
-					self.fields[fldname].label = prop.__doc__
+					self.fields[fldname].label = _(prop.__doc__)
 	
 	def save( self, commit=True ):
 		inst = ModelForm.save( self, commit=commit )
