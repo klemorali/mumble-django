@@ -115,7 +115,7 @@
         <li>{% trans "Muted by self"    %}: {{ item.selfMute|yesno   }}</li>
         <li>{% trans "Deafened by self" %}: {{ item.selfDeaf|yesno   }}</li>
         {% if CurrentUserIsAdmin or user.is_staff %}
-          <li>{% trans "IP Address" %}: {{ item.ipaddress }}</li>
+          <li>{% trans "IP Address" %}: <acronym title="{{ item.ipaddress }}">{{ item.fqdn }}</acronym></li>
         {% endif %}
       </ul>
       {% if item.mumbleuser and item.mumbleuser.owner %}
