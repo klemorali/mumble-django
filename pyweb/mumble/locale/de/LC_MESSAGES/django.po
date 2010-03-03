@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-28 20:31+0100\n"
-"PO-Revision-Date: 2010-02-28 20:34\n"
+"POT-Creation-Date: 2010-03-03 08:52+0100\n"
+"PO-Revision-Date: 2010-03-03 08:53\n"
 "Last-Translator: <de@de.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -60,7 +60,7 @@ msgstr "Nein"
 msgid "Public"
 msgstr "Öffentlich"
 
-#: admin.py:113 templates/mumble/mumble.html:211
+#: admin.py:113 templates/mumble/mumble.html:214
 msgid "Admin on root channel"
 msgstr "Admin im Wurzelkanal"
 
@@ -257,7 +257,7 @@ msgstr "Benutzername und Login"
 msgid "Login password"
 msgstr "Passwort"
 
-#: models.py:495 templates/mumble/mumble.html:281
+#: models.py:495 templates/mumble/mumble.html:284
 msgid "Account owner"
 msgstr "Accountbesitzer"
 
@@ -332,8 +332,8 @@ msgstr ""
 "      <p>Du musst <a href=\"%(login_url)s\">eingeloggt</a> sein um auf diesem Mumble-Server einen Account registrieren zu können.</p>\n"
 "    "
 
-#: templates/mumble/mumble.html:64 templates/mumble/mumble.html.py:136
-#: templates/mumble/mumble.html:266
+#: templates/mumble/mumble.html:64 templates/mumble/mumble.html.py:139
+#: templates/mumble/mumble.html:269
 msgid "User Texture"
 msgstr "Benutzertextur"
 
@@ -382,7 +382,7 @@ msgstr "Online seit"
 msgid "Authenticated"
 msgstr "Authentifiziert"
 
-#: templates/mumble/mumble.html:112 templates/mumble/mumble.html.py:124
+#: templates/mumble/mumble.html:112 templates/mumble/mumble.html.py:127
 msgid "Admin"
 msgstr "Administrator"
 
@@ -402,87 +402,91 @@ msgstr "Selbst stummgestellt"
 msgid "Deafened by self"
 msgstr "Selbst taubgestellt"
 
-#: templates/mumble/mumble.html:119
+#: templates/mumble/mumble.html:118
+msgid "IP Address"
+msgstr "IP-Adresse"
+
+#: templates/mumble/mumble.html:122
 msgid "User"
 msgstr "Benutzer"
 
-#: templates/mumble/mumble.html:122
+#: templates/mumble/mumble.html:125
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
-#: templates/mumble/mumble.html:125
+#: templates/mumble/mumble.html:128
 msgid "Sign-up date"
 msgstr "Datum der Anmeldung"
 
-#: templates/mumble/mumble.html:130
+#: templates/mumble/mumble.html:133
 msgid "User Comment"
 msgstr "Benutzer-Kommentar"
 
-#: templates/mumble/mumble.html:142 templates/mumble/mumble.html.py:156
+#: templates/mumble/mumble.html:145 templates/mumble/mumble.html.py:159
 msgid "Kick user"
 msgstr "Benutzer kicken"
 
-#: templates/mumble/mumble.html:148
+#: templates/mumble/mumble.html:151
 msgid "Reason"
 msgstr "Begründung"
 
-#: templates/mumble/mumble.html:153
+#: templates/mumble/mumble.html:156
 msgid "Ban user"
 msgstr "Benutzer bannen"
 
-#: templates/mumble/mumble.html:163
+#: templates/mumble/mumble.html:166
 msgid "Channel"
 msgstr "Kanal"
 
-#: templates/mumble/mumble.html:165
+#: templates/mumble/mumble.html:168
 msgid "Channel ID"
 msgstr "Kanal-ID"
 
-#: templates/mumble/mumble.html:167
+#: templates/mumble/mumble.html:170
 msgid "Connect"
 msgstr "Verbinden"
 
-#: templates/mumble/mumble.html:170
+#: templates/mumble/mumble.html:173
 msgid "Channel description"
 msgstr "Beschreibung des Kanals"
 
-#: templates/mumble/mumble.html:217
+#: templates/mumble/mumble.html:220
 msgid "Delete"
 msgstr "Löschen"
 
-#: templates/mumble/mumble.html:253
+#: templates/mumble/mumble.html:256
 msgid "Server Info"
 msgstr "Server-Infos"
 
-#: templates/mumble/mumble.html:254
+#: templates/mumble/mumble.html:257
 msgid "Registration"
 msgstr "Registrierung"
 
-#: templates/mumble/mumble.html:263
+#: templates/mumble/mumble.html:266
 msgid "Administration"
 msgstr "Administration"
 
-#: templates/mumble/mumble.html:270
+#: templates/mumble/mumble.html:273
 msgid "User List"
 msgstr "Benutzerliste"
 
-#: templates/mumble/mumble.html:274
+#: templates/mumble/mumble.html:277
 msgid "name"
 msgstr "Name"
 
-#: templates/mumble/mumble.html:294
+#: templates/mumble/mumble.html:297
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: templates/mumble/mumble.html:307
+#: templates/mumble/mumble.html:310
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: templates/mumble/mumble.html:319
+#: templates/mumble/mumble.html:322
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/mumble/mumble.html:345
+#: templates/mumble/mumble.html:348
 msgid "Resync with Murmur"
 msgstr "Liste neu laden"
 
