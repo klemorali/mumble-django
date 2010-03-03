@@ -22,7 +22,18 @@ from mumble.forms  import MumbleServerForm, MumbleAdminForm, MumbleUserAdminForm
 from mumble.models import MumbleServer, Mumble, MumbleUser
 
 class MumbleServerAdmin(admin.ModelAdmin):
+	list_display   = [ 'dbus', 'get_murmur_online' ]
+	search_fields  = [ 'dbus' ]
+	ordering       = [ 'dbus' ]
+	
 	form = MumbleServerForm
+	
+	def get_murmur_online( self, obj ):
+		return obj.online
+	
+	get_murmur_online.short_description = _('Master is running')
+	get_murmur_online.boolean = True
+
 
 class MumbleAdmin(admin.ModelAdmin):
 	""" Specification for the "Server administration" admin section. """
@@ -113,7 +124,9 @@ class MumbleUserAdmin(admin.ModelAdmin):
 	form = MumbleUserAdminForm
 	
 	def get_acl_admin( self, obj ):
-		return obj.aclAdmin
+		if obj.server.booted:
+			return obj.aclAdmin
+		return None
 	
 	get_acl_admin.short_description = _('Admin on root channel')
 	get_acl_admin.boolean = True
