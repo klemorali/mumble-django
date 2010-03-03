@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-import socket
+import socket, Ice
 
 from django.utils.translation	import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -96,6 +96,15 @@ class MumbleServer( models.Model ):
 			return self._conf[field]
 		return None
 	
+	def isOnline( self ):
+		try:
+			self.ctl
+		except Ice.ConnectionRefusedException:
+			return False;
+		else:
+			return True;
+	
+	online = property( isOnline )
 	defaultconf = property( getDefaultConf, doc="The default config dictionary." )
 
 
@@ -153,7 +162,10 @@ class Mumble( models.Model ):
 	
 	def getBooted( self ):
 		if self.id is not None:
-			return self.ctl.isBooted( self.srvid );
+			try:
+				return self.ctl.isBooted( self.srvid );
+			except Ice.ConnectionRefusedException:
+				return False;
 		else:
 			return False
 	
