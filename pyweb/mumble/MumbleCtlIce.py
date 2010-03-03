@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
 """
 
+from functools		import wraps
 from StringIO		import StringIO
 from os.path		import exists, join
 from os			import unlink, name as os_name
@@ -38,12 +39,13 @@ def protectDjangoErrPage( func ):
 	    non-existant files and borking.
 	"""
 	
+	@wraps(func)
 	def protection_wrapper( *args, **kwargs ):
 		""" Call the original function and catch Ice exceptions. """
 		try:
 			return func( *args, **kwargs );
-		except Ice.Exception, e:
-			raise e;
+		except Ice.Exception, err:
+			raise err;
 	protection_wrapper.innerfunc = func
 	
 	return protection_wrapper;
