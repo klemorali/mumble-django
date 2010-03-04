@@ -106,7 +106,7 @@ MUNIN_CATEGORY = 'network'
 # Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
 # Mumble-Django should use its own!
 DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'mumble-django.db3' )
+DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'db', 'mumble-django.db3' )
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''

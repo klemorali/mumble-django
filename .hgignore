@@ -2,6 +2,8 @@ syntax: glob
 
 *.pyc
 *.db3
+*.db3.bak
+*.db3-journal
 *~
 .directory
 .secret.txt
