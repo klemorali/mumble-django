@@ -4,6 +4,8 @@ ALTER TABLE `mumble_mumble`
         ADD `server_id` integer FIRST;
 ALTER TABLE `mumble_mumble`
         ADD `display` varchar(200) AFTER `name`;
+ALTER TABLE `mumble_mumble`
+	MODIFY `port` integer NULL;
 COMMIT;
 
 BEGIN;

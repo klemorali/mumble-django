@@ -4,7 +4,7 @@ CREATE TABLE "mumble_mumble_new" (
     "name" varchar(200) NOT NULL,
     "srvid" integer NOT NULL,
     "addr" varchar(200) NOT NULL,
-    "port" integer NOT NULL,
+    "port" integer,
     "display" varchar(200) NOT NULL,
     UNIQUE ("server_id", "srvid")
 );
