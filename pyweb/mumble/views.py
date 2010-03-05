@@ -170,6 +170,8 @@ def show( request, server ):
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'kick':
 			kickform = MumbleKickForm( request.POST );
 			if kickform.is_valid():
+				if kickform.cleaned_data["ban"]:
+					srv.banUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
 				srv.kickUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
 	
 	# ChannelTable is a somewhat misleading name, as it actually contains channels and players.
