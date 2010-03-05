@@ -21,7 +21,7 @@ from django.conf	import settings
 from django.db		import connection
 from django.db.models	import signals
 
-from mumble		import models
+from mumble.models	import Mumble
 
 from update_schema	import update_schema
 from server_detect	import find_existing_instances
@@ -36,15 +36,11 @@ if settings.DATABASE_ENGINE == "sqlite3":
 
 cursor = connection.cursor()
 
-tablename = models.Mumble._meta.db_table
+tablename = Mumble._meta.db_table
 
-uptodate  = False
 if tablename in connection.introspection.get_table_list(cursor):
 	fields = connection.introspection.get_table_description(cursor, tablename)
-	for entry in fields:
-		if entry[0] == "server_id":
-			uptodate = True
-			break
+	uptodate = "server_id" in [ entry[0] for entry in fields ]
 else:
 	# Table doesn't yet exist, so syncdb will create it properly
 	uptodate = True
