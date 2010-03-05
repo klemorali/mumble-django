@@ -434,6 +434,15 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		return userdata
 	
 	@protectDjangoErrPage
+	def getState(self, srvid, sessionid):
+		userdata = self._getIceServerObject(srvid).getState(sessionid);
+		for key in userdata.__dict__:
+			attr = getattr( userdata, key )
+			if isinstance( attr, str ):
+				setattr( userdata, key, attr.decode( "UTF-8" ) )
+		return userdata
+	
+	@protectDjangoErrPage
 	def registerPlayer(self, srvid, name, email, password):
 		# To get the real values of these ENUM entries, try
 		# Murmur.UserInfo.UserX.value
@@ -512,6 +521,24 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 	@protectDjangoErrPage
 	def setBans(self, srvid, bans):
 		return self._getIceServerObject(srvid).setBans(bans);
+	
+	@protectDjangoErrPage
+	def addBanForSession(self, srvid, sessionid, **kwargs):
+		session = self.getState(srvid, sessionid);
+		if "bits" not in kwargs:
+			kwargs["bits"] = 128;
+		return self.addBan(srvid, address=session.address, **kwargs);
+	
+	@protectDjangoErrPage
+	def addBan(self, srvid, **kwargs):
+		for key in kwargs:
+			if isinstance( kwargs[key], unicode ):
+				kwargs[key] = kwargs[key].encode("UTF-8")
+		
+		from Murmur import Ban
+		srvbans = self.getBans(srvid);
+		srvbans.append( Ban( **kwargs ) );
+		return self.setBans(srvid, srvbans);
 	
 	@protectDjangoErrPage
 	def kickUser(self, srvid, userid, reason=""):
