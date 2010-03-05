@@ -2,6 +2,17 @@
 Mumble-Django changelog
 =======================
 
+Version 2.0beta2, 5 Mar 2010:
+------------------------------
+* Drop "NOT NULL" constraint on the port column during the database transition.
+* Display users' FQDN and IP Adresses to admins.
+* Fix updating the user texture.
+* Fix the admin to correctly handle Murmur processes that are not currently running.
+* Move the database file to the "db" subdirectory, because people tend to set the
+  permissions with "chown -R user <md-dir>/*" instead of "chown -R user <md-dir>",
+  which has been repeatedly causing problems in the past. The database file will
+  be moved automatically when needed.
+
 Version 2.0beta1, 28 Feb 2010:
 ------------------------------
 * Remove a lot of columns from MDs database and replace them with properties. That
