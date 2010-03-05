@@ -21,7 +21,7 @@ from django.conf	import settings
 from django.db		import connection
 from django.db.models	import signals
 
-from mumble.models	import Mumble
+from mumble		import models
 
 from update_schema	import update_schema
 from server_detect	import find_existing_instances
@@ -36,7 +36,7 @@ if settings.DATABASE_ENGINE == "sqlite3":
 
 cursor = connection.cursor()
 
-tablename = Mumble._meta.db_table
+tablename = models.Mumble._meta.db_table
 
 if tablename in connection.introspection.get_table_list(cursor):
 	fields = connection.introspection.get_table_description(cursor, tablename)
