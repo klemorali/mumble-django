@@ -543,7 +543,10 @@ class MumbleCtlIce_123(MumbleCtlIce_120):
 		if len(texture) == 0:
 			raise ValueError( "No Texture has been set." );
 		from StringIO import StringIO
-		return Image.open( StringIO( texture ) )
+		try:
+			return Image.open( StringIO( texture ) )
+		except IOError, err:
+			raise ValueError( err )
 	
 	@protectDjangoErrPage
 	def setTexture(self, srvid, mumbleid, infile):
