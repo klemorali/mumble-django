@@ -62,30 +62,38 @@
   {% if Registered %}
     <div id="mumble_texture" class="mumble-ext">
       <h2>{% trans "User Texture" %}</h2>
-      <p>
-        {% blocktrans with DBaseObject.id as serverid %}
-          You can upload an image that you would like to use as your user texture here.
-        {% endblocktrans %}<br />
-        <br />
-        {% if MumbleAccount.hasTexture %}
-          {% trans "Your current texture is" %}:<br />
-          <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" /><br />
-        {% else %}
-          {% trans "You don't currently have a texture set" %}.<br />
-        {% endif %}
-        <br />
-        {% blocktrans with DBaseObject.id as serverid %}
-          Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
-          a different size, it will be resized accordingly.<br />
+      {% if DBaseObject|mmversion_eq:"1.2.2" %}
+        {% blocktrans %}
+          Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is disabled.
         {% endblocktrans %}
-      </p>
-      <form action="{% url mumble.views.show DBaseObject.id %}" method="post" enctype="multipart/form-data">
-        <table>
-          {{ TextureForm }}
-        </table>
-        <input type="hidden" name="mode" value="texture" />
-        <input type="submit" />
-      </form>
+      {% else %}
+        <p>
+          {% blocktrans with DBaseObject.id as serverid %}
+            You can upload an image that you would like to use as your user texture here.
+          {% endblocktrans %}<br />
+          <br />
+          {% if MumbleAccount.hasTexture %}
+            {% trans "Your current texture is" %}:<br />
+            <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" /><br />
+          {% else %}
+            {% trans "You don't currently have a texture set" %}.<br />
+          {% endif %}
+          <br />
+          {% if DBaseObject|mmversion_lt:"1.2.3" %}
+            {% blocktrans with DBaseObject.id as serverid %}
+              Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with
+              a different size, it will be resized accordingly.<br />
+            {% endblocktrans %}
+          {% endif %}
+        </p>
+        <form action="{% url mumble.views.show DBaseObject.id %}" method="post" enctype="multipart/form-data">
+          <table>
+            {{ TextureForm }}
+          </table>
+          <input type="hidden" name="mode" value="texture" />
+          <input type="submit" />
+        </form>
+      {% endif %}
     </div>
   {% endif %}
 
