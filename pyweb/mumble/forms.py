@@ -164,7 +164,7 @@ class MumbleServerForm( ModelForm ):
 class MumbleUserForm( ModelForm ):
 	""" The user registration form used to register an account. """
 	
-	password = forms.CharField( widget=forms.PasswordInput )
+	password = forms.CharField( widget=forms.PasswordInput, required=False )
 	
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs );
@@ -190,7 +190,7 @@ class MumbleUserForm( ModelForm ):
 	def clean_password( self ):
 		""" Verify a password has been given. """
 		passwd = self.cleaned_data['password'];
-		if not passwd:
+		if not passwd and ( not self.instance or self.instance.mumbleid == -1 ):
 			raise forms.ValidationError( _( "Cannot register player without a password!" ) );
 		return passwd;
 	
@@ -291,7 +291,14 @@ class MumbleUserLinkForm( MumbleUserForm ):
 
 class MumbleUserAdminForm( PropertyModelForm ):
 	aclAdmin = forms.BooleanField( required=False );
-	password = forms.CharField( widget=forms.PasswordInput )
+	password = forms.CharField( widget=forms.PasswordInput, required=False )
+	
+	def clean_password( self ):
+		""" Verify a password has been given. """
+		passwd = self.cleaned_data['password'];
+		if not passwd and ( not self.instance or self.instance.mumbleid == -1 ):
+			raise forms.ValidationError( _( "Cannot register player without a password!" ) );
+		return passwd;
 	
 	class Meta:
 		model   = Mumble;
