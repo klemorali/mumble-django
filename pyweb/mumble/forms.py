@@ -312,6 +312,6 @@ class MumbleKickForm( Form ):
 
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """
-	texturefile = forms.ImageField();
+	texturefile = forms.ImageField( label=_("User Texture") );
 
 

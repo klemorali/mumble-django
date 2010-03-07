@@ -31,6 +31,7 @@
               <li>{% trans "Website" %}: {{ DBaseObject.url|urlize }}</li>
             {% endif %}
             <li>{% trans "Server version" %}: {{ DBaseObject.version.0 }}.{{ DBaseObject.version.1 }}.{{ DBaseObject.version.2 }}</li>
+            <li><a href="{% url mumble.views.mobile_show DBaseObject.id %}">{% trans "Minimal view"   %}</a></li>
           </ul>
           <fieldset>
             <legend>{% trans "Welcome message" %}</legend>
