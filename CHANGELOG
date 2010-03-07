@@ -2,6 +2,15 @@
 Mumble-Django changelog
 =======================
 
+Version 2.0beta3, 7 Mar 2010:
+------------------------------
+* Fix the channel viewer crashing when PIL doesn't recognize the image format
+  of one user's Texture.
+* Disable the Texture stuff for Murmur 1.2.2, as its implementation is buggy.
+* Add a French translation.
+* Update Italian translation.
+* Add banning users.
+
 Version 2.0beta2, 5 Mar 2010:
 ------------------------------
 * Drop "NOT NULL" constraint on the port column during the database transition.
