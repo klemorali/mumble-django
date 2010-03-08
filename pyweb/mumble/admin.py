@@ -54,6 +54,7 @@ class MumbleAdmin(admin.ModelAdmin):
 	def get_addr( self, obj ):
 		if not obj.addr:
 			return "*"
+		return obj.addr
 	
 	get_addr.short_description = _('Server Address')
 	

@@ -45,8 +45,6 @@ def update_schema( **kwargs ):
 		try:
 			stmt = scriptfile.read()
 			cursor.execute( stmt )
-			if "postgresql" in settings.DATABASE_ENGINE:
-				transaction.commit()
 		
 		except IOError, err:
 			print "Error reading file '%s':" % filename
@@ -55,8 +53,6 @@ def update_schema( **kwargs ):
 		except cursor.db.connection.Error, err:
 			print "Error executing file '%s':" % filename
 			print err
-			if "postgresql" in settings.DATABASE_ENGINE:
-				transaction.rollback()
 		
 		finally:
 			scriptfile.close()
