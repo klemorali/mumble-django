@@ -115,18 +115,14 @@ def find_existing_instances( **kwargs ):
 				"srvid":   id,
 				}
 			
-			if v > 1:
-				print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName ),
+			if v:
+				print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName )
 			
 			# now create a model for the record set.
 			instance = Mumble( **values );
 		else:
-			if v > 1:
-				print "Syncing Murmur instance... ",
-		
-		
-		if v > 1:
-			print instance.name;
+			if v:
+				print "Syncing Murmur instance %d: '%s'... " % ( instance.id, instance.name )
 		
 		try:
 			instance.configureFromMurmur();
@@ -163,7 +159,7 @@ def find_existing_instances( **kwargs ):
 			if v > 1:
 				print "Looking for registered Players on Server id %d." % id;
 			instance.readUsersFromMurmur( verbose=v );
-		elif v > 1:
+		elif v:
 			print "This server is not running, can't sync players.";
 	
 	if v > 1:

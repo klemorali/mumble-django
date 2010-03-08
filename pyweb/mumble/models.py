@@ -328,7 +328,7 @@ class Mumble( models.Model ):
 			
 			else:
 				if verbose > 1:
-					print "Player '%s' is already listed in the database." % playerdata.name;
+					print "Player '%s' is already known." % playerdata.name;
 				playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid );
 				playerinstance.name = playerdata.name;
 			

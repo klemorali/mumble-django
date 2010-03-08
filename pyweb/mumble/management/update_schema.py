@@ -26,7 +26,15 @@ from mumble.management.server_detect import find_existing_instances
 
 
 def update_schema( **kwargs ):
-	scriptpath = join(
+	if "verbosity" in kwargs:
+		v = kwargs['verbosity'];
+	else:
+		v = 1;
+	
+	if v:
+		print "Migrating Database schema for Mumble-Django 2.0 now."
+	
+	scriptdir = join(
 		settings.MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql", {
 			'postgresql_psycopg2': 'pgsql',
 			'postgresql': 'pgsql',
@@ -35,14 +43,20 @@ def update_schema( **kwargs ):
 			}[settings.DATABASE_ENGINE]
 		)
 	
-	scripts = [ filename for filename in os.listdir( scriptpath ) if filename.endswith( ".sql" ) ]
+	if v > 1:
+		print "Reading migration scripts for %s from '%s'" % ( settings.DATABASE_ENGINE, scriptdir )
+	
+	scripts = [ filename for filename in os.listdir( scriptdir ) if filename.endswith( ".sql" ) ]
 	scripts.sort()
 	
 	for filename in scripts:
 		cursor = connection.cursor()
 		
-		scriptfile = open( os.path.join( scriptpath, filename ), "r" )
+		scriptpath = os.path.join( scriptdir, filename )
+		scriptfile = open( scriptpath, "r" )
 		try:
+			if v > 1:
+				print "Running migration script '%s'..." % scriptpath
 			stmt = scriptfile.read()
 			cursor.execute( stmt )
 		
@@ -57,5 +71,8 @@ def update_schema( **kwargs ):
 		finally:
 			scriptfile.close()
 			cursor.close()
+	
+	if v:
+		print "Database migration finished successfully."
 	
 	find_existing_instances( **kwargs )
