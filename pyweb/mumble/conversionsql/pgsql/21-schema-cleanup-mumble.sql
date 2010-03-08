@@ -1,4 +1,5 @@
 -- Model: Mumble
+BEGIN;
 ALTER TABLE "mumble_mumble"
         DROP COLUMN "dbus";
 ALTER TABLE "mumble_mumble"
@@ -30,3 +31,4 @@ ALTER TABLE "mumble_mumble"
 
 ALTER TABLE "mumble_mumble"
         ALTER COLUMN "server_id" SET NOT NULL;
+COMMIT;
