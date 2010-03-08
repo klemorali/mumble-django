@@ -139,7 +139,7 @@ class Mumble( models.Model ):
 			"and port fields are used. If display and bind ports are equal, you can omit it here.") );
 	
 	supw    = property( lambda self: '',
-			lambda self, value: self.ctl.setSuperUserPassword( self.srvid, value ),
+			lambda self, value: ( value and self.ctl.setSuperUserPassword( self.srvid, value ) ) or None,
 			doc=_('Superuser Password')
 			)
 	

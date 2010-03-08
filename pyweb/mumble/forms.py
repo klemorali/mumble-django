@@ -98,13 +98,17 @@ class MumbleForm( PropertyModelForm ):
 		# Populate the `default channel' field's choices
 		choices = [ ('', '----------') ]
 		
-		if self.instance and self.instance.srvid is not None and self.instance.booted:
-			def add_item( item, level ):
-				if item.is_server or item.is_channel:
-					choices.append( ( str(item.chanid), ( "-"*level + " " + item.name ) ) )
-			
-			self.instance.rootchan.visit(add_item)
-		
+		if self.instance and self.instance.srvid is not None:
+			if self.instance.booted:
+				def add_item( item, level ):
+					if item.is_server or item.is_channel:
+						choices.append( ( item.chanid, ( "-"*level + " " + item.name ) ) )
+				
+				self.instance.rootchan.visit(add_item)
+			else:
+				current = self.instance.defchan
+				if current is not None:
+					choices.append( ( current, "Current value: %d" % current ) )
 		self.fields['defchan'].choices = choices
 	
 	class Meta:
