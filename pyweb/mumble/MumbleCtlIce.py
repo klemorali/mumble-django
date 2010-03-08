@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
 """
 
+from time		import time
 from functools		import wraps
 from StringIO		import StringIO
 from os.path		import exists, join
@@ -527,6 +528,10 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 		session = self.getState(srvid, sessionid);
 		if "bits" not in kwargs:
 			kwargs["bits"] = 128;
+		if "start" not in kwargs:
+			kwargs["start"] = int(time());
+		if "duration" not in kwargs:
+			kwargs["duration"] = 3600;
 		return self.addBan(srvid, address=session.address, **kwargs);
 	
 	@protectDjangoErrPage
