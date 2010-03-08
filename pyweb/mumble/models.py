@@ -143,17 +143,17 @@ class Mumble( models.Model ):
 			doc=_('Superuser Password')
 			)
 	
-	url     = mk_config_property( "registerurl",	ugettext_noop("Website URL") )
-	motd    = mk_config_property( "welcometext",	ugettext_noop("Welcome Message") )
-	passwd  = mk_config_property( "password",	ugettext_noop("Server Password") )
-	users   = mk_config_property( "users",		ugettext_noop("Max. Users"),		get_coerce=int )
-	bwidth  = mk_config_property( "bandwidth",	ugettext_noop("Bandwidth [Bps]"),	get_coerce=int )
-	sslcrt  = mk_config_property( "certificate",	ugettext_noop("SSL Certificate") )
-	sslkey  = mk_config_property( "key",		ugettext_noop("SSL Key") )
-	player  = mk_config_property( "username",	ugettext_noop("Player name regex") )
-	channel = mk_config_property( "channelname",	ugettext_noop("Channel name regex") )
-	defchan = mk_config_property( "defaultchannel", ugettext_noop("Default channel"),	get_coerce=int )
-	timeout = mk_config_property( "timeout",	ugettext_noop("Timeout"),		get_coerce=int )
+	url     = mk_config_property( "registerurl",		ugettext_noop("Website URL") )
+	motd    = mk_config_property( "welcometext",		ugettext_noop("Welcome Message") )
+	passwd  = mk_config_property( "password",		ugettext_noop("Server Password") )
+	users   = mk_config_property( "users",			ugettext_noop("Max. Users"),		get_coerce=int )
+	bwidth  = mk_config_property( "bandwidth",		ugettext_noop("Bandwidth [Bps]"),	get_coerce=int )
+	sslcrt  = mk_config_property( "certificate",		ugettext_noop("SSL Certificate") )
+	sslkey  = mk_config_property( "key",			ugettext_noop("SSL Key") )
+	player  = mk_config_property( "username",		ugettext_noop("Player name regex") )
+	channel = mk_config_property( "channelname",		ugettext_noop("Channel name regex") )
+	defchan = mk_config_property( "defaultchannel", 	ugettext_noop("Default channel"),	get_coerce=int )
+	timeout = mk_config_property( "timeout",		ugettext_noop("Timeout"),		get_coerce=int )
 	
 	obfsc   = mk_config_bool_property( "obfuscate",         ugettext_noop("IP Obfuscation") )
 	certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
@@ -195,10 +195,7 @@ class Mumble( models.Model ):
 		    but to Murmur as well.
 		"""
 		if dontConfigureMurmur:
-			# skip murmur configuration, e.g. because we're inserting models for existing servers.
 			return models.Model.save( self );
-		
-		# check if this server already exists, if not call newServer and set my srvid first
 		
 		if self.id is None:
 			self.srvid = self.ctl.newServer();
@@ -220,7 +217,6 @@ class Mumble( models.Model ):
 		else:
 			self.ctl.setConf( self.srvid, 'registerhostname', '' );
 		
-		# Now allow django to save the record set
 		return models.Model.save( self );
 	
 	
@@ -454,7 +450,7 @@ class Mumble( models.Model ):
 		else:
 			return urlunsplit(( "mumble", self.netloc, "", versionstr, "" ))
 	
-	connecturl = property( getURL,                          doc=getURL.__doc__ );
+	connecturl = property( getURL );
 	
 	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur." );
 	
@@ -533,10 +529,8 @@ class MumbleUser( models.Model ):
 	def save( self, dontConfigureMurmur=False ):
 		""" Save the settings in this model to Murmur. """
 		if dontConfigureMurmur:
-			# skip murmur configuration, e.g. because we're inserting models for existing players.
 			return models.Model.save( self );
 		
-		# Before the record set is saved, update Murmur via controller.
 		ctl = self.server.ctl;
 		
 		if self.owner:
@@ -566,7 +560,6 @@ class MumbleUser( models.Model ):
 		# Don't save the users' passwords, we don't need them anyway
 		self.password = '';
 		
-		# Now allow django to save the record set
 		return models.Model.save( self );
 	
 	def __init__( self, *args, **kwargs ):
@@ -602,7 +595,7 @@ class MumbleUser( models.Model ):
 			self._registration = self.server.ctl.getRegistration( self.server.srvid, self.mumbleid );
 		return self._registration;
 	
-	registration = property( getRegistration, doc=getRegistration.__doc__ );
+	registration = property( getRegistration );
 	
 	# Texture handlers
 	def getTexture( self ):

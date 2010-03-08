@@ -66,7 +66,7 @@ class mmChannel( object ):
 		
 		return self._acl;
 	
-	acl = property( getACL, doc=getACL.__doc__ );
+	acl = property( getACL );
 	
 	
 	is_server  = False;
@@ -130,7 +130,7 @@ class mmChannel( object ):
 		else:
 			return urlunsplit(( "mumble", self.server.netloc, urlpath, versionstr, "" ))
 	
-	connecturl = property( getURL, doc="A convenience wrapper for getURL." );
+	connecturl = property( getURL );
 	
 	def setDefault( self ):
 		""" Make this the server's default channel. """
