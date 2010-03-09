@@ -229,7 +229,7 @@ class Mumble( models.Model ):
 	users_regged = property( lambda self: self.mumbleuser_set.count(),           doc="Number of registered users." );
 	users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." );
 	channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." );
-	is_public    = property( lambda self: self.passwd == '',
+	is_public    = property( lambda self: not self.passwd,
 			doc="False if a password is needed to join this server." );
 	
 	is_server  = True;

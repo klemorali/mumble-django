@@ -41,10 +41,10 @@ def protectDjangoErrPage( func ):
 	"""
 	
 	@wraps(func)
-	def protection_wrapper( *args, **kwargs ):
+	def protection_wrapper( self, *args, **kwargs ):
 		""" Call the original function and catch Ice exceptions. """
 		try:
-			return func( *args, **kwargs );
+			return func( self, *args, **kwargs );
 		except Ice.Exception, err:
 			raise err;
 	protection_wrapper.innerfunc = func
