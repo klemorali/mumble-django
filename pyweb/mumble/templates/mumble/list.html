@@ -2,6 +2,7 @@
 {% comment %}
   <!-- kate: space-indent on; indent-width 2; replace-tabs on; -->
 {% endcomment %}
+{% load i18n %}
 {% load mumble_extras %}
 {% block Headline %}
 Configured Mumble Servers
@@ -15,6 +16,8 @@ Configured Mumble Servers
     {% else %}
       <li>{{ mumble.name }} (offline)</li>
     {% endif %}
+  {% empty %}
+    {% trans "No server instances have been configured yet." %}
   {% endfor %}
   </ul>
 </div>
