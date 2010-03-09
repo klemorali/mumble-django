@@ -64,7 +64,7 @@ def mobile_mumbles( request ):
 
 def mumbles( request, mobile=False ):
 	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
-	mms = get_list_or_404( Mumble );
+	mms = Mumble.objects.all().order_by( "name" );
 	
 	if len(mms) == 1:
 		return HttpResponseRedirect( reverse(
