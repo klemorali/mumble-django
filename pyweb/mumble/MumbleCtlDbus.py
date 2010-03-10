@@ -69,7 +69,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 				info[str(key)] = conf[key];
 		return info;
 	
-	def getConf(self, srvid, key, value):
+	def getConf(self, srvid, key):
 		if key == "username":
 			key = "playername";
 		
