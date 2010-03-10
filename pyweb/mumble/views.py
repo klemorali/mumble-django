@@ -59,8 +59,10 @@ def redir( request ):
 	else:
 		return HttpResponseRedirect( reverse( mumbles ) );
 
+
 def mobile_mumbles( request ):
 	return mumbles( request, mobile=True );
+
 
 def mumbles( request, mobile=False ):
 	""" Display a list of all configured Mumble servers, or redirect if only one configured. """
@@ -380,5 +382,14 @@ def mmng_tree( request, server ):
 	return HttpResponse(
 		prefix + "(" + simplejson.dumps( { 'channels': chanlist, 'users': userlist } ) + ")",
 		mimetype='text/javascript'
+		);
+
+
+def mumbleviewer_tree_xml( request, server ):
+	from xml.etree.cElementTree import tostring as xml_to_string
+	srv = get_object_or_404( Mumble, id=int(server) );
+	return HttpResponse(
+		xml_to_string( srv.asXml(), encoding='utf-8' ),
+		mimetype='text/xml'
 		);
 

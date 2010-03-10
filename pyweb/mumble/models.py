@@ -460,6 +460,12 @@ class Mumble( models.Model ):
 			 'root':   self.rootchan.asDict()
 			};
 	
+	def asXml( self ):
+		from xml.etree.cElementTree import Element
+		root = Element("root")
+		self.rootchan.asXml(root)
+		return root
+	
 	# "server" field protection
 	def __setattr__( self, name, value ):
 		if name == 'server':

@@ -25,6 +25,7 @@ urlpatterns = patterns(
 	( r'(?P<server>\d+)/texture.png',			'showTexture'		),
 	
 	( r'murmur/tree/(?P<server>\d+)',			'mmng_tree'		),
+	( r'mumbleviewer/(?P<server>\d+).xml',			'mumbleviewer_tree_xml' ),
 	
 	( r'mobile/(?P<server>\d+)',				'mobile_show'		),
 	( r'mobile/?$',						'mobile_mumbles'	),

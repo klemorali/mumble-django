@@ -22,6 +22,7 @@ from time			import time
 from django.utils.http		import urlquote
 from django.conf		import settings
 
+
 def cmp_names( left, rite ):
 	""" Compare two objects by their name property. """
 	return cmp( left.name, rite.name );
@@ -147,7 +148,18 @@ class mmChannel( object ):
 		chandata['players']  = [ pl.asDict() for pl in self.players  ];
 		chandata['subchans'] = [ sc.asDict() for sc in self.subchans ];
 		return chandata;
-
+	
+	def asXml( self, parentnode ):
+		from xml.etree.cElementTree import SubElement
+		me      = SubElement( parentnode, "item" , id=self.id, rel='channel' )
+		content = SubElement( me,         "content" )
+		name    = SubElement( content ,   "name" )
+		name.text = self.name
+		
+		for sc in self.subchans:
+			sc.asXml(me)
+		for pl in self.players:
+			pl.asXml(me)
 
 
 
@@ -234,6 +246,13 @@ class mmPlayer( object ):
 				pldata['texture'] = self.mumbleuser.textureUrl;
 		
 		return pldata;
+	
+	def asXml( self, parentnode ):
+		from xml.etree.cElementTree import SubElement
+		me      = SubElement( parentnode, "item" , id=self.id, rel='user' )
+		content = SubElement( me,         "content" )
+		name    = SubElement( content ,   "name" )
+		name.text = self.name
 
 
 
