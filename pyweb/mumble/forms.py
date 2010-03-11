@@ -154,7 +154,7 @@ class MumbleServerForm( ModelForm ):
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs )
 		
-		if self.instance:
+		if self.instance and self.instance.id:
 			confstr = ""
 			conf = self.instance.defaultconf
 			for field in conf:

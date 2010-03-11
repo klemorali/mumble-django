@@ -14,7 +14,8 @@
  *  GNU General Public License for more details.
 """
 
-import socket, Ice
+import socket, Ice, re
+from sys import stderr
 
 from django.utils.translation	import ugettext_noop, ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -87,6 +88,14 @@ class MumbleServer( models.Model ):
 	
 	ctl = property( getCtl, doc="Get a Control object for this server. The ctl is cached for later reuse." );
 	
+	def isMethodDbus(self):
+		""" Return true if this instance uses DBus. """
+		rd = re.compile( r'^(\w+\.)*\w+$' );
+		return bool(rd.match(self.dbus))
+	
+	method_dbus = property( isMethodDbus )
+	method_ice  = property( lambda self: not self.isMethodDbus(), doc="Return true if this instance uses Ice." )
+	
 	def getDefaultConf( self, field=None ):
 		""" Get a field from the default conf dictionary, or None if the field isn't set. """
 		if self._conf is None:
@@ -99,12 +108,34 @@ class MumbleServer( models.Model ):
 	
 	def isOnline( self ):
 		""" Return true if this server process is running. """
+		possibleexceptions = []
+		try:
+			from Ice import ConnectionRefusedException
+		except ImportError, err:
+			if self.method_ice:
+				print >> stderr, err
+				return None
+		else:
+			possibleexceptions.append( ConnectionRefusedException )
+		try:
+			from dbus import DBusException
+		except ImportError, err:
+			if self.method_dbus:
+				print >> stderr, err
+				return None
+		else:
+			possibleexceptions.append( DBusException )
+		
 		try:
 			self.ctl
-		except Ice.ConnectionRefusedException:
-			return False;
+		except tuple(possibleexceptions), err:
+			print >> stderr, err
+			return False
+		except (EnvironmentError, RuntimeError), err:
+			print >> stderr, err
+			return None
 		else:
-			return True;
+			return True
 	
 	online = property( isOnline )
 	defaultconf = property( getDefaultConf, doc="The default config dictionary." )
@@ -164,10 +195,10 @@ class Mumble( models.Model ):
 	
 	def getBooted( self ):
 		if self.id is not None:
-			try:
-				return self.ctl.isBooted( self.srvid );
-			except Ice.ConnectionRefusedException:
-				return False;
+			if self.server.online:
+				return self.ctl.isBooted( self.srvid )
+			else:
+				return None
 		else:
 			return False
 	
