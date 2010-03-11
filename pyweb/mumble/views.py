@@ -84,13 +84,19 @@ def mumbles( request, mobile=False ):
 
 
 def show( request, server ):
-	"""Display the channel list for the given Server ID.
+	""" Display the channel list for the given Server ID.
 	
-	This includes not only the channel list itself, but indeed the user registration,
-	server admin and user texture form as well. The template then uses JavaScript
-	to display these forms integrated into the Channel viewer.
+	    This includes not only the channel list itself, but indeed the user registration,
+	    server admin and user texture form as well. The template then uses JavaScript
+	    to display these forms integrated into the Channel viewer.
 	"""
 	srv = get_object_or_404( Mumble, id=server );
+	if not srv.booted:
+		return render_to_response(
+			'mumble/offline.html',
+			{ 'DBaseObject':  srv,
+			  'MumbleActive': True,
+			}, context_instance = RequestContext(request) );
 	
 	isAdmin = srv.isUserAdmin( request.user );
 	
