@@ -210,6 +210,7 @@ class Mumble( models.Model ):
 				self.ctl.stop( self.srvid );
 	
 	booted  = property( getBooted, setBooted, doc=ugettext_noop("Boot Server") )
+	online  = property( getBooted, setBooted, doc=ugettext_noop("Boot Server") )
 	
 	class Meta:
 		unique_together     = ( ( 'server', 'srvid' ), );

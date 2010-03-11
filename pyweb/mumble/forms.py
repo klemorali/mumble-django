@@ -155,11 +155,14 @@ class MumbleServerForm( ModelForm ):
 		ModelForm.__init__( self, *args, **kwargs )
 		
 		if self.instance and self.instance.id:
-			confstr = ""
-			conf = self.instance.defaultconf
-			for field in conf:
-				confstr += "%s: %s\n" % ( field, conf[field] )
-			self.fields["defaultconf"].initial = confstr
+			if self.instance.online:
+				confstr = ""
+				conf = self.instance.defaultconf
+				for field in conf:
+					confstr += "%s: %s\n" % ( field, conf[field] )
+				self.fields["defaultconf"].initial = confstr
+			else:
+				self.fields["defaultconf"].initial = _("This server is currently offline.")
 	
 	class Meta:
 		model = MumbleServer
