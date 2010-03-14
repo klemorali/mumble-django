@@ -26,6 +26,7 @@ urlpatterns = patterns(
 	
 	( r'murmur/tree/(?P<server>\d+)',			'mmng_tree'		),
 	( r'mumbleviewer/(?P<server>\d+).xml',			'mumbleviewer_tree_xml' ),
+	( r'mumbleviewer/(?P<server>\d+).json', 		'mumbleviewer_tree_json'),
 	
 	( r'mobile/(?P<server>\d+)',				'mobile_show'		),
 	( r'mobile/?$',						'mobile_mumbles'	),

@@ -149,7 +149,8 @@ class mmChannel( object ):
 		chandata['subchans'] = [ sc.asDict() for sc in self.subchans ];
 		return chandata;
 	
-	def asXml( self, parentnode ):
+	def asMvXml( self, parentnode ):
+		""" Return an XML tree for this channel suitable for MumbleViewer-ng. """
 		from xml.etree.cElementTree import SubElement
 		me      = SubElement( parentnode, "item" , id=self.id, rel='channel' )
 		content = SubElement( me,         "content" )
@@ -157,9 +158,23 @@ class mmChannel( object ):
 		name.text = self.name
 		
 		for sc in self.subchans:
-			sc.asXml(me)
+			sc.asMvXml(me)
 		for pl in self.players:
-			pl.asXml(me)
+			pl.asMvXml(me)
+	
+	def asMvJson( self ):
+		""" Return a Dict for this channel suitable for MumbleViewer-ng. """
+		return  {
+			"attributes": {
+				"href": self.connecturl,
+				"id":   self.id,
+				"rel":  "channel",
+				},
+			'data':   self.name,
+			'children': [ sc.asMvJson() for sc in self.subchans ] + \
+				    [ pl.asMvJson() for pl in self.players  ],
+			'state': { False: "closed", True: "open" }[self.top_or_not_empty],
+			}
 
 
 
@@ -247,12 +262,23 @@ class mmPlayer( object ):
 		
 		return pldata;
 	
-	def asXml( self, parentnode ):
+	def asMvXml( self, parentnode ):
+		""" Return an XML node for this player suitable for MumbleViewer-ng. """
 		from xml.etree.cElementTree import SubElement
 		me      = SubElement( parentnode, "item" , id=self.id, rel='user' )
 		content = SubElement( me,         "content" )
 		name    = SubElement( content ,   "name" )
 		name.text = self.name
+	
+	def asMvJson( self ):
+		""" Return a Dict for this player suitable for MumbleViewer-ng. """
+		return {
+			"attributes": {
+				"id":   self.id,
+				"rel":  "user",
+				},
+			'data': self.name,
+			}
 
 
 
