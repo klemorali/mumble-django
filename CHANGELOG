@@ -2,6 +2,22 @@
 Mumble-Django changelog
 =======================
 
+Version 2.0, 14 Mar 2010:
+------------------------------
+* Prevent unwanted erasing of the supw and defaultchannel fields.
+* Review syncdb verbosity levels to display messages in a sensible context.
+* Order servers by name in the server list, and display a helpful message
+  when none have been entered into the db
+* Improve the way MD handles servers being offline, unavailable modules and
+  configuration issues.
+* Add XML and JSON data sources for Mumbleviewer-ng:
+  http://bitbucket.org/nodefab/mumbleviewer-ng
+* Take "position" parameter into account when sorting channels in the channel
+  viewer.
+* Various bug fixes.
+* Disable Polish and Croatian translations, as their authors disappeared and
+  the files are horribly outdated.
+
 Version 2.0beta3, 7 Mar 2010:
 ------------------------------
 * Fix the channel viewer crashing when PIL doesn't recognize the image format
