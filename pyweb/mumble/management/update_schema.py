@@ -34,14 +34,12 @@ def update_schema( **kwargs ):
 	if v:
 		print "Migrating Database schema for Mumble-Django 2.0 now."
 	
-	scriptdir = join(
-		settings.MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql", {
+	scriptdir = join( settings.CONVERSIONSQL_ROOT, {
 			'postgresql_psycopg2': 'pgsql',
 			'postgresql': 'pgsql',
 			'mysql':      'mysql',
 			'sqlite3':    'sqlite',
-			}[settings.DATABASE_ENGINE]
-		)
+			}[settings.DATABASE_ENGINE] )
 	
 	if v > 1:
 		print "Reading migration scripts for %s from '%s'" % ( settings.DATABASE_ENGINE, scriptdir )
