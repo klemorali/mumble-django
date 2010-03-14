@@ -492,11 +492,16 @@ class Mumble( models.Model ):
 			 'root':   self.rootchan.asDict()
 			};
 	
-	def asXml( self ):
+	def asMvXml( self ):
+		""" Return an XML tree for this server suitable for MumbleViewer-ng. """
 		from xml.etree.cElementTree import Element
 		root = Element("root")
-		self.rootchan.asXml(root)
+		self.rootchan.asMvXml(root)
 		return root
+	
+	def asMvJson( self ):
+		""" Return a Dict for this server suitable for MumbleViewer-ng. """
+		return self.rootchan.asMvJson()
 	
 	# "server" field protection
 	def __setattr__( self, name, value ):

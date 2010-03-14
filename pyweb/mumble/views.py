@@ -392,10 +392,24 @@ def mmng_tree( request, server ):
 
 
 def mumbleviewer_tree_xml( request, server ):
+	""" Get the XML tree from the server and serialize it to the client. """
 	from xml.etree.cElementTree import tostring as xml_to_string
 	srv = get_object_or_404( Mumble, id=int(server) );
 	return HttpResponse(
-		xml_to_string( srv.asXml(), encoding='utf-8' ),
+		xml_to_string( srv.asMvXml(), encoding='utf-8' ),
 		mimetype='text/xml'
 		);
 
+def mumbleviewer_tree_json( request, server ):
+	""" Get the Dict from the server and serialize it as JSON to the client. """
+	srv = get_object_or_404( Mumble, id=int(server) );
+	
+	if "jsonp_callback" in request.GET:
+		prefix = request.GET["jsonp_callback"]
+	else:
+		prefix = ""
+	
+	return HttpResponse(
+		prefix + "(" + simplejson.dumps( srv.asMvJson() ) + ")",
+		mimetype='text/javascript'
+		);
