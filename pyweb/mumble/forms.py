@@ -149,7 +149,7 @@ class MumbleAdminForm( MumbleForm ):
 
 
 class MumbleServerForm( ModelForm ):
-	defaultconf = forms.CharField( required=False, widget=forms.Textarea )
+	defaultconf = forms.CharField( label=_("Default config"), required=False, widget=forms.Textarea )
 	
 	def __init__( self, *args, **kwargs ):
 		ModelForm.__init__( self, *args, **kwargs )

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-11 16:43+0100\n"
+"POT-Creation-Date: 2010-03-14 18:23+0100\n"
 "PO-Revision-Date: 2010-02-25 14:26\n"
 "Last-Translator: <nocontents@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "いいえ"
 msgid "Public"
 msgstr "公開"
 
-#: admin.py:132 models.py:626 templates/mumble/mumble.html:223
+#: admin.py:132 models.py:631 templates/mumble/mumble.html:223
 msgid "Admin on root channel"
 msgstr "管理者権限を与える"
 
@@ -87,6 +87,11 @@ msgstr ""
 "ポート番号 %(portno)d は許可されていません、次の範囲が許可されています %"
 "(minrange)d - %(maxrange)d"
 
+#: forms.py:152
+#, fuzzy
+msgid "Default config"
+msgstr "デフォルトチャンネル"
+
 #: forms.py:165 templates/mumble/offline.html:12
 msgid "This server is currently offline."
 msgstr ""
@@ -95,11 +100,11 @@ msgstr ""
 msgid "That name is forbidden by the server."
 msgstr "その名前はサーバによって不可視にされています"
 
-#: forms.py:193 models.py:582
+#: forms.py:193 models.py:587
 msgid "Another player already registered that name."
 msgstr "その名前は既に使われています."
 
-#: forms.py:201 forms.py:307 models.py:584
+#: forms.py:201 forms.py:307 models.py:589
 msgid "Cannot register player without a password!"
 msgstr "パスワードは必須です"
 
@@ -164,7 +169,7 @@ msgstr ""
 msgid "Ice Secret"
 msgstr "Ice Secret"
 
-#: models.py:68
+#: models.py:68 models.py:159
 msgid "Mumble Server"
 msgstr "マンブルユーザID"
 
@@ -280,7 +285,7 @@ msgstr ""
 msgid "Boot Server"
 msgstr "サーバ起動"
 
-#: models.py:217 models.py:545
+#: models.py:217 models.py:550
 msgid "Server instance"
 msgstr "サーバインスタンス"
 
@@ -288,44 +293,44 @@ msgstr "サーバインスタンス"
 msgid "Server instances"
 msgstr "全サーバインスタンス"
 
-#: models.py:505 models.py:685
+#: models.py:510 models.py:690
 msgid "This field must not be updated once the record has been saved."
 msgstr "この項目はアップデート出来ません."
 
-#: models.py:542
+#: models.py:547
 msgid "Mumble player_id"
 msgstr "マンブルユーザID"
 
-#: models.py:543
+#: models.py:548
 msgid "User name and Login"
 msgstr "ユーザID"
 
-#: models.py:544
+#: models.py:549
 msgid "Login password"
 msgstr "パスワード"
 
-#: models.py:546 templates/mumble/mumble.html:293
+#: models.py:551 templates/mumble/mumble.html:293
 msgid "Account owner"
 msgstr "アカウントの所有者"
 
-#: models.py:548
+#: models.py:553
 #, fuzzy
 msgid "The user's comment."
 msgstr "ユーザアカウント"
 
-#: models.py:549
+#: models.py:554
 msgid "The user's hash."
 msgstr ""
 
-#: models.py:553
+#: models.py:558
 msgid "User account"
 msgstr "ユーザアカウント"
 
-#: models.py:554
+#: models.py:559
 msgid "User accounts"
 msgstr "全ユーザアカウント"
 
-#: models.py:561
+#: models.py:566
 #, python-format
 msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
 msgstr "マンブルユーザ %(mu)s は %(srv)s のDjangoユーザ %(du)s です"

@@ -156,7 +156,7 @@ class Mumble( models.Model ):
 	    deleted as well.
 	"""
 	
-	server  = models.ForeignKey(   MumbleServer );
+	server  = models.ForeignKey(   MumbleServer, verbose_name=_("Mumble Server") );
 	name    = models.CharField(    _('Server Name'),            max_length=200 );
 	srvid   = models.IntegerField( _('Server ID'),              editable=False );
 	addr    = models.CharField(    _('Server Address'),         max_length=200, blank=True, help_text=_(
