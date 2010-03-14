@@ -22,7 +22,6 @@ urlpatterns = patterns(
 	( r'(?P<server>\d+)/users',				'users' 		),
 	
 	( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',	'showTexture'		),
-	( r'(?P<server>\d+)/texture.png',			'showTexture'		),
 	
 	( r'murmur/tree/(?P<server>\d+)',			'mmng_tree'		),
 	( r'mumbleviewer/(?P<server>\d+).xml',			'mumbleviewer_tree_xml' ),
