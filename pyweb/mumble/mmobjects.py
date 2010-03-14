@@ -23,6 +23,13 @@ from django.utils.http		import urlquote
 from django.conf		import settings
 
 
+def cmp_channels( left, rite ):
+	byorder = cmp( left.position, rite.position );
+	if byorder != 0:
+		return byorder;
+	else:
+		return cmp_names( left, rite );
+
 def cmp_names( left, rite ):
 	""" Compare two objects by their name property. """
 	return cmp( left.name, rite.name );
@@ -97,7 +104,7 @@ class mmChannel( object ):
 	
 	def sort( self ):
 		""" Sort my subchannels and players, and then iterate over them and sort them recursively. """
-		self.subchans.sort( cmp_names );
+		self.subchans.sort( cmp_channels );
 		self.players.sort( cmp_names );
 		for subc in self.subchans:
 			subc.sort();
