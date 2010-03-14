@@ -375,7 +375,7 @@ def mmng_tree( request, server ):
 			"name":    user.name,
 			"channel": user.channel.chanid,
 			"mute":    user.mute or user.selfMute or user.suppress,
-			"deaf":    user.deaf or user.selfDeaf or user.suppress,
+			"deaf":    user.deaf or user.selfDeaf,
 			"online":  user.onlinesecs,
 			"state":   "online"
 			})
