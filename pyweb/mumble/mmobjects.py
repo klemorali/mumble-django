@@ -170,10 +170,10 @@ class mmChannel( object ):
 				"id":   self.id,
 				"rel":  "channel",
 				},
-			'data':   self.name,
-			'children': [ sc.asMvJson() for sc in self.subchans ] + \
+			"data": self.name,
+			"children": [ sc.asMvJson() for sc in self.subchans ] + \
 				    [ pl.asMvJson() for pl in self.players  ],
-			'state': { False: "closed", True: "open" }[self.top_or_not_empty],
+			"state": { False: "closed", True: "open" }[self.top_or_not_empty],
 			}
 
 

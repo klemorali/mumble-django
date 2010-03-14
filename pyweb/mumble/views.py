@@ -236,21 +236,14 @@ def mobile_show( request, server ):
 
 
 
-def showTexture( request, server, userid = None ):
+def showTexture( request, server, userid ):
 	""" Pack the given user's texture into an HttpResponse.
 	
 	    If userid is none, use the currently logged in User.
 	"""
 	
-	srv  = get_object_or_404( Mumble, id=int(server) );
-	
-	if userid is None:
-		if request.user.is_authenticated():
-			user = get_object_or_404( MumbleUser, server=srv, owner=request.user );
-		else:
-			raise Http404();
-	else:
-		user = get_object_or_404( MumbleUser, server=srv, id=int(userid) );
+	srv  = get_object_or_404( Mumble,     id=int(server) );
+	user = get_object_or_404( MumbleUser, server=srv, id=int(userid) );
 	
 	try:
 		img  = user.getTexture();
