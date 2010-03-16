@@ -39,6 +39,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'pyweb.settings'
 # Uncomment this line to point the egg cache to /tmp.
 #os.environ['PYTHON_EGG_CACHE'] = '/tmp/pyeggs'
 
+import locale
 from django.conf   import settings
 from mumble.models import MumbleServer, Mumble
 
@@ -50,20 +51,25 @@ categ = getattr( settings, "MUNIN_CATEGORY", "network"      )
 
 def get_running_instances():
 	for server in MumbleServer.objects.all():
+		if not server.online:
+			continue
 		runinst = server.ctl.getBootedServers()
 		for inst in server.mumble_set.filter( srvid__in=runinst ):
 			yield inst
 
 
 if sys.argv[-1] == 'config':
+	prefenc = locale.getpreferredencoding()
+	
 	print "graph_vlabel Users"
 	print "graph_args --base 1000"
 	print "graph_title", title
 	print "graph_category", categ
 	
 	for mumble in get_running_instances():
-		print "srv%d.label %s" % ( mumble.id, mumble.name.replace( '#', '' ) );
-		print "srv%d.info %s"  % ( mumble.id, mumble.connecturl );
+		print "srv%d.label %s" % ( mumble.id, mumble.name.replace('#', '').encode(prefenc, "replace") );
+		if mumble.connecturl:
+			print "srv%d.info %s"  % ( mumble.id, mumble.connecturl );
 		if mumble.users:
 			print "srv%d.warning %d"  % ( mumble.id, int( mumble.users * warn ) );
 			print "srv%d.critical %d" % ( mumble.id, int( mumble.users * crit ) );
