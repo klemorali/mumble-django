@@ -25,11 +25,11 @@ from django.conf		import settings
 
 def cmp_channels( left, rite ):
 	""" Compare two channels, first by position, and if that equals, by name. """
-	byorder = cmp( left.position, rite.position );
-	if byorder != 0:
-		return byorder;
-	else:
-		return cmp_names( left, rite );
+	if hasattr( left, "position" ) and hasattr( rite, "position" ):
+		byorder = cmp( left.position, rite.position );
+		if byorder != 0:
+			return byorder;
+	return cmp_names( left, rite );
 
 def cmp_names( left, rite ):
 	""" Compare two objects by their name property. """
