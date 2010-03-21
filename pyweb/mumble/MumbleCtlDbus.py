@@ -125,9 +125,10 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 		ret = {};
 		
 		for channel in chans:
+			print channel;
 			ret[ channel[0] ] = ObjectInfo(
 				id     = int(channel[0]),
-				name   = str(channel[1]),
+				name   = unicode(channel[1]),
 				parent = int(channel[2]),
 				links  = [ int(lnk) for lnk in channel[3] ],
 				);
@@ -149,7 +150,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 				selfDeaf     = bool( playerObj[5] ),
 				channel      =  int( playerObj[6] ),
 				userid       =  int( playerObj[7] ),
-				name         =  str( playerObj[8] ),
+				name         = unicode( playerObj[8] ),
 				onlinesecs   =  int( playerObj[9] ),
 				bytespersec  =  int( playerObj[10] )
 				);
@@ -178,7 +179,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 				applySubs = bool(rule[1]),
 				inherited = bool(rule[2]),
 				userid    =  int(rule[3]),
-				group     =  str(rule[4]),
+				group     = unicode(rule[4]),
 				allow     =  int(rule[5]),
 				deny      =  int(rule[6]),
 				)
@@ -186,7 +187,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
 			];
 		
 		groups = [ ObjectInfo(
-				name        =  str(group[0]),
+				name        = unicode(group[0]),
 				inherited   = bool(group[1]),
 				inherit     = bool(group[2]),
 				inheritable = bool(group[3]),
