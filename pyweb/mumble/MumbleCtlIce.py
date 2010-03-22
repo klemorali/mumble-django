@@ -78,6 +78,11 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 	prx = ice.stringToProxy( connstring.encode("utf-8") )
 	
 	try:
+		prx.ice_ping()
+	except Ice.Exception:
+		raise EnvironmentError( "Murmur does not appear to be listening on this address (Ice ping failed)." )
+	
+	try:
 		import Murmur
 	except ImportError:
 		# Try loading the Slice from Murmur directly via its getSlice method.
