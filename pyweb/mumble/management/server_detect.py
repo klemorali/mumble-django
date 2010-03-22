@@ -62,7 +62,7 @@ def find_existing_instances( **kwargs ):
 			print "  2) ICE  -- Meta:tcp -h 127.0.0.1 -p 6502"
 			print "Enter 1 or 2 for the defaults above, nothing to skip Server detection,"
 			print "and if the defaults do not fit your needs, enter the correct string."
-			print "Whether to use DBus or ICE will be detected automatically from the"
+			print "Whether to use DBus or Ice will be detected automatically from the"
 			print "string's format."
 			print
 			
