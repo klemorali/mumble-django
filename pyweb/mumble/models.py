@@ -72,6 +72,7 @@ class MumbleServer( models.Model ):
 		models.Model.__init__( self, *args, **kwargs );
 		self._ctl  = None;
 		self._conf = None;
+		self._version = None;
 	
 	def __unicode__( self ):
 		return self.dbus;
@@ -139,6 +140,17 @@ class MumbleServer( models.Model ):
 	
 	online = property( isOnline )
 	defaultconf = property( getDefaultConf, doc="The default config dictionary." )
+	
+	def getVersion( self ):
+		""" Return the version of Murmur. """
+		if self._version is None:
+			self._version = self.ctl.getVersion()
+		return self._version
+	
+	version = property( getVersion )
+	
+	prettyversion = property( lambda self: '.'.join( map( str, self.version[:3] ) ),
+		doc="Pretty-Printed version" );
 
 
 class Mumble( models.Model ):
@@ -475,7 +487,7 @@ class Mumble( models.Model ):
 		if not self.netloc:
 			return None
 		from urlparse import urlunsplit
-		versionstr = "version=%d.%d.%d" % tuple(self.version[:3]);
+		versionstr = "version=%s" % self.prettyversion;
 		if forUser is not None:
 			netloc = "%s@%s" % ( forUser.name, self.netloc );
 			return urlunsplit(( "mumble", netloc, "", versionstr, "" ))
@@ -484,7 +496,8 @@ class Mumble( models.Model ):
 	
 	connecturl = property( getURL );
 	
-	version = property( lambda self: self.ctl.getVersion(), doc="The version of Murmur." );
+	version = property( lambda self: self.server.version, doc="The version of Murmur." );
+	prettyversion = property( lambda self: self.server.prettyversion );
 	
 	def asDict( self ):
 		return { 'name':   self.name,

@@ -22,7 +22,7 @@ from mumble.forms  import MumbleServerForm, MumbleAdminForm, MumbleUserAdminForm
 from mumble.models import MumbleServer, Mumble, MumbleUser
 
 class MumbleServerAdmin(admin.ModelAdmin):
-	list_display   = [ 'dbus', 'get_murmur_online' ]
+	list_display   = [ 'dbus', 'get_murmur_online', 'get_murmur_version' ]
 	search_fields  = [ 'dbus' ]
 	ordering       = [ 'dbus' ]
 	
@@ -33,6 +33,13 @@ class MumbleServerAdmin(admin.ModelAdmin):
 	
 	get_murmur_online.short_description = _('Master is running')
 	get_murmur_online.boolean = True
+	
+	def get_murmur_version( self, obj ):
+		if obj.online:
+			return obj.prettyversion
+		return "?"
+	
+	get_murmur_version.short_description = _("Server version")
 
 
 class MumbleAdmin(admin.ModelAdmin):
