@@ -124,7 +124,7 @@ class mmChannel( object ):
 		    mumble://username@host:port/parentchans/self.name
 		"""
 		from urlparse import urlunsplit
-		versionstr = "version=%d.%d.%d" % tuple(self.server.version[:3]);
+		versionstr = "version=%s" % self.server.prettyversion;
 		
 		if self.parent is not None:
 			chanlist = self.parent_channels() + [self.name];
