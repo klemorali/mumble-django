@@ -143,6 +143,12 @@
           {{ item.comment|removetags:"script link meta html head body style"|safe }}
         </fieldset>
       {% endif %}
+      {% if item.mumbleuser and item.mumbleuser.gravatar %}
+        <fieldset>
+          <legend>Gravatar</legend>
+          <img src="{{ item.mumbleuser.gravatar }}" alt="{{ item.name }}'s gravatar" />
+        </fieldset>
+      {% endif %}
       {% if item.mumbleuser and item.mumbleuser.hasTexture %}
         <fieldset>
           <legend>{% trans "User Texture" %}</legend>
