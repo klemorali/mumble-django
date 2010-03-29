@@ -58,6 +58,8 @@ from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
 
+# URL Template for constructing Gravatars.
+GRAVATAR_URL = 'http://www.gravatar.com/avatar/%(hash)s.jpg?d=monsterid&s=%(size)d'
 
 # The default connection string to set for newly created instances.
 # ICE:

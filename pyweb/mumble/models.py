@@ -566,6 +566,11 @@ class MumbleUser( models.Model ):
 	comment = mk_registration_property( "comment", doc=ugettext_noop("The user's comment.") );
 	hash    = mk_registration_property( "hash",    doc=ugettext_noop("The user's hash.")    );
 	
+	gravatar256 = property( lambda self: self.gravatarUrl( size=256 ) )
+	gravatar128 = property( lambda self: self.gravatarUrl( size=128 ) )
+	gravatar64  = property( lambda self: self.gravatarUrl( size=64  ) )
+	gravatar    = property( lambda self: self.gravatarUrl() )
+	
 	class Meta:
 		unique_together     = ( ( 'server', 'owner' ), ( 'server', 'mumbleid' ) );
 		verbose_name        = _( 'User account'  );
@@ -674,6 +679,18 @@ class MumbleUser( models.Model ):
 			return False;
 		else:
 			return True;
+	
+	def gravatarUrl( self, size=80 ):
+		""" Get a Gravatar URL for my owner's email adress (if any), or using the User's cert hash.
+		    The size parameter is optional, and defaults to 80 pixels (the default used by Gravatar
+		    if you omit this parameter in the URL).
+		"""
+		if self.owner and self.owner.email:
+			from hashlib import md5
+			return settings.GRAVATAR_URL % { 'hash': md5(self.owner.email).hexdigest(), 'size': size }
+		elif self.hash:
+			return settings.GRAVATAR_URL % { 'hash': self.hash, 'size': size }
+		return None
 	
 	def getTextureUrl( self ):
 		""" Get a URL under which the texture can be retrieved. """
