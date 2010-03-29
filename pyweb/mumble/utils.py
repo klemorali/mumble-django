@@ -28,3 +28,9 @@ class ObjectInfo( object ):
 	
 	def __unicode__( self ):
 		return unicode( self.__dict__ );
+	
+	def __contains__( self, name ):
+		return name in self.__dict__;
+	
+	def __getitem__( self, name ):
+		return self.__dict__[name];
