@@ -536,8 +536,8 @@ def mk_registration_property( field, doc="" ):
 	""" Create a property for the given registration field. """
 	
 	def get_field( self ):
-		if "comment" in self.registration:
-			return self.registration["comment"];
+		if field in self.registration:
+			return self.registration[field];
 		else:
 			return None;
 	
