@@ -15,7 +15,6 @@
 """
 
 import simplejson
-from urllib				import urlopen
 from StringIO				import StringIO
 from PIL				import Image
 
@@ -167,8 +166,7 @@ def show( request, server ):
 			textureform = MumbleTextureForm( request.POST, request.FILES );
 			if textureform.is_valid():
 				if 'usegravatar' in textureform.cleaned_data and textureform.cleaned_data['usegravatar'] and user.gravatar:
-					gravatar = urlopen( user.gravatar256 );
-					user.setTexture( Image.open( gravatar ) );
+					user.setTextureFromUrl( user.gravatar );
 				elif 'texturefile' in request.FILES:
 					user.setTexture( Image.open( request.FILES['texturefile'] ) );
 				return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );

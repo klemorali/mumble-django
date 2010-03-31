@@ -21,7 +21,8 @@
 ## The slice to use for communication over ZeroC Ice.          ##
 ## This must be set to the path to the Murmur.ice file that    ##
 ## resides in your Murmur directory.                           ##
-SLICE = '/usr/share/slice/Murmur.ice'                          ##
+SLICE = '/home/svedrin/murmur/Murmur.ice'
+#SLICE = '/usr/share/slice/Murmur.ice'                          ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
@@ -60,9 +61,11 @@ if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
 
 # URL Template for constructing Gravatars.
 GRAVATAR_URL = 'http://www.gravatar.com/avatar/%(hash)s.jpg?d=monsterid&s=%(size)d'
+# Automatically set the Gravatar as the user's avatar when creating new users?
+USE_GRAVATAR = True
 
 # The default connection string to set for newly created instances.
-# ICE:
+# Ice:
 DEFAULT_CONN = 'Meta:tcp -h 127.0.0.1 -p 6502'
 # DBus:
 #DEFAULT_CONN = 'net.sourceforge.mumble.murmur'
