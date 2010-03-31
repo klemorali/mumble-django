@@ -319,6 +319,7 @@ class MumbleKickForm( Form ):
 
 class MumbleTextureForm( Form ):
 	""" The form used to upload a new image to be set as texture. """
-	texturefile = forms.ImageField( label=_("User Texture") );
+	usegravatar = forms.BooleanField( required=False, label=_("Use my Gravatar as my Texture") );
+	texturefile = forms.ImageField(   required=False, label=_("User Texture") );
 
 

@@ -15,6 +15,7 @@
 """
 
 import simplejson
+from urllib				import urlopen
 from StringIO				import StringIO
 from PIL				import Image
 
@@ -165,7 +166,11 @@ def show( request, server ):
 		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'texture' and registered:
 			textureform = MumbleTextureForm( request.POST, request.FILES );
 			if textureform.is_valid():
-				user.setTexture( Image.open( request.FILES['texturefile'] ) );
+				if 'usegravatar' in textureform.cleaned_data and textureform.cleaned_data['usegravatar'] and user.gravatar:
+					gravatar = urlopen( user.gravatar256 );
+					user.setTexture( Image.open( gravatar ) );
+				elif 'texturefile' in request.FILES:
+					user.setTexture( Image.open( request.FILES['texturefile'] ) );
 				return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) );
 		else:
 			textureform = MumbleTextureForm();
@@ -175,12 +180,13 @@ def show( request, server ):
 		textureform = None;
 	
 	if isAdmin:
-		if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'kick':
-			kickform = MumbleKickForm( request.POST );
-			if kickform.is_valid():
-				if kickform.cleaned_data["ban"]:
-					srv.banUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
-				srv.kickUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
+		if request.method == 'POST' and 'mode' in request.POST:
+			if request.POST['mode'] == 'kick':
+				kickform = MumbleKickForm( request.POST );
+				if kickform.is_valid():
+					if kickform.cleaned_data["ban"]:
+						srv.banUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
+					srv.kickUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] );
 	
 	# ChannelTable is a somewhat misleading name, as it actually contains channels and players.
 	channelTable = [];
