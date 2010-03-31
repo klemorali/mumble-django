@@ -73,6 +73,12 @@
             You can upload an image that you would like to use as your user texture here.
           {% endblocktrans %}<br />
           <br />
+          <div float="right">
+            {% if MumbleAccount.gravatar %}
+              Gravatar:
+              <img src="{{ MumbleAccount.gravatar }}" alt="your gravatar" />
+            {% endif %}
+          </div>
           {% if MumbleAccount.hasTexture %}
             {% trans "Your current texture is" %}:<br />
             <img src="{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}" alt="user texture" /><br />
