@@ -15,7 +15,10 @@
 """
 
 import socket, Ice, re
-from sys import stderr
+from sys	import stderr
+from urllib	import urlopen
+from StringIO	import StringIO
+from PIL	import Image
 
 from django.utils.translation	import ugettext_noop, ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -621,6 +624,10 @@ class MumbleUser( models.Model ):
 		# Don't save the users' passwords, we don't need them anyway
 		self.password = '';
 		
+		# If enabled (and possible), set Gravatar as default Avatar
+		if settings.USE_GRAVATAR and self.gravatar:
+			self.setTextureFromUrl( self.gravatar )
+		
 		return models.Model.save( self );
 	
 	def __init__( self, *args, **kwargs ):
@@ -666,6 +673,11 @@ class MumbleUser( models.Model ):
 	def setTexture( self, image ):
 		""" Install the given image as the user's texture. """
 		self.server.ctl.setTexture(self.server.srvid, self.mumbleid, image)
+	
+	def setTextureFromUrl( self, url, transparency=None ):
+		""" Retrieve the image at the given URL and set it as my texture. """
+		img = Image.open( StringIO( urlopen( url ).read() ) )
+		self.setTexture( img )
 	
 	texture = property( getTexture, setTexture,
 		doc="Get the texture as a PIL Image or set the Image as the texture."
