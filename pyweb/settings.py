@@ -21,8 +21,7 @@
 ## The slice to use for communication over ZeroC Ice.          ##
 ## This must be set to the path to the Murmur.ice file that    ##
 ## resides in your Murmur directory.                           ##
-SLICE = '/home/svedrin/murmur/Murmur.ice'
-#SLICE = '/usr/share/slice/Murmur.ice'                          ##
+SLICE = '/usr/share/slice/Murmur.ice'                          ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
