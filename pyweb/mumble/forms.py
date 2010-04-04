@@ -81,7 +81,7 @@ class MumbleForm( PropertyModelForm ):
 	motd    = forms.CharField( required=False, widget=forms.Textarea )
 	passwd  = forms.CharField( required=False, help_text=_(
 		"Password required to join. Leave empty for public servers.") )
-	supw    = forms.CharField( required=False )
+	supw    = forms.CharField( required=False, widget=forms.PasswordInput )
 	obfsc   = forms.BooleanField( required=False, help_text=_(
 		"If on, IP adresses of the clients are not logged.") )
 	player  = forms.CharField( required=False )
