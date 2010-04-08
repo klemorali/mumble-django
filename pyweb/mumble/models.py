@@ -144,6 +144,15 @@ class MumbleServer( models.Model ):
 	online = property( isOnline )
 	defaultconf = property( getDefaultConf, doc="The default config dictionary." )
 	
+	def getDefaultPort( self ):
+		""" Return the default port configured on this server. """
+		if "port" in self.defaultconf:
+			return self.defaultconf['port']
+		else:
+			return settings.MUMBLE_DEFAULT_PORT
+	
+	defaultPort = property( getDefaultPort )
+	
 	def getVersion( self ):
 		""" Return the version of Murmur. """
 		if self._version is None:
@@ -254,7 +263,7 @@ class Mumble( models.Model ):
 		else:
 			self.ctl.setConf( self.srvid, 'host', '' );
 		
-		if self.port and self.port != settings.MUMBLE_DEFAULT_PORT + self.srvid - 1:
+		if self.port and self.port != self.server.defaultPort + self.srvid - 1:
 			self.ctl.setConf( self.srvid, 'port', str(self.port) );
 		else:
 			self.ctl.setConf( self.srvid, 'port', '' );
