@@ -31,6 +31,16 @@ from utils		import ObjectInfo
 import Ice, IcePy, tempfile
 
 
+def loadSlice( slicefile ):
+	""" Load the slice file with the correct include dir set, if possible. """
+	icepath = Ice.getSliceDir()
+	if not icepath:
+		# last resort, let's hope to christ this works (won't for >=1.2.3)
+		Ice.loadSlice( slicefile )
+	else:
+		Ice.loadSlice( '', ['-I' + icepath, slicefile ] )
+
+
 def protectDjangoErrPage( func ):
 	""" Catch and reraise Ice exceptions to prevent the Django page from failing.
 	
@@ -106,7 +116,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 				raise EnvironmentError( "The slice file name MUST end with '.ice'." )
 			
 			try:
-				Ice.loadSlice( slicefile )
+				loadSlice( slicefile )
 			except RuntimeError:
 				raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
 		else:
@@ -119,7 +129,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 				finally:
 					slicetemp.close()
 				try:
-					Ice.loadSlice( temppath )
+					loadSlice( temppath )
 				except RuntimeError:
 					raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
 				finally:
@@ -129,7 +139,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 				try:
 					slicetemp.write( slice )
 					slicetemp.flush()
-					Ice.loadSlice( slicetemp.name )
+					loadSlice( slicetemp.name )
 				except RuntimeError:
 					raise RuntimeError( "Slice preprocessing failed. Please check your server's error log." )
 				finally:
