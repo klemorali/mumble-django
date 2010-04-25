@@ -147,7 +147,7 @@ class MumbleServer( models.Model ):
 	def getDefaultPort( self ):
 		""" Return the default port configured on this server. """
 		if "port" in self.defaultconf:
-			return self.defaultconf['port']
+			return int(self.defaultconf['port'])
 		else:
 			return settings.MUMBLE_DEFAULT_PORT
 	
@@ -162,7 +162,7 @@ class MumbleServer( models.Model ):
 	version = property( getVersion )
 	
 	prettyversion = property( lambda self: '.'.join( map( str, self.version[:3] ) ),
-		doc="Pretty-Printed version" );
+		doc="Pretty-Printed version" )
 
 
 class Mumble( models.Model ):
