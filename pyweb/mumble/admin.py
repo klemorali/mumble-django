@@ -67,7 +67,7 @@ class MumbleAdmin(admin.ModelAdmin):
 	
 	def get_port( self, obj ):
 		if not obj.port:
-			return "< %d >" % (settings.MUMBLE_DEFAULT_PORT + obj.srvid - 1)
+			return '< %d >' % (obj.server.defaultPort + obj.srvid - 1)
 		return obj.port
 	
 	get_port.short_description = _('Server Port')
