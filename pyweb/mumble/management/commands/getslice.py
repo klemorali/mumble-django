@@ -34,7 +34,7 @@ class Command( BaseCommand ):
 		ice = Ice.initialize(idd)
 		
 		for serv in MumbleServer.objects.all():
-			print "Probing server at '%s'..." % serv.dbus
+			print >>stderr, "Probing server at '%s'..." % serv.dbus
 			
 			if serv.secret:
 				ice.getImplicitContext().put( "secret", serv.secret.encode("utf-8") )
@@ -48,9 +48,10 @@ class Command( BaseCommand ):
 					True, (), (), (), IcePy._t_string, ()
 					).invoke(prx, ((), None))
 			except TypeError, err:
-				print "  Received TypeError:", err
-				print "  It seems your version of IcePy is incompatible."
+				print >>stderr, "  Received TypeError:", err
+				print >>stderr, "  It seems your version of IcePy is incompatible."
 			except Ice.OperationNotExistException:
-				print "  Your version of Murmur does not support getSlice."
+				print >>stderr, "  Your version of Murmur does not support getSlice."
 			else:
-				print "  Successfully received the slice (length: %d bytes.)" % len(slice)
+				print slice
+				print >>stderr, "  Successfully received the slice (length: %d bytes.)" % len(slice)
