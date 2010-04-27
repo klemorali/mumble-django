@@ -2,6 +2,15 @@
 Mumble-Django changelog
 =======================
 
+Version 2.1, 27 Apr 2010:
+------------------------------
+* Fixed a few encoding issues in the Munin plugin and the DBus Ctls.
+* Ping Murmur to see if it is actually reachable before trying to connect.
+* Imrove performance by caching the server version, which is used a few times
+  when loading the page.
+* Add displaying Gravatars and setting them as the default avatar.
+* Add reading the default port from the server's default config where appropriate.
+
 Version 2.0, 14 Mar 2010:
 ------------------------------
 * Prevent unwanted erasing of the supw and defaultchannel fields.
