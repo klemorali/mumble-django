@@ -17,3 +17,7 @@
 def installed_apps(request):
 	from django.conf import settings
 	return { 'ROSETTA_INSTALLED': "rosetta" in settings.INSTALLED_APPS }
+
+def mumble_version(request):
+	from mumble import version_str
+	return { 'CURRENTVERSION': version_str }

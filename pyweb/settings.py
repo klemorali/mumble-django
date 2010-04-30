@@ -206,6 +206,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
 	'processors.installed_apps',
+	'processors.mumble_version',
 )
 
 TEST_RUNNER = 'mumble.testrunner.run_tests'
