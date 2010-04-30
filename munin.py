@@ -54,7 +54,7 @@ def get_running_instances():
 		if not server.online:
 			continue
 		runinst = server.ctl.getBootedServers()
-		for inst in server.mumble_set.filter( srvid__in=runinst ):
+		for inst in server.mumble_set.order_by("srvid").filter( srvid__in=runinst ):
 			yield inst
 
 
