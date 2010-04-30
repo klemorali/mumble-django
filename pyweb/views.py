@@ -35,6 +35,8 @@ def profile( request ):
 
 
 def imprint( request ):
+	import mumble
 	return render_to_response(
 		'registration/imprint.html',
+		{ 'upstreamversion': mumble.getLatestUpstreamVersion() },
 		context_instance = RequestContext(request) );

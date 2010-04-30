@@ -12,3 +12,33 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
 """
+
+version = { 'major': 2, 'minor': 2, 'beta': None }
+
+if version['beta']:
+	version_str = "v%(major)d.%(minor)dbeta%(beta)d" % version
+else:
+	version_str = "v%(major)d.%(minor)d" % version
+
+def getVersions():
+	""" Generator that yields all available upstream versions. """
+	url = 'http://bitbucket.org/Svedrin/mumble-django/raw/tip/.hgtags'
+	from urllib2 import urlopen
+	webtags = urlopen(url)
+	try:
+		while True:
+			line = webtags.readline().strip()
+			if not line:
+				raise StopIteration
+			_, version = line.split(' ')
+			yield version
+	finally:
+		webtags.close()
+
+def getLatestUpstreamVersion():
+	""" Return the latest version available upstream. """
+	return max(getVersions())
+
+def isUptodate():
+	""" Check if this version of Mumble-Django is the latest available. """
+	return version_str >= getLatestUpstreamVersion()
