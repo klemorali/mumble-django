@@ -16,7 +16,7 @@ Version 2.0, 14 Mar 2010:
 * Prevent unwanted erasing of the supw and defaultchannel fields.
 * Review syncdb verbosity levels to display messages in a sensible context.
 * Order servers by name in the server list, and display a helpful message
-  when none have been entered into the db
+  when none have been entered into the db.
 * Improve the way MD handles servers being offline, unavailable modules and
   configuration issues.
 * Add XML and JSON data sources for Mumbleviewer-ng:
