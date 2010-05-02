@@ -276,8 +276,12 @@ class Mumble( models.Model ):
 		
 		self.ctl.setConf( self.srvid, 'registername', self.name );
 		
-		if self.addr and self.addr != '0.0.0.0':
-			self.ctl.setConf( self.srvid, 'host', get_ipv46_str_by_name(self.addr) );
+		if self.addr:
+			if " " in self.addr:
+				# user gave multiple addresses, don't mess with that
+				self.ctl.setConf( self.srvid, 'host', self.addr );
+			else:
+				self.ctl.setConf( self.srvid, 'host', get_ipv46_str_by_name(self.addr) );
 		else:
 			self.ctl.setConf( self.srvid, 'host', '' );
 		
@@ -502,6 +506,8 @@ class Mumble( models.Model ):
 				return self.display;
 			else:
 				daddr = self.display;
+		elif " " in self.addr:
+			daddr = self.addr.split(" ")[0];
 		else:
 			daddr = self.addr;
 		
