@@ -121,6 +121,7 @@ class MumbleAdminForm( MumbleForm ):
     """ A Mumble Server admin form intended to be used by the server hoster. """
 
     users    = forms.IntegerField( required=False )
+    usersperchannel = forms.IntegerField( required=False )
     bwidth   = forms.IntegerField( required=False )
     sslcrt   = forms.CharField( required=False, widget=forms.Textarea )
     sslkey   = forms.CharField( required=False, widget=forms.Textarea )
