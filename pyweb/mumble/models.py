@@ -30,6 +30,23 @@ from mumble.mmobjects		import mmChannel, mmPlayer
 from mumble.mctl		import MumbleCtlBase
 
 
+def get_ipv46_host_by_name( hostname ):
+	""" Resolve the given hostname and return both its IPv4 and IPv6 address,
+	    if applicable. Returns: { AF_INET: inet4address, AF_INET6: inet6address }.
+	    For addresses that don't exist, the corresponding field will be None.
+	"""
+	addrinfo = socket.getaddrinfo( hostname, settings.MUMBLE_DEFAULT_PORT )
+	ret = {}
+	for (family, socktype, proto, canonname, sockaddr) in addrinfo:
+		if family not in ret:
+			ret[family] = sockaddr[0]
+	return ret
+
+def get_ipv46_str_by_name( hostname, sep=" " ):
+	""" Return a space-separated string of all addresses the given hostname resolves to. """
+	return sep.join( get_ipv46_host_by_name( hostname ).values() )
+
+
 def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerce=unicode, set_none='' ):
 	""" Create a property for the given config field. """
 	
@@ -209,6 +226,7 @@ class Mumble( models.Model ):
 	channel = mk_config_property( "channelname",		ugettext_noop("Channel name regex") )
 	defchan = mk_config_property( "defaultchannel", 	ugettext_noop("Default channel"),	get_coerce=int )
 	timeout = mk_config_property( "timeout",		ugettext_noop("Timeout"),		get_coerce=int )
+	#usersperchannel
 	
 	obfsc   = mk_config_bool_property( "obfuscate",         ugettext_noop("IP Obfuscation") )
 	certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
@@ -259,7 +277,7 @@ class Mumble( models.Model ):
 		self.ctl.setConf( self.srvid, 'registername', self.name );
 		
 		if self.addr and self.addr != '0.0.0.0':
-			self.ctl.setConf( self.srvid, 'host', socket.gethostbyname(self.addr) );
+			self.ctl.setConf( self.srvid, 'host', get_ipv46_str_by_name(self.addr) );
 		else:
 			self.ctl.setConf( self.srvid, 'host', '' );
 		
@@ -331,7 +349,7 @@ class Mumble( models.Model ):
 		
 		if regname and addr:
 			if regport == self.port:
-				if socket.gethostbyname(regname) == socket.gethostbyname(addr):
+				if get_ipv46_str_by_name(regname) == get_ipv46_str_by_name(addr):
 					self.display = ''
 					self.addr = regname
 				else:
