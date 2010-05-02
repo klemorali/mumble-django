@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
  *  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -14,8 +15,8 @@
  *  GNU General Public License for more details.
 """
 
-from django.core.management.commands.shell	import Command as OrigCommand
-from mumble.murmurenvutils			import MumbleCommandWrapper_noargs
+from django.core.management.commands.shell    import Command as OrigCommand
+from mumble.murmurenvutils            import MumbleCommandWrapper_noargs
 
 class Command( MumbleCommandWrapper_noargs, OrigCommand ):
-	pass
+    pass

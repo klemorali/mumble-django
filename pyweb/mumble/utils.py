@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
  *  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -15,22 +16,22 @@
 """
 
 class ObjectInfo( object ):
-	""" Wraps arbitrary information to be easily accessed. """
-	
-	def __init__( self, **kwargs ):
-		self.__dict__ = kwargs;
-	
-	def __str__( self ):
-		return unicode( self );
-	
-	def __repr__( self ):
-		return unicode( self );
-	
-	def __unicode__( self ):
-		return unicode( self.__dict__ );
-	
-	def __contains__( self, name ):
-		return name in self.__dict__;
-	
-	def __getitem__( self, name ):
-		return self.__dict__[name];
+    """ Wraps arbitrary information to be easily accessed. """
+
+    def __init__( self, **kwargs ):
+        self.__dict__ = kwargs
+
+    def __str__( self ):
+        return unicode( self )
+
+    def __repr__( self ):
+        return unicode( self )
+
+    def __unicode__( self ):
+        return unicode( self.__dict__ )
+
+    def __contains__( self, name ):
+        return name in self.__dict__
+
+    def __getitem__( self, name ):
+        return self.__dict__[name]

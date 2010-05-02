@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
  *  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -17,41 +18,41 @@
 import Ice, IcePy, os, getpass
 from sys import stderr
 
-from django.core.management.base	import BaseCommand
+from django.core.management.base    import BaseCommand
 
-from mumble.models			import MumbleServer
+from mumble.models            import MumbleServer
 
 class Command( BaseCommand ):
-	help =  "Check if the known servers support getSlice."
-	
-	def handle(self, **options):
-		prop = Ice.createProperties([])
-		prop.setProperty("Ice.ImplicitContext", "Shared")
-		
-		idd = Ice.InitializationData()
-		idd.properties = prop
-		
-		ice = Ice.initialize(idd)
-		
-		for serv in MumbleServer.objects.all():
-			print >>stderr, "Probing server at '%s'..." % serv.dbus
-			
-			if serv.secret:
-				ice.getImplicitContext().put( "secret", serv.secret.encode("utf-8") )
-			
-			prx = ice.stringToProxy( serv.dbus.encode("utf-8") )
-			
-			# Try loading the Slice from Murmur directly via its getSlice method.
-			try:
-				slice = IcePy.Operation( 'getSlice',
-					Ice.OperationMode.Idempotent, Ice.OperationMode.Idempotent,
-					True, (), (), (), IcePy._t_string, ()
-					).invoke(prx, ((), None))
-			except TypeError, err:
-				print >>stderr, "  Received TypeError:", err
-				print >>stderr, "  It seems your version of IcePy is incompatible."
-			except Ice.OperationNotExistException:
-				print >>stderr, "  Your version of Murmur does not support getSlice."
-			else:
-				print slice
-				print >>stderr, "  Successfully received the slice (length: %d bytes.)" % len(slice)
+    help =  "Check if the known servers support getSlice."
+
+    def handle(self, **options):
+        prop = Ice.createProperties([])
+        prop.setProperty("Ice.ImplicitContext", "Shared")
+
+        idd = Ice.InitializationData()
+        idd.properties = prop
+
+        ice = Ice.initialize(idd)
+
+        for serv in MumbleServer.objects.all():
+            print >>stderr, "Probing server at '%s'..." % serv.dbus
+
+            if serv.secret:
+                ice.getImplicitContext().put( "secret", serv.secret.encode("utf-8") )
+
+            prx = ice.stringToProxy( serv.dbus.encode("utf-8") )
+
+            # Try loading the Slice from Murmur directly via its getSlice method.
+            try:
+                slice = IcePy.Operation( 'getSlice',
+                    Ice.OperationMode.Idempotent, Ice.OperationMode.Idempotent,
+                    True, (), (), (), IcePy._t_string, ()
+                    ).invoke(prx, ((), None))
+            except TypeError, err:
+                print >>stderr, "  Received TypeError:", err
+                print >>stderr, "  It seems your version of IcePy is incompatible."
+            except Ice.OperationNotExistException:
+                print >>stderr, "  Your version of Murmur does not support getSlice."
+            else:
+                print slice
+                print >>stderr, "  Successfully received the slice (length: %d bytes.)" % len(slice)

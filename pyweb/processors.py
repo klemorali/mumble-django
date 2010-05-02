@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
  *  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -15,9 +16,9 @@
 """
 
 def installed_apps(request):
-	from django.conf import settings
-	return { 'ROSETTA_INSTALLED': "rosetta" in settings.INSTALLED_APPS }
+    from django.conf import settings
+    return { 'ROSETTA_INSTALLED': "rosetta" in settings.INSTALLED_APPS }
 
 def mumble_version(request):
-	from mumble import version_str
-	return { 'CURRENTVERSION': version_str }
+    from mumble import version_str
+    return { 'CURRENTVERSION': version_str }
