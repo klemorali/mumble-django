@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 # Django settings for mumble_django project.
 
 """
@@ -56,7 +57,7 @@ MUMBLE_DJANGO_ROOT = None                                      ##
 
 from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
-	MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)));
+    MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 
 # URL Template for constructing Gravatars.
 GRAVATAR_URL = 'http://www.gravatar.com/avatar/%(hash)s.jpg?d=monsterid&s=%(size)d'
@@ -95,8 +96,8 @@ PROTECTED_MODE = False
 # stolen they could easily take over the server. (So make sure the password can't be easily
 # guessed, use at least over 9000 letters, blah blah.)
 # This feature is only available if PROTECTED_MODE is not active.
-ALLOW_ACCOUNT_LINKING = True		# Allow linking in general?
-ALLOW_ACCOUNT_LINKING_ADMINS = False	# Allow linking for Admin accounts?
+ALLOW_ACCOUNT_LINKING = True        # Allow linking in general?
+ALLOW_ACCOUNT_LINKING_ADMINS = False    # Allow linking for Admin accounts?
 
 # Warning and Critical levels for the Munin plugin. These will be multiplied with the
 # server instance's slot count to calculate the real levels.
@@ -155,85 +156,85 @@ MEDIA_URL = MUMBLE_DJANGO_URL+'static/'
 ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
 
 # URL to the login view
-LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login';
-LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile';
+LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
+LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile'
 
 
 # Automatically generate a .secret.txt file containing the SECRET_KEY.
 # Shamelessly stolen from ByteFlow: <http://www.byteflow.su>
 try:
-	SECRET_KEY
+    SECRET_KEY
 except NameError:
-	SECRET_FILE = join(MUMBLE_DJANGO_ROOT, '.secret.txt')
-	try:
-		SECRET_KEY = open(SECRET_FILE).read().strip()
-	except IOError:
-		try:
-			from random import choice
-			SECRET_KEY = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
-			secret = file(SECRET_FILE, 'w')
-			secret.write(SECRET_KEY)
-			secret.close()
-		except IOError:
-			Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
+    SECRET_FILE = join(MUMBLE_DJANGO_ROOT, '.secret.txt')
+    try:
+        SECRET_KEY = open(SECRET_FILE).read().strip()
+    except IOError:
+        try:
+            from random import choice
+            SECRET_KEY = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+            secret = file(SECRET_FILE, 'w')
+            secret.write(SECRET_KEY)
+            secret.close()
+        except IOError:
+            Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
 
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-	'django.template.loaders.filesystem.load_template_source',
-	'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.app_directories.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
-	'django.middleware.common.CommonMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.locale.LocaleMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'pyweb.urls'
 
 TEMPLATE_DIRS = (
-	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-	# Always use forward slashes, even on Windows.
-	# Don't forget to use absolute paths, not relative paths.
-	join( MUMBLE_DJANGO_ROOT, 'pyweb', 'templates' ),
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    join( MUMBLE_DJANGO_ROOT, 'pyweb', 'templates' ),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-	"django.core.context_processors.auth",
-	"django.core.context_processors.debug",
-	"django.core.context_processors.i18n",
-	"django.core.context_processors.media",
-	'processors.installed_apps',
-	'processors.mumble_version',
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    'processors.installed_apps',
+    'processors.mumble_version',
 )
 
 TEST_RUNNER = 'mumble.testrunner.run_tests'
-TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' );
-TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' );
+TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' )
+TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' )
 
-CONVERSIONSQL_ROOT = join( MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql" );
+CONVERSIONSQL_ROOT = join( MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql" )
 
 INSTALLED_APPS = [
-	'django.contrib.auth',
-	'django.contrib.admin',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.sites',
-	'registration',
-	'mumble',
+    'django.contrib.auth',
+    'django.contrib.admin',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'registration',
+    'mumble',
 ]
 
 
 def modprobe( name ):
-	""" Try to import the named module, and if that works add it to INSTALLED_APPS. """
-	try:
-		__import__( name )
-	except ImportError:
-		pass
-	else:
-		INSTALLED_APPS.append( name )
+    """ Try to import the named module, and if that works add it to INSTALLED_APPS. """
+    try:
+        __import__( name )
+    except ImportError:
+        pass
+    else:
+        INSTALLED_APPS.append( name )
 
 # Check if rosetta is available.
 #    http://code.google.com/p/django-rosetta

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
  *  Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
@@ -14,29 +15,29 @@
  *  GNU General Public License for more details.
 """
 
-from django.shortcuts			import render_to_response
-from django.template			import RequestContext
-from django.contrib.auth.decorators	import login_required
+from django.shortcuts            import render_to_response
+from django.template            import RequestContext
+from django.contrib.auth.decorators    import login_required
 
-from mumble.models			import MumbleUser
+from mumble.models            import MumbleUser
 
 @login_required
 def profile( request ):
-	userdata = {
-		"ProfileActive": True,
-		"mumbleaccs":	MumbleUser.objects.filter(	owner  = request.user ),
-		};
-	
-	return render_to_response(
-		'registration/profile.html',
-		userdata,
-		context_instance = RequestContext(request)
-		);
+    userdata = {
+        "ProfileActive": True,
+        "mumbleaccs":    MumbleUser.objects.filter(    owner  = request.user ),
+        }
+
+    return render_to_response(
+        'registration/profile.html',
+        userdata,
+        context_instance = RequestContext(request)
+        )
 
 
 def imprint( request ):
-	import mumble
-	return render_to_response(
-		'registration/imprint.html',
-		{ 'upstreamversion': mumble.getLatestUpstreamVersion() },
-		context_instance = RequestContext(request) );
+    import mumble
+    return render_to_response(
+        'registration/imprint.html',
+        { 'upstreamversion': mumble.getLatestUpstreamVersion() },
+        context_instance = RequestContext(request) )
