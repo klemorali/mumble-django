@@ -255,6 +255,11 @@ class Mumble( models.Model ):
     booted  = property( getBooted, setBooted, doc=ugettext_noop("Boot Server") )
     online  = property( getBooted, setBooted, doc=ugettext_noop("Boot Server") )
 
+    defaultPort = property( lambda self: self.server.defaultPort + self.srvid - 1,
+        doc="Default port for this server instance" )
+    boundPort   = property( lambda self: self.port or self.defaultPort,
+        doc="The port that this instance actually binds to" )
+
     class Meta:
         unique_together     = ( ( 'server', 'srvid' ), )
         verbose_name        = _('Server instance')
@@ -286,7 +291,7 @@ class Mumble( models.Model ):
         else:
             self.ctl.setConf( self.srvid, 'host', '' )
 
-        if self.port and self.port != self.server.defaultPort + self.srvid - 1:
+        if self.port and self.port != self.defaultPort:
             self.ctl.setConf( self.srvid, 'port', str(self.port) )
         else:
             self.ctl.setConf( self.srvid, 'port', '' )
@@ -503,17 +508,24 @@ class Mumble( models.Model ):
             to this server instance.
         """
         if self.display:
-            if ":" in self.display:
+            # Find out if this is a sensible address *with port*.
+            # Regex checks for (hostname OR [ipv6] OR ipv4):port.
+            if re.match( r'^([^:]+|\[[\da-fA-F]{0,4}(:[\da-fA-F]{0,4})+\]|\d{1,3}(\.\d{1,3}){3}):\d{1,5}$', self.display):
                 return self.display
             else:
                 daddr = self.display
         elif " " in self.addr:
+            # If Murmur binds to multiple addresses, use the first
             daddr = self.addr.split(" ")[0]
         else:
             daddr = self.addr
 
-        if self.port and self.port != settings.MUMBLE_DEFAULT_PORT:
-            return "%s:%d" % (daddr, self.port)
+        if ":" in daddr:
+            # []-escape IPv6 addresses
+            daddr = "[%s]" % daddr
+
+        if self.boundPort != settings.MUMBLE_DEFAULT_PORT:
+            return "%s:%d" % (daddr, self.boundPort)
         else:
             return daddr
 
