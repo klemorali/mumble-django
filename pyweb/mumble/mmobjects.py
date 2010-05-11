@@ -152,14 +152,14 @@ class mmChannel( object ):
         doc="True if this channel is the server's default channel."
         )
 
-    def asDict( self ):
+    def asDict( self, authed=False ):
         chandata = self.channel_obj.__dict__.copy()
-        chandata['users']        = [ pl.asDict() for pl in self.players  ]
-        chandata['channels']     = [ sc.asDict() for sc in self.subchans ]
+        chandata['users']        = [ pl.asDict( authed ) for pl in self.players  ]
+        chandata['channels']     = [ sc.asDict( authed ) for sc in self.subchans ]
         chandata['x-connecturl'] = self.connecturl
         return chandata
 
-    def asXml( self, parentnode ):
+    def asXml( self, parentnode, authed=False ):
         from xml.etree.cElementTree import SubElement
         me = SubElement( parentnode, "channel" )
         for key in self.channel_obj.__dict__:
@@ -176,9 +176,9 @@ class mmChannel( object ):
         me.set( "x-connecturl", self.connecturl )
 
         for sc in self.subchans:
-            sc.asXml(me)
+            sc.asXml(me, authed)
         for pl in self.players:
-            pl.asXml(me)
+            pl.asXml(me, authed)
 
     def asMvXml( self, parentnode ):
         """ Return an XML tree for this channel suitable for MumbleViewer-ng. """
@@ -284,17 +284,20 @@ class mmPlayer( object ):
         """ Call callback on myself. """
         callback( self, lvl )
 
-    def asDict( self ):
+    def asDict( self, authed=False ):
         pldata = self.player_obj.__dict__.copy()
-        pldata["x-addrstring"] = self.ipaddress
 
-        if self.mumbleuser:
-            if self.mumbleuser.hasTexture():
-                pldata['x-texture'] = self.mumbleuser.textureUrl
+        if authed:
+            pldata["x-addrstring"] = self.ipaddress
+        else:
+            del pldata["address"]
+
+        if self.mumbleuser and self.mumbleuser.hasTexture():
+            pldata['x-texture'] = self.mumbleuser.textureUrl
 
         return pldata
 
-    def asXml( self, parentnode ):
+    def asXml( self, parentnode, authed=False ):
         from xml.etree.cElementTree import SubElement
         me = SubElement( parentnode, "user" )
         for key in self.player_obj.__dict__:
@@ -308,10 +311,12 @@ class mmPlayer( object ):
             else:
                 me.set( key, unicode(val) )
 
-        me.set( "x-addrstring", self.ipaddress )
+        if authed:
+            me.set( "x-addrstring", self.ipaddress )
+        else:
+            me.set( "address", "" )
 
-        if self.mumbleuser:
-            if self.mumbleuser.hasTexture():
+        if self.mumbleuser and self.mumbleuser.hasTexture():
                 me.set( 'x-texture', self.mumbleuser.textureUrl )
 
     def asMvXml( self, parentnode ):
