@@ -403,6 +403,7 @@ def cvp_xml( request, server ):
     from xml.etree.cElementTree import tostring as xml_to_string
     srv = get_object_or_404( Mumble, id=int(server) )
     return HttpResponse(
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+\
         xml_to_string( srv.asXml(), encoding='utf-8' ),
         mimetype='text/xml'
         )
