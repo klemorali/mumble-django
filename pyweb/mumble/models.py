@@ -16,19 +16,19 @@
 """
 
 import socket, Ice, re
-from sys    import stderr
+from sys       import stderr
 from urllib    import urlopen
-from StringIO    import StringIO
-from PIL    import Image
+from StringIO  import StringIO
+from PIL       import Image
 
-from django.utils.translation    import ugettext_noop, ugettext_lazy as _
+from django.utils.translation   import ugettext_noop, ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.db            import models
-from django.db.models        import signals
-from django.conf        import settings
+from django.db                  import models
+from django.db.models           import signals
+from django.conf                import settings
 
-from mumble.mmobjects        import mmChannel, mmPlayer
-from mumble.mctl        import MumbleCtlBase
+from mumble.mmobjects import mmChannel, mmPlayer
+from mumble.mctl      import MumbleCtlBase
 
 
 def get_ipv46_host_by_name( hostname ):
@@ -36,7 +36,7 @@ def get_ipv46_host_by_name( hostname ):
         if applicable. Returns: { AF_INET: inet4address, AF_INET6: inet6address }.
         For addresses that don't exist, the corresponding field will be None.
     """
-    addrinfo = socket.getaddrinfo( hostname, settings.MUMBLE_DEFAULT_PORT )
+    addrinfo = socket.getaddrinfo( hostname, settings.MUMBLE_DEFAULT_PORT, 0, socket.SOCK_DGRAM )
     ret = {}
     for (family, socktype, proto, canonname, sockaddr) in addrinfo:
         if family not in ret:
@@ -551,8 +551,16 @@ class Mumble( models.Model ):
     def asDict( self ):
         return { 'name':   self.name,
              'id':     self.id,
-             'root':   self.rootchan.asDict()
+             'root':   self.rootchan.asDict(),
+             'x-connecturl': self.connecturl
             }
+
+    def asXml( self ):
+        from xml.etree.cElementTree import Element
+        root = Element( "server", id=unicode(self.id), name=self.name )
+        root.set( 'x-connecturl', self.connecturl )
+        self.rootchan.asXml(root)
+        return root
 
     def asMvXml( self ):
         """ Return an XML tree for this server suitable for MumbleViewer-ng. """
