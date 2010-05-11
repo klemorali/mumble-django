@@ -28,7 +28,7 @@ def trunc( string, maxlen = 50 ):
     """ converts "a very very extaordinary long text" to "a very very extra... """
     if len(string) < maxlen:
         return string
-    return string[:(maxlen - 3)] + "…"
+    return string[:(maxlen - 1)] + u"…"
 
 
 @register.filter
