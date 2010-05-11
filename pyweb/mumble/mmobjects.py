@@ -163,7 +163,15 @@ class mmChannel( object ):
         from xml.etree.cElementTree import SubElement
         me = SubElement( parentnode, "channel" )
         for key in self.channel_obj.__dict__:
-            me.set( key, unicode( getattr( self.channel_obj, key ) ) )
+            val = getattr( self.channel_obj, key )
+            if   isinstance( val, bool ):
+                me.set( key, unicode(val).lower() )
+            elif isinstance( val, list ) or isinstance( val, tuple ):
+                me.set( key, ','.join( ( unicode(elem) for elem in val ) ) )
+            elif isinstance( val, str ):
+                me.set( key, unicode(val, "utf8").lower() )
+            else:
+                me.set( key, unicode(val) )
 
         me.set( "x-connecturl", self.connecturl )
 
@@ -290,9 +298,17 @@ class mmPlayer( object ):
         from xml.etree.cElementTree import SubElement
         me = SubElement( parentnode, "user" )
         for key in self.player_obj.__dict__:
-            me.set( key, unicode( getattr( self.player_obj, key ) ) )
+            val = getattr( self.player_obj, key )
+            if   isinstance( val, bool ):
+                me.set( key, unicode(val).lower() )
+            elif isinstance( val, list ) or isinstance( val, tuple ):
+                me.set( key, ','.join( ( unicode(elem) for elem in val ) ) )
+            elif isinstance( val, str ):
+                me.set( key, unicode(val, "utf8").lower() )
+            else:
+                me.set( key, unicode(val) )
 
-        me.set("x-addrstring", self.ipaddress )
+        me.set( "x-addrstring", self.ipaddress )
 
         if self.mumbleuser:
             if self.mumbleuser.hasTexture():
