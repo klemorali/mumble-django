@@ -378,6 +378,24 @@ def mmng_tree( request, server ):
         )
 
 
+def cvp_checkauth( request, srv ):
+    """ Check if the user is allowed to see private fields. """
+    # http://www.djangosnippets.org/snippets/243/
+    if srv.isUserAdmin( request.user ):
+        return True
+    if 'HTTP_AUTHORIZATION' in request.META:
+        auth = request.META['HTTP_AUTHORIZATION'].split()
+        if len(auth) == 2:
+            # NOTE: We only support basic authentication for now.
+            if auth[0].lower() == "basic":
+                import base64
+                from django.contrib.auth import authenticate
+                uname, passwd = base64.b64decode(auth[1]).split(':')
+                user = authenticate(username=uname, password=passwd)
+                if user is not None and user.is_active and srv.isUserAdmin( user ):
+                    return True
+    return False
+
 def cvp_json( request, server ):
     """ JSON reference implementation for the Channel Viewer Protocol.
 
@@ -391,7 +409,7 @@ def cvp_json( request, server ):
         prefix = ""
 
     return HttpResponse(
-        prefix + "(" + simplejson.dumps( srv.asDict() ) + ")",
+        prefix + "(" + simplejson.dumps( srv.asDict( cvp_checkauth( request, srv ) ) ) + ")",
         mimetype='text/javascript'
         )
 
@@ -404,7 +422,7 @@ def cvp_xml( request, server ):
     srv = get_object_or_404( Mumble, id=int(server) )
     return HttpResponse(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+\
-        xml_to_string( srv.asXml(), encoding='utf-8' ),
+        xml_to_string( srv.asXml( cvp_checkauth( request, srv ) ), encoding='utf-8' ),
         mimetype='text/xml'
         )
 

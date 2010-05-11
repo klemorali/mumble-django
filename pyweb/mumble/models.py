@@ -548,18 +548,18 @@ class Mumble( models.Model ):
     version = property( lambda self: self.server.version, doc="The version of Murmur." )
     prettyversion = property( lambda self: self.server.prettyversion )
 
-    def asDict( self ):
+    def asDict( self, authed=False ):
         return { 'name':   self.name,
              'id':     self.id,
-             'root':   self.rootchan.asDict(),
+             'root':   self.rootchan.asDict( authed ),
              'x-connecturl': self.connecturl
             }
 
-    def asXml( self ):
+    def asXml( self, authed=False ):
         from xml.etree.cElementTree import Element
         root = Element( "server", id=unicode(self.id), name=self.name )
         root.set( 'x-connecturl', self.connecturl )
-        self.rootchan.asXml(root)
+        self.rootchan.asXml( root, authed )
         return root
 
     def asMvXml( self ):
