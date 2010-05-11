@@ -154,9 +154,23 @@ class mmChannel( object ):
 
     def asDict( self ):
         chandata = self.channel_obj.__dict__.copy()
-        chandata['players']  = [ pl.asDict() for pl in self.players  ]
-        chandata['subchans'] = [ sc.asDict() for sc in self.subchans ]
+        chandata['users']        = [ pl.asDict() for pl in self.players  ]
+        chandata['channels']     = [ sc.asDict() for sc in self.subchans ]
+        chandata['x-connecturl'] = self.connecturl
         return chandata
+
+    def asXml( self, parentnode ):
+        from xml.etree.cElementTree import SubElement
+        me = SubElement( parentnode, "channel" )
+        for key in self.channel_obj.__dict__:
+            me.set( key, unicode( getattr( self.channel_obj, key ) ) )
+
+        me.set( "x-connecturl", self.connecturl )
+
+        for sc in self.subchans:
+            sc.asXml(me)
+        for pl in self.players:
+            pl.asXml(me)
 
     def asMvXml( self, parentnode ):
         """ Return an XML tree for this channel suitable for MumbleViewer-ng. """
@@ -264,12 +278,25 @@ class mmPlayer( object ):
 
     def asDict( self ):
         pldata = self.player_obj.__dict__.copy()
+        pldata["x-addrstring"] = self.ipaddress
 
         if self.mumbleuser:
             if self.mumbleuser.hasTexture():
-                pldata['texture'] = self.mumbleuser.textureUrl
+                pldata['x-texture'] = self.mumbleuser.textureUrl
 
         return pldata
+
+    def asXml( self, parentnode ):
+        from xml.etree.cElementTree import SubElement
+        me = SubElement( parentnode, "user" )
+        for key in self.player_obj.__dict__:
+            me.set( key, unicode( getattr( self.player_obj, key ) ) )
+
+        me.set("x-addrstring", self.ipaddress )
+
+        if self.mumbleuser:
+            if self.mumbleuser.hasTexture():
+                me.set( 'x-texture', self.mumbleuser.textureUrl )
 
     def asMvXml( self, parentnode ):
         """ Return an XML node for this player suitable for MumbleViewer-ng. """

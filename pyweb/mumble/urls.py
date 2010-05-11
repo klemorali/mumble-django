@@ -19,18 +19,21 @@ from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns(
     'mumble.views',
-    ( r'djangousers',                    'djangousers'        ),
-    ( r'(?P<server>\d+)/users',                'users'         ),
+    ( r'djangousers',               'djangousers' ),
+    ( r'(?P<server>\d+)/users',     'users'       ),
 
-    ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture'        ),
+    ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture' ),
 
-    ( r'murmur/tree/(?P<server>\d+)',            'mmng_tree'        ),
-    ( r'mumbleviewer/(?P<server>\d+).xml',            'mumbleviewer_tree_xml' ),
-    ( r'mumbleviewer/(?P<server>\d+).json',         'mumbleviewer_tree_json'),
+    ( r'murmur/tree/(?P<server>\d+)',        'mmng_tree'             ),
+    ( r'mumbleviewer/(?P<server>\d+).xml',   'mumbleviewer_tree_xml' ),
+    ( r'mumbleviewer/(?P<server>\d+).json',  'mumbleviewer_tree_json'),
 
-    ( r'mobile/(?P<server>\d+)',                'mobile_show'        ),
-    ( r'mobile/?$',                        'mobile_mumbles'    ),
+    ( r'mobile/(?P<server>\d+)',             'mobile_show'     ),
+    ( r'mobile/?$',                          'mobile_mumbles'  ),
+
+    ( r'(?P<server>\d+).json',               'cvp_json'        ),
+    ( r'(?P<server>\d+).xml',                'cvp_xml'         ),
 
     ( r'(?P<server>\d+)',                    'show'            ),
-    ( r'$',                            'mumbles'        ),
+    ( r'$',                                  'mumbles'         ),
 )
