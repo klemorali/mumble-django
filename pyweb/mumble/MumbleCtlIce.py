@@ -34,7 +34,11 @@ import Ice, IcePy, tempfile
 
 def loadSlice( slicefile ):
     """ Load the slice file with the correct include dir set, if possible. """
-    icepath = Ice.getSliceDir()
+    if hasattr( Ice, "getSliceDir" ):
+        icepath = Ice.getSliceDir()
+    else:
+        icepath = None
+
     if not icepath:
         # last resort, let's hope to christ this works (won't for >=1.2.3)
         Ice.loadSlice( slicefile )
