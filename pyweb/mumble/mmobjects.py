@@ -18,10 +18,11 @@
 import socket
 import datetime
 import re
-from time            import time
+from time import time
 
-from django.utils.http        import urlquote
-from django.conf        import settings
+from django.contrib.sites.models import Site
+from django.utils.http import urlquote
+from django.conf import settings
 
 
 def cmp_channels( left, rite ):
@@ -293,7 +294,7 @@ class mmPlayer( object ):
             del pldata["address"]
 
         if self.mumbleuser and self.mumbleuser.hasTexture():
-            pldata['x-texture'] = self.mumbleuser.textureUrl
+            pldata['x-texture'] = "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl
 
         return pldata
 
@@ -317,7 +318,7 @@ class mmPlayer( object ):
             me.set( "address", "" )
 
         if self.mumbleuser and self.mumbleuser.hasTexture():
-                me.set( 'x-texture', self.mumbleuser.textureUrl )
+            me.set( 'x-texture', "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl )
 
     def asMvXml( self, parentnode ):
         """ Return an XML node for this player suitable for MumbleViewer-ng. """
