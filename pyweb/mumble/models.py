@@ -557,8 +557,16 @@ class Mumble( models.Model ):
 
     def asXml( self, authed=False ):
         from xml.etree.cElementTree import Element
-        root = Element( "server", id=unicode(self.id), name=self.name )
+        root = Element( "server",
+            xmlns="http://mumble.sourceforge.net/Channel_Viewer_Protocol",
+            id=unicode(self.id), name=self.name
+            )
         root.set( 'x-connecturl', self.connecturl )
+        root.set( 'xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance" )
+        root.set( 'xsi:schemaLocation',
+            "http://bitbucket.org/Svedrin/mumble-django/wiki/channel-viewer-protocol_murmur-%d-%d-%d.xsd" % self.version[:3]
+            )
+
         self.rootchan.asXml( root, authed )
         return root
 

@@ -167,7 +167,7 @@ class mmChannel( object ):
             if   isinstance( val, bool ):
                 me.set( key, unicode(val).lower() )
             elif isinstance( val, list ) or isinstance( val, tuple ):
-                me.set( key, ','.join( ( unicode(elem) for elem in val ) ) )
+                me.set( key, ' '.join( ( unicode(elem) for elem in val ) ) )
             elif isinstance( val, str ):
                 me.set( key, unicode(val, "utf8") )
             else:
@@ -305,7 +305,7 @@ class mmPlayer( object ):
             if   isinstance( val, bool ):
                 me.set( key, unicode(val).lower() )
             elif isinstance( val, list ) or isinstance( val, tuple ):
-                me.set( key, ','.join( ( unicode(elem) for elem in val ) ) )
+                me.set( key, ' '.join( ( unicode(elem) for elem in val ) ) )
             elif isinstance( val, str ):
                 me.set( key, unicode(val, "utf8") )
             else:
