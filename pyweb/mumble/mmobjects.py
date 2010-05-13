@@ -51,7 +51,7 @@ def xmlpopulate( node, srcobj ):
         else:
             encoded = unicode(val)
         if "\x00" in encoded: # user::context. no kidding. complain to pcgod plzkthx.
-            node.set( key, base64.encode( encoded ) )
+            node.set( key, base64.encodestring( encoded ) )
         else:
             node.set( key, encoded )
 
