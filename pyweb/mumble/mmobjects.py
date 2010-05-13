@@ -37,6 +37,22 @@ def cmp_names( left, rite ):
     """ Compare two objects by their name property. """
     return cmp( left.name, rite.name )
 
+def xmlpopulate( node, srcobj ):
+    """ Read all instance variables from srcobj and set them as attributes on the given node. """
+    for key in srcobj.__dict__:
+        val = getattr( srcobj, key )
+        if   isinstance( val, bool ):
+            encoded = unicode(val).lower()
+        elif isinstance( val, list ) or isinstance( val, tuple ):
+            encoded = ' '.join( ( unicode(elem) for elem in val ) )
+        elif isinstance( val, str ):
+            encoded = unicode(val, "utf8")
+        else:
+            encoded = unicode(val)
+        if "\x00" in encoded: # user::context. no kidding. complain to pcgod plzkthx.
+            node.set( key, base64.encode( encoded ) )
+        else:
+            node.set( key, encoded )
 
 class mmChannel( object ):
     """ Represents a channel in Murmur. """
@@ -55,6 +71,9 @@ class mmChannel( object ):
             self.parent.subchans.append( self )
 
         self._acl = None
+
+    def __repr__( self ):
+        return "mmChannel <%d: %s>" % ( self.chanid, self.name )
 
     # Lookup unknown attributes in self.channel_obj to automatically include Murmur's fields
     def __getattr__( self, key ):
@@ -163,16 +182,7 @@ class mmChannel( object ):
     def asXml( self, parentnode, authed=False ):
         from xml.etree.cElementTree import SubElement
         me = SubElement( parentnode, "channel" )
-        for key in self.channel_obj.__dict__:
-            val = getattr( self.channel_obj, key )
-            if   isinstance( val, bool ):
-                me.set( key, unicode(val).lower() )
-            elif isinstance( val, list ) or isinstance( val, tuple ):
-                me.set( key, ' '.join( ( unicode(elem) for elem in val ) ) )
-            elif isinstance( val, str ):
-                me.set( key, unicode(val, "utf8") )
-            else:
-                me.set( key, unicode(val) )
+        xmlpopulate( me, self.channel_obj )
 
         me.set( "x-connecturl", self.connecturl )
 
@@ -228,6 +238,9 @@ class mmPlayer( object ):
                 self.mumbleuser = None
         else:
             self.mumbleuser = None
+
+    def __repr__( self ):
+        return "mmPlayer <%d: %s (%d)>" % ( self.session, self.name, self.userid )
 
     # Lookup unknown attributes in self.player_obj to automatically include Murmur's fields
     def __getattr__( self, key ):
@@ -300,17 +313,9 @@ class mmPlayer( object ):
 
     def asXml( self, parentnode, authed=False ):
         from xml.etree.cElementTree import SubElement
+        import base64
         me = SubElement( parentnode, "user" )
-        for key in self.player_obj.__dict__:
-            val = getattr( self.player_obj, key )
-            if   isinstance( val, bool ):
-                me.set( key, unicode(val).lower() )
-            elif isinstance( val, list ) or isinstance( val, tuple ):
-                me.set( key, ' '.join( ( unicode(elem) for elem in val ) ) )
-            elif isinstance( val, str ):
-                me.set( key, unicode(val, "utf8") )
-            else:
-                me.set( key, unicode(val) )
+        xmlpopulate( me, self.player_obj )
 
         if authed:
             me.set( "x-addrstring", self.ipaddress )
