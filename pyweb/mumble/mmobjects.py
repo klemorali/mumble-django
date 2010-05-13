@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
 """
 
+import base64
 import socket
 import datetime
 import re
@@ -313,7 +314,6 @@ class mmPlayer( object ):
 
     def asXml( self, parentnode, authed=False ):
         from xml.etree.cElementTree import SubElement
-        import base64
         me = SubElement( parentnode, "user" )
         xmlpopulate( me, self.player_obj )
 
