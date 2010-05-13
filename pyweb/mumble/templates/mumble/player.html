@@ -29,7 +29,11 @@
   </span>
   <span>
     <img src="{{ MEDIA_URL }}/mumble/knoten_v.png" alt="" />
-    <img src="{{ MEDIA_URL }}/mumble/talking_off.png" alt="Player" />
+    {% if Player.isTalking %}
+      <img src="{{ MEDIA_URL }}/mumble/talking_on.png" alt="Player" />
+    {% else %}
+      <img src="{{ MEDIA_URL }}/mumble/talking_off.png" alt="Player" />
+    {% endif %}
     <a id="link_{{ Player.id }}" class="mumble" href="#" title="{{ Player.name }}">{{ Player.name|trunc:30 }}</a>
   </span>
 </div>
