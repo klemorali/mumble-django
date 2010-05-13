@@ -268,6 +268,9 @@ class mmPlayer( object ):
         doc="True if this player is in the Admin group in the ACL."
         )
 
+    # Totally ripped from Pimmetje
+    isTalking = property( lambda self: self.idlesecs == 0, doc="True if this player is currently talking." )
+
     is_server  = False
     is_channel = False
     is_player  = True
