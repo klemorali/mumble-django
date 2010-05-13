@@ -402,16 +402,14 @@ def cvp_json( request, server ):
         See <http://mumble.sourceforge.net/Channel_Viewer_Protocol>
     """
     srv = get_object_or_404( Mumble, id=int(server) )
+    json = simplejson.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
 
-    if "jsonp_callback" in request.GET:
-        prefix = request.GET["jsonp_callback"]
+    if "callback" in request.GET:
+        ret = "%s(%s)" % ( request.GET["callback"], json )
     else:
-        prefix = ""
+        ret = json
 
-    return HttpResponse(
-        prefix + "(" + simplejson.dumps( srv.asDict( cvp_checkauth( request, srv ) ) ) + ")",
-        mimetype='text/javascript'
-        )
+    return HttpResponse( ret, mimetype='application/json' )
 
 def cvp_xml( request, server ):
     """ XML reference implementation for the Channel Viewer Protocol.
