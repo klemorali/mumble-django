@@ -315,6 +315,8 @@ class Mumble( models.Model ):
     channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." )
     is_public    = property( lambda self: not self.passwd,
             doc="False if a password is needed to join this server." )
+    uptime       = property( lambda self: self.ctl.getUptime(self.srvid),
+            doc="Number of seconds this instance has been running." )
 
     is_server  = True
     is_channel = False
@@ -552,7 +554,8 @@ class Mumble( models.Model ):
         return { 'name':   self.name,
              'id':     self.id,
              'root':   self.rootchan.asDict( authed ),
-             'x-connecturl': self.connecturl
+             'x-connecturl': self.connecturl,
+             'x-uptime': self.uptime,
             }
 
     def asXml( self, authed=False ):
@@ -562,6 +565,7 @@ class Mumble( models.Model ):
             id=unicode(self.id), name=self.name
             )
         root.set( 'x-connecturl', self.connecturl )
+        root.set( 'x-uptime', unicode(self.uptime) )
         root.set( 'xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance" )
         root.set( 'xsi:schemaLocation',
             "http://bitbucket.org/Svedrin/mumble-django/wiki/channel-viewer-protocol_murmur-%d-%d-%d.xsd" % self.version[:3]

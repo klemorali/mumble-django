@@ -317,6 +317,8 @@ class MumbleCtlDbus_118(MumbleCtlBase):
                 ret = int(data)
         return ret
 
+    def getUptime(self, srvid):
+        return None
 
 class MumbleCtlDbus_Legacy( MumbleCtlDbus_118 ):
     def getVersion( self ):
