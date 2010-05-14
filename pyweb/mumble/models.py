@@ -554,8 +554,8 @@ class Mumble( models.Model ):
         return { 'name':   self.name,
              'id':     self.id,
              'root':   self.rootchan.asDict( authed ),
-             'x-connecturl': self.connecturl,
-             'x-uptime': self.uptime,
+             'x_connecturl': self.connecturl,
+             'x_uptime': self.uptime,
             }
 
     def asXml( self, authed=False ):
@@ -564,8 +564,8 @@ class Mumble( models.Model ):
             xmlns="http://mumble.sourceforge.net/Channel_Viewer_Protocol",
             id=unicode(self.id), name=self.name
             )
-        root.set( 'x-connecturl', self.connecturl )
-        root.set( 'x-uptime', unicode(self.uptime) )
+        root.set( 'x_connecturl', self.connecturl )
+        root.set( 'x_uptime', unicode(self.uptime) )
         root.set( 'xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance" )
         root.set( 'xsi:schemaLocation',
             "http://bitbucket.org/Svedrin/mumble-django/wiki/channel-viewer-protocol_murmur-%d-%d-%d.xsd" % self.version[:3]
