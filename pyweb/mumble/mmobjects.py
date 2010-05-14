@@ -177,7 +177,7 @@ class mmChannel( object ):
         chandata = self.channel_obj.__dict__.copy()
         chandata['users']        = [ pl.asDict( authed ) for pl in self.players  ]
         chandata['channels']     = [ sc.asDict( authed ) for sc in self.subchans ]
-        chandata['x-connecturl'] = self.connecturl
+        chandata['x_connecturl'] = self.connecturl
         return chandata
 
     def asXml( self, parentnode, authed=False ):
@@ -185,7 +185,7 @@ class mmChannel( object ):
         me = SubElement( parentnode, "channel" )
         xmlpopulate( me, self.channel_obj )
 
-        me.set( "x-connecturl", self.connecturl )
+        me.set( "x_connecturl", self.connecturl )
 
         for sc in self.subchans:
             sc.asXml(me, authed)
@@ -306,12 +306,12 @@ class mmPlayer( object ):
         pldata = self.player_obj.__dict__.copy()
 
         if authed:
-            pldata["x-addrstring"] = self.ipaddress
+            pldata["x_addrstring"] = self.ipaddress
         else:
             del pldata["address"]
 
         if self.mumbleuser and self.mumbleuser.hasTexture():
-            pldata['x-texture'] = "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl
+            pldata['x_texture'] = "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl
 
         return pldata
 
@@ -321,12 +321,12 @@ class mmPlayer( object ):
         xmlpopulate( me, self.player_obj )
 
         if authed:
-            me.set( "x-addrstring", self.ipaddress )
+            me.set( "x_addrstring", self.ipaddress )
         else:
             me.set( "address", "" )
 
         if self.mumbleuser and self.mumbleuser.hasTexture():
-            me.set( 'x-texture', "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl )
+            me.set( 'x_texture', "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl )
 
     def asMvXml( self, parentnode ):
         """ Return an XML node for this player suitable for MumbleViewer-ng. """
