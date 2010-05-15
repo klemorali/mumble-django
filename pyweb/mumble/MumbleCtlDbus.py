@@ -126,7 +126,6 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         ret = {}
 
         for channel in chans:
-            print channel
             ret[ channel[0] ] = ObjectInfo(
                 id     = int(channel[0]),
                 name   = unicode(channel[1]),
