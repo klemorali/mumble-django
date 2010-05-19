@@ -22,3 +22,10 @@ def installed_apps(request):
 def mumble_version(request):
     from mumble import version_str
     return { 'CURRENTVERSION': version_str }
+
+def theme_url(request):
+    from django.conf import settings
+    if settings.THEME:
+        return { 'THEME_URL': settings.THEME_URL }
+    else:
+        return {}
