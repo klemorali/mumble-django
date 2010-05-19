@@ -54,10 +54,28 @@ MUMBLE_DJANGO_ROOT = None                                      ##
 #################################################################
 #################################################################
 
+# Who will receive emails on errors?
+ADMINS = (
+    # ('Your Name', 'your_email@domain.com'),
+)
 
-from os.path import join, dirname, abspath, exists
-if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
-    MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+# Show debug information on errors?
+# If you want to file a bug report, please enable this option.
+DEBUG = True
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'Europe/Berlin'
+
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'en-us'
+
+# The Theme to use. None for the builtin theme.
+THEME = None
 
 # URL Template for constructing Gravatars.
 GRAVATAR_URL = 'http://www.gravatar.com/avatar/%(hash)s.jpg?d=monsterid&s=%(size)d'
@@ -108,8 +126,25 @@ MUNIN_TITLE    = 'Mumble Users'
 # see <http://munin.projects.linpro.no/wiki/graph_category_list> for a list of valid categories.
 MUNIN_CATEGORY = 'network'
 
-# Database settings for Mumble-Django's database. These do NOT need to point to Murmur's database,
-# Mumble-Django should use its own!
+
+###################################################################
+##                                                               ##
+##  The following settings normally do not require changes, and  ##
+##  you should only change them if you know what you're doing.   ##
+##                                                               ##
+###################################################################
+
+from os.path import join, dirname, abspath, exists
+if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
+    MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+
+if not MUMBLE_DJANGO_URL:
+    MUMBLE_DJANGO_URL = '/'
+elif MUMBLE_DJANGO_URL[-1] != '/':
+    MUMBLE_DJANGO_URL = MUMBLE_DJANGO_URL + '/'
+
+# Database settings for Mumble-Django's database. These do NOT need to point
+# to Murmur's database, Mumble-Django should use its own!
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'db', 'mumble-django.db3' )
 DATABASE_USER = ''
@@ -117,27 +152,9 @@ DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
 
-
-# Show debug information on errors?
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-)
-
 MANAGERS = ADMINS
-
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
-TIME_ZONE = 'Europe/Berlin'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -145,15 +162,17 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
-
 # Absolute path to the directory that holds media.
 MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 
 # URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = MUMBLE_DJANGO_URL+'static/'
+MEDIA_URL = MUMBLE_DJANGO_URL + 'static/'
+
+## URL to static files of the currently active theme
+THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
 
 # URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL+'media/'
+ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'media/'
 
 # URL to the login view
 LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
@@ -194,21 +213,29 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'pyweb.urls'
 
-TEMPLATE_DIRS = (
+if THEME:
+	TEMPLATE_DIRS = [ join( MUMBLE_DJANGO_ROOT, 'themes', THEME, 'templates' ) ]
+else:
+	TEMPLATE_DIRS = []
+
+TEMPLATE_DIRS.extend((
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     join( MUMBLE_DJANGO_ROOT, 'pyweb', 'templates' ),
-)
+))
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+TEMPLATE_CONTEXT_PROCESSORS = [
     "django.core.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     'processors.installed_apps',
     'processors.mumble_version',
-)
+]
+
+if THEME:
+    TEMPLATE_CONTEXT_PROCESSORS.append('processors.theme_url')
 
 TEST_RUNNER = 'mumble.testrunner.run_tests'
 TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' )
