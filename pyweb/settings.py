@@ -214,7 +214,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'pyweb.urls'
 
 if THEME:
-	TEMPLATE_DIRS = [ join( MUMBLE_DJANGO_ROOT, 'themes', THEME, 'templates' ) ]
+	TEMPLATE_DIRS = [ join( MUMBLE_DJANGO_ROOT, 'themes', THEME ) ]
 else:
 	TEMPLATE_DIRS = []
 
