@@ -227,11 +227,11 @@ class Mumble( models.Model ):
     channel = mk_config_property( "channelname",            ugettext_noop("Channel name regex") )
     defchan = mk_config_property( "defaultchannel",         ugettext_noop("Default channel"),    get_coerce=int )
     timeout = mk_config_property( "timeout",                ugettext_noop("Timeout"),            get_coerce=int )
+    textlen = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
     usersperchannel = mk_config_property( "usersperchannel",ugettext_noop("Users per channel"),  get_coerce=int )
 
     obfsc   = mk_config_bool_property( "obfuscate",         ugettext_noop("IP Obfuscation") )
     certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
-    textlen = mk_config_bool_property( "textmessagelength", ugettext_noop("Maximum length of text messages") )
     html    = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
     bonjour = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
     autoboot= mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
