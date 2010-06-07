@@ -2,18 +2,98 @@
 # -*- coding: utf-8 -*-
 # kate: space-indent on; indent-width 4; replace-tabs on;
 
+# This is PerlDoc documentation (POD) to be viewed with munindoc (or perldoc).
+
 """
- *  Copyright (C) 2009, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
- *
- *  Mumble-Django is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This package is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+=head1 NAME
+
+mumble-django - graph Mumble user counts for server instances
+
+=head1 DESCRIPTION
+
+This plugin monitors the number of users connected to the Mumble server
+instances configured in Mumble-Django. It automatically adapts to servers
+being offline, new servers being added and servers being deleted, and
+therefore should not require too much maintenance.
+
+=head1 APPLICABLE SYSTEMS
+
+Mumble servers that have Mumble-Django installed.
+
+=head1 SYNOPSIS
+
+B<munin-run mumble-django> [config|autoconf]
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<config>   - emit graph configuration options for Munin to use.
+
+=item B<autoconf> - check if the plugin can be safely installed.
+
+=back
+
+If neither are given, the plugin will emit the current user counts for each
+known server instance.
+
+=head1 CONFIGURATION
+
+The plugin is configured in the I<settings.py> file along with your
+Mumble-Django installation. The plugin allows self-testing to see if it has
+everything it needs in order to run; just run it with the parameter "autoconf"
+and the plugin will tell you if it can be safely installed.
+
+The following variables are relevant in I<settings.py>:
+
+=over 4
+
+=item B<MUNIN_WARNING>  - the "warning" level factor, defaults to 0.80.
+
+=item B<MUNIN_CRITICAL> - the "critical" level factor, defaults to 0.95.
+
+=item B<MUNIN_TITLE>    - the title of the graph, defaults to "Mumble Users".
+
+=item B<MUNIN_CATEGORY> - the category the graphs appear in, defaults to "network".
+
+=back
+
+All of these settings can be overridden in I<settings.py> simply by defining
+them there. If a variable is omitted, the defaults are used as specified.
+
+The WARNING and CRITICAL level factors are multiplied with the server's slot
+count to form the real thresholds.
+
+=head1 MAGIC MARKERS
+
+  #%# family=auto
+  #%# capabilities=autoconf
+
+=head1 BUGS
+
+Bugs are tracked along with Mumble-Django bugs in the issue tracker:
+
+	http://bitbucket.org/Svedrin/mumble-django/issue/
+
+If you find a bug, please report it.
+
+=head1 AUTHOR
+
+Copyright (C) 2009 - 2010, Michael "Svedrin" Ziegler
+
+=head1 LICENSE
+
+Mumble-Django is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This package is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+=cut
 """
 
 # Set this to the same path you used in settings.py, or None for auto-detection.
