@@ -8,3 +8,6 @@ syntax: glob
 .directory
 .secret.txt
 htdocs/mviewtest
+themes
+htdocs/themes
+
