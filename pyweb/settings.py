@@ -94,9 +94,6 @@ DEFAULT_FROM_EMAIL = "webmaster@localhost"
 # Length of the account activation period, in days.
 ACCOUNT_ACTIVATION_DAYS = 30
 
-# Default mumble port. If your server runs under this port, it will not be included in the links in the Channel Viewer.
-MUMBLE_DEFAULT_PORT = 64738
-
 # Should subchannels be shown, even if there are no players in them?
 SHOW_EMPTY_SUBCHANS = False
 
@@ -114,8 +111,8 @@ PROTECTED_MODE = False
 # stolen they could easily take over the server. (So make sure the password can't be easily
 # guessed, use at least over 9000 letters, blah blah.)
 # This feature is only available if PROTECTED_MODE is not active.
-ALLOW_ACCOUNT_LINKING = True        # Allow linking in general?
-ALLOW_ACCOUNT_LINKING_ADMINS = False    # Allow linking for Admin accounts?
+ALLOW_ACCOUNT_LINKING = True          # Allow linking in general?
+ALLOW_ACCOUNT_LINKING_ADMINS = False  # Allow linking for Admin accounts?
 
 # Warning and Critical levels for the Munin plugin. These will be multiplied with the
 # server instance's slot count to calculate the real levels.
@@ -137,6 +134,10 @@ MUNIN_CATEGORY = 'network'
 from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
     MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+
+# Default mumble port. If your server runs under this port, it will not be
+# included in the links in the Channel Viewer.
+MUMBLE_DEFAULT_PORT = 64738
 
 if not MUMBLE_DJANGO_URL:
     MUMBLE_DJANGO_URL = '/'
