@@ -7,7 +7,7 @@
 <h2>Create Account</h2>
 <p>Please fill in the following form.</p>
 
-<form method="post" action=".">
+<form method="post" action=".">{% csrf_token %}
     <table>
       {{ form }}
     </table>
