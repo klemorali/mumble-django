@@ -2,6 +2,18 @@
 Mumble-Django changelog
 =======================
 
+Version 2.2, 21 June 2010:
+------------------------------
+* Add version info and display, and an update check.
+* Add IPv6 support.
+* Add usersperchannel configuration field.
+* Add views for the Channel Viewer Protocol.
+* Fix an encoding issue in the channel name truncator.
+* Add basic theming support.
+* Add munindoc documentation to the Munin plugin.
+* Include CSRF protection mechanisms to fix errors with Django >= 1.2.1.
+* Reorganized settings.py to make clear which settings are interesting.
+
 Version 2.1, 27 Apr 2010:
 ------------------------------
 * Fixed a few encoding issues in the Munin plugin and the DBus Ctls.
