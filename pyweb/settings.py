@@ -153,6 +153,13 @@ DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
 
+# Email settings. only change if the defaults don't work
+#EMAIL_HOST = "localhost"
+#EMAIL_PORT = 25
+#EMAIL_HOST_USER = ""
+#EMAIL_HOST_PASSWORD = ""
+#EMAIL_USE_TLS = True
+
 TEMPLATE_DEBUG = DEBUG
 
 MANAGERS = ADMINS
