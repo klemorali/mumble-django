@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-import socket, Ice, re
+import Ice, re
 from sys       import stderr
 from urllib    import urlopen
 from StringIO  import StringIO
@@ -29,23 +29,6 @@ from django.conf                import settings
 
 from mumble.mmobjects import mmChannel, mmPlayer
 from mumble.mctl      import MumbleCtlBase
-
-
-def get_ipv46_host_by_name( hostname ):
-    """ Resolve the given hostname and return both its IPv4 and IPv6 address,
-        if applicable. Returns: { AF_INET: inet4address, AF_INET6: inet6address }.
-        For addresses that don't exist, the corresponding field will be None.
-    """
-    addrinfo = socket.getaddrinfo( hostname, settings.MUMBLE_DEFAULT_PORT, 0, socket.SOCK_DGRAM )
-    ret = {}
-    for (family, socktype, proto, canonname, sockaddr) in addrinfo:
-        if family not in ret:
-            ret[family] = sockaddr[0]
-    return ret
-
-def get_ipv46_str_by_name( hostname, sep=" " ):
-    """ Return a space-separated string of all addresses the given hostname resolves to. """
-    return sep.join( get_ipv46_host_by_name( hostname ).values() )
 
 
 def mk_config_property( field, doc="", get_coerce=None, get_none=None, set_coerce=unicode, set_none='' ):
@@ -283,11 +266,7 @@ class Mumble( models.Model ):
         self.ctl.setConf( self.srvid, 'registername', self.name )
 
         if self.addr:
-            if " " in self.addr:
-                # user gave multiple addresses, don't mess with that
-                self.ctl.setConf( self.srvid, 'host', self.addr )
-            else:
-                self.ctl.setConf( self.srvid, 'host', get_ipv46_str_by_name(self.addr) )
+            self.ctl.setConf( self.srvid, 'host', self.addr )
         else:
             self.ctl.setConf( self.srvid, 'host', '' )
 
@@ -338,47 +317,22 @@ class Mumble( models.Model ):
         else:
             self.name = conf["registername"]
 
-        if "registerhostname" in conf and conf["registerhostname"]:
-            if ':' in conf["registerhostname"]:
-                regname, regport = conf["registerhostname"].split(':')
-                regport = int(regport)
-            else:
-                regname = conf["registerhostname"]
-                regport = None
+        if "host" in conf:
+            self.addr = conf["host"]
         else:
-            regname = None
-            regport = None
+            self.addr = ""
 
-        if "host" in conf and conf["host"]:
-            addr = conf["host"]
-        else:
-            addr = None
-
-        if "port" in conf and conf["port"]:
+        if "port" in conf:
             self.port = int(conf["port"])
         else:
             self.port = None
 
-        if regname and addr:
-            if regport == self.port:
-                if get_ipv46_str_by_name(regname) == get_ipv46_str_by_name(addr):
-                    self.display = ''
-                    self.addr = regname
-                else:
-                    self.display = regname
-                    self.addr = addr
-            else:
-                self.display = conf["registerhostname"]
-                self.addr = addr
-        elif regname and not addr:
-            self.display = regname
-            self.addr    = ''
-        elif addr and not regname:
-            self.display = ''
-            self.addr    = addr
+        if "registerhostname" in conf and conf["registerhostname"] != self.addr:
+            self.display = conf["registerhostname"]
+            if ' ' in self.addr and self.display == self.addr.split(' ')[0]:
+                self.display = ""
         else:
-            self.display = ''
-            self.addr    = ''
+            self.display = ""
 
         self.save( dontConfigureMurmur=True )
 
