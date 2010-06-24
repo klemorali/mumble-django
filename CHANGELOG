@@ -2,6 +2,13 @@
 Mumble-Django changelog
 =======================
 
+Version 2.3, 24 June 2010:
+------------------------------
+* Removed resolving the bind addresses the user entered into IP addresses,
+  as Murmur does this itself.
+* Remove a lot of checking code from syncdb which will cause issues when
+  a server's "host" configuration is set to multiple addresses.
+
 Version 2.2, 21 June 2010:
 ------------------------------
 * Add version info and display, and an update check.
