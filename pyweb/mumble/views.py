@@ -32,6 +32,13 @@ from models import Mumble, MumbleUser
 from forms  import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
 from forms  import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
 
+from extdirect import Provider
+
+EXT_DIRECT_PROVIDER = Provider( "/mumble/ext" )
+
+@EXT_DIRECT_PROVIDER.register_method( "omgfu" )
+def ohai( request ):
+    return "plzkthx"
 
 def redir( request ):
     """ Redirect to the servers list. """
