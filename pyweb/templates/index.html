@@ -5,14 +5,14 @@
     <title>Mumble Administration</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/ext-2.2/resources/css/ext-all.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/ext-3.2.0/resources/css/ext-all.css" />
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/mumble/style.css"  />
     <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}/mumble/mumble.16x16.png" />
 
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-2.2/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-2.2/ext-all.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/checkcolumn.js"></script>
 
     {% block HeadTag %}
@@ -56,6 +56,7 @@
       </div>
       <!-- content -->
       <div id="contentpanel">
+        {% block ContentMaster %}
         <div id="contentleft">
           {% block LeftColumn %}
           {% endblock %}
@@ -64,6 +65,7 @@
           {% block Content %}
           {% endblock %}
         </div>
+        {% endblock %}
       </div>
       <!-- footer -->
       <div id="footerpanel">
