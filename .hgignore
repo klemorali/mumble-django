@@ -10,4 +10,5 @@ syntax: glob
 htdocs/mviewtest
 themes
 htdocs/themes
+*.kpf
 
