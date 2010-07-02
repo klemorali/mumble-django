@@ -34,7 +34,7 @@ from forms  import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
 
 from extdirect import Provider
 
-EXT_DIRECT_PROVIDER = Provider( "/mumble/ext" )
+EXT_DIRECT_PROVIDER = Provider()
 
 @EXT_DIRECT_PROVIDER.register_method( "omgfu" )
 def ohai( request ):
@@ -257,6 +257,7 @@ def showTexture( request, server, userid ):
 
 
 @login_required
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def users( request, server ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.
 
@@ -269,30 +270,7 @@ def users( request, server ):
         srv.readUsersFromMurmur()
 
     if not srv.isUserAdmin( request.user ):
-        return HttpResponse(
-            simplejson.dumps({ 'success': False, 'objects': [], 'errormsg': 'Access denied' }),
-            mimetype='text/javascript'
-            )
-
-    if request.method == 'POST':
-        data = simplejson.loads( request.POST['data'] )
-        for record in data:
-            if record['id'] == -1:
-                if record['delete']:
-                    continue
-                mu = MumbleUser( server=srv )
-            else:
-                mu = MumbleUser.objects.get( id=record['id'] )
-                if record['delete']:
-                    mu.delete()
-                    continue
-
-            mu.name     = record['name']
-            mu.password = record['password']
-            if record['owner']:
-                mu.owner = User.objects.get( id=int(record['owner']) )
-            mu.save()
-            mu.aclAdmin = record['admin']
+        raise Exception( 'Access denied' )
 
     users = []
     for mu in srv.mumbleuser_set.all():
@@ -308,13 +286,10 @@ def users( request, server ):
             'admin':    mu.aclAdmin,
             } )
 
-    return HttpResponse(
-        simplejson.dumps( { 'success': True, 'objects': users } ),
-        mimetype='text/javascript'
-        )
-
+    return users
 
 @login_required
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def djangousers( request ):
     """ Return a list of all Django users' names and IDs. """
 
@@ -325,10 +300,7 @@ def djangousers( request ):
             'uname': unicode( du ),
             } )
 
-    return HttpResponse(
-        simplejson.dumps( { 'success': True, 'objects': users } ),
-        mimetype='text/javascript'
-        )
+    return users
 
 
 def mmng_tree( request, server ):
