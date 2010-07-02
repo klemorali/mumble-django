@@ -40,6 +40,7 @@ class Provider( object ):
         response and exceptions - if any.
 
         Instantiation:
+
         >>> EXT_JS_PROVIDER = Provider( [name="Ext.app.REMOTING_API", autoadd=True] )
 
         If autoadd is True, the api.js will include a line like such:
@@ -48,9 +49,9 @@ class Provider( object ):
         After instantiating the Provider, register functions to it like so:
 
         >>> @EXT_JS_PROVIDER.register_method("myclass")
-            def myview( request, possibly, some, other, arguments ):
-               " does something with all those args and returns something "
-               return 13.37
+        ... def myview( request, possibly, some, other, arguments ):
+        ...    " does something with all those args and returns something "
+        ...    return 13.37
 
         Note that those views **MUST NOT** return an HttpResponse but simply
         the plain result, as the Provider will build a response from whatever
@@ -61,13 +62,14 @@ class Provider( object ):
 
         >>> from views import EXT_JS_PROVIDER # import our provider instance
         >>> urlpatterns = patterns(
-                # other patterns go here
-                ( r'api/', include(EXT_DIRECT_PROVIDER.urls) ),
-            )
+        ...     # other patterns go here
+        ...     ( r'api/', include(EXT_DIRECT_PROVIDER.urls) ),
+        ... )
 
         This way, the Provider will define the URLs "api/api.js" and "api/router".
 
-        If you then access the "api/api.js" URL, you will get a response such as:
+        If you then access the "api/api.js" URL, you will get a response such as::
+
             Ext.app.REMOTING_API = { # Ext.app.REMOTING_API is from Provider.name
                 "url": "/mumble/api/router",
                 "type": "remoting",
@@ -83,7 +85,12 @@ class Provider( object ):
         self.classes  = {}
 
     def register_method( self, cls_or_name ):
-        """ Return a function that takes a method as an argument and adds that to cls_or_name. """
+        """ Return a function that takes a method as an argument and adds that
+            to cls_or_name.
+
+            Note: This decorator does not replace the method by a new function,
+            it returns the original function as-is.
+        """
         clsname = getname(cls_or_name)
         if clsname not in self.classes:
             self.classes[clsname] = {}
@@ -221,4 +228,3 @@ class Provider( object ):
             (r'api.js$',  self.get_api ),
             (r'router/?', self.request ),
             )
-

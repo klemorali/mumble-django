@@ -15,12 +15,15 @@
  *  GNU General Public License for more details.
 """
 
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, include
+from views import EXT_DIRECT_PROVIDER
 
 urlpatterns = patterns(
     'mumble.views',
     ( r'djangousers',               'djangousers' ),
     ( r'(?P<server>\d+)/users',     'users'       ),
+
+    ( r'api/',                      include(EXT_DIRECT_PROVIDER.urls) ),
 
     ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture' ),
 
