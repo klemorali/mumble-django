@@ -12,6 +12,8 @@
 {% endblock %}
 {% block HeadTag %}
   <script type="text/javascript" src="/jsi18n/"></script>
+  <script type="text/javascript" src="/mumble/api/api.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}/js/mumble.js"></script>
   <script type="text/javascript">
@@ -19,7 +21,9 @@
       render_mumble( "ext_container", {
         data:         "{% url mumble.views.cvp_json DBaseObject.id %}",
         django_users: '{% url mumble.views.djangousers %}',
-        mumble_users: '{% url mumble.views.users DBaseObject.id %}'
+        mumble_users: '{% url mumble.views.users DBaseObject.id %}',
+        gravatar:     "{{ MumbleAccount.gravatar }}",
+        myavatar:     "{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}",
         } );
       } );
   </script>

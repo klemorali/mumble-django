@@ -18,12 +18,10 @@ Ext.ux.UserEditorPanel = function( config ){
     { name: 'delete',   type: 'bool'   }
     ]);
 
-  userAdminStore = new Ext.data.Store({
-    url:    config.mumble_users_url,
-    reader: new Ext.data.JsonReader({
-      root:    'objects',
-      fields:  userRecord
-      }),
+  userAdminStore = new Ext.data.DirectStore({
+    baseParams: { server: 1 },
+    directFn: Mumble.users,
+    fields:   userRecord,
     autoLoad: true,
     remoteSort: false
     });
@@ -47,12 +45,9 @@ Ext.ux.UserEditorPanel = function( config ){
     triggerAction:  'all',
     valueField:     'uid',
     displayField:   'uname',
-    store: new Ext.data.Store({
-      url:    config.django_users_url,
-      reader: new Ext.data.JsonReader({
-        fields:  [ 'uid', 'uname' ],
-        root:    'objects'
-        }),
+    store: new Ext.data.DirectStore({
+      directFn: Mumble.djangousers,
+      fields:   [ 'uid', 'uname' ],
       autoLoad: true
       })
     });
