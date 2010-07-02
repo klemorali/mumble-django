@@ -40,7 +40,10 @@ class Provider( object ):
         response and exceptions - if any.
 
         Instantiation:
-        >>> EXT_JS_PROVIDER = Provider( [name="Ext.app.REMOTING_API"] )
+        >>> EXT_JS_PROVIDER = Provider( [name="Ext.app.REMOTING_API", autoadd=True] )
+
+        If autoadd is True, the api.js will include a line like such:
+            Ext.Direct.addProvider( Ext.app.REMOTING_API );
 
         After instantiating the Provider, register functions to it like so:
 
@@ -74,8 +77,9 @@ class Provider( object ):
         You can then use this code in ExtJS to define the Provider there.
     """
 
-    def __init__( self, name="Ext.app.REMOTING_API" ):
+    def __init__( self, name="Ext.app.REMOTING_API", autoadd=True ):
         self.name     = name
+        self.autoadd  = autoadd
         self.classes  = {}
 
     def register_method( self, cls_or_name ):
@@ -88,6 +92,8 @@ class Provider( object ):
     def _register_method( self, cls_or_name, method ):
         """ Actually registers the given function as a method of cls_or_name. """
         self.classes[ getname(cls_or_name) ][ method.__name__ ] = method
+        method.EXT_argnames = inspect.getargspec( method ).args[1:]
+        method.EXT_len      = len( method.EXT_argnames )
         return method
 
     @csrf_exempt
@@ -99,14 +105,19 @@ class Provider( object ):
             for methodname in self.classes[clsname]:
                 actdict[clsname].append( {
                     "name": methodname,
-                    "len":  len( inspect.getargspec( self.classes[clsname][methodname] ).args ) - 1
+                    "len":  self.classes[clsname][methodname].EXT_len
                     } )
 
-        return HttpResponse( "%s = %s;" % ( self.name, simplejson.dumps({
+        lines = ["%s = %s;" % ( self.name, simplejson.dumps({
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": actdict
-            })), mimetype="text/javascript" )
+            }))]
+
+        if self.autoadd:
+            lines.append( "Ext.Direct.addProvider( %s );" % self.name )
+
+        return HttpResponse( "\n".join( lines ), mimetype="text/javascript" )
 
     @csrf_exempt
     def request( self, request ):
@@ -155,11 +166,25 @@ class Provider( object ):
                     })
                 continue
 
+            func = self.classes[cls][methname]
+
+            if func.EXT_len and len(data) == 1 and type(data[0]) == dict:
+                # data[0] seems to contain a dict with params. check if it does, and if so, unpack
+                args = []
+                for argname in func.EXT_argnames:
+                    if argname in data[0]:
+                        args.append( data[0][argname] )
+                    else:
+                        args = None
+                        break
+                if args:
+                    data = args
+
             try:
                 if data:
-                    result = self.classes[cls][methname]( request, *data )
+                    result = func( request, *data )
                 else:
-                    result = self.classes[cls][methname]( request )
+                    result = func( request )
 
             except Exception, err:
                 errinfo = {
@@ -169,7 +194,7 @@ class Provider( object ):
                 if settings.DEBUG:
                     traceback.print_exc( file=stderr )
                     errinfo['message'] = unicode(err)
-                    errinfo['where']   = '\n'.join(traceback.format_exception())
+                    errinfo['where']   = traceback.format_exc()
                 else:
                     errinfo['message'] = 'Sorry, an error occurred.'
                     errinfo['where']   = ''
