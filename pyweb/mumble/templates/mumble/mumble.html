@@ -11,10 +11,16 @@
   <div id="ext_container"></div>
 {% endblock %}
 {% block HeadTag %}
+  <script type="text/javascript" src="/jsi18n/"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}/js/mumble.js"></script>
   <script type="text/javascript">
     Ext.onReady( function(){
-      render_mumble( "ext_container", "{% url mumble.views.cvp_json DBaseObject.id %}" );
+      render_mumble( "ext_container", {
+        data:         "{% url mumble.views.cvp_json DBaseObject.id %}",
+        django_users: '{% url mumble.views.djangousers %}',
+        mumble_users: '{% url mumble.views.users DBaseObject.id %}'
+        } );
       } );
   </script>
 {% endblock %}
