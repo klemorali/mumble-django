@@ -2,7 +2,7 @@
 # kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
- *  Copyright (C) 2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+ *  Copyright (C) 200, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  *
  *  Mumble-Django is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,16 @@
 import simplejson
 import inspect
 import functools
+import traceback
+from sys import stderr
 
 from django.http import HttpResponse
+from django.conf import settings
+from django.conf.urls.defaults import patterns
+from django.core.urlresolvers  import reverse
+from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.csrf import csrf_exempt
+
 
 def getname( cls_or_name ):
     if type(cls_or_name) not in ( str, unicode ):
@@ -27,66 +35,165 @@ def getname( cls_or_name ):
     return cls_or_name
 
 class Provider( object ):
-    def __init__( self, base_url ):
-        self.base_url = base_url
-        self.classes = {}
-    
-    def register_instance( self, cls_or_name, instance ):
-        name = getname(cls_or_name)
-        if name not in self.classes:
-            raise KeyError(name)
-        self.classes[ name ][0] = instance
-        return instance
-    
+    """ Provider for Ext.Direct. This class handles building API information and
+        routing requests to the appropriate functions, and serializing their
+        response and exceptions - if any.
+
+        Instantiation:
+        >>> EXT_JS_PROVIDER = Provider( [name="Ext.app.REMOTING_API"] )
+
+        After instantiating the Provider, register functions to it like so:
+
+        >>> @EXT_JS_PROVIDER.register_method("myclass")
+            def myview( request, possibly, some, other, arguments ):
+               " does something with all those args and returns something "
+               return 13.37
+
+        Note that those views **MUST NOT** return an HttpResponse but simply
+        the plain result, as the Provider will build a response from whatever
+        your view returns!
+
+        To be able to access the Provider, include its URLs in an arbitrary
+        URL pattern, like so:
+
+        >>> from views import EXT_JS_PROVIDER # import our provider instance
+        >>> urlpatterns = patterns(
+                # other patterns go here
+                ( r'api/', include(EXT_DIRECT_PROVIDER.urls) ),
+            )
+
+        This way, the Provider will define the URLs "api/api.js" and "api/router".
+
+        If you then access the "api/api.js" URL, you will get a response such as:
+            Ext.app.REMOTING_API = { # Ext.app.REMOTING_API is from Provider.name
+                "url": "/mumble/api/router",
+                "type": "remoting",
+                "actions": {"myclass": [{"name": "myview", "len": 4}]}
+                }
+
+        You can then use this code in ExtJS to define the Provider there.
+    """
+
+    def __init__( self, name="Ext.app.REMOTING_API" ):
+        self.name     = name
+        self.classes  = {}
+
     def register_method( self, cls_or_name ):
         """ Return a function that takes a method as an argument and adds that to cls_or_name. """
-        print "REGMETHOD", cls_or_name
         clsname = getname(cls_or_name)
         if clsname not in self.classes:
-            self.classes[clsname] = ( None, {} )
+            self.classes[clsname] = {}
         return functools.partial( self._register_method, cls_or_name )
-    
+
     def _register_method( self, cls_or_name, method ):
-        print "REGREALMETHOD", cls_or_name, method
-        self.classes[ getname(cls_or_name) ][1][ method.__name__ ] = method
+        """ Actually registers the given function as a method of cls_or_name. """
+        self.classes[ getname(cls_or_name) ][ method.__name__ ] = method
         return method
-    
-    def get_api( self, name="Ext.app.REMOTING_API" ):
+
+    @csrf_exempt
+    def get_api( self, request ):
         """ Introspect the methods and get a JSON description of this API. """
         actdict = {}
         for clsname in self.classes:
             actdict[clsname] = []
-            for methodname in self.classes[clsname][1]:
+            for methodname in self.classes[clsname]:
                 actdict[clsname].append( {
                     "name": methodname,
-                    "len":  len( inspect.getargspec( self.classes[clsname][1][methodname] ).args )
+                    "len":  len( inspect.getargspec( self.classes[clsname][methodname] ).args ) - 1
                     } )
-        
-        return "%s = %s" % ( name, simplejson.dumps({
-            "url":     ("%s/router" % self.base_url),
+
+        return HttpResponse( "%s = %s;" % ( self.name, simplejson.dumps({
+            "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": actdict
-            }))
-    
+            })), mimetype="text/javascript" )
+
+    @csrf_exempt
     def request( self, request ):
-        cls      = request.POST['extAction']
-        methname = request.POST['extMethod']
-        data     = request.POST['extData']
-        rtype    = request.POST['extType']
-        tid      = request.POST['extTID']
-        
-        if cls not in self.classes:
-            raise KeyError(cls)
-        if methname not in self.classes[cls][1]:
-            raise KeyError(methname)
-        
-        result = self.classes[cls][1][methname]( *data, request=request )
-        
-        return HttpResponse( simplejson.dumps({
-            "type":   rtype,
-            "tid":    tid,
-            "action": cls,
-            "method": methname,
-            "result": result
-            }))
+        """ Implements the Router part of the Ext.Direct specification.
+
+            It handles decoding requests, calling the appropriate function (if
+            found) and encoding the response / exceptions.
+        """
+        try:
+            rawjson = [{
+                'action':  request.POST['extAction'],
+                'method':  request.POST['extMethod'],
+                'data':    request.POST['extData'],
+                'type':    request.POST['extType'],
+                'tid':     request.POST['extTID'],
+            }]
+        except (MultiValueDictKeyError, KeyError):
+            rawjson  = simplejson.loads( request.raw_post_data )
+            if not isinstance( rawjson, list ):
+                rawjson = [rawjson]
+
+        responses = []
+
+        for reqinfo in rawjson:
+            cls, methname, data, rtype, tid = (reqinfo['action'],
+                reqinfo['method'],
+                reqinfo['data'],
+                reqinfo['type'],
+                reqinfo['tid'])
+
+            if cls not in self.classes:
+                responses.append({
+                    'type':    'exception',
+                    'message': 'no such action',
+                    'where':   cls,
+                    "tid":     tid,
+                    })
+                continue
+
+            if methname not in self.classes[cls]:
+                responses.append({
+                    'type':    'exception',
+                    'message': 'no such method',
+                    'where':   methname,
+                    "tid":     tid,
+                    })
+                continue
+
+            try:
+                if data:
+                    result = self.classes[cls][methname]( request, *data )
+                else:
+                    result = self.classes[cls][methname]( request )
+
+            except Exception, err:
+                errinfo = {
+                    'type': 'exception',
+                    "tid":  tid,
+                    }
+                if settings.DEBUG:
+                    traceback.print_exc( file=stderr )
+                    errinfo['message'] = unicode(err)
+                    errinfo['where']   = '\n'.join(traceback.format_exception())
+                else:
+                    errinfo['message'] = 'Sorry, an error occurred.'
+                    errinfo['where']   = ''
+                responses.append(errinfo)
+
+            else:
+                responses.append({
+                    "type":   rtype,
+                    "tid":    tid,
+                    "action": cls,
+                    "method": methname,
+                    "result": result
+                    })
+
+        if len(responses) == 1:
+            return HttpResponse( simplejson.dumps( responses[0] ), mimetype="text/javascript" )
+        else:
+            return HttpResponse( simplejson.dumps( responses ),    mimetype="text/javascript" )
+
+    @property
+    def urls(self):
+        """ Return the URL patterns. """
+        return patterns('',
+            (r'api.js$',  self.get_api ),
+            (r'router/?', self.request ),
+            )
 
