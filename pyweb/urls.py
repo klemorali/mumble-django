@@ -26,6 +26,10 @@ from django.conf import settings
 handler404 = 'django.views.defaults.page_not_found'
 handler500 = 'django.views.defaults.server_error'
 
+js_info_dict = {
+    'packages': ('mumble',),
+}
+
 urlpatterns = patterns('',
     (r'^/?$',               'mumble.views.redir' ),
 
@@ -41,6 +45,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/',            admin.site.urls),
+    
+    (r'^i18n/',             include('django.conf.urls.i18n')),
+     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
 
 if "rosetta" in settings.INSTALLED_APPS:

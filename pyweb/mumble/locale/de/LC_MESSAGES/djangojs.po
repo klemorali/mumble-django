@@ -1,0 +1,108 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-02 11:38+0200\n"
+"PO-Revision-Date: 2010-07-02 11:41\n"
+"Last-Translator:   <diese-addy@funzt-halt.net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.5.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: js/mumble.js:10
+msgid "Channel Viewer"
+msgstr "Serveransicht"
+
+#: js/mumble.js:12
+msgid "Loading..."
+msgstr "Lade..."
+
+#: js/mumble.js:16
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: js/mumble.js:95
+msgid "Registration"
+msgstr "Registrierung"
+
+#: js/mumble.js:99
+msgid "User name"
+msgstr "Benutzername"
+
+#: js/mumble.js:103
+msgid "Password"
+msgstr "Passwort"
+
+#: js/mumble.js:108
+msgid "Administration"
+msgstr "Administration"
+
+#: js/mumble.js:116
+msgid "User texture"
+msgstr "Benutzertextur"
+
+#: js/mumble.js:124
+msgid "Texture"
+msgstr "Textur"
+
+#: js/mumble.js:128
+msgid "Gravatar"
+msgstr "Gravatar"
+
+#: js/mumble.js:136
+msgid "Use Gravatar"
+msgstr "Benutze Gravatar"
+
+#: js/mumble.js:140
+msgid "Upload Avatar"
+msgstr "Avatar hochladen"
+
+#: js/usereditor.js:33
+msgid "Admin on root channel"
+msgstr "Admin im Wurzelkanal"
+
+#: js/usereditor.js:39
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/usereditor.js:62
+msgid "User List"
+msgstr "Benutzerliste"
+
+#: js/usereditor.js:67
+msgid "name"
+msgstr "Name"
+
+#: js/usereditor.js:74
+msgid "Account owner"
+msgstr "Accountbesitzer"
+
+#: js/usereditor.js:86
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: js/usereditor.js:100
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: js/usereditor.js:104
+msgid "New User"
+msgstr "Neuer Benutzer"
+
+#: js/usereditor.js:112
+msgid "Save"
+msgstr "Speichern"
+
+#: js/usereditor.js:138
+msgid "Resync with Murmur"
+msgstr "Aktualisieren"
