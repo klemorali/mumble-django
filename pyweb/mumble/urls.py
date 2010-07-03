@@ -17,6 +17,7 @@
 
 from django.conf.urls.defaults import patterns, include
 from views import EXT_DIRECT_PROVIDER
+from forms import EXT_FORMS_PROVIDER
 
 urlpatterns = patterns(
     'mumble.views',
@@ -24,6 +25,7 @@ urlpatterns = patterns(
     ( r'(?P<server>\d+)/users',     'users'       ),
 
     ( r'api/',                      include(EXT_DIRECT_PROVIDER.urls) ),
+    ( r'forms/',                    include(EXT_FORMS_PROVIDER.urls)  ),
 
     ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture' ),
 

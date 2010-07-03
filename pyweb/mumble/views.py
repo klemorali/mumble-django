@@ -255,6 +255,17 @@ def showTexture( request, server, userid ):
         img.save( buf, "PNG" )
         return HttpResponse( buf.getvalue(), "image/png" )
 
+@login_required
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def get_admin( request, server ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    adminform = MumbleForm( request.POST, instance=srv )
+    data = {}
+    for fld in adminform.fields:
+        data[fld] = getattr( srv, fld )
+    return { 'data': data, 'success': True }
 
 @login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )

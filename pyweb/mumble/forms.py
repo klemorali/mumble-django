@@ -25,6 +25,9 @@ from django.utils.translation    import ugettext_lazy as _
 
 from mumble.models        import MumbleServer, Mumble, MumbleUser
 
+from extdirect import Provider
+
+EXT_FORMS_PROVIDER = Provider(name="Ext.app.MUMBLE_FORMS_API")
 
 class PropertyModelForm( ModelForm ):
     """ ModelForm that gets/sets fields that are not within the model's
@@ -69,7 +72,7 @@ class PropertyModelForm( ModelForm ):
             if fldname not in instfields:
                 setattr( inst, fldname, self.cleaned_data[fldname] )
 
-
+@EXT_FORMS_PROVIDER.register_form
 class MumbleForm( PropertyModelForm ):
     """ The Mumble Server admin form that allows to configure settings which do
         not necessarily have to be reserved to the server hoster.
@@ -150,6 +153,7 @@ class MumbleAdminForm( MumbleForm ):
         return None
 
 
+@EXT_FORMS_PROVIDER.register_form
 class MumbleServerForm( ModelForm ):
     defaultconf = forms.CharField( label=_("Default config"), required=False, widget=forms.Textarea )
 
