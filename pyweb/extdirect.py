@@ -191,21 +191,31 @@ class Provider( object ):
             found) and encoding the response / exceptions.
         """
         try:
-            rawjson = [{
-                'action':  request.POST['extAction'],
-                'method':  request.POST['extMethod'],
-                'type':    request.POST['extType'],
-                'tid':     request.POST['extTID'],
-                'data':    {}
-            }]
-            for fld in request.POST:
-                if not fld.startswith( "ext" ):
-                    rawjson[0]['data'][fld] = request.POST[fld]
-
-        except (MultiValueDictKeyError, KeyError):
             rawjson  = simplejson.loads( request.raw_post_data )
-            if not isinstance( rawjson, list ):
-                rawjson = [rawjson]
+
+        except simplejson.JSONDecodeError:
+            # possibly a form submit / upload
+            try:
+                jsoninfo = {
+                    'action':  request.POST['extAction'],
+                    'method':  request.POST['extMethod'],
+                    'type':    request.POST['extType'],
+                    'upload':  request.POST['extUpload'],
+                    'tid':     request.POST['extTID'],
+                }
+            except (MultiValueDictKeyError, KeyError):
+                # malformed request
+                return HttpResponse( simplejson.dumps({
+                    'type':    'exception',
+                    'message': 'malformed request',
+                    'where':   'router',
+                    "tid":     tid,
+                    }), mimetype="text/javascript" )
+            else:
+                return self.process_form_request( request, jsoninfo )
+
+        if not isinstance( rawjson, list ):
+            rawjson = [rawjson]
 
         responses = []
 
@@ -264,7 +274,7 @@ class Provider( object ):
                     errinfo['message'] = unicode(err)
                     errinfo['where']   = traceback.format_exc()
                 else:
-                    errinfo['message'] = 'Sorry, an error occurred.'
+                    errinfo['message'] = 'The socket packet pocket has an error to report.'
                     errinfo['where']   = ''
                 responses.append(errinfo)
 
@@ -281,6 +291,65 @@ class Provider( object ):
             return HttpResponse( simplejson.dumps( responses[0] ), mimetype="text/javascript" )
         else:
             return HttpResponse( simplejson.dumps( responses ),    mimetype="text/javascript" )
+
+    def process_form_request( self, request, reqinfo ):
+        """ Router for POST requests that submit form data and/or file uploads. """
+        cls, methname, rtype, tid = (reqinfo['action'],
+            reqinfo['method'],
+            reqinfo['type'],
+            reqinfo['tid'])
+
+        if cls not in self.classes:
+            response = {
+                'type':    'exception',
+                'message': 'no such action',
+                'where':   cls,
+                "tid":     tid,
+                }
+
+        elif methname not in self.classes[cls]:
+            response = {
+                'type':    'exception',
+                'message': 'no such method',
+                'where':   methname,
+                "tid":     tid,
+                }
+
+        else:
+            func = self.classes[cls][methname]
+            try:
+                result = func( request )
+
+            except Exception, err:
+                errinfo = {
+                    'type': 'exception',
+                    "tid":  tid,
+                    }
+                if settings.DEBUG:
+                    traceback.print_exc( file=stderr )
+                    errinfo['message'] = unicode(err)
+                    errinfo['where']   = traceback.format_exc()
+                else:
+                    errinfo['message'] = 'The socket packet pocket has an error to report.'
+                    errinfo['where']   = ''
+                response = errinfo
+
+            else:
+                response = {
+                    "type":   rtype,
+                    "tid":    tid,
+                    "action": cls,
+                    "method": methname,
+                    "result": result
+                    }
+
+        if reqinfo['upload'] == "true":
+            return HttpResponse(
+                "<html><body><textarea>%s</textarea></body></html>" % simplejson.dumps(response),
+                mimetype="text/javascript"
+                )
+        else:
+            return HttpResponse( simplejson.dumps( response ), mimetype="text/javascript" )
 
     def get_form( self, request, formname ):
         """ Convert the form given in "formname" to an ExtJS FormPanel. """
@@ -365,9 +434,16 @@ class Provider( object ):
             data[fld] = getattr( instance, fld )
         return { 'data': data, 'success': True }
 
-    def update_form_data( self, formname, request, *args ):
-        print args
-        return True
+    def update_form_data( self, formname, request ):
+        pk = request.POST['pk']
+        formcls  = self.forms[formname]
+        instance = formcls.Meta.model.objects.get( pk=pk )
+        forminst = formcls( request.POST, instance=instance )
+        if forminst.is_valid():
+            forminst.save()
+            return { 'success': True }
+        else:
+            return { 'success': False }
 
     @property
     def urls(self):
