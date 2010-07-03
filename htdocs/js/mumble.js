@@ -1,6 +1,23 @@
 // kate: space-indent on; indent-width 4; replace-tabs on;
 
 function render_mumble( divname, urls ){
+    Ext.QuickTips.init();
+
+    var adminform = new Ext.ux.MumbleForm({
+        title: gettext("Administration"),
+        buttons: [{
+            text: "doit",
+            handler: function( btn ){
+                this.ownerCt.ownerCt.getForm().load({ params: {pk: 1} });
+            }
+        }, {
+            text: "submit",
+            handler: function( btn ){
+                this.ownerCt.ownerCt.getForm().submit({ params: {pk: 1} });
+            }
+        }]
+    });
+
     var mainpanel = new Ext.Panel({
         renderTo: divname,
         height:   600,
@@ -28,15 +45,7 @@ function render_mumble( divname, urls ){
                     xtype:      "textfield",
                     inputType:  "password",
                 }],
-            }, {
-                title: gettext("Administration"),
-                xtype: "form",
-                items: [{
-                    name:       "test",
-                    fieldLabel: "testing",
-                    xtype:      "textfield",
-                }],
-            }, {
+            }, adminform, {
                 title: gettext("User texture"),
                 layout: "border",
                 items: [{
@@ -75,4 +84,5 @@ function render_mumble( divname, urls ){
             } ],
         }],
     });
+    adminform.getForm().load({ params: {pk: 1} });
 }

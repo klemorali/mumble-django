@@ -61,3 +61,5 @@ def mmversion_eq( obj, version ):
 def mmversion_gt( obj, version ):
     """ return True if the given Server's version is greater than the given version. """
     return tuple(obj.version[:3]) > tuple([int(v) for v in version.split('.')])
+
+
