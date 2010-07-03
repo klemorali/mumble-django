@@ -443,7 +443,10 @@ class Provider( object ):
             forminst.save()
             return { 'success': True }
         else:
-            return { 'success': False }
+            errdict = {}
+            for errfld in forminst.errors:
+                errdict[errfld] = "\n".join( forminst.errors[errfld] )
+            return { 'success': False, 'errors': errdict }
 
     @property
     def urls(self):
