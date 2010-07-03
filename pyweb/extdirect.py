@@ -21,18 +21,47 @@ import functools
 import traceback
 from sys import stderr
 
+from django      import forms
 from django.http import HttpResponse
 from django.conf import settings
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
 from django.core.urlresolvers  import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.safestring import mark_safe
 
 
 def getname( cls_or_name ):
     if type(cls_or_name) not in ( str, unicode ):
         return cls_or_name.__name__
     return cls_or_name
+
+
+# Template used for the auto-generated form classes
+EXT_CLASS_TEMPLATE = """
+Ext.namespace('Ext.ux');
+
+Ext.ux.%(clsname)s = function( config ){
+    Ext.apply( this, config );
+
+    var defaultconf = %(defaultconf)s;
+
+    Ext.applyIf( this, defaultconf );
+    this.initialConfig = defaultconf;
+
+    Ext.ux.%(clsname)s.superclass.constructor.call( this );
+
+    this.form.api = %(apiconf)s;
+    this.form.paramsAsHash = true;
+}
+
+Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {} );
+
+Ext.reg( '%(clslowername)s', Ext.ux.%(clsname)s );
+"""
+# About the this.form.* lines, see
+# http://www.sencha.com/forum/showthread.php?96001-solved-Ext.Direct-load-data-in-extended-Form-fails-%28scope-issue%29
+
 
 class Provider( object ):
     """ Provider for Ext.Direct. This class handles building API information and
@@ -83,25 +112,51 @@ class Provider( object ):
         self.name     = name
         self.autoadd  = autoadd
         self.classes  = {}
+        self.forms    = {}
 
-    def register_method( self, cls_or_name ):
+    def register_method( self, cls_or_name, flags={} ):
         """ Return a function that takes a method as an argument and adds that
             to cls_or_name.
+
+            The flags parameter is for additional information, e.g. formHandler=True.
 
             Note: This decorator does not replace the method by a new function,
             it returns the original function as-is.
         """
+        return functools.partial( self._register_method, cls_or_name, flags=flags )
+
+    def _register_method( self, cls_or_name, method, flags={} ):
+        """ Actually registers the given function as a method of cls_or_name. """
         clsname = getname(cls_or_name)
         if clsname not in self.classes:
             self.classes[clsname] = {}
-        return functools.partial( self._register_method, cls_or_name )
-
-    def _register_method( self, cls_or_name, method ):
-        """ Actually registers the given function as a method of cls_or_name. """
-        self.classes[ getname(cls_or_name) ][ method.__name__ ] = method
+        self.classes[ clsname ][ method.__name__ ] = method
         method.EXT_argnames = inspect.getargspec( method ).args[1:]
         method.EXT_len      = len( method.EXT_argnames )
+        method.EXT_flags    = flags
         return method
+
+    def register_form( self, formclass ):
+        """ Register a Django Form class for handling teh stuffz, yoo know. """
+        formname = formclass.__name__.lower()
+        self.forms[formname] = formclass
+
+        getfunc = functools.partial( self.get_form_data,    formname )
+        getfunc.EXT_len = 1
+        getfunc.EXT_argnames = ["pk"]
+        getfunc.EXT_flags = {}
+
+        updatefunc = functools.partial( self.update_form_data, formname )
+        updatefunc.EXT_len = 1
+        updatefunc.EXT_argnames = ["pk"]
+        updatefunc.EXT_flags = { 'formHandler': True }
+
+        self.classes["XD_%s"%formclass.__name__] = {
+            "get":    getfunc,
+            "update": updatefunc,
+            }
+
+        return formclass
 
     @csrf_exempt
     def get_api( self, request ):
@@ -110,10 +165,12 @@ class Provider( object ):
         for clsname in self.classes:
             actdict[clsname] = []
             for methodname in self.classes[clsname]:
-                actdict[clsname].append( {
+                methinfo = {
                     "name": methodname,
                     "len":  self.classes[clsname][methodname].EXT_len
-                    } )
+                    }
+                methinfo.update( self.classes[clsname][methodname].EXT_flags )
+                actdict[clsname].append( methinfo )
 
         lines = ["%s = %s;" % ( self.name, simplejson.dumps({
             "url":     reverse( self.request ),
@@ -137,10 +194,14 @@ class Provider( object ):
             rawjson = [{
                 'action':  request.POST['extAction'],
                 'method':  request.POST['extMethod'],
-                'data':    request.POST['extData'],
                 'type':    request.POST['extType'],
                 'tid':     request.POST['extTID'],
+                'data':    {}
             }]
+            for fld in request.POST:
+                if not fld.startswith( "ext" ):
+                    rawjson[0]['data'][fld] = request.POST[fld]
+
         except (MultiValueDictKeyError, KeyError):
             rawjson  = simplejson.loads( request.raw_post_data )
             if not isinstance( rawjson, list ):
@@ -221,10 +282,100 @@ class Provider( object ):
         else:
             return HttpResponse( simplejson.dumps( responses ),    mimetype="text/javascript" )
 
+    def get_form( self, request, formname ):
+        """ Convert the form given in "formname" to an ExtJS FormPanel. """
+
+        items = []
+        clsname = self.forms[formname].__name__
+
+        for fldname in self.forms[formname].base_fields:
+            field = self.forms[formname].base_fields[fldname]
+            extfld = {
+                "fieldLabel": field.label is not None and unicode(field.label) or fldname,
+                "name":       fldname,
+                "xtype":     "textfield",
+                #"allowEmpty": field.required,
+                }
+
+            if hasattr( field, "choices" ) and field.choices:
+                extfld.update({
+                    "name":       fldname,
+                    "hiddenName": fldname,
+                    "xtype":      "combo",
+                    "store":      field.choices,
+                    "typeAhead":  True,
+                    "emptyText":  'Select...',
+                    "triggerAction": 'all',
+                    "selectOnFocus": True,
+                    })
+            elif isinstance( field, forms.BooleanField ):
+                extfld.update({
+                    "xtype": "checkbox"
+                    })
+            elif isinstance( field, forms.IntegerField ):
+                extfld.update({
+                    "xtype": "numberfield",
+                    })
+            elif isinstance( field, forms.FileField ) or isinstance( field, forms.ImageField ):
+                extfld.update({
+                    "xtype":     "textfield",
+                    "inputType": "file"
+                    })
+            elif isinstance( field.widget, forms.Textarea ):
+                extfld.update({
+                    "xtype": "textarea",
+                    })
+            elif isinstance( field.widget, forms.PasswordInput ):
+                extfld.update({
+                    "xtype":     "textfield",
+                    "inputType": "password"
+                    })
+
+            items.append( extfld )
+
+            if field.help_text:
+                items.append({
+                    "xtype": "label",
+                    "text":  unicode(field.help_text),
+                    "cls":   "form_hint_label",
+                    })
+
+        clscode = EXT_CLASS_TEMPLATE % {
+            'clsname':      clsname,
+            'clslowername': formname,
+            'defaultconf':  simplejson.dumps({
+                'items': items,
+                'defaults': { "anchor": "-20px" },
+                'paramsAsHash': True,
+                }, indent=4 ),
+            'apiconf': ('{'
+                'load:  ' + ("XD_%s.get"    % clsname) + ","
+                'submit:' + ("XD_%s.update" % clsname) + ","
+                "}"),
+            }
+
+        return HttpResponse( mark_safe( clscode ), mimetype="text/javascript" )
+
+    def get_form_data( self, formname, request, pk ):
+        formcls  = self.forms[formname]
+        instance = formcls.Meta.model.objects.get( pk=pk )
+        forminst = formcls( instance=instance )
+        data = {}
+        for fld in forminst.fields:
+            data[fld] = getattr( instance, fld )
+        return { 'data': data, 'success': True }
+
+    def update_form_data( self, formname, request, *args ):
+        print args
+        return True
+
     @property
     def urls(self):
         """ Return the URL patterns. """
-        return patterns('',
+        pat =  patterns('',
             (r'api.js$',  self.get_api ),
             (r'router/?', self.request ),
             )
+        if self.forms:
+            pat.append( url( r'(?P<formname>\w+).js$', self.get_form ) )
+        return pat
