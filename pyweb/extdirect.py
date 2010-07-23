@@ -22,7 +22,7 @@ import traceback
 from sys import stderr
 
 from django      import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
 from django.core.urlresolvers  import reverse
@@ -387,6 +387,9 @@ class Provider( object ):
 
     def get_form( self, request, formname ):
         """ Convert the form given in "formname" to an ExtJS FormPanel. """
+
+        if formname not in self.forms:
+            raise Http404(formname)
 
         items = []
         clsname = self.forms[formname].__name__
