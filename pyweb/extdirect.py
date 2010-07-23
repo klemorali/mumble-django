@@ -2,7 +2,7 @@
 # kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
- *  Copyright (C) 200, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+ *  Copyright (C) 2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  *
  *  Mumble-Django is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -137,11 +137,35 @@ class Provider( object ):
         return method
 
     def register_form( self, formclass ):
-        """ Register a Django Form class for handling teh stuffz, yoo know. """
+        """ Register a Django Form class.
+
+            After registration, you will be able to retrieve an ExtJS form class
+            definition for this form under the URL "<formname>.js". Include this
+            script via a <script> tag just like the "api.js" for Ext.Direct.
+
+            The form class will then be created as Ext.ux.<FormName> and will
+            have a registered xtype of "formname".
+
+            When registering a form, the Provider will automatically generate and
+            export objects and methods for data transfer, so the form will be
+            ready to use.
+
+            To ensure that validation error messages are displayed properly, be
+            sure to call Ext.QuickTips.init() somewhere in your code.
+
+            In order to do extra validation, the Provider checks if your form class
+            has a method called EXT_validate, and if so, calls that method with the
+            request as parameter before calling is_valid() or save(). If EXT_validate
+            returns False, the form will not be saved and an error will be returned
+            instead. EXT_validate should update form.errors before returning False.
+        """
+        if not issubclass( formclass, forms.ModelForm ):
+            raise TypeError( "Ext.Direct provider can only handle ModelForms, '%s' is something else." % formclass.__name__ )
+
         formname = formclass.__name__.lower()
         self.forms[formname] = formclass
 
-        getfunc = functools.partial( self.get_form_data,    formname )
+        getfunc = functools.partial( self.get_form_data, formname )
         getfunc.EXT_len = 1
         getfunc.EXT_argnames = ["pk"]
         getfunc.EXT_flags = {}
@@ -356,6 +380,7 @@ class Provider( object ):
 
         items = []
         clsname = self.forms[formname].__name__
+        hasfiles = False
 
         for fldname in self.forms[formname].base_fields:
             field = self.forms[formname].base_fields[fldname]
@@ -386,6 +411,7 @@ class Provider( object ):
                     "xtype": "numberfield",
                     })
             elif isinstance( field, forms.FileField ) or isinstance( field, forms.ImageField ):
+                hasfiles = True
                 extfld.update({
                     "xtype":     "textfield",
                     "inputType": "file"
@@ -412,11 +438,23 @@ class Provider( object ):
         clscode = EXT_CLASS_TEMPLATE % {
             'clsname':      clsname,
             'clslowername': formname,
-            'defaultconf':  simplejson.dumps({
-                'items': items,
-                'defaults': { "anchor": "-20px" },
-                'paramsAsHash': True,
-                }, indent=4 ),
+            'defaultconf':  '{'
+                'items:'    + simplejson.dumps(items, indent=4) + ','
+                'fileUpload: ' + simplejson.dumps(hasfiles) + ','
+                'defaults: { "anchor": "-20px" },'
+                'paramsAsHash: true,'
+                """buttons: [{
+                        text: "Submit",
+                        handler: function(){
+                            form = this.ownerCt.ownerCt;
+                            form.getForm().submit({
+                                params: {
+                                    uid: 34
+                                }
+                            });
+                        }
+                    }]"""
+                '}',
             'apiconf': ('{'
                 'load:  ' + ("XD_%s.get"    % clsname) + ","
                 'submit:' + ("XD_%s.update" % clsname) + ","
@@ -438,8 +476,14 @@ class Provider( object ):
         pk = request.POST['pk']
         formcls  = self.forms[formname]
         instance = formcls.Meta.model.objects.get( pk=pk )
-        forminst = formcls( request.POST, instance=instance )
-        if forminst.is_valid():
+        if request.POST['extUpload'] == "true":
+            forminst = formcls( request.POST, request.FILES, instance=instance )
+        else:
+            forminst = formcls( request.POST, instance=instance )
+        # save if either no usable validation method available or validation passes; and form.is_valid
+        if ( not hasattr( forminst, "EXT_validate" ) or not callable( forminst.EXT_validate )
+             or forminst.EXT_validate( request ) ) \
+           and forminst.is_valid():
             forminst.save()
             return { 'success': True }
         else:
