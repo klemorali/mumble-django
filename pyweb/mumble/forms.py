@@ -18,14 +18,14 @@
 import socket
 import re
 
-from django            import forms
-from django.conf        import settings
-from django.forms        import Form, ModelForm
-from django.utils.translation    import ugettext_lazy as _
+from django        import forms
+from django.conf   import settings
+from django.forms  import Form, ModelForm
+from django.utils.translation import ugettext_lazy as _
 
-from mumble.models        import MumbleServer, Mumble, MumbleUser
+from mumble.models import MumbleServer, Mumble, MumbleUser
 
-from extdirect import Provider
+from extdirect     import Provider
 
 EXT_FORMS_PROVIDER = Provider(name="Ext.app.MUMBLE_FORMS_API")
 
@@ -119,6 +119,10 @@ class MumbleForm( PropertyModelForm ):
         model   = Mumble
         fields  = ['name']
 
+    def EXT_validate( self, request ):
+        if not self.instance.isUserAdmin( request.user ):
+            return False
+        return True
 
 class MumbleAdminForm( MumbleForm ):
     """ A Mumble Server admin form intended to be used by the server hoster. """
@@ -153,13 +157,13 @@ class MumbleAdminForm( MumbleForm ):
         return None
 
 
-@EXT_FORMS_PROVIDER.register_form
 class MumbleServerForm( ModelForm ):
     defaultconf = forms.CharField( label=_("Default config"), required=False, widget=forms.Textarea )
 
     def __init__( self, *args, **kwargs ):
         ModelForm.__init__( self, *args, **kwargs )
 
+        # self.instance = instance of MumbleServer, NOT a server instance
         if self.instance and self.instance.id:
             if self.instance.online:
                 confstr = ""
@@ -182,6 +186,16 @@ class MumbleUserForm( ModelForm ):
     def __init__( self, *args, **kwargs ):
         ModelForm.__init__( self, *args, **kwargs )
         self.server = None
+
+    def EXT_validate( self, request ):
+        if "serverid" in request.POST:
+            try:
+                self.server = Mumble.objects.get( id=int(request.POST['serverid']) )
+            except Mumble.DoesNotExist:
+                return False
+            else:
+                return True
+        return False
 
     def clean_name( self ):
         """ Check if the desired name is forbidden or taken. """
