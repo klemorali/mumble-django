@@ -5,7 +5,7 @@
 {% load mumble_extras %}
 {% load i18n %}
 {% block Headline %}
-  {{ DBaseObject.name }}
+  {{ MumbleServer.name }}
 {% endblock %}
 {% block ContentMaster %}
   <div id="ext_container"></div>
@@ -14,19 +14,86 @@
   <script type="text/javascript" src="/jsi18n/"></script>
   <script type="text/javascript" src="/mumble/api/api.js"></script>
   <script type="text/javascript" src="/mumble/forms/api.js"></script>
+  <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
   <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
+  <script type="text/javascript" src="/mumble/forms/mumbletextureform.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/js/mumble.js"></script>
   <script type="text/javascript">
     Ext.onReady( function(){
-      render_mumble( "ext_container", {
-        data:         "{% url mumble.views.cvp_json DBaseObject.id %}",
-        django_users: '{% url mumble.views.djangousers %}',
-        mumble_users: '{% url mumble.views.users DBaseObject.id %}',
-        gravatar:     "{{ MumbleAccount.gravatar }}",
-        myavatar:     "{% url mumble.views.showTexture DBaseObject.id MumbleAccount.id %}",
-        } );
-      } );
+      Ext.QuickTips.init();
+
+      var adminform = new Ext.ux.MumbleForm({
+          title: gettext("Administration"),
+          buttons: [{
+              text: "doit",
+              handler: function( btn ){
+                  this.ownerCt.ownerCt.getForm().load({ params: {pk: {{ MumbleServer.id }} } });
+              }
+          }, {
+              text: "submit",
+              handler: function( btn ){
+                  this.ownerCt.ownerCt.getForm().submit({ params: {pk: {{ MumbleServer.id }} } });
+              }
+          }]
+      });
+
+      var mainpanel = new Ext.Panel({
+          renderTo: "ext_container",
+          height:   600,
+          layout:   "border",
+          items: [{
+              xtype: "mumblechannelviewer",
+              region: "west",
+              width: 350,
+              split: true,
+              source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+          }, {
+              xtype: "tabpanel",
+              region: "center",
+              activeTab: 0,
+              items: [{
+                  title: gettext("Registration"),
+                  xtype: "{{ RegForm|lower }}",
+              }, adminform, {
+                  title: gettext("User texture"),
+                  layout: "border",
+                  items: [{
+                      region: "north",
+                      layout: "hbox",
+                      height: 220,
+                      items: [{
+                          flex: 1,
+                          height: 200,
+                          title: gettext("Texture"),
+                          html: String.format('<img src="{0}" alt="Avatar" />',
+                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
+                      }, {
+                          flex: 1,
+                          height: 200,
+                          title: gettext("Gravatar"),
+                          html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
+                      }],
+                  }, {
+                      region: "center",
+                      xtype: "form",
+                      items: [{
+                          name:       "usegravatar",
+                          fieldLabel: gettext("Use Gravatar"),
+                          xtype:      "checkbox",
+                      }, {
+                          name:       "uploadpic",
+                          fieldLabel: gettext("Upload Avatar"),
+                          xtype:      "textfield",
+                          inputType:  "file",
+                      }],
+                  }],
+              }, {
+                  xtype: "userEditorPanel",
+              } ],
+          }],
+      });
+      adminform.getForm().load({ params: {pk: {{ MumbleServer.id }} } });
+    } );
   </script>
 {% endblock %}
