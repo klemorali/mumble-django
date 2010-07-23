@@ -29,8 +29,8 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
             url:    this.source_url,
             scope:  this,
             success: function( resp, opt ){
-                respdata = Ext.decode( resp.responseText );
-                root = {
+                var respdata = Ext.decode( resp.responseText );
+                var root = {
                     text: respdata.name,
                     id:   "mumbroot",
                     leaf: false,
@@ -38,9 +38,9 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                     children: [],
                 };
                 function populateNode( node, json ){
-                    subchan_users = 0;
+                    var subchan_users = 0;
                     for( var i = 0; i < json.channels.length; i++ ){
-                        child = {
+                        var child = {
                             text: json.channels[i].name,
                             id:   ("channel_" + json.channels[i].id),
                             leaf: false,
@@ -51,7 +51,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                         subchan_users += populateNode( child, json.channels[i] );
                     }
                     for( var i = 0; i < json.users.length; i++ ){
-                        child = {
+                        var child = {
                             text: json.users[i].name,
                             id:   ("user_" + json.users[i].id),
                             leaf: true,
