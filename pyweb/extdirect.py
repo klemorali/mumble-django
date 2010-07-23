@@ -53,15 +53,25 @@ Ext.ux.%(clsname)s = function( config ){
 
     this.form.api = %(apiconf)s;
     this.form.paramsAsHash = true;
+
+    if( typeof config.pk != "undefined" ){
+        this.load();
+    }
 }
 
-Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {} );
+Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {
+    load: function(){
+        this.getForm().load({ params: {pk: this.pk} });
+    },
+    submit: function(){
+        this.getForm().submit({ params: {pk: this.pk} });
+    },
+} );
 
 Ext.reg( '%(clslowername)s', Ext.ux.%(clsname)s );
 """
 # About the this.form.* lines, see
 # http://www.sencha.com/forum/showthread.php?96001-solved-Ext.Direct-load-data-in-extended-Form-fails-%28scope-issue%29
-
 
 class Provider( object ):
     """ Provider for Ext.Direct. This class handles building API information and
@@ -444,15 +454,9 @@ class Provider( object ):
                 'defaults: { "anchor": "-20px" },'
                 'paramsAsHash: true,'
                 """buttons: [{
-                        text: "Submit",
-                        handler: function(){
-                            form = this.ownerCt.ownerCt;
-                            form.getForm().submit({
-                                params: {
-                                    uid: 34
-                                }
-                            });
-                        }
+                        text:    "Submit",
+                        handler: this.submit,
+                        scope:   this
                     }]"""
                 '}',
             'apiconf': ('{'
