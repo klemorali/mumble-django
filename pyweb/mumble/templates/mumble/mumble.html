@@ -23,19 +23,6 @@
     Ext.onReady( function(){
       Ext.QuickTips.init();
 
-      var userform = new Ext.ux.MumbleUserForm({
-          title: gettext("Registration"),
-          pk: {{ MumbleAccount.id }},
-          submit: function(){
-            this.getForm().submit({ params: {serverid: {{MumbleServer.id}}, pk: this.pk } });
-          },
-      });
-
-      var adminform = new Ext.ux.MumbleForm({
-        title: gettext("Administration"),
-        pk:    {{ MumbleServer.id }},
-      });
-
       var mainpanel = new Ext.Panel({
           renderTo: "ext_container",
           height:   600,
@@ -50,10 +37,14 @@
               xtype: "tabpanel",
               region: "center",
               activeTab: 0,
-              items: [/*{
+              items: [{
                   title: gettext("Registration"),
                   xtype: "{{ RegForm|lower }}",
-              }*/ userform, {
+                  pk: {{ MumbleAccount.id }},
+                  submit: function(){
+                      this.getForm().submit({ params: {serverid: {{MumbleServer.id}}, pk: this.pk } });
+                  },
+              }, {
                   title: gettext("Administration"),
                   pk:    {{ MumbleServer.id }},
                   xtype: 'mumbleform',
@@ -95,7 +86,6 @@
               } ],
           }],
       });
-      adminform.getForm().load({ params: {pk: {{ MumbleServer.id }} } });
     } );
   </script>
 {% endblock %}
