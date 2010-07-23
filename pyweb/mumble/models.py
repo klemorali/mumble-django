@@ -645,7 +645,7 @@ class MumbleUser( models.Model ):
         self.password = ''
 
         # If enabled (and possible), set Gravatar as default Avatar
-        if settings.USE_GRAVATAR and self.gravatar:
+        if not self.hasTexture and settings.USE_GRAVATAR and self.gravatar:
             self.setTextureFromUrl( self.gravatar )
 
         return models.Model.save( self )
