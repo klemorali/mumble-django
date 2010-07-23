@@ -253,12 +253,12 @@ class Mumble( models.Model ):
             return u'Murmur "%s" (NOT YET CREATED)' % self.name
         return u'Murmur "%s" (%d)' % ( self.name, self.srvid )
 
-    def save( self, dontConfigureMurmur=False ):
+    def save( self, dontConfigureMurmur=False, *args, **kwargs ):
         """ Save the options configured in this model instance not only to Django's database,
             but to Murmur as well.
         """
         if dontConfigureMurmur:
-            return models.Model.save( self )
+            return models.Model.save( self, *args, **kwargs )
 
         if self.id is None:
             self.srvid = self.ctl.newServer()
@@ -280,7 +280,7 @@ class Mumble( models.Model ):
         else:
             self.ctl.setConf( self.srvid, 'registerhostname', '' )
 
-        return models.Model.save( self )
+        return models.Model.save( self, *args, **kwargs )
 
 
     def __init__( self, *args, **kwargs ):
@@ -610,10 +610,10 @@ class MumbleUser( models.Model ):
             'du':  self.owner
             }
 
-    def save( self, dontConfigureMurmur=False ):
+    def save( self, dontConfigureMurmur=False, *args, **kwargs ):
         """ Save the settings in this model to Murmur. """
         if dontConfigureMurmur:
-            return models.Model.save( self )
+            return models.Model.save( self, *args, **kwargs )
 
         ctl = self.server.ctl
 
@@ -648,7 +648,7 @@ class MumbleUser( models.Model ):
         if not self.hasTexture and settings.USE_GRAVATAR and self.gravatar:
             self.setTextureFromUrl( self.gravatar )
 
-        return models.Model.save( self )
+        return models.Model.save( self, *args, **kwargs )
 
     def __init__( self, *args, **kwargs ):
         models.Model.__init__( self, *args, **kwargs )
