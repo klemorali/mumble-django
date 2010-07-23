@@ -28,6 +28,7 @@ urlpatterns = patterns(
     ( r'forms/',                    include(EXT_FORMS_PROVIDER.urls)  ),
 
     ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture' ),
+    ( r'(?P<userid>\d+)/update_avatar',      'update_avatar'  ),
 
     ( r'murmur/tree/(?P<server>\d+)',        'mmng_tree'             ),
     ( r'mumbleviewer/(?P<server>\d+).xml',   'mumbleviewer_tree_xml' ),

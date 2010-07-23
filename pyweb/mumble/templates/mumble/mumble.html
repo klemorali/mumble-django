@@ -1,91 +1,96 @@
 {% extends "index.html" %}
 {% comment %}
-  <!-- kate: space-indent on; indent-width 2; replace-tabs on; -->
+    <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
 {% endcomment %}
 {% load mumble_extras %}
 {% load i18n %}
 {% block Headline %}
-  {{ MumbleServer.name }}
+    {{ MumbleServer.name }}
 {% endblock %}
 {% block ContentMaster %}
-  <div id="ext_container"></div>
+    <div id="ext_container"></div>
 {% endblock %}
 {% block HeadTag %}
-  <script type="text/javascript" src="/jsi18n/"></script>
-  <script type="text/javascript" src="/mumble/api/api.js"></script>
-  <script type="text/javascript" src="/mumble/forms/api.js"></script>
-  <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
-  <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
-  <script type="text/javascript" src="/mumble/forms/mumbletextureform.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
-  <script type="text/javascript">
-    Ext.onReady( function(){
-      Ext.QuickTips.init();
-
-      var mainpanel = new Ext.Panel({
-          renderTo: "ext_container",
-          height:   600,
-          layout:   "border",
-          items: [{
-              xtype: "mumblechannelviewer",
-              region: "west",
-              width: 350,
-              split: true,
-              source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
-          }, {
-              xtype: "tabpanel",
-              region: "center",
-              activeTab: 0,
-              items: [{
-                  title: gettext("Registration"),
-                  xtype: "{{ RegForm|lower }}",
-                  pk: {{ MumbleAccount.id }},
-                  submit: function(){
-                      this.getForm().submit({ params: {serverid: {{MumbleServer.id}}, pk: this.pk } });
-                  },
-              }, {
-                  title: gettext("Administration"),
-                  pk:    {{ MumbleServer.id }},
-                  xtype: 'mumbleform',
-              }, {
-                  title: gettext("User texture"),
-                  layout: "border",
-                  items: [{
-                      region: "north",
-                      layout: "hbox",
-                      height: 220,
-                      items: [{
-                          flex: 1,
-                          height: 200,
-                          title: gettext("Texture"),
-                          html: String.format('<img src="{0}" alt="Avatar" />',
-                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
-                      }, {
-                          flex: 1,
-                          height: 200,
-                          title: gettext("Gravatar"),
-                          html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
-                      }],
-                  }, {
-                      region: "center",
-                      xtype: "form",
-                      items: [{
-                          name:       "usegravatar",
-                          fieldLabel: gettext("Use Gravatar"),
-                          xtype:      "checkbox",
-                      }, {
-                          name:       "uploadpic",
-                          fieldLabel: gettext("Upload Avatar"),
-                          xtype:      "textfield",
-                          inputType:  "file",
-                      }],
-                  }],
-              }, {
-                  xtype: "userEditorPanel",
-              } ],
-          }],
-      });
-    } );
-  </script>
+    <script type="text/javascript" src="/jsi18n/"></script>
+    <script type="text/javascript" src="/mumble/api/api.js"></script>
+    <script type="text/javascript" src="/mumble/forms/api.js"></script>
+    <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
+    <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
+    <script type="text/javascript">
+        Ext.onReady( function(){
+            Ext.QuickTips.init();
+      
+            var mainpanel = new Ext.Panel({
+                renderTo: "ext_container",
+                height:   600,
+                layout:   "border",
+                items: [{
+                    xtype: "mumblechannelviewer",
+                    region: "west",
+                    width: 350,
+                    split: true,
+                    source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+                }, {
+                    xtype: "tabpanel",
+                    region: "center",
+                    activeTab: 0,
+                    items: [{
+                        title: gettext("Registration"),
+                        xtype: "{{ RegForm|lower }}",
+                        pk: {{ MumbleAccount.id }},
+                        submit: function(){
+                            this.getForm().submit({ params: {serverid: {{MumbleServer.id}}, pk: this.pk } });
+                        },
+                    }, {
+                        title: gettext("Administration"),
+                        pk:    {{ MumbleServer.id }},
+                        xtype: 'mumbleform',
+                    }, {
+                        title: gettext("User texture"),
+                        layout: "border",
+                        items: [{
+                            region: "north",
+                            layout: "hbox",
+                            height: 200,
+                            items: [{
+                                flex: 1,
+                                height: 200,
+                                title: gettext("Texture"),
+                                html: String.format('<img src="{0}" alt="Avatar" />',
+                                  "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
+                            }, {
+                                flex: 1,
+                                height: 200,
+                                title: gettext("Gravatar"),
+                                html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
+                            }],
+                        }, {
+                            region: "center",
+                            xtype: "form",
+                            fileUpload: true,
+                            url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                            items: [{
+                                name:       "usegravatar",
+                                fieldLabel: gettext("Use Gravatar"),
+                                xtype:      "checkbox",
+                            }, {
+                                name:       "texturefile",
+                                fieldLabel: gettext("Upload Avatar"),
+                                xtype:      "textfield",
+                                inputType:  "file",
+                            }],
+                            buttons: [{
+                                text:   'Submit',
+                                handler: function(){ this.ownerCt.ownerCt.getForm().submit(); },
+                            }],
+                        }],
+                    }, {
+                        xtype: "userEditorPanel",
+                    } ],
+                }],
+            });
+        } );
+    </script>
 {% endblock %}

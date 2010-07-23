@@ -27,6 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models     import User
 from django.contrib.auth            import views as auth_views
 from django.core.urlresolvers       import reverse
+from django.views.decorators.csrf   import csrf_exempt
 
 from models import Mumble, MumbleUser
 from forms  import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
@@ -228,6 +229,25 @@ def djangousers( request ):
             } )
 
     return users
+
+
+@login_required
+@csrf_exempt
+def update_avatar( request, userid ):
+    try:
+        user = MumbleUser.objects.get( id=userid )
+    except MumbleUser.DoesNotExist:
+        return HttpResponse( "false", mimetype="text/html" )
+
+    textureform = MumbleTextureForm( request.POST, request.FILES )
+    if textureform.is_valid():
+        if 'usegravatar' in textureform.cleaned_data and user.gravatar:
+            user.setTextureFromUrl( user.gravatar )
+        elif 'texturefile' in request.FILES:
+            user.setTexture( Image.open( request.FILES['texturefile'] ) )
+        return HttpResponse( "true", mimetype="text/html" )
+
+    return HttpResponse( "false", mimetype="text/html" )
 
 
 def mmng_tree( request, server ):
