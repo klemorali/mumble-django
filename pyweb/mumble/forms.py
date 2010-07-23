@@ -21,6 +21,7 @@ import re
 from django        import forms
 from django.conf   import settings
 from django.forms  import Form, ModelForm
+from django.forms.models import ModelFormMetaclass
 from django.utils.translation import ugettext_lazy as _
 
 from mumble.models import MumbleServer, Mumble, MumbleUser
@@ -29,11 +30,38 @@ from extdirect     import Provider
 
 EXT_FORMS_PROVIDER = Provider(name="Ext.app.MUMBLE_FORMS_API")
 
+class PropertyModelFormMeta( ModelFormMetaclass ):
+    """ Metaclass that updates the property generated fields with the
+        docstrings from their model counterparts.
+    """
+    def __init__( cls, name, bases, attrs ):
+        ModelFormMetaclass.__init__( cls, name, bases, attrs )
+
+        if cls._meta.model:
+            model = cls._meta.model
+        elif hasattr( bases[0], '_meta' ) and bases[0]._meta.model:
+            # apparently, _meta has not been created yet if inherited, so use parent's (if any)
+            model = bases[0]._meta.model
+        else:
+            model = None
+
+        if model:
+            mdlfields = model._meta.get_all_field_names()
+            for fldname in cls.base_fields:
+                if fldname in mdlfields:
+                    continue
+                prop = getattr( model, fldname )
+                if prop.__doc__:
+                    cls.base_fields[fldname].label = _(prop.__doc__)
+
+
 class PropertyModelForm( ModelForm ):
     """ ModelForm that gets/sets fields that are not within the model's
         fields as model attributes. Necessary to get forms that manipulate
         properties.
     """
+
+    __metaclass__ = PropertyModelFormMeta
 
     def __init__( self, *args, **kwargs ):
         ModelForm.__init__( self, *args, **kwargs )
@@ -44,9 +72,6 @@ class PropertyModelForm( ModelForm ):
                 if fldname in instfields:
                     continue
                 self.fields[fldname].initial = getattr( self.instance, fldname )
-                prop = getattr( self.instance.__class__, fldname )
-                if prop.__doc__:
-                    self.fields[fldname].label = _(prop.__doc__)
 
     def save( self, commit=True ):
         inst = ModelForm.save( self, commit=commit )
@@ -328,7 +353,7 @@ class MumbleUserAdminForm( PropertyModelForm ):
         return passwd
 
     class Meta:
-        model   = Mumble
+        model   = MumbleUser
 
 
 class MumbleKickForm( Form ):
