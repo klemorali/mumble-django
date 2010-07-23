@@ -106,114 +106,30 @@ def show( request, server ):
             }, context_instance = RequestContext(request) )
 
     isAdmin = srv.isUserAdmin( request.user )
+    try:
+        user = MumbleUser.objects.get( server=srv, owner=request.user )
+    except MumbleUser.DoesNotExist:
+        user = None
 
-    # The tab to start on.
-    displayTab = 0
+    from mumble.forms import EXT_FORMS_PROVIDER, MumbleUserPasswordForm, MumbleUserLinkForm, MumbleUserForm
 
-    if isAdmin:
-        if request.method == 'POST' and "mode" in request.POST and request.POST['mode'] == 'admin':
-            adminform = MumbleForm( request.POST, instance=srv )
-            if adminform.is_valid():
-                adminform.save()
-                return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) )
-            else:
-                displayTab = 2
-        else:
-            adminform = MumbleForm( instance=srv )
-    else:
-        adminform = None
-
-    registered = False
-    user = None
-
-    if request.user.is_authenticated():
+    regformname = None
+    if not user:
         # Unregistered users may or may not need a password to register.
         if settings.PROTECTED_MODE and srv.passwd:
-            unregged_user_form = MumbleUserPasswordForm
+            regformname = "MumbleUserPasswordForm"
+            EXT_FORMS_PROVIDER.register_form( MumbleUserPasswordForm )
         # Unregistered users may or may not want to link an existing account
         elif settings.ALLOW_ACCOUNT_LINKING:
-            unregged_user_form = MumbleUserLinkForm
-        else:
-            unregged_user_form = MumbleUserForm
-
-
-        if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'reg':
-            try:
-                user    = MumbleUser.objects.get( server=srv, owner=request.user )
-            except MumbleUser.DoesNotExist:
-                regform = unregged_user_form( request.POST )
-                regform.server = srv
-                if regform.is_valid():
-                    model = regform.save( commit=False )
-                    model.owner  = request.user
-                    model.server = srv
-                    # If we're linking accounts, the change is local only.
-                    model.save( dontConfigureMurmur=( "linkacc" in regform.data ) )
-                    return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) )
-                else:
-                    displayTab = 1
-            else:
-                regform = MumbleUserForm( request.POST, instance=user )
-                regform.server = srv
-                if regform.is_valid():
-                    regform.save()
-                    return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) )
-                else:
-                    displayTab = 1
-        else:
-            try:
-                user  = MumbleUser.objects.get( server=srv, owner=request.user )
-            except MumbleUser.DoesNotExist:
-                regform = unregged_user_form()
-            else:
-                regform = MumbleUserForm( instance=user )
-                registered = True
-
-        if request.method == 'POST' and 'mode' in request.POST and request.POST['mode'] == 'texture' and registered:
-            textureform = MumbleTextureForm( request.POST, request.FILES )
-            if textureform.is_valid():
-                if 'usegravatar' in textureform.cleaned_data and textureform.cleaned_data['usegravatar'] and user.gravatar:
-                    user.setTextureFromUrl( user.gravatar )
-                elif 'texturefile' in request.FILES:
-                    user.setTexture( Image.open( request.FILES['texturefile'] ) )
-                return HttpResponseRedirect( reverse( show, kwargs={ 'server': int(server), } ) )
-        else:
-            textureform = MumbleTextureForm()
-
-    else:
-        regform = None
-        textureform = None
-
-    if isAdmin:
-        if request.method == 'POST' and 'mode' in request.POST:
-            if request.POST['mode'] == 'kick':
-                kickform = MumbleKickForm( request.POST )
-                if kickform.is_valid():
-                    if kickform.cleaned_data["ban"]:
-                        srv.banUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] )
-                    srv.kickUser( kickform.cleaned_data['session'], kickform.cleaned_data['reason'] )
-
-    # ChannelTable is a somewhat misleading name, as it actually contains channels and players.
-    channelTable = []
-    for cid in srv.channels:
-        if cid != 0 and srv.channels[cid].show:
-            channelTable.append( srv.channels[cid] )
-    for pid in srv.players:
-        channelTable.append( srv.players[pid] )
-
-    show_url = reverse( show, kwargs={ 'server': srv.id } )
-    login_url = reverse( auth_views.login )
+            regformname = "MumbleUserLinkForm"
+            EXT_FORMS_PROVIDER.register_form( MumbleUserLinkForm )
+    if not regformname:
+        regformname = "MumbleUserForm"
+        EXT_FORMS_PROVIDER.register_form( MumbleUserForm )
 
     return render_to_response( 'mumble/mumble.html', {
-            'login_url':    "%s?next=%s" % ( login_url, show_url ),
-            'DBaseObject':  srv,
-            'ChannelTable': channelTable,
-            'CurrentUserIsAdmin': isAdmin,
-            'AdminForm':    adminform,
-            'RegForm':      regform,
-            'TextureForm':  textureform,
-            'Registered':   registered,
-            'DisplayTab':   displayTab,
+            'MumbleServer': srv,
+            'RegForm':      regformname,
             'MumbleActive': True,
             'MumbleAccount':user,
         }, context_instance = RequestContext(request) )
