@@ -26,7 +26,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mumble.models import MumbleServer, Mumble, MumbleUser
 
-from extdirect     import Provider
+from djextdirect   import Provider
 
 EXT_FORMS_PROVIDER = Provider(name="Ext.app.MUMBLE_FORMS_API")
 

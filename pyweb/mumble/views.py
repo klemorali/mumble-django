@@ -33,7 +33,7 @@ from models import Mumble, MumbleUser
 from forms  import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
 from forms  import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
 
-from extdirect import Provider
+from djextdirect import Provider
 
 EXT_DIRECT_PROVIDER = Provider()
 
