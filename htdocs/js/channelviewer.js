@@ -43,10 +43,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                         var child = {
                             text: json.channels[i].name,
                             id:   ("channel_" + json.channels[i].id),
-                            leaf: false,
+                            leaf: true,
                             icon: '/static/mumble/channel.png',
                             children: [],
                         };
+                        node.leaf = false;
                         node.children.push( child );
                         subchan_users += populateNode( child, json.channels[i] );
                     }
@@ -57,6 +58,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             leaf: true,
                             icon: '/static/mumble/talking_off.png',
                         };
+                        node.leaf = false;
                         node.children.push( child );
                     }
                     if( json.id == 0 || json.users.length > 0 || subchan_users )
