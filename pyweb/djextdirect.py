@@ -4,7 +4,7 @@
 """
  *  Copyright (C) 2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
  *
- *  Mumble-Django is free software; you can redistribute it and/or modify
+ *  djExtDirect is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
@@ -29,6 +29,13 @@ from django.core.urlresolvers  import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.safestring import mark_safe
+
+__author__ = "Michael Ziegler"
+__copyright__ = "Copyright (C) 2010, Michael Ziegler"
+__license__ = "GPL"
+__version__ = "0.1"
+__email__ = "diese-addy@funzt-halt.net"
+__status__ = "Development"
 
 
 def getname( cls_or_name ):
@@ -82,7 +89,8 @@ class Provider( object ):
 
         >>> EXT_JS_PROVIDER = Provider( [name="Ext.app.REMOTING_API", autoadd=True] )
 
-        If autoadd is True, the api.js will include a line like such:
+        If autoadd is True, the api.js will include a line like such::
+
             Ext.Direct.addProvider( Ext.app.REMOTING_API );
 
         After instantiating the Provider, register functions to it like so:
