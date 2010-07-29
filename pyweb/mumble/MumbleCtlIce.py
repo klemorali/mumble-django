@@ -430,6 +430,9 @@ class MumbleCtlIce_118(MumbleCtlBase):
     def getUptime(self, srvid):
         return None
 
+    @protectDjangoErrPage
+    def getLog( self, srvid, first=0, last=100 ):
+        return self._getIceServerObject(srvid).getLog( first, last )
 
 class MumbleCtlIce_120(MumbleCtlIce_118):
     @protectDjangoErrPage
