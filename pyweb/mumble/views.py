@@ -107,9 +107,12 @@ def show( request, server ):
             }, context_instance = RequestContext(request) )
 
     isAdmin = srv.isUserAdmin( request.user )
-    try:
-        user = MumbleUser.objects.get( server=srv, owner=request.user )
-    except MumbleUser.DoesNotExist:
+    if request.user.is_authenticated():
+        try:
+            user = MumbleUser.objects.get( server=srv, owner=request.user )
+        except MumbleUser.DoesNotExist:
+            user = None
+    else:
         user = None
 
     from mumble.forms import EXT_FORMS_PROVIDER, MumbleUserPasswordForm, MumbleUserLinkForm, MumbleUserForm
@@ -133,6 +136,7 @@ def show( request, server ):
             'RegForm':      regformname,
             'MumbleActive': True,
             'MumbleAccount':user,
+            'IsAdmin':      isAdmin,
         }, context_instance = RequestContext(request) )
 
 def mobile_show( request, server ):
