@@ -207,14 +207,14 @@ def get_admin( request, server ):
 
 @login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
-def log( request, server, start, limit ):
+def log( request, server, start, limit, filter ):
     """ Retrieve log messages. """
     srv = get_object_or_404( Mumble, id=int(server) )
     if not srv.isUserAdmin( request.user ):
         raise Exception( "Access denied" )
     return { 'data': [
             { 'timestamp': ent.timestamp, 'txt': ent.txt }
-            for ent in srv.ctl.getLog( srv.srvid, start, (start + limit) )
+            for ent in srv.getLog( start, (start + limit), filter )
         ], 'success': True }
 
 
