@@ -7,6 +7,8 @@ Ext.ux.MumbleChannelViewer = function( config ){
 
     Ext.applyIf( this, {
         title: gettext("Channel Viewer"),
+        refreshInterval: 10000,
+        autoScroll: true,
         root: {
             text: gettext("Loading..."),
             leaf: true
@@ -19,10 +21,17 @@ Ext.ux.MumbleChannelViewer = function( config ){
     } );
 
     Ext.ux.MumbleChannelViewer.superclass.constructor.call( this );
-    this.refresh();
+    this.autoRefresh();
 }
 
 Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
+    autoRefresh: function(){
+        this.refresh();
+        if( this.refreshInterval > 0 ){
+            this.autoRefresh.defer( this.refreshInterval, this );
+        }
+    },
+
     refresh: function(){
         var conn = new Ext.data.Connection();
         conn.request({
@@ -56,8 +65,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             text: json.users[i].name,
                             id:   ("user_" + json.users[i].id),
                             leaf: true,
-                            icon: '/static/mumble/talking_off.png',
                         };
+                        if( json.users[i].idlesecs == 0 )
+                            child.icon = '/static/mumble/talking_on.png';
+                        else
+                            child.icon = '/static/mumble/talking_off.png';
                         node.leaf = false;
                         node.children.push( child );
                     }
@@ -69,7 +81,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                 this.setRootNode( root );
             },
             failure: function( resp, opt ){
-                alert("fail");
+                if( this.refreshInterval > 0 )
+                    if( this.refreshInterval < 300000 )
+                        this.refreshInterval = 300000;
+                    else
+                        this.refreshInterval = 0;
             },
         });
     },
