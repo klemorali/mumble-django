@@ -40,7 +40,6 @@
                             if( !this.wnd ){
                                 this.wnd = new Ext.Window({
                                     title: gettext('Administration'),
-                                    closable: false,
                                     layout: 'fit',
                                     items: new Ext.ux.IFrameComponent({ url: '/admin' }),
                                     width:  viewsize.width - 200,
@@ -51,7 +50,13 @@
                                             window.open( '/admin' );
                                             this.ownerCt.ownerCt.ownerButton.toggle( false );
                                         }
-                                    }]
+                                    }],
+                                    listeners: {
+                                        beforeclose: function(){
+                                            this.ownerButton.toggle( false, false );
+                                            this.ownerButton.wnd = null;
+                                        }
+                                    },
                                 });
                                 this.wnd.ownerButton = this;
                             }
