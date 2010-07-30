@@ -299,7 +299,21 @@ class Provider( object ):
                         break
                 if args:
                     data = args
+            
+            if data is not None:
+                datalen = len(data)
+            else:
+                datalen = 0
 
+            if datalen != len(func.EXT_argnames):
+                responses.append({
+                    'type': 'exception',
+                    'tid':  tid,
+                    'message': 'invalid arguments',
+                    'where': 'Expected %d, got %d' % ( len(func.EXT_argnames), len(data) )
+                    })
+                continue
+            
             try:
                 if data:
                     result = func( request, *data )
@@ -482,6 +496,11 @@ class Provider( object ):
         formcls  = self.forms[formname]
         instance = formcls.Meta.model.objects.get( pk=pk )
         forminst = formcls( instance=instance )
+
+        if hasattr( forminst, "EXT_authorize" ) and \
+           forminst.EXT_authorize( request, "get" ) is False:
+            return { 'success': False, 'errors': {'': 'access denied'} }
+
         data = {}
         for fld in forminst.fields:
             data[fld] = getattr( instance, fld )
@@ -495,6 +514,11 @@ class Provider( object ):
             forminst = formcls( request.POST, request.FILES, instance=instance )
         else:
             forminst = formcls( request.POST, instance=instance )
+
+        if hasattr( forminst, "EXT_authorize" ) and \
+           forminst.EXT_authorize( request, "update" ) is False:
+            return { 'success': False, 'errors': {'': 'access denied'} }
+
         # save if either no usable validation method available or validation passes; and form.is_valid
         if ( not hasattr( forminst, "EXT_validate" ) or not callable( forminst.EXT_validate )
              or forminst.EXT_validate( request ) ) \
