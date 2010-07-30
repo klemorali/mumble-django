@@ -94,14 +94,18 @@
                                 this.wnd = new Ext.Window({
                                     title: gettext('Login'),
                                     closable: false,
+                                    width:  300,
+                                    height: 130,
+                                    layout: 'fit',
                                     items: {
-                                        xtype: 'form',
+                                        layout: 'form',
                                         border: false,
+                                        defaults: { anchor: '-20px' },
                                         buttons: [{
                                             text: gettext('Submit'),
                                             handler: function(){
-                                                form = this.ownerCt.ownerCt.getForm().getFieldValues();
-                                                Accounts.login(form.username, form.password,
+                                                form = this.ownerCt.ownerCt.items.items;
+                                                Accounts.login(form[0].getValue(), form[1].getValue(),
                                                     function(provider, response){
                                                         if( response.result.success ){
                                                             window.location.reload();
@@ -119,6 +123,7 @@
                                         }],
                                         items: [{
                                             xtype: "textfield",
+                                            width: 50,       
                                             fieldLabel: gettext("User name"),
                                             name: "username"
                                         }, {
