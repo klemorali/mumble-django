@@ -100,6 +100,7 @@ Ext.ux.UserEditorPanel = function( config ){
         }
       }, {
       text:     gettext("Save"),
+        scope: this,
         handler : function(){
           var data = [];
           for( i = 0; i < userAdminStore.data.items.length; i++ ){
@@ -108,7 +109,7 @@ Ext.ux.UserEditorPanel = function( config ){
               data.push(rec.data);
             }
           }
-          MumbleUserAdmin.update( data, function(provider, response){
+          MumbleUserAdmin.update( this.server, data, function(provider, response){
             if( response.result.success ){
               for( i = 0; i < userAdminStore.data.items.length; i++ ){
                 rec = userAdminStore.data.items[i];
