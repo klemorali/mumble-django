@@ -261,7 +261,8 @@ def djangousers( request ):
     return users
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
-def update( request, data ):
+def update( request, server, data ):
+    srv = get_object_or_404( Mumble, id=int(server) )
     for record in data:
         if record['id'] == -1:
             if record['delete']:
