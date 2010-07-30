@@ -16,7 +16,7 @@ Ext.ux.UserEditorPanel = function( config ){
 
   userAdminStore = new Ext.data.DirectStore({
     baseParams: { server: this.server },
-    directFn: Mumble.users,
+    directFn: MumbleUserAdmin.users,
     fields:   userRecord,
     autoLoad: true,
     remoteSort: false
@@ -42,7 +42,7 @@ Ext.ux.UserEditorPanel = function( config ){
     valueField:     'uid',
     displayField:   'uname',
     store: new Ext.data.DirectStore({
-      directFn: Mumble.djangousers,
+      directFn: MumbleUserAdmin.djangousers,
       fields:   [ 'uid', 'uname' ],
       autoLoad: true
       })
@@ -86,7 +86,7 @@ Ext.ux.UserEditorPanel = function( config ){
           }
       }, deleteColumn ] ),
 
-    tbar:   [{
+    buttons:   [{
         text:     gettext("Add"),
         handler : function(){
           userAdminStore.add( new userRecord( {
@@ -101,18 +101,15 @@ Ext.ux.UserEditorPanel = function( config ){
       }, {
       text:     gettext("Save"),
         handler : function(){
-          data = [];
+          var data = [];
           for( i = 0; i < userAdminStore.data.items.length; i++ ){
-            rec = userAdminStore.data.items[i];
+            var rec = userAdminStore.data.items[i];
             if( rec.dirty ){
               data.push(rec.data);
             }
           }
-          var conn = new Ext.data.Connection();
-          conn.request( {
-            url:     userAdminStore.url,
-            params:  { data: Ext.encode( data ) },
-            success: function(){
+          MumbleUserAdmin.update( data, function(provider, response){
+            if( response.result.success ){
               for( i = 0; i < userAdminStore.data.items.length; i++ ){
                 rec = userAdminStore.data.items[i];
                 if( rec.data['delete'] == true )
@@ -121,6 +118,14 @@ Ext.ux.UserEditorPanel = function( config ){
                   rec.commit();
                 }
               }
+            }
+            else{
+              Ext.Msg.show({
+                title: gettext("Submit error"),
+                msg:   gettext("Unable to save."),
+                icon:  Ext.MessageBox.ERROR,
+                buttons: Ext.MessageBox.OK
+                });
             }
           });
         }
