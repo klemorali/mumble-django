@@ -240,7 +240,9 @@
                                 width: 500,
                                 dataIndex: 'txt'
                             }]),
-                        bbar: [{ text: gettext('Filter') + ':' }, {
+                        bbar: [{
+                            text: gettext('Filter') + ':'
+                        }, {
                             xtype: 'textfield',
                             name: 'filter',
                             listeners: {
@@ -256,7 +258,12 @@
                                         field.ownerCt.ownerCt.store.reload();
                                     }
                                 }
-                            },
+                            }
+                        }, '-', {
+                            iconCls: 'x-tbar-loading',
+                            handler: function(){
+                                this.ownerCt.ownerCt.store.reload();
+                            }
                         }],
                         store: new Ext.data.DirectStore({
                             baseParams: {'server': 1, 'start': 0, 'limit': 100, 'filter': ''},
