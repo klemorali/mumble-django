@@ -224,7 +224,39 @@
                     },
                     {% if IsAdmin %} {
                         xtype: "userEditorPanel",
-                    } {% endif %}
+                    }, {% endif %}
+                    {
+                        xtype: 'grid',
+                        title: gettext('Log messages'),
+                        colModel: new Ext.grid.ColumnModel([{
+                                header: gettext('Timestamp'),
+                                dataIndex: 'timestamp',
+                                width: 100,
+                                renderer: function( value ){
+                                    return new Date(value*1000).format( "Y-m-d H:i:s" );
+                                }
+                            }, {
+                                header: gettext('Log entry'),
+                                width: 500,
+                                dataIndex: 'txt'
+                            }]),
+                        store: new Ext.data.DirectStore({
+                            baseParams: {'server': 1, 'start': 0, 'limit': 100},
+                            directFn: Mumble.log,
+                            paramOrder: ['server', 'start', 'limit'],
+                            paramsNames: {
+                                start: 'start',
+                                limit: 'limit',
+                                sort:  'sort',
+                                dir:   'dir'
+                                },
+                            root: 'data',
+                            fields: ['timestamp', 'txt'],
+                            autoLoad: true,
+                            remoteSort: false
+                            }),
+                        viewConfig: { forceFit: true }
+                    }
                     {% endif %} ],
                 }],
             });
