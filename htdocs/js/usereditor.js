@@ -1,8 +1,4 @@
-// {% load mumble_extras %}
-// {% load i18n %}
-// {% comment %}
-//   kate: space-indent on; indent-width 2; replace-tabs on;
-// {% endcomment %}
+// kate: space-indent on; indent-width 2; replace-tabs on;
 
 Ext.namespace('Ext.ux');
 
@@ -19,7 +15,7 @@ Ext.ux.UserEditorPanel = function( config ){
     ]);
 
   userAdminStore = new Ext.data.DirectStore({
-    baseParams: { server: 1 },
+    baseParams: { server: this.server },
     directFn: Mumble.users,
     fields:   userRecord,
     autoLoad: true,
