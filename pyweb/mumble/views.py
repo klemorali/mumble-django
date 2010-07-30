@@ -216,7 +216,7 @@ def log( request, server, start, limit, filter ):
         ], 'success': True }
 
 
-@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+@EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.
 
@@ -247,7 +247,7 @@ def users( request, server ):
 
     return users
 
-@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+@EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def djangousers( request ):
     """ Return a list of all Django users' names and IDs. """
 
@@ -260,6 +260,26 @@ def djangousers( request ):
 
     return users
 
+@EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
+def update( request, data ):
+    for record in data:
+        if record['id'] == -1:
+            if record['delete']:
+                continue
+            mu = MumbleUser( server=srv )
+        else:
+            mu = MumbleUser.objects.get( id=record['id'] )
+            if record['delete']:
+                mu.delete()
+                continue
+
+        mu.name     = record['name']
+        mu.password = record['password']
+        if record['owner']:
+            mu.owner = User.objects.get( id=int(record['owner']) )
+        mu.save()
+        mu.aclAdmin = record['admin']
+    return { 'success': True }
 
 @login_required
 @csrf_exempt
