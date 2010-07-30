@@ -144,6 +144,9 @@ class MumbleForm( PropertyModelForm ):
         model   = Mumble
         fields  = ['name']
 
+    def EXT_authorize( self, request, action ):
+        return request.user.is_authenticated() and ( not self.instance or self.instance.isUserAdmin( request.user ) )
+
     def EXT_validate( self, request ):
         if not self.instance.isUserAdmin( request.user ):
             return False
