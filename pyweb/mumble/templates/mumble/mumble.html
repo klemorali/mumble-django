@@ -13,147 +13,35 @@
     <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/logviewer.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/buttoniframewindow.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/loginout_buttons.js"></script>
     <script type="text/javascript">
-        Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-            // http://www.extjs.com/forum/showthread.php?p=54416#post54416
-            onRender : function(ct, position){
-                this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: this.url});
-            }
-        });
+        viewsize = {
+            width:  Ext.lib.Dom.getViewWidth(),
+            height: Ext.lib.Dom.getViewHeight()
+        };
 
         Ext.onReady( function(){
             Ext.QuickTips.init();
-            viewsize = {
-                width:  Ext.lib.Dom.getViewWidth(),
-                height: Ext.lib.Dom.getViewHeight()
-            };
-            var mainpanel = new Ext.Panel({
+            mainpanel = new Ext.Panel({
                 renderTo: document.body,
                 height:   viewsize.height,
                 layout:   "border",
                 title:    "{{ MumbleServer.name }}",
-                buttons: [ 
-                    {% if user.is_staff %}{
-                        text: gettext('Admin'),
-                        enableToggle: true,
-                        toggleHandler: function(button, state){
-                            if( !this.wnd ){
-                                this.wnd = new Ext.Window({
-                                    title: gettext('Administration'),
-                                    layout: 'fit',
-                                    items: new Ext.ux.IFrameComponent({ url: '/admin' }),
-                                    width:  viewsize.width - 200,
-                                    height: viewsize.height - 100,
-                                    buttons: [{
-                                        text: gettext('Open in new window'),
-                                        handler: function(){
-                                            window.open( '/admin' );
-                                            this.ownerCt.ownerCt.ownerButton.toggle( false );
-                                        }
-                                    }],
-                                    listeners: {
-                                        beforeclose: function(){
-                                            this.ownerButton.toggle( false, false );
-                                            this.ownerButton.wnd = null;
-                                        }
-                                    },
-                                });
-                                this.wnd.ownerButton = this;
-                            }
-                            if( state ){
-                                this.wnd.show();
-                                mypos = this.getPosition();
-                                mysize = this.getSize();
-                                winsize = this.wnd.getSize();
-                                this.wnd.setPosition(
-                                    mypos[0] + mysize.width - winsize.width,
-                                    mypos[1] - winsize.height
-                                    );
-                            }
-                            else
-                                this.wnd.hide();
-                        },
-                    }, {% endif %}
-                    {% if user.is_authenticated %}{
-                        text: gettext('Logout'),
-                        handler: function(){
-                            Accounts.logout( function(provider, response){
-                                    if( response.result.success ){
-                                        window.location.reload();
-                                    }
-                                    else{
-                                        Ext.Msg.show({
-                                            title: gettext("Login error"),
-                                            msg:   gettext("Unable to log out."),
-                                            icon:  Ext.MessageBox.ERROR,
-                                            buttons: Ext.MessageBox.OK
-                                            });
-                                    }
-                                } );
-                        }
-                    } {% else %} {
-                        text: gettext('Login'),
-                        enableToggle: true,
-                        toggleHandler: function(button, state){
-                            if( !this.wnd ){
-                                this.wnd = new Ext.Window({
-                                    title: gettext('Login'),
-                                    closable: false,
-                                    width:  300,
-                                    height: 130,
-                                    layout: 'fit',
-                                    items: {
-                                        layout: 'form',
-                                        border: false,
-                                        defaults: { anchor: '-20px' },
-                                        buttons: [{
-                                            text: gettext('Submit'),
-                                            handler: function(){
-                                                form = this.ownerCt.ownerCt.items.items;
-                                                Accounts.login(form[0].getValue(), form[1].getValue(),
-                                                    function(provider, response){
-                                                        if( response.result.success ){
-                                                            window.location.reload();
-                                                        }
-                                                        else{
-                                                            Ext.Msg.show({
-                                                                title: gettext("Login error"),
-                                                                msg:   gettext("Unable to log in."),
-                                                                icon:  Ext.MessageBox.ERROR,
-                                                                buttons: Ext.MessageBox.OK
-                                                                });
-                                                        }
-                                                    });
-                                            }
-                                        }],
-                                        items: [{
-                                            xtype: "textfield",
-                                            width: 50,       
-                                            fieldLabel: gettext("User name"),
-                                            name: "username"
-                                        }, {
-                                            xtype: 'textfield',
-                                            fieldLabel: gettext("Password"),
-                                            inputType: "password",
-                                            name: "password"
-                                        }],
-                                    },
-                                });
-                            }
-                            if( state ){
-                                this.wnd.show();
-                                mypos = this.getPosition();
-                                mysize = this.getSize();
-                                winsize = this.wnd.getSize();
-                                this.wnd.setPosition(
-                                    mypos[0] + mysize.width - winsize.width,
-                                    mypos[1] - winsize.height
-                                    );
-                            }
-                            else
-                                this.wnd.hide();
-                        },
-                    } {% endif %}
+                buttons: [
+                    {% if user.is_staff %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  gettext('Administration'),
+                        url: '/admin',
+                    },
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        new Ext.ux.ButtonLogout()
+                    {% else %}
+                        new Ext.ux.ButtonLogin()
+                    {% endif %}
                 ],
                 items: [{
                     xtype: "mumblechannelviewer",
@@ -175,114 +63,66 @@
                         },
                     },
                     {% if MumbleAccount %}
-                    {% if IsAdmin %} {
-                        title: gettext("Administration"),
-                        pk:    {{ MumbleServer.id }},
-                        labelWidth: 150,
-                        xtype: 'mumbleform',
-                    }, {% endif %}
-                    {
-                        title: gettext("User texture"),
-                        layout: "border",
-                        items: [{
-                            region: "north",
-                            layout: "hbox",
-                            height: 200,
-                            items: [{
-                                flex: 1,
-                                height: 200,
-                                title: gettext("Texture"),
-                                html: String.format('<img src="{0}" alt="Avatar" />',
-                                  "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
-                            }, {
-                                flex: 1,
-                                height: 200,
-                                title: gettext("Gravatar"),
-                                html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
-                            }],
-                        }, {
-                            region: "center",
-                            xtype: "form",
+                        {% if IsAdmin %}
+                        {
+                            title: gettext("Administration"),
+                            pk:    {{ MumbleServer.id }},
                             labelWidth: 150,
-                            fileUpload: true,
-                            url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                            xtype: 'mumbleform',
+                        },
+                        {% endif %}
+                        {
+                            title: gettext("User texture"),
+                            layout: "border",
                             items: [{
-                                name:       "usegravatar",
-                                fieldLabel: gettext("Use Gravatar"),
-                                xtype:      "checkbox",
+                                region: "north",
+                                layout: "hbox",
+                                height: 200,
+                                items: [{
+                                    flex: 1,
+                                    height: 200,
+                                    title: gettext("Texture"),
+                                    html: String.format('<img src="{0}" alt="Avatar" />',
+                                      "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
+                                }, {
+                                    flex: 1,
+                                    height: 200,
+                                    title: gettext("Gravatar"),
+                                    html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
+                                }],
                             }, {
-                                name:       "texturefile",
-                                fieldLabel: gettext("Upload Avatar"),
-                                xtype:      "textfield",
-                                inputType:  "file",
+                                region: "center",
+                                xtype: "form",
+                                labelWidth: 150,
+                                fileUpload: true,
+                                url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                                items: [{
+                                    name:       "usegravatar",
+                                    fieldLabel: gettext("Use Gravatar"),
+                                    xtype:      "checkbox",
+                                }, {
+                                    name:       "texturefile",
+                                    fieldLabel: gettext("Upload Avatar"),
+                                    xtype:      "textfield",
+                                    inputType:  "file",
+                                }],
+                                buttons: [{
+                                    text:   gettext('Submit'),
+                                    handler: function(){ this.ownerCt.ownerCt.getForm().submit(); },
+                                }],
                             }],
-                            buttons: [{
-                                text:   gettext('Submit'),
-                                handler: function(){ this.ownerCt.ownerCt.getForm().submit(); },
-                            }],
-                        }],
-                    },
-                    {% if IsAdmin %} {
-                        xtype: "userEditorPanel",
-                    }, {% endif %}
-                    {
-                        xtype: 'grid',
-                        title: gettext('Log messages'),
-                        colModel: new Ext.grid.ColumnModel([{
-                                header: gettext('Timestamp'),
-                                dataIndex: 'timestamp',
-                                width: 100,
-                                renderer: function( value ){
-                                    return new Date(value*1000).format( "Y-m-d H:i:s" );
-                                }
+                        },
+                        {% if IsAdmin %}
+                            {
+                                xtype: "userEditorPanel",
+                                server: {{ MumbleServer.id }}
                             }, {
-                                header: gettext('Log entry'),
-                                width: 500,
-                                dataIndex: 'txt'
-                            }]),
-                        bbar: [{
-                            text: gettext('Filter') + ':'
-                        }, {
-                            xtype: 'textfield',
-                            name: 'filter',
-                            listeners: {
-                                render: function(c) {
-                                    Ext.QuickTips.register({
-                                        target: c.getEl(),
-                                        text:   gettext('Enter a string to filter the logs by and press Enter. To display all log entries, empty this field.')
-                                    });
-                                },
-                                specialkey: function( field, ev ){
-                                    if( ev.getKey() == ev.ENTER ){
-                                        field.ownerCt.ownerCt.store.baseParams.filter = field.getValue();
-                                        field.ownerCt.ownerCt.store.reload();
-                                    }
-                                }
+                                xtype: 'logViewerPanel',
+                                server: {{ MumbleServer.id }}
                             }
-                        }, '-', {
-                            iconCls: 'x-tbar-loading',
-                            handler: function(){
-                                this.ownerCt.ownerCt.store.reload();
-                            }
-                        }],
-                        store: new Ext.data.DirectStore({
-                            baseParams: {'server': 1, 'start': 0, 'limit': 100, 'filter': ''},
-                            directFn: Mumble.log,
-                            paramOrder: ['server', 'start', 'limit', 'filter'],
-                            paramsNames: {
-                                start: 'start',
-                                limit: 'limit',
-                                sort:  'sort',
-                                dir:   'dir'
-                                },
-                            root: 'data',
-                            fields: ['timestamp', 'txt'],
-                            autoLoad: true,
-                            remoteSort: false
-                            }),
-                        viewConfig: { forceFit: true }
-                    }
-                    {% endif %} ],
+                        {% endif %}
+                    {% endif %}
+                    ],
                 }],
             });
         } );
