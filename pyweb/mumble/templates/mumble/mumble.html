@@ -240,10 +240,28 @@
                                 width: 500,
                                 dataIndex: 'txt'
                             }]),
+                        bbar: [{ text: gettext('Filter') + ':' }, {
+                            xtype: 'textfield',
+                            name: 'filter',
+                            listeners: {
+                                render: function(c) {
+                                    Ext.QuickTips.register({
+                                        target: c.getEl(),
+                                        text:   gettext('Enter a string to filter the logs by and press Enter. To display all log entries, empty this field.')
+                                    });
+                                },
+                                specialkey: function( field, ev ){
+                                    if( ev.getKey() == ev.ENTER ){
+                                        field.ownerCt.ownerCt.store.baseParams.filter = field.getValue();
+                                        field.ownerCt.ownerCt.store.reload();
+                                    }
+                                }
+                            },
+                        }],
                         store: new Ext.data.DirectStore({
-                            baseParams: {'server': 1, 'start': 0, 'limit': 100},
+                            baseParams: {'server': 1, 'start': 0, 'limit': 100, 'filter': ''},
                             directFn: Mumble.log,
-                            paramOrder: ['server', 'start', 'limit'],
+                            paramOrder: ['server', 'start', 'limit', 'filter'],
                             paramsNames: {
                                 start: 'start',
                                 limit: 'limit',

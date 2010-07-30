@@ -553,6 +553,12 @@ class Mumble( models.Model ):
     def banUser( self, sessionid, reason="" ):
         return self.ctl.addBanForSession( self.srvid, sessionid, reason=reason )
 
+    def getLog( self, first=0, last=100, filter="" ):
+        """ Return log entries from ``first`` to ``last`` that contain ``filter`` (if any). """
+        logentries = self.ctl.getLog( self.srvid, first, last )
+        if not filter:
+            return logentries
+        return [ logentry for logentry in logentries if filter in logentry.txt ]
 
 
 def mk_registration_property( field, doc="" ):
