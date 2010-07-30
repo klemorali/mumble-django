@@ -193,7 +193,6 @@ def showTexture( request, server, userid ):
         img.save( buf, "PNG" )
         return HttpResponse( buf.getvalue(), "image/png" )
 
-@login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def get_admin( request, server ):
     srv = get_object_or_404( Mumble, id=int(server) )
@@ -205,7 +204,6 @@ def get_admin( request, server ):
         data[fld] = getattr( srv, fld )
     return { 'data': data, 'success': True }
 
-@login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def log( request, server, start, limit, filter ):
     """ Retrieve log messages. """
@@ -218,7 +216,6 @@ def log( request, server, start, limit, filter ):
         ], 'success': True }
 
 
-@login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def users( request, server ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.
@@ -250,7 +247,6 @@ def users( request, server ):
 
     return users
 
-@login_required
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def djangousers( request ):
     """ Return a list of all Django users' names and IDs. """
