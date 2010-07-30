@@ -35,8 +35,8 @@ Ext.ux.ButtonIframeWindow = function( config ){
                     }],
                     listeners: {
                         beforeclose: function(){
-                            this.toggle( false, false );
-                            this.wnd = null;
+                            this.ownerButton.toggle( false, false );
+                            this.ownerButton.wnd = null;
                         }
                     },
                 });
