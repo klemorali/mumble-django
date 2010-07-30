@@ -37,9 +37,26 @@ from djextdirect import Provider
 
 EXT_DIRECT_PROVIDER = Provider()
 
-@EXT_DIRECT_PROVIDER.register_method( "omgfu" )
-def ohai( request ):
-    return "plzkthx"
+@EXT_DIRECT_PROVIDER.register_method( "Accounts" )
+def login( request, username, passwd ):
+    from django.contrib.auth import authenticate, login as djlogin
+    if request.user.is_authenticated():
+        return { 'success': True }
+    user = authenticate( username=username, password=passwd )
+    if user:
+        if user.is_active:
+            djlogin( request, user )
+            return { 'success': True }
+        else:
+            return { 'success': False, 'error': 'account disabled' }
+    else:
+        return { 'success': False, 'error': 'invalid credentials' }
+
+@EXT_DIRECT_PROVIDER.register_method( "Accounts" )
+def logout( request ):
+    from django.contrib.auth import logout as djlogout
+    djlogout( request )
+    return { 'success': True }
 
 def redir( request ):
     """ Redirect to the servers list. """
