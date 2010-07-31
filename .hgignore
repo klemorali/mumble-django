@@ -12,3 +12,6 @@ themes
 htdocs/themes
 *.kpf
 
+pyweb/MANIFEST
+build
+dist
