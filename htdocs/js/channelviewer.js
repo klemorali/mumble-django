@@ -2,20 +2,38 @@
 
 Ext.namespace('Ext.ux');
 
+Ext.ux.MumbleChannelNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
+    renderElements : function(n, a, targetNode, bulkRender){
+        Ext.ux.MumbleUserNodeUI.superclass.renderElements.call( this, n, a, targetNode, bulkRender );
+        Ext.DomHelper.applyStyles( this.elNode, 'position: relative' );
+        var tpl = new Ext.DomHelper.createTemplate(
+            '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>'
+            );
+        var icons = []
+        if( a.chandata.description != "" ) icons.push( "comment_seen" );
+        var pos = 8;
+        for( var i = 0; i < icons.length; i++ ){
+            tpl.append( this.elNode, {'icon': icons[i], 'pos': pos} );
+            pos += 18
+        }
+    }
+});
+
 Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
     renderElements : function(n, a, targetNode, bulkRender){
         Ext.ux.MumbleUserNodeUI.superclass.renderElements.call( this, n, a, targetNode, bulkRender );
         Ext.DomHelper.applyStyles( this.elNode, 'position: relative' );
-        var tpl = new Ext.DomHelper.createTemplate( '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>' );
-
-        icons = []
-        if( a.userdata.userid != 0 ) icons.push( "authenticated" );
-        if( a.userdata.selfMute )    icons.push( "muted_self" );
-        if( a.userdata.mute )        icons.push( "muted_server" );
-        if( a.userdata.suppress )    icons.push( "muted_suppressed" );
-        if( a.userdata.selfDeaf )    icons.push( "deafened_self" );
-        if( a.userdata.deaf )        icons.push( "deafened_server" );
-        if( a.userdata.comment!="" ) icons.push( "comment_seen" );
+        var tpl = new Ext.DomHelper.createTemplate(
+            '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>'
+            );
+        var icons = []
+        if( a.userdata.userid != 0 )   icons.push( "authenticated" );
+        if( a.userdata.selfMute )      icons.push( "muted_self" );
+        if( a.userdata.mute )          icons.push( "muted_server" );
+        if( a.userdata.suppress )      icons.push( "muted_suppressed" );
+        if( a.userdata.selfDeaf )      icons.push( "deafened_self" );
+        if( a.userdata.deaf )          icons.push( "deafened_server" );
+        if( a.userdata.comment != "" ) icons.push( "comment_seen" );
         var pos = 8;
         for( var i = 0; i < icons.length; i++ ){
             tpl.append( this.elNode, {'icon': icons[i], 'pos': pos} );
@@ -50,7 +68,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
     autoRefresh: function(){
         this.refresh();
         if( this.refreshInterval > 0 ){
-            //this.autoRefresh.defer( this.refreshInterval, this );
+            this.autoRefresh.defer( this.refreshInterval, this );
         }
     },
 
@@ -77,6 +95,8 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             leaf: true,
                             icon: '/static/mumble/channel.png',
                             children: [],
+                            uiProvider: Ext.ux.MumbleChannelNodeUI,
+                            chandata: json.channels[i]
                         };
                         node.leaf = false;
                         node.children.push( child );
@@ -90,7 +110,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             uiProvider: Ext.ux.MumbleUserNodeUI,
                             userdata: json.users[i]
                         };
-                        if( json.users[i].idlesecs == 0 )
+                        if( json.users[i].idlesecs <= 2 )
                             child.icon = '/static/mumble/talking_on.png';
                         else
                             child.icon = '/static/mumble/talking_off.png';
