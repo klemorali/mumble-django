@@ -105,7 +105,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                     for( var i = 0; i < json.users.length; i++ ){
                         var child = {
                             text: json.users[i].name,
-                            id:   ("user_" + json.users[i].id),
+                            id:   ("user_" + json.users[i].session),
                             leaf: true,
                             uiProvider: Ext.ux.MumbleUserNodeUI,
                             userdata: json.users[i]
