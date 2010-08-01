@@ -71,6 +71,7 @@ Ext.ux.MumbleChannelViewer = function( config ){
                 value:   this.refreshInterval / 1000,
                 ref:     "../nfAutoRefreshInterval",
                 scope: this,
+                selectOnFocus: true,
                 listeners: {
                     render: function(c) {
                         Ext.QuickTips.register({
@@ -81,12 +82,12 @@ Ext.ux.MumbleChannelViewer = function( config ){
                     specialkey: function( field, ev ){
                         if( ev.getKey() == ev.ENTER ){
                             this.scope.setAutoRefresh(); // lawl
+                            this.blur();
                         }
                     }
                 },
             }, gettext("Seconds"), '->', {
                 xtype:   "button",
-                template: null,
                 text:    gettext("Refresh"),
                 handler: this.refresh,
                 scope:   this
