@@ -1,3 +1,10 @@
+.form_hint_label {
+	font-family:    Lucida Grande,Verdana,Arial,sans-serif;
+	font-size:      10px;
+	font-weight:    400;
+	font-style:     normal;
+	color:          #999999;
+}
 
 a.mumble:link, a.mumble:visited, a.mumble:hover, a.mumble:active {
 	font-weight:     bold;

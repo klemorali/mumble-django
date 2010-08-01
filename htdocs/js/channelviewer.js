@@ -58,39 +58,39 @@ Ext.ux.MumbleChannelViewer = function( config ){
 
     Ext.applyIf( this, {
         // This stuff needs the above applied already
-        bbar: {
-            items: [ gettext("Auto-Refresh")+':', {
-                    xtype:   "checkbox",
-                    ref:     "../cbAutoRefresh",
-                    scope:   this,
-                    handler: this.setAutoRefresh,
-                    checked: (this.refreshInterval > 0),
-                }, {
-                    xtype:   "numberfield",
-                    width:   30,
-                    value:   this.refreshInterval / 1000,
-                    ref:     "../nfAutoRefreshInterval",
-                    scope: this,
-                    listeners: {
-                        render: function(c) {
-                            Ext.QuickTips.register({
-                                target: c.getEl(),
-                                text:   gettext('Enter the interval in seconds in which the channel viewer should refresh and hit Enter.')
-                            });
-                        },
-                        specialkey: function( field, ev ){
-                            if( ev.getKey() == ev.ENTER ){
-                                this.scope.setAutoRefresh(); // lawl
-                            }
-                        }
+        // x-btn   x-btn-noicon
+        bbar: [ gettext("Auto-Refresh")+':', {
+                xtype:   "checkbox",
+                ref:     "../cbAutoRefresh",
+                scope:   this,
+                handler: this.setAutoRefresh,
+                checked: (this.refreshInterval > 0),
+            }, {
+                xtype:   "numberfield",
+                width:   30,
+                value:   this.refreshInterval / 1000,
+                ref:     "../nfAutoRefreshInterval",
+                scope: this,
+                listeners: {
+                    render: function(c) {
+                        Ext.QuickTips.register({
+                            target: c.getEl(),
+                            text:   gettext('Enter the interval in seconds in which the channel viewer should refresh and hit Enter.')
+                        });
                     },
-                }, gettext("Seconds"), '->', {
-                    xtype:   "button",
-                    text:    gettext("Refresh"),
-                    handler: this.refresh,
-                    scope:   this
-                }]
-        },
+                    specialkey: function( field, ev ){
+                        if( ev.getKey() == ev.ENTER ){
+                            this.scope.setAutoRefresh(); // lawl
+                        }
+                    }
+                },
+            }, gettext("Seconds"), '->', {
+                xtype:   "button",
+                template: null,
+                text:    gettext("Refresh"),
+                handler: this.refresh,
+                scope:   this
+            }]
     } );
 
     Ext.ux.MumbleChannelViewer.superclass.constructor.call( this );
