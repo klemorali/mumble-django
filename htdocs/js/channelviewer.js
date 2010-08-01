@@ -48,27 +48,74 @@ Ext.ux.MumbleChannelViewer = function( config ){
     Ext.applyIf( this, {
         title: gettext("Channel Viewer"),
         refreshInterval: 10000,
+        idleInterval: 2,
         autoScroll: true,
         root: {
             text: gettext("Loading..."),
             leaf: true
+        }
+    });
+
+    Ext.applyIf( this, {
+        // This stuff needs the above applied already
+        bbar: {
+            items: [ gettext("Auto-Refresh")+':', {
+                    xtype:   "checkbox",
+                    ref:     "../cbAutoRefresh",
+                    scope:   this,
+                    handler: this.setAutoRefresh,
+                    checked: (this.refreshInterval > 0),
+                }, {
+                    xtype:   "numberfield",
+                    width:   30,
+                    value:   this.refreshInterval / 1000,
+                    ref:     "../nfAutoRefreshInterval",
+                    scope: this,
+                    listeners: {
+                        render: function(c) {
+                            Ext.QuickTips.register({
+                                target: c.getEl(),
+                                text:   gettext('Enter the interval in seconds in which the channel viewer should refresh and hit Enter.')
+                            });
+                        },
+                        specialkey: function( field, ev ){
+                            if( ev.getKey() == ev.ENTER ){
+                                this.scope.setAutoRefresh(); // lawl
+                            }
+                        }
+                    },
+                }, gettext("Seconds"), '->', {
+                    xtype:   "button",
+                    text:    gettext("Refresh"),
+                    handler: this.refresh,
+                    scope:   this
+                }]
         },
-        buttons: [{
-            text:    gettext("Refresh"),
-            handler: this.refresh,
-            scope:   this
-        }],
     } );
 
     Ext.ux.MumbleChannelViewer.superclass.constructor.call( this );
-    this.autoRefresh();
+    this.autoRefreshId = 0;
+    this.setAutoRefresh();
 }
 
 Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
+    setAutoRefresh: function(){
+        if( this.autoRefreshId != 0 ){
+            clearTimeout( this.autoRefreshId );
+        }
+        if( this.cbAutoRefresh.getValue() ){
+            this.refreshInterval = this.nfAutoRefreshInterval.getValue() * 1000;
+            this.autoRefresh();
+        }
+        else{
+            this.refreshInterval = 0;
+        }
+    },
+
     autoRefresh: function(){
         this.refresh();
         if( this.refreshInterval > 0 ){
-            this.autoRefresh.defer( this.refreshInterval, this );
+            this.autoRefreshId = this.autoRefresh.defer( this.refreshInterval, this );
         }
     },
 
@@ -110,7 +157,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             uiProvider: Ext.ux.MumbleUserNodeUI,
                             userdata: json.users[i]
                         };
-                        if( json.users[i].idlesecs <= 2 )
+                        if( json.users[i].idlesecs <= this.idleInterval )
                             child.icon = '/static/mumble/talking_on.png';
                         else
                             child.icon = '/static/mumble/talking_off.png';
@@ -126,10 +173,13 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
             },
             failure: function( resp, opt ){
                 if( this.refreshInterval > 0 )
-                    if( this.refreshInterval < 300000 )
-                        this.refreshInterval = 300000;
-                    else
-                        this.refreshInterval = 0;
+                    this.cbAutoRefresh.setValue(false);
+                Ext.Msg.show({
+                    title: gettext("Update error"),
+                    msg:   gettext("Querying the server failed, so the channel viewer has not been updated."),
+                    icon:  Ext.MessageBox.ERROR,
+                    buttons: Ext.MessageBox.OK
+                    });
             },
         });
     },
