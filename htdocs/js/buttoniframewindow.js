@@ -48,7 +48,7 @@ Ext.ux.ButtonIframeWindow = function( config ){
                 mysize = this.getSize();
                 winsize = this.wnd.getSize();
                 this.wnd.setPosition(
-                    mypos[0] + mysize.width - winsize.width,
+                    (window.viewsize.width - winsize.width) / 2,
                     mypos[1] - winsize.height
                     );
             }
