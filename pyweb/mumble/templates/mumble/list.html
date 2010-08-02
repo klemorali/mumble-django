@@ -9,6 +9,7 @@
 {% block HeadTag %}
     <script type="text/javascript" src="/jsi18n/"></script>
     <script type="text/javascript" src="/mumble/api/api.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/buttoniframewindow.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/loginout_buttons.js"></script>
     <script type="text/javascript">
@@ -67,14 +68,9 @@
                         selectionchange: function(listview, nodes){
                             selectedstuff = listview.getSelectedRecords();
                             MumbleList.serverinfo( selectedstuff[0].data.id, function(provider, response){
-                                mainpanel.descrippanel.el.dom.innerHTML = String.format(
-                                   "<ul><li>Serveradresse: {0}</li><li>Version: {1}</li></ul>"+
-                                   "<br /><fieldset><legend>Willkommensnachricht</legend>{2}</fieldset>",
-                                    response.result.connurl,
-                                    response.result.version,
-                                    response.result.motd
-                                    );
-                                });
+                                var info = renderserverinfos(response.result);
+                                mainpanel.descrippanel.el.dom.children[1].children[0].innerHTML = info;
+                            });
                         }
                     },
                 }, {
