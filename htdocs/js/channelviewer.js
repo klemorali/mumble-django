@@ -27,13 +27,14 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
             '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>'
             );
         var icons = []
-        if( a.userdata.userid != 0 )   icons.push( "authenticated" );
-        if( a.userdata.selfMute )      icons.push( "muted_self" );
-        if( a.userdata.mute )          icons.push( "muted_server" );
-        if( a.userdata.suppress )      icons.push( "muted_suppressed" );
-        if( a.userdata.selfDeaf )      icons.push( "deafened_self" );
-        if( a.userdata.deaf )          icons.push( "deafened_server" );
-        if( a.userdata.comment != "" ) icons.push( "comment_seen" );
+        if( a.userdata.userid != 0 )     icons.push( "authenticated" );
+        if( a.userdata.selfDeaf )        icons.push( "deafened_self" );
+        if( a.userdata.deaf )            icons.push( "deafened_server" );
+        if( a.userdata.selfMute )        icons.push( "muted_self" );
+        if( a.userdata.suppress )        icons.push( "muted_suppressed" );
+        if( a.userdata.mute )            icons.push( "muted_server" );
+        if( a.userdata.comment != "" )   icons.push( "comment_seen" );
+        if( a.userdata.prioritySpeaker ) icons.push( "priority_speaker" );
         var pos = 8;
         for( var i = 0; i < icons.length; i++ ){
             tpl.append( this.elNode, {'icon': icons[i], 'pos': pos} );
