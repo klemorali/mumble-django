@@ -4,7 +4,8 @@
 {% endcomment %}
 {% load mumble_extras %}
 {% load i18n %}
-{% block body %}{% endblock %}
+{% block body %}
+{% endblock %}
 {% block HeadTag %}
     <script type="text/javascript" src="/jsi18n/"></script>
     <script type="text/javascript" src="/mumble/api/api.js"></script>
@@ -17,24 +18,32 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/buttoniframewindow.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/loginout_buttons.js"></script>
     <script type="text/javascript">
-        viewsize = {
-            width:  Ext.lib.Dom.getViewWidth(),
-            height: Ext.lib.Dom.getViewHeight()
-        };
-
         Ext.onReady( function(){
             Ext.QuickTips.init();
             mainpanel = new Ext.Panel({
                 renderTo: document.body,
-                height:   viewsize.height,
+                height:   600,
                 layout:   "border",
-                title:    "{{ MumbleServer.name }}",
+                tbar: [ {
+                    text: gettext("back"),
+                    xtype: "button",
+                    handler: function(){
+                        location.href = "{% url mumble.views.mumbles %}";
+                    }
+                } ],
                 buttons: [
+                    {% if user.is_staff and ROSETTA_INSTALLED %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  gettext('Edit Translation'),
+                        url: '{% url rosetta-home %}',
+                    },
+                    {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  gettext('Administration'),
-                        url: '/admin',
+                        url: '{% url admin:mumble_mumble_change MumbleServer.id %}',
                     },
                     {% endif %}
                     {% if user.is_authenticated %}
@@ -54,6 +63,15 @@
                     region: "center",
                     activeTab: 0,
                     items: [{
+                        title: gettext("Server info"),
+                        html:  String.format(
+                                   "<ul><li>Serveradresse: {0}</li><li>Version: {1}</li></ul>"+
+                                   "<br /><fieldset><legend>Willkommensnachricht</legend>{2}</fieldset>",
+                                    "{{ MumbleServer.connecturl }}",
+                                    "{{ MumbleServer.prettyversion }}",
+                                    "{{ MumbleServer.motd }}"
+                                    ),
+                    }, {
                         title: gettext("Registration"),
                         xtype: "{{ RegForm|lower }}",
                         pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
@@ -125,6 +143,21 @@
                     ],
                 }],
             });
+            function updateLayout(){
+                viewsize = {
+                    width:  Ext.lib.Dom.getViewWidth(),
+                    height: Ext.lib.Dom.getViewHeight()
+                };
+                mainpanel.setHeight( viewsize.height - 20 );
+                mainpanel.setWidth( viewsize.width - 40 );
+            }
+            updateLayout();
+            Ext.EventManager.onWindowResize(updateLayout);
         } );
     </script>
+    <style type="text/css">
+        body {
+            padding: 20px 20px 0 20px;
+        }
+    </style>
 {% endblock %}

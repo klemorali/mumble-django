@@ -107,6 +107,26 @@ def mumbles( request, mobile=False ):
         context_instance = RequestContext(request)
         )
 
+@EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
+def servers( request ):
+    mms = Mumble.objects.all().order_by( "name" ).values( "id", "name" )
+
+    return [{ 'id': mm['id'], 'name': mm['name'] } for mm in mms]
+
+@EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
+def serverinfo( request, server ):
+    srv = Mumble.objects.get( id=int(server) )
+    return {
+        'id': srv.id,
+        'name': srv.name,
+        'motd': srv.motd,
+        'connurl': srv.connecturl,
+        'version': srv.prettyversion
+        }
+
+@EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
+def serverurl( request, server ):
+    return reverse( show, args=(int(server),) );
 
 def show( request, server ):
     """ Display the channel list for the given Server ID.
