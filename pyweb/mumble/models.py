@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-import Ice, re
+import re
 from sys       import stderr
 from urllib    import urlopen
 from StringIO  import StringIO
