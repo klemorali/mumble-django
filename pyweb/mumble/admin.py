@@ -47,7 +47,7 @@ class MumbleAdmin(admin.ModelAdmin):
     """ Specification for the "Server administration" admin section. """
 
     list_display   = [ 'name', 'srvid', 'get_addr', 'get_port', 'get_murmur_online', 'get_booted',
-               'get_is_public', 'get_users_regged', 'get_users_online', 'get_channel_count' ]
+               'get_is_public', 'get_users_online' ]
     list_filter    = [ 'addr', 'server' ]
     search_fields  = [ 'name', 'addr', 'port' ]
     ordering       = [ 'name' ]
