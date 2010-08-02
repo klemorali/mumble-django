@@ -12,6 +12,7 @@
     <script type="text/javascript" src="/mumble/forms/api.js"></script>
     <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
     <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/js/logviewer.js"></script>
@@ -64,13 +65,7 @@
                     activeTab: 0,
                     items: [{
                         title: gettext("Server info"),
-                        html:  String.format(
-                                   "<ul><li>Serveradresse: {0}</li><li>Version: {1}</li></ul>"+
-                                   "<br /><fieldset><legend>Willkommensnachricht</legend>{2}</fieldset>",
-                                    "{{ MumbleServer.connecturl }}",
-                                    "{{ MumbleServer.prettyversion }}",
-                                    "{{ MumbleServer.motd }}"
-                                    ),
+                        html:  renderserverinfos( {{ ServerDict|safe }} ),
                     }, {
                         title: gettext("Registration"),
                         xtype: "{{ RegForm|lower }}",

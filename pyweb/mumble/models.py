@@ -16,6 +16,8 @@
 """
 
 import re
+import datetime
+from time      import time
 from sys       import stderr
 from urllib    import urlopen
 from StringIO  import StringIO
@@ -293,9 +295,11 @@ class Mumble( models.Model ):
     users_online = property( lambda self: len(self.ctl.getPlayers(self.srvid)),  doc="Number of online users." )
     channel_cnt  = property( lambda self: len(self.ctl.getChannels(self.srvid)), doc="Number of channels." )
     is_public    = property( lambda self: not self.passwd,
-            doc="False if a password is needed to join this server." )
+                             doc="False if a password is needed to join this server." )
     uptime       = property( lambda self: self.ctl.getUptime(self.srvid),
-            doc="Number of seconds this instance has been running." )
+                             doc="Number of seconds this instance has been running." )
+    upsince      = property( lambda self: datetime.datetime.fromtimestamp( float( time() - self.uptime ) ),
+                             doc="Datetime since when the server is running." )
 
     is_server  = True
     is_channel = False

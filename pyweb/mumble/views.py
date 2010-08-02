@@ -116,12 +116,20 @@ def servers( request ):
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
 def serverinfo( request, server ):
     srv = Mumble.objects.get( id=int(server) )
+    # users_regged users_online channel_cnt uptime upsince minurl
     return {
-        'id': srv.id,
-        'name': srv.name,
-        'motd': srv.motd,
-        'connurl': srv.connecturl,
-        'version': srv.prettyversion
+        'id':            srv.id,
+        'name':          srv.name,
+        'motd':          srv.motd,
+        'connecturl':    srv.connecturl,
+        'prettyversion': srv.prettyversion,
+        'url':           srv.url,
+        'users_regged':  srv.users_regged,
+        'users_online':  srv.users_online,
+        'channel_cnt':   srv.channel_cnt,
+        'uptime':        srv.uptime,
+        'upsince':       unicode(srv.upsince),
+        'minurl':        reverse( mobile_show, args=(server,) )
         }
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
@@ -170,6 +178,7 @@ def show( request, server ):
 
     return render_to_response( 'mumble/mumble.html', {
             'MumbleServer': srv,
+            'ServerDict':   simplejson.dumps(serverinfo(request, server)),
             'RegForm':      regformname,
             'MumbleActive': True,
             'MumbleAccount':user,
