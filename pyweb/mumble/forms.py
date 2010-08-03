@@ -145,12 +145,7 @@ class MumbleForm( PropertyModelForm ):
         fields  = ['name']
 
     def EXT_authorize( self, request, action ):
-        return request.user.is_authenticated() and ( not self.instance or self.instance.isUserAdmin( request.user ) )
-
-    def EXT_validate( self, request ):
-        if not self.instance.isUserAdmin( request.user ):
-            return False
-        return True
+        return self.instance.isUserAdmin( request.user )
 
 class MumbleAdminForm( MumbleForm ):
     """ A Mumble Server admin form intended to be used by the server hoster. """
@@ -205,15 +200,26 @@ class MumbleServerForm( ModelForm ):
     class Meta:
         model = MumbleServer
 
-
+@EXT_FORMS_PROVIDER.register_form
 class MumbleUserForm( ModelForm ):
     """ The user registration form used to register an account. """
 
-    password = forms.CharField( widget=forms.PasswordInput, required=False )
+    password = forms.CharField( label=_("Password"), widget=forms.PasswordInput, required=False )
 
     def __init__( self, *args, **kwargs ):
         ModelForm.__init__( self, *args, **kwargs )
         self.server = None
+
+    def EXT_authorize( self, request, action ):
+        if not request.user.is_authenticated():
+            return False
+        if action == "update" and settings.PROTECTED_MODE and self.instance.id is None:
+            # creating new user in protected mode -> need UserPasswordForm
+            return False
+        if self.instance is not None and request.user != self.instance.owner:
+            # editing another account
+            return False
+        return True
 
     def EXT_validate( self, request ):
         if "serverid" in request.POST:
@@ -253,7 +259,7 @@ class MumbleUserForm( ModelForm ):
         model   = MumbleUser
         fields  = ( 'name', 'password' )
 
-
+@EXT_FORMS_PROVIDER.register_form
 class MumbleUserPasswordForm( MumbleUserForm ):
     """ The user registration form used to register an account on a private server in protected mode. """
 
@@ -262,6 +268,14 @@ class MumbleUserPasswordForm( MumbleUserForm ):
         help_text=_('This server is private and protected mode is active. Please enter the server password.'),
         widget=forms.PasswordInput(render_value=False)
         )
+
+    def EXT_authorize( self, request, action ):
+        if not request.user.is_authenticated():
+            return False
+        if self.instance is not None and request.user != self.instance.owner:
+            # editing another account
+            return False
+        return True
 
     def clean_serverpw( self ):
         """ Validate the password """
@@ -277,7 +291,7 @@ class MumbleUserPasswordForm( MumbleUserForm ):
             del( self.cleaned_data['serverpw'] )
         return self.cleaned_data
 
-
+@EXT_FORMS_PROVIDER.register_form
 class MumbleUserLinkForm( MumbleUserForm ):
     """ Special registration form to either register or link an account. """
 
@@ -290,6 +304,14 @@ class MumbleUserLinkForm( MumbleUserForm ):
     def __init__( self, *args, **kwargs ):
         MumbleUserForm.__init__( self, *args, **kwargs )
         self.mumbleid = None
+
+    def EXT_authorize( self, request, action ):
+        if not request.user.is_authenticated():
+            return False
+        if self.instance is not None and request.user != self.instance.owner:
+            # editing another account
+            return False
+        return settings.ALLOW_ACCOUNT_LINKING
 
     def clean_name( self ):
         """ Check if the target account exists in Murmur. """
