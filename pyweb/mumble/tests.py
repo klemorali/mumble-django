@@ -15,195 +15,212 @@
  *  GNU General Public License for more details.
 """
 
+import simplejson
 from django.conf        import settings
 from django.test        import TestCase
+from django.test.client import Client
+from django.contrib.auth.models import User
 
-from models            import Mumble
-from utils            import ObjectInfo
+from models             import Mumble, MumbleUser
+from utils              import ObjectInfo
+
+class ExtDirectFormTestMixin(object):
+    """ Methods for testing a Form exported via Ext.Direct.
+        These only define the methods, you will need to inherit your TestCase
+        from this class and set the following class attributes:
+
+        api_baseurl:
+          The URL under which the Ext.Direct provider has been registered.
+        formname:
+          The name of the exported form class.
+    """
+    def setUp(self):
+        self.cl = Client()
+        super(ExtDirectFormTestMixin, self).setUp()
+        self.tid = 1
+
+    def testFormApi(self):
+        rawr = self.cl.get( "%s/%s.js" % ( self.api_baseurl, self.formname.lower() ) )
+        self.assertEquals( rawr.status_code, 200 )
+
+    def formGet( self, data=[] ):
+        rawr = self.cl.post( self.api_baseurl+'/router',
+            data=simplejson.dumps({
+                'tid':    self.tid,
+                'action': ('XD_%s' % self.formname),
+                'method': 'get',
+                'data':   data,
+                'type':   'rpc'
+                }),
+            content_type='application/json' )
+        self.tid += 1
+        response = simplejson.loads(rawr.content)
+        if response['type'] == "exception":
+            raise Exception( response["message"] )
+        self.assert_( "result" in response )
+        return response['result']
+
+    def formPost( self, data={} ):
+        postdata={
+            'extAction': ('XD_%s' % self.formname),
+            'extMethod': 'update',
+            'extTID':    self.tid,
+            'extType':   'rpc',
+            'extUpload': 'false',
+            }
+        self.tid += 1
+        postdata.update( data )
+        rawr = self.cl.post( self.api_baseurl+'/router', data=postdata )
+        response = simplejson.loads(rawr.content)
+        if response['type'] == "exception":
+            raise Exception( response["message"] )
+        self.assert_( "result" in response )
+        return response['result']
 
 
-class InstancesHandling( TestCase ):
-    """ Tests creation, editing and removing of vserver instances. """
+class AuthedTestCase( TestCase ):
+    fixtures = ["testdb.json"]
 
     def setUp( self ):
-        # Make sure we always start with a FRESH murmur instance, checking for left-over instances
-        # and deleting them before creating ours.
-        try:
-            self.murmur = Mumble.objects.get( addr="0.0.0.0", port=31337 )
-        except Mumble.DoesNotExist:
-            pass
+        TestCase.setUp( self )
+        if not self.cl.login( username="svedrin", password="passwort" ):
+            raise Exception( "Login failed" )
+
+class UnauthedMumbleFormTestCase( ExtDirectFormTestMixin, TestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleForm"
+
+    def testFormGet( self ):
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPost( self ):
+        result = self.formPost( {'pk': 1, 'url': '', 'player': ''} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+
+class AuthedMumbleFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleForm"
+
+    def testFormGet( self ):
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
+
+    def testFormPostSrvAdmin( self ):
+        result = self.formPost( {'pk': 1, 'name': 'test server', 'url': '', 'player': ''} )
+        self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
+
+    def testFormPostNonSrvAdmin( self ):
+        result = self.formPost( {'pk': 2, 'name': 'alealejandro', 'url': '', 'player': ''} )
+        self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
+
+
+class UnauthedMumbleUserFormTestCase( ExtDirectFormTestMixin, TestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleUserForm"
+
+    def testFormGet( self ):
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPostWithoutServer( self ):
+        result = self.formPost( {'pk': 1, 'name': "ohai", 'password': "failfail"} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPost( self ):
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+class AuthedMumbleUserFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleUserForm"
+
+    def testFormGet( self ):
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
+
+    def testFormPostWithoutServer( self ):
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort' } )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'pre-validation failed' )
+
+    def testFormPost( self ):
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1} )
+        self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
+
+class UnauthedMumbleUserLinkFormTestCase( UnauthedMumbleUserFormTestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleUserLinkForm"
+
+    def testFormGet( self ):
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPost( self ):
+        result = self.formPost( {'pk': 1, 'name': "ohai", 'password': 'failfail', 'serverid': 1} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+class AuthedMumbleUserLinkFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleUserLinkForm"
+
+    def testFormGet( self ):
+        if settings.ALLOW_ACCOUNT_LINKING:
+            # Excepts because linkacc can't be retrieved, but this form is for being
+            # displayed when empty only so retrieval is either forbidden or an error
+            self.assertRaises( Exception, self.formGet, [{'pk': 1}] )
         else:
-            self.murmur.delete()
-        finally:
-            self.murmur = Mumble( name="#unit testing instance#", addr="0.0.0.0", port=31337 )
-            self.murmur.save()
+            result = self.formGet( [{'pk': 1}] )
+            self.assertEquals( result['success'], False )
+            self.assertEquals( result['errors'][''], 'access denied' )
 
-    def testDefaultConf( self ):
-        conf = self.murmur.ctl.getAllConf( self.murmur.srvid )
-
-        self.assert_( type(conf) == dict )
-        self.assert_( "host"             in conf )
-        self.assert_( "port"             in conf )
-        self.assert_( "certificate"      in conf )
-        self.assert_( "key"              in conf )
-        self.assert_( "registerhostname" in conf )
-        self.assert_( "registername"     in conf )
-        self.assert_( "channelname"      in conf )
-        self.assert_( "username"         in conf )
-        self.assert_( "obfuscate"        in conf )
-        self.assert_( "defaultchannel"   in conf )
-
-    def testAddrPortUnique( self ):
-        try:
-            duplicate = Mumble(
-                name="#another unit testing instance#",
-                addr=self.murmur.addr, port=self.murmur.port,
-                dbus=settings.DEFAULT_CONN
-                )
-            if duplicate.ctl.method == "ICE":
-                import Murmur
-                self.assertRaises( Murmur.ServerFailureException, duplicate.save )
-            elif self.murmur.version[:2] == [ 1, 2 ]:
-                from dbus import DBusException
-                self.assertRaises( DBusException, duplicate.save )
-            else:
-                from sqlite3 import IntegrityError
-                self.assertRaises( IntegrityError, duplicate.save )
-        finally:
-            # make sure the duplicate is removed
-            duplicate.ctl.deleteServer( duplicate.srvid )
-
-    def tearDown( self ):
-        self.murmur.delete()
-
-
-class DataReading( TestCase ):
-    """ Tests reading data from murmur using the low-level CTL methods. """
-
-    def setUp( self ):
-        # BIG FAT WARNING: This sucks ass, because it assumes the tester has a
-        # Murmur database like the one I have.
-        # I definitely need to prepare Murmur somehow before running these tests.
-        # Just don't yet know how.
-        self.murmur = Mumble.objects.get(id=1)
-
-
-    def testCtlGetChannels( self ):
-        """ Test getChannels() """
-
-        channels = self.murmur.ctl.getChannels( self.murmur.srvid )
-
-        if self.murmur.ctl.method == "ICE":
-            import Murmur
-            self.assertEquals( type( channels[0] ), Murmur.Channel )
+    def testFormPost( self ):
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1} )
+        if settings.ALLOW_ACCOUNT_LINKING:
+            self.assertEquals( result['success'], True, ("errors" in result and result['errors'] or None) )
         else:
-            self.assertEquals( type( channels[0] ), ObjectInfo )
+            self.assertEquals( result['success'], False )
+            self.assertEquals( result['errors'][''], 'access denied' )
 
-        self.assert_( hasattr( channels[0], "id"     ) )
-        self.assert_( hasattr( channels[0], "name"   ) )
-        self.assert_( hasattr( channels[0], "parent" ) )
-        self.assert_( hasattr( channels[0], "links"  ) )
-
-
-    def testCtlGetPlayers( self ):
-        """ Test getPlayers() """
-
-        players = self.murmur.ctl.getPlayers( self.murmur.srvid )
-
-        self.assert_( len(players) > 0 )
-
-        self.assertEquals( type(players), dict )
-
-        for plidx in players:
-            player = players[plidx]
-
-            if self.murmur.ctl.method == "ICE" and self.murmur.version[:2] == ( 1, 2 ):
-                import Murmur
-                self.assertEquals( type( player ), Murmur.User )
-            else:
-                self.assertEquals( type( player ), ObjectInfo )
-
-            self.assert_( hasattr( player, "session" ) )
-            self.assert_( hasattr( player, "mute" ) )
-            self.assert_( hasattr( player, "deaf" ) )
-            self.assert_( hasattr( player, "selfMute" ) )
-            self.assert_( hasattr( player, "selfDeaf" ) )
-            self.assert_( hasattr( player, "channel" ) )
-            self.assert_( hasattr( player, "userid" ) )
-            self.assert_( hasattr( player, "name" ) )
-            self.assert_( hasattr( player, "onlinesecs" ) )
-            self.assert_( hasattr( player, "bytespersec" ) )
+    def testFormPostLinking( self ):
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1, 'linkacc': 'on'} )
+        self.assertEquals( result['success'], False )
 
 
-    def testCtlGetRegisteredPlayers( self ):
-        """ Test getRegistredPlayers() and getRegistration() """
+class UnauthedFormLoading(TestCase):
+    """ Makes unauthorized requests to forms which require auth, and checks
+        that those handle auth correctly.
+    """
+    def setUp(self):
+        self.cl = Client()
 
-        players = self.murmur.ctl.getRegisteredPlayers( self.murmur.srvid )
+    def testMumbleUserFormApi(self):
+        rawr = self.cl.get( '/mumble/forms/mumbleuserform.js' )
+        self.assertEquals( rawr.status_code, 200 )
 
-        self.assert_( len(players) > 0 )
+    def testMumbleUserPasswordFormApi(self):
+        rawr = self.cl.get( '/mumble/forms/mumbleuserpasswordform.js' )
+        self.assertEquals( rawr.status_code, 200 )
 
-        self.assertEquals( type(players), dict )
+    def testMumbleUserLinkFormApi(self):
+        rawr = self.cl.get( '/mumble/forms/mumbleuserlinkform.js' )
+        self.assertEquals( rawr.status_code, 200 )
 
-        for plidx in players:
-            player = players[plidx]
+    def testMumbleAdminFormApi(self):
+        # This form is NOT exported (and shouldn't be) because it's only used in the admin
+        rawr = self.cl.get( '/mumble/forms/mumbleadminform.js' )
+        self.assertEquals( rawr.status_code, 404 )
 
-            self.assertEquals( type( player ), ObjectInfo )
-
-            self.assert_( hasattr( player, "userid" ) )
-            self.assert_( hasattr( player, "name"   ) )
-            self.assert_( hasattr( player, "email"  ) )
-            self.assert_( hasattr( player, "pw"     ) )
-
-            # compare with getRegistration result
-            reg = self.murmur.ctl.getRegistration( self.murmur.srvid, player.userid )
-
-            self.assertEquals( type( reg ), ObjectInfo )
-
-            self.assert_( hasattr( reg, "userid" ) )
-            self.assert_( hasattr( reg, "name"   ) )
-            self.assert_( hasattr( reg, "email"  ) )
-            self.assert_( hasattr( reg, "pw"     ) )
-
-            self.assertEquals( player.userid, reg.userid )
-            self.assertEquals( player.name,   reg.name   )
-            self.assertEquals( player.email,  reg.email  )
-            self.assertEquals( player.pw,     reg.pw     )
-
-
-    def testCtlGetAcl( self ):
-        """ Test getACL() for the root channel """
-
-        acls, groups, inherit = self.murmur.ctl.getACL( self.murmur.srvid, 0 )
-
-        for rule in acls:
-            if self.murmur.ctl.method == "ICE" and self.murmur.version[:2] == ( 1, 2 ):
-                import Murmur
-                self.assertEquals( type( rule ), Murmur.ACL )
-            else:
-                self.assertEquals( type( rule ), ObjectInfo )
-
-            self.assert_( hasattr( rule, "applyHere" ) )
-            self.assert_( hasattr( rule, "applySubs" ) )
-            self.assert_( hasattr( rule, "inherited" ) )
-            self.assert_( hasattr( rule, "userid"    ) )
-            self.assert_( hasattr( rule, "group"     ) )
-            self.assert_( hasattr( rule, "allow"     ) )
-            self.assert_( hasattr( rule, "deny"      ) )
-
-        for grp in groups:
-            if self.murmur.ctl.method == "ICE":
-                import Murmur
-                self.assertEquals( type( grp ), Murmur.Group )
-            else:
-                self.assertEquals( type( grp ), ObjectInfo )
-
-            self.assert_( hasattr( grp,  "name"        ) )
-            self.assert_( hasattr( grp,  "inherited"   ) )
-            self.assert_( hasattr( grp,  "inherit"     ) )
-            self.assert_( hasattr( grp,  "inheritable" ) )
-            self.assert_( hasattr( grp,  "add"         ) )
-            self.assert_( hasattr( grp,  "remove"      ) )
-            self.assert_( hasattr( grp,  "members"     ) )
-
-
+    def testMumbleUserAdminFormApi(self):
+        # This form is NOT exported (and shouldn't be) because it's only used in the admin
+        rawr = self.cl.get( '/mumble/forms/mumbleuseradminform.js' )
+        self.assertEquals( rawr.status_code, 404 )
 
