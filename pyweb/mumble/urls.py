@@ -23,11 +23,9 @@ from forms import EXT_FORMS_PROVIDER
 
 urlpatterns = patterns(
     'mumble.views',
-    ( r'djangousers',               'djangousers' ),
-    ( r'(?P<server>\d+)/users',     'users'       ),
 
-    ( r'api/',                      include(EXT_DIRECT_PROVIDER.urls) ),
-    ( r'forms/',                    include(EXT_FORMS_PROVIDER.urls)  ),
+    ( r'api/',   include(EXT_DIRECT_PROVIDER.urls) ),
+    ( r'forms/', include(EXT_FORMS_PROVIDER.urls)  ),
 
     ( r'(?P<server>\d+)/(?P<userid>\d+)/texture.png',    'showTexture' ),
     ( r'(?P<userid>\d+)/update_avatar',      'update_avatar'  ),
