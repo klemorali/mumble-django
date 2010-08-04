@@ -49,7 +49,6 @@ if settings.DEBUG or True:
     # really serve this stuff through the web server directly.
     from os.path import join, dirname, abspath, exists
     mediadir = join( dirname(abspath(__file__)), 'media' )
-    print mediadir
     urlpatterns.insert( 1, url(r'^media/(?P<path>.*)$',
         'django.views.static.serve',
         {'document_root': mediadir, 'show_indexes': True} ),
