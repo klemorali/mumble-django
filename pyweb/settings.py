@@ -246,9 +246,9 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 if THEME:
     TEMPLATE_CONTEXT_PROCESSORS.append('processors.theme_url')
 
-TEST_RUNNER = 'mumble.testrunner.run_tests'
-TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' )
-TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' )
+#TEST_RUNNER = 'mumble.testrunner.run_tests'
+#TEST_MURMUR_LAB_DIR   = join( dirname(MUMBLE_DJANGO_ROOT), 'murmur' )
+#TEST_MURMUR_FILES_DIR = join( MUMBLE_DJANGO_ROOT, 'testdata' )
 
 CONVERSIONSQL_ROOT = join( MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql" )
 
