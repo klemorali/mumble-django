@@ -15,7 +15,9 @@
  *  GNU General Public License for more details.
 """
 
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls.defaults import url, patterns, include
+from django.conf import settings
+
 from views import EXT_DIRECT_PROVIDER
 from forms import EXT_FORMS_PROVIDER
 
@@ -34,12 +36,23 @@ urlpatterns = patterns(
     ( r'mumbleviewer/(?P<server>\d+).xml',   'mumbleviewer_tree_xml' ),
     ( r'mumbleviewer/(?P<server>\d+).json',  'mumbleviewer_tree_json'),
 
-    ( r'mobile/(?P<server>\d+)',             'mobile_show'     ),
+    ( r'mobile/(?P<server>\d+)$',            'mobile_show'     ),
     ( r'mobile/?$',                          'mobile_mumbles'  ),
 
     ( r'(?P<server>\d+).json',               'cvp_json'        ),
     ( r'(?P<server>\d+).xml',                'cvp_xml'         ),
 
-    ( r'(?P<server>\d+)',                    'show'            ),
+    ( r'(?P<server>\d+)$',                   'show'            ),
     ( r'$',                                  'mumbles'         ),
 )
+
+if settings.DEBUG or True:
+    # The following is a fake, to not break old installations. You should
+    # really serve this stuff through the web server directly.
+    from os.path import join, dirname, abspath, exists
+    mediadir = join( dirname(abspath(__file__)), 'media' )
+    print mediadir
+    urlpatterns.insert( 1, url(r'^media/(?P<path>.*)$',
+        'django.views.static.serve',
+        {'document_root': mediadir, 'show_indexes': True} ),
+    )
