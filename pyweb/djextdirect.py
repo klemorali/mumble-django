@@ -516,7 +516,7 @@ class Provider( object ):
         return { 'data': data, 'success': True }
 
     def update_form_data( self, formname, request ):
-        pk = request.POST['pk']
+        pk = int(request.POST['pk'])
         formcls  = self.forms[formname]
         if pk != -1:
             instance = formcls.Meta.model.objects.get( pk=pk )
