@@ -2,12 +2,12 @@
   <!-- kate: space-indent on; indent-width 2; replace-tabs on; -->
 {% endcomment %}
 {% load mumble_extras %}
-<div class="mumble" style="background-image: url( {{ MEDIA_URL }}/mumble/linie_v.png )">
-  <img src="{{ MEDIA_URL }}/mumble/knoten_v.png" alt="" />
+<div class="mumble" style="background-image: url( {{MUMBLE_MEDIA_PREFIX}}/img/linie_v.png )">
+  <img src="{{MUMBLE_MEDIA_PREFIX}}/img/knoten_v.png" alt="" />
   {% if Channel.linked %}
-    <img src="{{ MEDIA_URL }}/mumble/channel_linked.png" alt="linked channel" />
+    <img src="{{MUMBLE_MEDIA_PREFIX}}/img/channel_linked.png" alt="linked channel" />
   {% else %}
-    <img src="{{ MEDIA_URL }}/mumble/channel.png" alt="channel" />
+    <img src="{{MUMBLE_MEDIA_PREFIX}}/img/channel.png" alt="channel" />
   {% endif %}
   {% if Channel.server.netloc %}
     <a href="{{ Channel|chanurl:MumbleAccount }}" class="mumble" id="link_{{ Channel.id }}" title="{{ Channel.name }}">
