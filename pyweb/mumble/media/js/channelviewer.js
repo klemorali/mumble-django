@@ -7,13 +7,13 @@ Ext.ux.MumbleChannelNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         Ext.ux.MumbleUserNodeUI.superclass.renderElements.call( this, n, a, targetNode, bulkRender );
         Ext.DomHelper.applyStyles( this.elNode, 'position: relative' );
         var tpl = new Ext.DomHelper.createTemplate(
-            '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>'
+            '<img style="position: absolute; top: 0px; right: {pos}px;" src="{imageurl}/{icon}.png"/>'
             );
         var icons = []
         if( a.chandata.description != "" ) icons.push( "comment_seen" );
         var pos = 8;
         for( var i = 0; i < icons.length; i++ ){
-            tpl.append( this.elNode, {'icon': icons[i], 'pos': pos} );
+            tpl.append( this.elNode, {'imageurl': a.imageurl, 'icon': icons[i], 'pos': pos} );
             pos += 18
         }
     }
@@ -24,7 +24,7 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         Ext.ux.MumbleUserNodeUI.superclass.renderElements.call( this, n, a, targetNode, bulkRender );
         Ext.DomHelper.applyStyles( this.elNode, 'position: relative' );
         var tpl = new Ext.DomHelper.createTemplate(
-            '<img style="position: absolute; top: 0px; right: {pos}px;" src="/static/mumble/{icon}.png"/>'
+            '<img style="position: absolute; top: 0px; right: {pos}px;" src="{imageurl}/{icon}.png"/>'
             );
         var icons = []
         if( a.userdata.userid != 0 )     icons.push( "authenticated" );
@@ -37,7 +37,7 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         if( a.userdata.prioritySpeaker ) icons.push( "priority_speaker" );
         var pos = 8;
         for( var i = 0; i < icons.length; i++ ){
-            tpl.append( this.elNode, {'icon': icons[i], 'pos': pos} );
+            tpl.append( this.elNode, {'imageurl': a.imageurl, 'icon': icons[i], 'pos': pos} );
             pos += 18
         }
     }
@@ -132,9 +132,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                     text: respdata.name,
                     id:   "mumbroot",
                     leaf: false,
-                    icon: '/static/mumble/mumble.16x16.png',
+                    icon: this.imageurl+'/mumble.16x16.png',
                     children: [],
+                    imageurl: this.imageurl
                 };
+                tree = this;
                 function populateNode( node, json ){
                     var subchan_users = 0;
                     for( var i = 0; i < json.channels.length; i++ ){
@@ -142,10 +144,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             text: json.channels[i].name,
                             id:   ("channel_" + json.channels[i].id),
                             leaf: true,
-                            icon: '/static/mumble/channel.png',
+                            icon: tree.imageurl+'/channel.png',
                             children: [],
                             uiProvider: Ext.ux.MumbleChannelNodeUI,
-                            chandata: json.channels[i]
+                            chandata: json.channels[i],
+                            imageurl: tree.imageurl
                         };
                         node.leaf = false;
                         node.children.push( child );
@@ -157,12 +160,13 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             id:   ("user_" + json.users[i].session),
                             leaf: true,
                             uiProvider: Ext.ux.MumbleUserNodeUI,
-                            userdata: json.users[i]
+                            userdata: json.users[i],
+                            imageurl: tree.imageurl
                         };
                         if( json.users[i].idlesecs <= this.idleInterval )
-                            child.icon = '/static/mumble/talking_on.png';
+                            child.icon = tree.imageurl+'/talking_on.png';
                         else
-                            child.icon = '/static/mumble/talking_off.png';
+                            child.icon = tree.imageurl+'/talking_off.png';
                         node.leaf = false;
                         node.children.push( child );
                     }

@@ -176,11 +176,13 @@ MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 # URL that handles the media served from MEDIA_ROOT.
 MEDIA_URL = MUMBLE_DJANGO_URL + 'static/'
 
+
 ## URL to static files of the currently active theme
 THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
 
 # URL prefix for admin media -- CSS, JavaScript and images.
 ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'media/'
+MUMBLE_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'mumble/media/'
 
 # URL to the login view
 LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
@@ -241,6 +243,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "django.core.context_processors.media",
     'processors.installed_apps',
     'processors.mumble_version',
+    'processors.mumble_media_prefix',
 ]
 
 if THEME:

@@ -2,107 +2,200 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-02 11:38+0200\n"
+"POT-Creation-Date: 2010-08-04 20:28+0200\n"
 "PO-Revision-Date: 2010-07-02 11:41\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.5.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: js/mumble.js:10
+#: media/js/buttoniframewindow.js:30
+msgid "Open in new window"
+msgstr ""
+
+#: media/js/channelviewer.js:51
 msgid "Channel Viewer"
 msgstr "Serveransicht"
 
-#: js/mumble.js:12
+#: media/js/channelviewer.js:56
 msgid "Loading..."
 msgstr "Lade..."
 
-#: js/mumble.js:16
-msgid "Refresh"
+#: media/js/channelviewer.js:64
+#, fuzzy
+msgid "Auto-Refresh"
 msgstr "Aktualisieren"
 
-#: js/mumble.js:95
-msgid "Registration"
-msgstr "Registrierung"
+#: media/js/loginout_buttons.js:7
+msgid "Logout"
+msgstr ""
 
-#: js/mumble.js:99
+#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:51
+msgid "Login error"
+msgstr ""
+
+#: media/js/loginout_buttons.js:16
+msgid "Unable to log out."
+msgstr ""
+
+#: media/js/loginout_buttons.js:26 media/js/loginout_buttons.js.py:31
+msgid "Login"
+msgstr ""
+
+#: media/js/loginout_buttons.js:41
+msgid "Submit"
+msgstr ""
+
+#: media/js/loginout_buttons.js:52
+msgid "Unable to log in."
+msgstr ""
+
+#: media/js/loginout_buttons.js:63
 msgid "User name"
 msgstr "Benutzername"
 
-#: js/mumble.js:103
+#: media/js/loginout_buttons.js:67
 msgid "Password"
 msgstr "Passwort"
 
-#: js/mumble.js:108
-msgid "Administration"
-msgstr "Administration"
+#: media/js/logviewer.js:11
+msgid "Log messages"
+msgstr ""
 
-#: js/mumble.js:116
-msgid "User texture"
-msgstr "Benutzertextur"
+#: media/js/logviewer.js:13
+msgid "Timestamp"
+msgstr ""
 
-#: js/mumble.js:124
-msgid "Texture"
-msgstr "Textur"
+#: media/js/logviewer.js:20
+msgid "Log entry"
+msgstr ""
 
-#: js/mumble.js:128
-msgid "Gravatar"
-msgstr "Gravatar"
+#: media/js/logviewer.js:25
+msgid "Filter"
+msgstr ""
 
-#: js/mumble.js:136
-msgid "Use Gravatar"
-msgstr "Benutze Gravatar"
+#: media/js/logviewer.js:33
+msgid ""
+"Enter a string to filter the logs by and press Enter. To display all log "
+"entries, empty this field."
+msgstr ""
 
-#: js/mumble.js:140
-msgid "Upload Avatar"
-msgstr "Avatar hochladen"
+#: media/js/logviewer.js:45
+msgid "Refresh"
+msgstr "Aktualisieren"
 
-#: js/usereditor.js:33
+#: media/js/rendermumbleserver.js:4
+msgid "Server Address"
+msgstr ""
+
+#: media/js/rendermumbleserver.js:7
+msgid "Website"
+msgstr ""
+
+#: media/js/rendermumbleserver.js:11
+#, perl-format
+msgid "Currently, %s user is registered."
+msgid_plural "Currently, %s users are registered."
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/js/rendermumbleserver.js:14
+#, perl-format
+msgid "Currently, %s user is online."
+msgid_plural "Currently, %s users are online."
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/js/rendermumbleserver.js:17
+#, perl-format
+msgid "Currently, there is %s channel."
+msgid_plural "Currently, there are %s channels."
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/js/rendermumbleserver.js:22
+msgid "Switch to minimal view"
+msgstr ""
+
+#: media/js/rendermumbleserver.js:28
+msgid "Welcome message"
+msgstr ""
+
+#: media/js/usereditor.js:27
 msgid "Admin on root channel"
 msgstr "Admin im Wurzelkanal"
 
-#: js/usereditor.js:39
+#: media/js/usereditor.js:33
 msgid "Delete"
 msgstr "Löschen"
 
-#: js/usereditor.js:62
+#: media/js/usereditor.js:53
 msgid "User List"
 msgstr "Benutzerliste"
 
-#: js/usereditor.js:67
+#: media/js/usereditor.js:58
 msgid "name"
 msgstr "Name"
 
-#: js/usereditor.js:74
+#: media/js/usereditor.js:65
 msgid "Account owner"
 msgstr "Accountbesitzer"
 
-#: js/usereditor.js:86
+#: media/js/usereditor.js:77
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: js/usereditor.js:100
+#: media/js/usereditor.js:91
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: js/usereditor.js:104
+#: media/js/usereditor.js:95
 msgid "New User"
 msgstr "Neuer Benutzer"
 
-#: js/usereditor.js:112
+#: media/js/usereditor.js:103
 msgid "Save"
 msgstr "Speichern"
 
-#: js/usereditor.js:138
+#: media/js/usereditor.js:126
+msgid "Submit error"
+msgstr ""
+
+#: media/js/usereditor.js:127
+msgid "Unable to save."
+msgstr ""
+
+#: media/js/usereditor.js:135
 msgid "Resync with Murmur"
 msgstr "Aktualisieren"
+
+#~ msgid "Registration"
+#~ msgstr "Registrierung"
+
+#~ msgid "Administration"
+#~ msgstr "Administration"
+
+#~ msgid "User texture"
+#~ msgstr "Benutzertextur"
+
+#~ msgid "Texture"
+#~ msgstr "Textur"
+
+#~ msgid "Gravatar"
+#~ msgstr "Gravatar"
+
+#~ msgid "Use Gravatar"
+#~ msgstr "Benutze Gravatar"
+
+#~ msgid "Upload Avatar"
+#~ msgstr "Avatar hochladen"

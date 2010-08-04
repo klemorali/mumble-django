@@ -23,6 +23,10 @@ def mumble_version(request):
     from mumble import version_str
     return { 'CURRENTVERSION': version_str }
 
+def mumble_media_prefix(request):
+    from django.conf import settings
+    return { 'MUMBLE_MEDIA_PREFIX': settings.MUMBLE_MEDIA_PREFIX }
+
 def theme_url(request):
     from django.conf import settings
     if settings.THEME:

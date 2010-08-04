@@ -12,12 +12,12 @@
     <script type="text/javascript" src="/mumble/forms/api.js"></script>
     <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
     <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/rendermumbleserver.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/channelviewer.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/usereditor.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/logviewer.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/buttoniframewindow.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/loginout_buttons.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
     <script type="text/javascript">
         Ext.onReady( function(){
             Ext.QuickTips.init();
@@ -59,6 +59,7 @@
                     width: 350,
                     split: true,
                     source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+                    imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img'
                 }, {
                     xtype: "tabpanel",
                     region: "center",
