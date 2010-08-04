@@ -7,12 +7,12 @@
     <!-- for iphone/ipod -->
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel="apple-touch-icon" href="{{ MEDIA_URL }}/mumble/mumble.64x64.png" />
+    <link rel="apple-touch-icon" href="{{MUMBLE_MEDIA_PREFIX}}/img/mumble.64x64.png" />
 
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
     <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
-    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/mumble/style.css"  />
-    <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}/mumble/mumble.16x16.png" />
+    <link rel="stylesheet"    type="text/css"  href="{{MUMBLE_MEDIA_PREFIX}}/css/style.css"  />
+    <link rel="shortcut icon" type="image/png" href="{{MUMBLE_MEDIA_PREFIX}}/img/mumble.16x16.png" />
 
     {% block HeadTag %}
     {% endblock %}
