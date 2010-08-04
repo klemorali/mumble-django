@@ -36,13 +36,13 @@ urlpatterns = patterns(
     ( r'mumbleviewer/(?P<server>\d+).xml',   'mumbleviewer_tree_xml' ),
     ( r'mumbleviewer/(?P<server>\d+).json',  'mumbleviewer_tree_json'),
 
-    ( r'mobile/(?P<server>\d+)$',            'mobile_show'     ),
+    ( r'mobile/(?P<server>\d+)/?$',          'mobile_show'     ),
     ( r'mobile/?$',                          'mobile_mumbles'  ),
 
     ( r'(?P<server>\d+).json',               'cvp_json'        ),
     ( r'(?P<server>\d+).xml',                'cvp_xml'         ),
 
-    ( r'(?P<server>\d+)$',                   'show'            ),
+    ( r'(?P<server>\d+)/?$',                 'show'            ),
     ( r'$',                                  'mumbles'         ),
 )
 
