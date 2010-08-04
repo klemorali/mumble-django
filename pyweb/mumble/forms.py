@@ -308,7 +308,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
     def EXT_authorize( self, request, action ):
         if not request.user.is_authenticated():
             return False
-        if self.instance is not None and request.user != self.instance.owner:
+        if self.instance.id is not None and request.user != self.instance.owner:
             # editing another account
             return False
         return settings.ALLOW_ACCOUNT_LINKING
