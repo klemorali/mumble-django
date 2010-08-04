@@ -9,9 +9,9 @@
 {% block HeadTag %}
     <script type="text/javascript" src="/jsi18n/"></script>
     <script type="text/javascript" src="/mumble/api/api.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/rendermumbleserver.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/buttoniframewindow.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/js/loginout_buttons.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
     <script type="text/javascript">
         Ext.onReady( function(){
             Ext.QuickTips.init();
