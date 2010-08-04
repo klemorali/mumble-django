@@ -78,13 +78,22 @@ class ExtDirectFormTestMixin(object):
         return response['result']
 
 
-class AuthedTestCase( TestCase ):
+class AdminAuthedTestCase( TestCase ):
     fixtures = ["testdb.json"]
 
     def setUp( self ):
         TestCase.setUp( self )
         if not self.cl.login( username="svedrin", password="passwort" ):
             raise Exception( "Login failed" )
+
+class UserAuthedTestCase( TestCase ):
+    fixtures = ["testdb.json"]
+
+    def setUp( self ):
+        TestCase.setUp( self )
+        if not self.cl.login( username="nocheinuser", password="passwort" ):
+            raise Exception( "Login failed" )
+
 
 class UnauthedMumbleFormTestCase( ExtDirectFormTestMixin, TestCase ):
     api_baseurl = "/mumble/forms"
@@ -101,7 +110,7 @@ class UnauthedMumbleFormTestCase( ExtDirectFormTestMixin, TestCase ):
         self.assertEquals( result['errors'][''], 'access denied' )
 
 
-class AuthedMumbleFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+class AuthedMumbleFormTestCase( ExtDirectFormTestMixin, AdminAuthedTestCase ):
     api_baseurl = "/mumble/forms"
     formname = "MumbleForm"
 
@@ -137,7 +146,7 @@ class UnauthedMumbleUserFormTestCase( ExtDirectFormTestMixin, TestCase ):
         self.assertEquals( result['success'], False )
         self.assertEquals( result['errors'][''], 'access denied' )
 
-class AuthedMumbleUserFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+class AuthedMumbleUserFormTestCase( ExtDirectFormTestMixin, AdminAuthedTestCase ):
     api_baseurl = "/mumble/forms"
     formname = "MumbleUserForm"
 
@@ -168,7 +177,7 @@ class UnauthedMumbleUserLinkFormTestCase( UnauthedMumbleUserFormTestCase ):
         self.assertEquals( result['success'], False )
         self.assertEquals( result['errors'][''], 'access denied' )
 
-class AuthedMumbleUserLinkFormTestCase( ExtDirectFormTestMixin, AuthedTestCase ):
+class AuthedMumbleUserLinkFormTestCase( ExtDirectFormTestMixin, AdminAuthedTestCase ):
     api_baseurl = "/mumble/forms"
     formname = "MumbleUserLinkForm"
 
@@ -193,6 +202,35 @@ class AuthedMumbleUserLinkFormTestCase( ExtDirectFormTestMixin, AuthedTestCase )
     def testFormPostLinking( self ):
         result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1, 'linkacc': 'on'} )
         self.assertEquals( result['success'], False )
+
+class UserMumbleUserLinkFormTestCase( ExtDirectFormTestMixin, UserAuthedTestCase ):
+    api_baseurl = "/mumble/forms"
+    formname = "MumbleUserLinkForm"
+    def testFormGet( self ):
+        # Request someone who isn't me
+        result = self.formGet( [{'pk': 1}] )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPostEdit( self ):
+        # Edit someone who isn't me
+        result = self.formPost( {'pk': 1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors'][''], 'access denied' )
+
+    def testFormPostEdit( self ):
+        # Try registering taken account
+        result = self.formPost( {'pk': -1, 'name': "svedrin", 'password': 'passwort', 'serverid': 1} )
+        self.assertEquals( result['success'], False )
+        self.assertEquals( result['errors']['name'], 'Another player already registered that name.' )
+
+    def testFormPostLinkingUser( self ):
+        result = self.formPost( {'pk': -1, 'name': "nichtadmin", 'password': 'nichtadmin', 'serverid': 1, 'linkacc': 'on'} )
+        self.assertEquals( result['success'], settings.ALLOW_ACCOUNT_LINKING )
+
+    def testFormPostLinkingAdmin( self ):
+        result = self.formPost( {'pk': -1, 'name': "dochadmin", 'password': 'dochadmin', 'serverid': 1, 'linkacc': 'on'} )
+        self.assertEquals( result['success'], (settings.ALLOW_ACCOUNT_LINKING and settings.ALLOW_ACCOUNT_LINKING_ADMINS) )
 
 
 class UnauthedFormLoading(TestCase):

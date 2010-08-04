@@ -43,6 +43,28 @@
     }
   }, 
   {
+    "pk": 2, 
+    "model": "mumble.mumbleuser", 
+    "fields": {
+      "owner": null, 
+      "mumbleid": 2, 
+      "password": "", 
+      "name": "nichtadmin", 
+      "server": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "mumble.mumbleuser", 
+    "fields": {
+      "owner": null, 
+      "mumbleid": 3, 
+      "password": "", 
+      "name": "dochadmin", 
+      "server": 1
+    }
+  }, 
+  {
     "pk": 13, 
     "model": "auth.permission", 
     "fields": {
@@ -430,12 +452,30 @@
       "is_active": true, 
       "is_superuser": true, 
       "is_staff": true, 
-      "last_login": "2010-08-02 15:56:15", 
+      "last_login": "2010-08-04 22:59:55", 
       "groups": [], 
       "user_permissions": [], 
       "password": "sha1$71bab$1dd52b90d6b63ba95483292dc50ac58ee71ca551", 
       "email": "diese-addy@funzt-halt.net", 
       "date_joined": "2010-07-23 08:43:57"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "nocheinuser", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2010-08-04 23:43:38", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$42964$bbadc83a17fb5272a9461b64fd70a12d353614f2", 
+      "email": "", 
+      "date_joined": "2010-08-04 23:43:38"
     }
   }
 ]
