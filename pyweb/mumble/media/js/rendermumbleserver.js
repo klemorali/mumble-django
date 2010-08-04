@@ -1,3 +1,5 @@
+// kate: space-indent on; indent-width 4; replace-tabs on;
+
 function renderserverinfos( server ){
     var buf = [];
     if( server.connecturl ){
@@ -25,8 +27,10 @@ function renderserverinfos( server ){
     for( var i = 0; i < buf.length; i++ )
         res.push( '<li>'+buf[i]+'</li>' );
     res.push( '</ul><br /><br />' );
-    res.push( String.format( '<b>{0}:</b><br />', gettext("Welcome message") ) );
-    res.push( String.format( '<div style="padding: 10px">{0}</div>', server.motd ) );
+    if( server.motd ){
+        res.push( String.format( '<b>{0}:</b><br />', gettext("Welcome message") ) );
+        res.push( String.format( '<div style="padding: 10px">{0}</div>', server.motd ) );
+    }
     res.push( '</div>' );
     return res.join('');
 }
