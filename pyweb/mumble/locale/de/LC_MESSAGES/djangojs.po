@@ -2,26 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-04 20:28+0200\n"
-"PO-Revision-Date: 2010-07-02 11:41\n"
+"PO-Revision-Date: 2010-08-04 23:34\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Translated-Using: django-rosetta 0.5.5\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.5.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: media/js/buttoniframewindow.js:30
 msgid "Open in new window"
-msgstr ""
+msgstr "In neuem Fenster öffnen"
 
 #: media/js/channelviewer.js:51
 msgid "Channel Viewer"
@@ -32,33 +32,32 @@ msgid "Loading..."
 msgstr "Lade..."
 
 #: media/js/channelviewer.js:64
-#, fuzzy
 msgid "Auto-Refresh"
-msgstr "Aktualisieren"
+msgstr "Auto-Aktualisieren"
 
 #: media/js/loginout_buttons.js:7
 msgid "Logout"
-msgstr ""
+msgstr "Abmelden"
 
 #: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:51
 msgid "Login error"
-msgstr ""
+msgstr "Fehler bei der Anmeldung"
 
 #: media/js/loginout_buttons.js:16
 msgid "Unable to log out."
-msgstr ""
+msgstr "Abmelden ist fehlgeschlagen."
 
 #: media/js/loginout_buttons.js:26 media/js/loginout_buttons.js.py:31
 msgid "Login"
-msgstr ""
+msgstr "Anmeldung"
 
 #: media/js/loginout_buttons.js:41
 msgid "Submit"
-msgstr ""
+msgstr "Absenden"
 
 #: media/js/loginout_buttons.js:52
 msgid "Unable to log in."
-msgstr ""
+msgstr "Anmelden ist fehlgeschlagen."
 
 #: media/js/loginout_buttons.js:63
 msgid "User name"
@@ -70,25 +69,25 @@ msgstr "Passwort"
 
 #: media/js/logviewer.js:11
 msgid "Log messages"
-msgstr ""
+msgstr "Log-Meldungen"
 
 #: media/js/logviewer.js:13
 msgid "Timestamp"
-msgstr ""
+msgstr "Zeitstempel"
 
 #: media/js/logviewer.js:20
 msgid "Log entry"
-msgstr ""
+msgstr "Log-Eintrag"
 
 #: media/js/logviewer.js:25
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: media/js/logviewer.js:33
 msgid ""
 "Enter a string to filter the logs by and press Enter. To display all log "
 "entries, empty this field."
-msgstr ""
+msgstr "Gib einen Suchbegriff ein, mit dem die Log-Einträge gefiltert werden sollen, und drücke Enter. Um alle Einträge anzuzeigen, leere dieses Feld."
 
 #: media/js/logviewer.js:45
 msgid "Refresh"
@@ -96,40 +95,40 @@ msgstr "Aktualisieren"
 
 #: media/js/rendermumbleserver.js:4
 msgid "Server Address"
-msgstr ""
+msgstr "Server-Adresse"
 
 #: media/js/rendermumbleserver.js:7
 msgid "Website"
-msgstr ""
+msgstr "Webseite"
 
 #: media/js/rendermumbleserver.js:11
 #, perl-format
 msgid "Currently, %s user is registered."
 msgid_plural "Currently, %s users are registered."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Momentan ist %s Benutzer registriert."
+msgstr[1] "Momentan sind %s Benutzer registriert."
 
 #: media/js/rendermumbleserver.js:14
 #, perl-format
 msgid "Currently, %s user is online."
 msgid_plural "Currently, %s users are online."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Momentan ist %s Benutzer online."
+msgstr[1] "Momentan sind %s Benutzer online."
 
 #: media/js/rendermumbleserver.js:17
 #, perl-format
 msgid "Currently, there is %s channel."
 msgid_plural "Currently, there are %s channels."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Momentan gibt es %s Kanal."
+msgstr[1] "Momentan gibt es %s Kanäle."
 
 #: media/js/rendermumbleserver.js:22
 msgid "Switch to minimal view"
-msgstr ""
+msgstr "Auf die Minimalansicht umschalten"
 
 #: media/js/rendermumbleserver.js:28
 msgid "Welcome message"
-msgstr ""
+msgstr "Willkommensnachricht"
 
 #: media/js/usereditor.js:27
 msgid "Admin on root channel"
@@ -169,11 +168,11 @@ msgstr "Speichern"
 
 #: media/js/usereditor.js:126
 msgid "Submit error"
-msgstr ""
+msgstr "Fehler beim Absenden"
 
 #: media/js/usereditor.js:127
 msgid "Unable to save."
-msgstr ""
+msgstr "Konnte nicht speichern."
 
 #: media/js/usereditor.js:135
 msgid "Resync with Murmur"
