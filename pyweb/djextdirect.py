@@ -521,7 +521,10 @@ class Provider( object ):
 
         data = {}
         for fld in forminst.fields:
-            data[fld] = getattr( instance, fld )
+            if instance:
+                data[fld] = getattr( instance, fld )
+            else:
+                data[fld] = forminst.base_fields[fld].initial;
         return { 'data': data, 'success': True }
 
     def update_form_data( self, formname, request ):
