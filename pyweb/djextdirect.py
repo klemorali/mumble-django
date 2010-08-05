@@ -68,10 +68,18 @@ Ext.ux.%(clsname)s = function( config ){
 
 Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {
     load: function(){
-        this.getForm().load({ params: {pk: this.pk} });
+        this.getForm().load({ params: Ext.applyIf( {pk: this.pk}, this.baseParams ) });
     },
     submit: function(){
-        this.getForm().submit({ params: {pk: this.pk} });
+        this.getForm().submit({
+            params: Ext.applyIf( {pk: this.pk}, this.baseParams ),
+            failure: function( form, action ){
+                if( action.failureType == Ext.form.Action.SERVER_INVALID &&
+                    typeof action.result.errors[''] != 'undefined' ){
+                    Ext.Msg.alert( "Error", action.result.errors[''] );
+                }
+            }
+        });
     },
 } );
 
@@ -483,6 +491,7 @@ class Provider( object ):
                 'fileUpload: ' + simplejson.dumps(hasfiles) + ','
                 'defaults: { "anchor": "-20px" },'
                 'paramsAsHash: true,'
+                'baseParams: {},'
                 'autoScroll: true,'
                 """buttons: [{
                         text:    "Submit",
