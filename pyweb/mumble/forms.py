@@ -216,7 +216,7 @@ class MumbleUserForm( ModelForm ):
         if action == "update" and settings.PROTECTED_MODE and self.instance.id is None:
             # creating new user in protected mode -> need UserPasswordForm
             return False
-        if self.instance is not None and request.user != self.instance.owner:
+        if self.instance.id is not None and request.user != self.instance.owner:
             # editing another account
             return False
         return True
@@ -255,6 +255,10 @@ class MumbleUserForm( ModelForm ):
             raise forms.ValidationError( _( "Cannot register player without a password!" ) )
         return passwd
 
+    def save(self):
+        self.instance.server = self.server
+        ModelForm.save(self)
+
     class Meta:
         model   = MumbleUser
         fields  = ( 'name', 'password' )
@@ -272,7 +276,7 @@ class MumbleUserPasswordForm( MumbleUserForm ):
     def EXT_authorize( self, request, action ):
         if not request.user.is_authenticated():
             return False
-        if self.instance is not None and request.user != self.instance.owner:
+        if self.instance.id is not None and request.user != self.instance.owner:
             # editing another account
             return False
         return True
@@ -306,7 +310,7 @@ class MumbleUserLinkForm( MumbleUserForm ):
         self.mumbleid = None
 
     def EXT_authorize( self, request, action ):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated() or action == "get":
             return False
         if self.instance.id is not None and request.user != self.instance.owner:
             # editing another account
