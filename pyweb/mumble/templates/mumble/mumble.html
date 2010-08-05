@@ -72,9 +72,7 @@
                         xtype: "{{ RegForm|lower }}",
                         pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
                         labelWidth: 150,
-                        submit: function(){
-                            this.getForm().submit({ params: {serverid: {{MumbleServer.id}}, pk: this.pk } });
-                        },
+                        baseParams: {serverid: {{MumbleServer.id}} },
                     },
                     {% if MumbleAccount %}
                         {% if IsAdmin %}
