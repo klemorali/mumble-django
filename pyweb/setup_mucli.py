@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
  *  Copyright © 2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
