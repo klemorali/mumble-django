@@ -168,8 +168,10 @@ RES_SUCCESS      = {'success': True}
 RES_ACCESSDENIED = {'success': False, 'errors': {'': 'access denied'}}
 RES_PREVALFAIL   = {'success': False, 'errors': {'': 'pre-validation failed'}}
 
-LOGIN_SUPERADMIN = {'username': 'svedrin',     'password': 'passwort'}
-LOGIN_UNREGUSER  = {'username': 'nocheinuser', 'password': 'passwort'}
+LOGIN_SUPERADMIN = {'username': 'svedrin', 'password': 'passwort'}
+LOGIN_UNREGUSER  = {'username': 'unreg',   'password': 'passwort'}
+LOGIN_USER       = {'username': 'user',    'password': 'passwort'}
+LOGIN_ADMIN      = {'username': 'admin',   'password': 'passwort'}
 
 #############################################################
 ###      ANON: Unauthed (not logged in) users             ###
@@ -248,9 +250,29 @@ Unreg_Administration = generateTestCase(
 ###      USER: MumbleUser but not a server admin          ###
 #############################################################
 
+User_Administration = generateTestCase(
+    name     = "User_Administration",
+    formname = "MumbleForm",
+    data     = {
+        'My':    ( {'pk': 1, 'name': 'test server',  'url': '', 'player': ''}, RES_ACCESSDENIED ),
+        'Other': ( {'pk': 2, 'name': 'alealejandro', 'url': '', 'player': ''}, RES_ACCESSDENIED ),
+        },
+    login    = LOGIN_USER,
+    )
+
 #############################################################
 ###      ADMIN: MumbleUser is a server admin              ###
 #############################################################
+
+Admin_Administration = generateTestCase(
+    name     = "Admin_Administration",
+    formname = "MumbleForm",
+    data     = {
+        'My':    ( {'pk': 1, 'name': 'test server',  'url': '', 'player': ''}, RES_SUCCESS      ),
+        'Other': ( {'pk': 2, 'name': 'alealejandro', 'url': '', 'player': ''}, RES_ACCESSDENIED ),
+        },
+    login    = LOGIN_ADMIN,
+    )
 
 #############################################################
 ###      SUPER: User is superadmin, MumbleUser irrelevant ###
