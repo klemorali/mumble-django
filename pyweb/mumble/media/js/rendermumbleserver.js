@@ -6,7 +6,7 @@ function renderserverinfos( server ){
         buf.push( String.format( '{0}: <a href="{1}">{1}</a>', gettext("Server Address"), server.connecturl ) );
     }
     if( server.url ){
-        buf.push( String.format( '{0}: {1}', gettext("Website"), server.url ) );
+        buf.push( String.format( '{0}: <a href="{1}">{1}</a>', gettext("Website"), server.url ) );
     }
     buf.push( interpolate( "This server is running Murmur version %s.", [server.prettyversion] ) );
     buf.push( interpolate(
