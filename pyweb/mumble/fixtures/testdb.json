@@ -65,6 +65,28 @@
     }
   }, 
   {
+    "pk": 4, 
+    "model": "mumble.mumbleuser", 
+    "fields": {
+      "owner": 3, 
+      "mumbleid": 4, 
+      "password": "", 
+      "name": "user", 
+      "server": 1
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "mumble.mumbleuser", 
+    "fields": {
+      "owner": 4, 
+      "mumbleid": 5, 
+      "password": "", 
+      "name": "admin", 
+      "server": 1
+    }
+  }, 
+  {
     "pk": 13, 
     "model": "auth.permission", 
     "fields": {
@@ -464,7 +486,7 @@
     "pk": 2, 
     "model": "auth.user", 
     "fields": {
-      "username": "nocheinuser", 
+      "username": "unreg", 
       "first_name": "", 
       "last_name": "", 
       "is_active": true, 
@@ -476,6 +498,42 @@
       "password": "sha1$42964$bbadc83a17fb5272a9461b64fd70a12d353614f2", 
       "email": "", 
       "date_joined": "2010-08-04 23:43:38"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "user", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2010-08-09 21:52:26", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$29968$676eef769fb463e8f6fb644bcad3d6c88e7b2e51", 
+      "email": "", 
+      "date_joined": "2010-08-09 21:52:26"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "admin", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2010-08-09 21:52:53", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$618ff$faa3b4d6818c777a0a1710ad0e465761a87f3885", 
+      "email": "", 
+      "date_joined": "2010-08-09 21:52:53"
     }
   }
 ]
