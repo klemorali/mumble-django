@@ -2,6 +2,16 @@
 Mumble-Django changelog
 =======================
 
+Version 2.4beta1, 10 Aug 2010:
+------------------------------
+* Update from ExtJS 2.2 to 3.2.0.
+* Rebuild the user interface completely using ExtJS, handling form submissions
+  and data loading via AJAX.
+* Add a log viewer for admins.
+* Add a distutils script that wraps up MuCLI in a redistributable fashion.
+* Add unit tests to check form authorization.
+* Move media for the mumble app into a directory beneath pyweb/mumble.
+
 Version 2.3, 24 June 2010:
 ------------------------------
 * Removed resolving the bind addresses the user entered into IP addresses,
