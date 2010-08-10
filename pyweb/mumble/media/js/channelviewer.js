@@ -43,6 +43,20 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
     }
 });
 
+function cmp_channels( left, rite ){
+    // Compare two channels, first by position, and if that equals, by name.
+    if( typeof left.position != "undefined" && typeof rite.position != "undefined" ){
+        byorder = left.position - rite.position;
+        if( byorder != 0 )
+            return byorder;
+    }
+    return left.name.localeCompare(rite.name);
+}
+
+function cmp_names( left, rite ){
+    return left.name.localeCompare(rite.name);
+}
+
 Ext.ux.MumbleChannelViewer = function( config ){
     Ext.apply( this, config );
 
@@ -139,6 +153,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                 tree = this;
                 function populateNode( node, json ){
                     var subchan_users = 0;
+                    json.channels.sort(cmp_channels);
                     for( var i = 0; i < json.channels.length; i++ ){
                         var child = {
                             text: json.channels[i].name,
@@ -154,6 +169,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                         node.children.push( child );
                         subchan_users += populateNode( child, json.channels[i] );
                     }
+                    json.users.sort(cmp_names);
                     for( var i = 0; i < json.users.length; i++ ){
                         var child = {
                             text: json.users[i].name,
