@@ -65,15 +65,23 @@ Ext.ux.MumbleChannelViewer = function( config ){
         refreshInterval: 10000,
         idleInterval: 2,
         autoScroll: true,
+        enableDD:   false, // Users need to enable this explicitly
         root: {
             text: gettext("Loading..."),
             leaf: true
+        },
+        listeners: {}
+    });
+
+    Ext.applyIf( this.listeners, {
+        dragdrop: function( tree, node, targetdd, ev ){
+            if( typeof node.attributes.userdata != "undefined" )
+                tree.fireEvent("moveUser", tree, node.attributes.userdata, targetdd.dragOverData.target.attributes.chandata);
         }
     });
 
     Ext.applyIf( this, {
         // This stuff needs the above applied already
-        // x-btn   x-btn-noicon
         bbar: [ gettext("Auto-Refresh")+':', {
                 xtype:   "checkbox",
                 ref:     "../cbAutoRefresh",
@@ -110,6 +118,12 @@ Ext.ux.MumbleChannelViewer = function( config ){
     } );
 
     Ext.ux.MumbleChannelViewer.superclass.constructor.call( this );
+
+    this.addEvents({
+        'moveUser':    true,
+        'moveChannel': true  //TODO
+    });
+
     this.autoRefreshId = 0;
     this.setAutoRefresh();
 }
@@ -144,6 +158,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                 var respdata = Ext.decode( resp.responseText );
                 var root = {
                     text: respdata.name,
+                    nodeType: 'async',
                     id:   "mumbroot",
                     leaf: false,
                     icon: this.imageurl+'/mumble.16x16.png',
@@ -158,7 +173,11 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                         var child = {
                             text: json.channels[i].name,
                             id:   ("channel_" + json.channels[i].id),
+                            nodeType: 'async',
                             leaf: true,
+                            allowDrag: true,
+                            allowDrop: true,
+                            draggable: true,
                             icon: tree.imageurl+'/channel.png',
                             children: [],
                             uiProvider: Ext.ux.MumbleChannelNodeUI,
@@ -174,7 +193,10 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                         var child = {
                             text: json.users[i].name,
                             id:   ("user_" + json.users[i].session),
+                            nodeType: 'async',
                             leaf: true,
+                            allowDrag: true,
+                            draggable: true,
                             uiProvider: Ext.ux.MumbleUserNodeUI,
                             userdata: json.users[i],
                             imageurl: tree.imageurl
