@@ -125,7 +125,7 @@ class MumbleAdmin(admin.ModelAdmin):
 class MumbleUserAdmin(admin.ModelAdmin):
     """ Specification for the "Registered users" admin section. """
 
-    list_display   = [ 'owner', 'server', 'name', 'mumbleid', 'get_acl_admin' ]
+    list_display   = [ 'name', 'server', 'owner', 'mumbleid', 'get_acl_admin' ]
     list_filter    = [ 'server' ]
     search_fields  = [ 'owner__username', 'name' ]
     ordering       = [ 'owner__username' ]
