@@ -58,8 +58,14 @@
                     region: "west",
                     width: 350,
                     split: true,
+                    enableDD: true,
                     source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
-                    imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img'
+                    imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
+                    listeners: {
+                        moveUser: function( tree, userdata, chandata ){
+                            User.move( {{MumbleServer.id}}, userdata.session, chandata.id )
+                        }
+                    }
                 }, {
                     xtype: "tabpanel",
                     region: "center",

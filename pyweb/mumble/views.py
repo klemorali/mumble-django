@@ -329,6 +329,12 @@ def update_avatar( request, userid ):
 
     return HttpResponse( "false", mimetype="text/html" )
 
+@EXT_DIRECT_PROVIDER.register_method( "User" )
+def move( request, server, sessionid, channelid ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.moveUser( sessionid, channelid )
 
 def mmng_tree( request, server ):
     """ Return a JSON representation of the channel tree suitable for

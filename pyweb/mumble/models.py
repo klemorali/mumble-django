@@ -557,6 +557,15 @@ class Mumble( models.Model ):
     def banUser( self, sessionid, reason="" ):
         return self.ctl.addBanForSession( self.srvid, sessionid, reason=reason )
 
+    def moveUser( self, sessionid, channelid ):
+        return self.ctl.moveUser( self.srvid, sessionid, channelid )
+
+    def muteUser( self, sessionid, mute=True ):
+        return self.ctl.muteUser( self.srvid, sessionid, mute )
+
+    def deafenUser( self, sessionid, deafen=True ):
+        return self.ctl.moveUser( self.srvid, sessionid, deafen )
+
     def getLog( self, first=0, last=100, filter="" ):
         """ Return log entries from ``first`` to ``last`` that contain ``filter`` (if any). """
         logentries = self.ctl.getLog( self.srvid, first, last )
