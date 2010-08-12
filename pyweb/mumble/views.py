@@ -244,6 +244,20 @@ def log( request, server, start, limit, filter ):
             for ent in srv.getLog( start, (start + limit), filter )
         ], 'success': True }
 
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def moveUser( request, server, sessionid, channelid ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.moveUser( sessionid, channelid )
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def moveChannel( request, server, channelid, parentid ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.moveChannel( channelid, parentid )
+
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):
@@ -328,13 +342,6 @@ def update_avatar( request, userid ):
         return HttpResponse( "true", mimetype="text/html" )
 
     return HttpResponse( "false", mimetype="text/html" )
-
-@EXT_DIRECT_PROVIDER.register_method( "User" )
-def move( request, server, sessionid, channelid ):
-    srv = get_object_or_404( Mumble, id=int(server) )
-    if not srv.isUserAdmin( request.user ):
-        raise Exception( 'Access denied' )
-    srv.moveUser( sessionid, channelid )
 
 def mmng_tree( request, server ):
     """ Return a JSON representation of the channel tree suitable for

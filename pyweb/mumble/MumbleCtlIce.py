@@ -435,6 +435,13 @@ class MumbleCtlIce_118(MumbleCtlBase):
         return self._getIceServerObject(srvid).getLog( first, last )
 
     @protectDjangoErrPage
+    def moveChannel(self, srvid, channelid, parentid):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getChannelState(channelid)
+        state.parent = parentid
+        srv.setChannelState(state)
+
+    @protectDjangoErrPage
     def moveUser(self, srvid, sessionid, channelid):
         srv = self._getIceServerObject(srvid)
         state = srv.getState(sessionid)

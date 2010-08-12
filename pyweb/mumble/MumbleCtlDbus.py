@@ -306,6 +306,11 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         (session, ismute, isdeaf, suppressed, selfMute, selfDeaf, channel) = srv.getPlayerState(dbus.UInt32(sessionid))
         srv.setPlayerState((session, ismute, deaf, suppressed, selfMute, selfDeaf, channel))
 
+    def moveChannel(self, srvid, channelid, parentid):
+        srv = self._getDbusServerObject(srvid)
+        (chanid, name, parent, links) = srv.getChannelState(dbus.UInt32(channelid))
+        srv.setChannelState((chanid, name, parentid, links))
+
     @staticmethod
     def convertDbusTypeToNative(data):
         #i know dbus.* type is extends python native type.

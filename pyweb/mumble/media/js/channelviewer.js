@@ -77,6 +77,8 @@ Ext.ux.MumbleChannelViewer = function( config ){
         dragdrop: function( tree, node, targetdd, ev ){
             if( typeof node.attributes.userdata != "undefined" )
                 tree.fireEvent("moveUser", tree, node.attributes.userdata, targetdd.dragOverData.target.attributes.chandata);
+            else if( typeof node.attributes.chandata != "undefined" )
+                tree.fireEvent("moveChannel", tree, node.attributes.chandata, targetdd.dragOverData.target.attributes.chandata);
         }
     });
 
@@ -121,7 +123,7 @@ Ext.ux.MumbleChannelViewer = function( config ){
 
     this.addEvents({
         'moveUser':    true,
-        'moveChannel': true  //TODO
+        'moveChannel': true
     });
 
     this.autoRefreshId = 0;
@@ -174,7 +176,6 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             text: json.channels[i].name,
                             id:   ("channel_" + json.channels[i].id),
                             nodeType: 'async',
-                            leaf: true,
                             allowDrag: true,
                             allowDrop: true,
                             draggable: true,
@@ -184,7 +185,6 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             chandata: json.channels[i],
                             imageurl: tree.imageurl
                         };
-                        node.leaf = false;
                         node.children.push( child );
                         subchan_users += populateNode( child, json.channels[i] );
                     }
