@@ -1,0 +1,17 @@
+syntax: glob
+
+*.pyc
+*.db3
+*.db3.bak
+*.db3-journal
+*~
+.directory
+.secret.txt
+htdocs/mviewtest
+themes
+htdocs/themes
+*.kpf
+
+pyweb/MANIFEST
+build
+dist

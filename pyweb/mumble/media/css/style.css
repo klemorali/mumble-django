@@ -1,0 +1,46 @@
+.form_hint_label {
+	font-family:    Lucida Grande,Verdana,Arial,sans-serif;
+	font-size:      10px;
+	font-weight:    400;
+	font-style:     normal;
+	color:          #999999;
+}
+
+a.mumble:link, a.mumble:visited, a.mumble:hover, a.mumble:active {
+	font-weight:     bold;
+	font-size:       8pt;
+	color:           #283E53;
+	text-decoration: none;
+}
+
+div.mumble {
+	background-repeat: repeat-y;
+	margin-left: 20px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+div.mumble img {
+	padding: 0px;
+	margin:  0px;
+}
+
+span.mumble {
+	width: 40%;
+	float:right;
+}
+
+div.mumble-ext {
+	padding: 10px;
+}
+
+div.mumble-ext ul {
+	list-style-type: disc;
+	padding-left: 20px;
+}
+
+div.mumble-ext fieldset {
+	border: 1px solid darkblue;
+	margin-top: 20px;
+	padding: 10px;
+}
