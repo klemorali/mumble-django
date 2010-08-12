@@ -258,6 +258,14 @@ def moveChannel( request, server, channelid, parentid ):
         raise Exception( 'Access denied' )
     srv.moveChannel( channelid, parentid )
 
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def kickUser( request, server, sessionid, reason, ban, duration ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    if ban:
+        srv.banUser( sessionid, reason, duration )
+    srv.kickUser( sessionid, reason )
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):

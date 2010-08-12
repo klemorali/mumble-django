@@ -12,8 +12,9 @@
     <script type="text/javascript" src="/mumble/forms/api.js"></script>
     <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
     <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
@@ -59,6 +60,12 @@
                     width: 350,
                     split: true,
                     enableDD: true,
+                    plugins: [
+                        new Ext.ux.MumbleUserEditor({
+                            serverid: {{MumbleServer.id}}
+                            }),
+                        new Ext.ux.MumbleChannelEditor()
+                        ],
                     source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
                     imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
                     listeners: {

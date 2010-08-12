@@ -554,8 +554,8 @@ class Mumble( models.Model ):
     def kickUser( self, sessionid, reason="" ):
         return self.ctl.kickUser( self.srvid, sessionid, reason )
 
-    def banUser( self, sessionid, reason="" ):
-        return self.ctl.addBanForSession( self.srvid, sessionid, reason=reason )
+    def banUser( self, sessionid, reason="", duration=0 ):
+        return self.ctl.addBanForSession( self.srvid, sessionid, reason=reason, duration=duration )
 
     def moveUser( self, sessionid, channelid ):
         return self.ctl.moveUser( self.srvid, sessionid, channelid )
