@@ -2,6 +2,14 @@
 
 Ext.namespace('Ext.ux');
 
+if( typeof gettext == "undefined" ){
+    // Cope with Django's jsi18n not being available by adding dummy gettext
+    gettext = function( text ){
+        return text;
+    };
+    gettext_noop = gettext;
+}
+
 Ext.ux.MumbleChannelNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
     renderElements : function(n, a, targetNode, bulkRender){
         Ext.ux.MumbleUserNodeUI.superclass.renderElements.call( this, n, a, targetNode, bulkRender );
