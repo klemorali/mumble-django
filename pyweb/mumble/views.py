@@ -245,6 +245,18 @@ def log( request, server, start, limit, filter ):
         ], 'success': True }
 
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def bans( request, server ):
+    """ Retrieve log messages. """
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( "Access denied" )
+    return { 'data': [
+            { 'start': ent.start, 'address': ent.address, 'bits': ent.bits,
+              'duration': ent.duration, 'reason': ent.reason }
+            for ent in srv.getBans()
+        ], 'success': True }
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def moveUser( request, server, sessionid, channelid ):
     srv = get_object_or_404( Mumble, id=int(server) )
     if not srv.isUserAdmin( request.user ):
