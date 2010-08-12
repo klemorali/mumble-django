@@ -307,6 +307,9 @@ class Mumble( models.Model ):
 
     ctl = property( lambda self: self.server.ctl )
 
+    def getBans( self ):
+        return self.ctl.getBans( self.srvid )
+
     def getConf( self, field ):
         return self.ctl.getConf( self.srvid, field )
 

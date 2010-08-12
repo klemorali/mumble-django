@@ -17,6 +17,7 @@
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/banviewer.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
     <script type="text/javascript">
@@ -146,6 +147,9 @@
                                 server: {{ MumbleServer.id }}
                             }, {
                                 xtype: 'logViewerPanel',
+                                server: {{ MumbleServer.id }}
+                            }, {
+                                xtype: 'banViewerPanel',
                                 server: {{ MumbleServer.id }}
                             }
                         {% endif %}
