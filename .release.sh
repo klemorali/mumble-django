@@ -13,12 +13,12 @@ LASTTAG=`hg tags | grep -v tip | head -n1 | cut -d' ' -f1`
 
 cd "${PYWEB}"
 
-echo "Updating djExtDirect."
-wget -nv -N 'http://bitbucket.org/Svedrin/djextdirect/raw/tip/djextdirect.py'
-if hg status djextdirect.py | grep djextdirect.py > /dev/null; then
-    # looks like wget changed the file
-    hg commit djextdirect.py -m "Update djExtDirect"
-fi
+#echo "Updating djExtDirect."
+#wget -nv -N 'http://bitbucket.org/Svedrin/djextdirect/raw/tip/djextdirect.py'
+#if hg status djextdirect.py | grep djextdirect.py > /dev/null; then
+#    # looks like wget changed the file
+#    hg commit djextdirect.py -m "Update djExtDirect"
+#fi
 
 VERSIONSTR=`python -c 'import mumble; print mumble.version_str'`
 
@@ -54,9 +54,9 @@ rm "${HISTFILE}"
 echo "New version will be tagged ${VERSIONSTR}. If this is correct, hit enter to continue."
 read
 
-echo hg commit "${BASEDIR}/CHANGELOG" -m "Releasing ${VERSIONSTR}."
-echo hg tag "${VERSIONSTR}"
-echo hg push
+hg commit "${BASEDIR}/CHANGELOG" -m "Releasing ${VERSIONSTR}."
+hg tag "${VERSIONSTR}"
+hg push
 
 echo "You successfully released ${VERSIONSTR}!"
 
