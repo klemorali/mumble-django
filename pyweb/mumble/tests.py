@@ -165,8 +165,8 @@ def generateTestCase( name, formname, data, login=None ):
     return type( name, (ExtDirectFormTestMixin, TestCase), attrs )
 
 RES_SUCCESS      = {'success': True}
-RES_ACCESSDENIED = {'success': False, 'errors': {'': 'access denied'}}
-RES_PREVALFAIL   = {'success': False, 'errors': {'': 'pre-validation failed'}}
+RES_ACCESSDENIED = {'success': False, 'errors': {'__all__': 'access denied'}}
+RES_PREVALFAIL   = {'success': False, 'errors': {'__all__': 'pre-validation failed'}}
 
 LOGIN_SUPERADMIN = {'username': 'svedrin', 'password': 'passwort'}
 LOGIN_UNREGUSER  = {'username': 'unreg',   'password': 'passwort'}
