@@ -75,8 +75,8 @@ Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {
             params: Ext.applyIf( {pk: this.pk}, this.baseParams ),
             failure: function( form, action ){
                 if( action.failureType == Ext.form.Action.SERVER_INVALID &&
-                    typeof action.result.errors[''] != 'undefined' ){
-                    Ext.Msg.alert( "Error", action.result.errors[''] );
+                    typeof action.result.errors['__all__'] != 'undefined' ){
+                    Ext.Msg.alert( "Error", action.result.errors['__all__'] );
                 }
             }
         });
@@ -517,7 +517,7 @@ class Provider( object ):
 
         if hasattr( forminst, "EXT_authorize" ) and \
            forminst.EXT_authorize( request, "get" ) is False:
-            return { 'success': False, 'errors': {'': 'access denied'} }
+            return { 'success': False, 'errors': {'__all__': 'access denied'} }
 
         data = {}
         for fld in forminst.fields:
@@ -541,12 +541,12 @@ class Provider( object ):
 
         if hasattr( forminst, "EXT_authorize" ) and \
            forminst.EXT_authorize( request, "update" ) is False:
-            return { 'success': False, 'errors': {'': 'access denied'} }
+            return { 'success': False, 'errors': {'__all__': 'access denied'} }
 
         # save if either no usable validation method available or validation passes; and form.is_valid
         if ( hasattr( forminst, "EXT_validate" ) and callable( forminst.EXT_validate )
              and not forminst.EXT_validate( request ) ):
-            return { 'success': False, 'errors': {'': 'pre-validation failed'} }
+            return { 'success': False, 'errors': {'__all__': 'pre-validation failed'} }
 
         if forminst.is_valid():
             forminst.save()
