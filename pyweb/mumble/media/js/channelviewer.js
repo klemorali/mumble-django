@@ -27,7 +27,7 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
             '<img style="position: absolute; top: 0px; right: {pos}px;" src="{imageurl}/{icon}.png"/>'
             );
         var icons = []
-        if( a.userdata.userid != 0 )     icons.push( "authenticated" );
+        if( a.userdata.userid != -1 )    icons.push( "authenticated" );
         if( a.userdata.selfDeaf )        icons.push( "deafened_self" );
         if( a.userdata.deaf )            icons.push( "deafened_server" );
         if( a.userdata.selfMute )        icons.push( "muted_self" );
