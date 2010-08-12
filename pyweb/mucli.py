@@ -150,8 +150,10 @@ else:
         print >> sys.stderr, "Method name:    %s" % progargs[0]
 
     method = getattr( ctl, progargs[0] )
+    bound = True
     if hasattr( method, "innerfunc" ):
         method = method.innerfunc
+        bound = False
 
     args = inspect.getargspec( method )[0]
 
@@ -180,7 +182,10 @@ else:
             if options.verbose:
                 print >> sys.stderr, "Call arguments: %s" % repr(cleanargs)
 
-            print method( ctl, *cleanargs )
+            if bound:
+                print method( *cleanargs )
+            else:
+                print method( ctl, *cleanargs )
 
     elif len(args) == 1:
         print >> sys.stderr, "Method '%s' does not take any arguments." % progargs[0]
