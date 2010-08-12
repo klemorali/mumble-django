@@ -434,6 +434,28 @@ class MumbleCtlIce_118(MumbleCtlBase):
     def getLog( self, srvid, first=0, last=100 ):
         return self._getIceServerObject(srvid).getLog( first, last )
 
+    @protectDjangoErrPage
+    def moveUser(self, srvid, sessionid, channelid):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getState(sessionid)
+        state.channel = channelid
+        srv.setState(state)
+
+    @protectDjangoErrPage
+    def muteUser(self, srvid, sessionid, mute=True):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getState(sessionid)
+        state.mute = mute
+        srv.setState(state)
+
+    @protectDjangoErrPage
+    def deafenUser(self, srvid, sessionid, deaf=True):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getState(sessionid)
+        state.deaf = deaf
+        srv.setState(state)
+
+
 class MumbleCtlIce_120(MumbleCtlIce_118):
     @protectDjangoErrPage
     def getRegisteredPlayers(self, srvid, filter = ''):
