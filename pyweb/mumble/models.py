@@ -566,6 +566,9 @@ class Mumble( models.Model ):
     def deafenUser( self, sessionid, deafen=True ):
         return self.ctl.moveUser( self.srvid, sessionid, deafen )
 
+    def moveChannel( self, channelid, parentid ):
+        return self.ctl.moveChannel( self.srvid, channelid, parentid )
+
     def getLog( self, first=0, last=100, filter="" ):
         """ Return log entries from ``first`` to ``last`` that contain ``filter`` (if any). """
         logentries = self.ctl.getLog( self.srvid, first, last )
