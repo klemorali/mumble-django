@@ -7,7 +7,14 @@
 {% block body %}
 {% endblock %}
 {% block HeadTag %}
+    <link rel="stylesheet"    type="text/css"  href="{{ MUMBLE_MEDIA_PREFIX }}css/tab-scroller-menu.css" />
+    <style  type="text/css">
+        .x-tab-tabmenu-right {
+            background: transparent url({{ MUMBLE_MEDIA_PREFIX }}img/tab-scroller-menu.gif) no-repeat 0 0;
+        }
+    </style>
     <script type="text/javascript" src="/jsi18n/"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/TabScrollerMenu.js"></script>
     <script type="text/javascript" src="/mumble/api/api.js"></script>
     <script type="text/javascript" src="/mumble/forms/api.js"></script>
     <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
@@ -81,6 +88,8 @@
                     xtype: "tabpanel",
                     region: "center",
                     activeTab: 0,
+                    enableTabScroll: true,
+                    plugins: [ new Ext.ux.TabScrollerMenu() ],
                     items: [{
                         title: gettext("Server info"),
                         html:  renderserverinfos( {{ ServerDict|safe }} ),
