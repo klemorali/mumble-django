@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Mumble Administration</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+    <!-- for iphone/ipod -->
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="{{MUMBLE_MEDIA_PREFIX}}/img/mumble.64x64.png" />
+
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
+    <link rel="stylesheet"    type="text/css"  href="{{MUMBLE_MEDIA_PREFIX}}/css/style.css"  />
+    <link rel="shortcut icon" type="image/png" href="{{MUMBLE_MEDIA_PREFIX}}/img/mumble.16x16.png" />
+
+    {% block HeadTag %}
+    {% endblock %}
+  </head>
+  <body bgcolor="#3B69AD">
+    <div id="mobilecontent">
+        {% block LeftColumn %}
+        {% endblock %}
+    </div>
+    <!-- footer -->
+    <div id="footerpanel" style="color:white">
+      <ul>
+        <li><a href="{% url mumble.views.redir %}" style="color:white">Home</a></li>
+        <li><a href="http://bitbucket.org/Svedrin/mumble-django" style="color:white" target="_blank">Mumble-Django {{ CURRENTVERSION }}</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

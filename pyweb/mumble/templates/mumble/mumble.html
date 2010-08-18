@@ -1,0 +1,177 @@
+{% extends "index.html" %}
+{% comment %}
+    <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
+{% endcomment %}
+{% load mumble_extras %}
+{% load i18n %}
+{% block body %}
+{% endblock %}
+{% block HeadTag %}
+    <script type="text/javascript" src="/jsi18n/"></script>
+    <script type="text/javascript" src="/mumble/api/api.js"></script>
+    <script type="text/javascript" src="/mumble/forms/api.js"></script>
+    <script type="text/javascript" src="/mumble/forms/{{ RegForm|lower }}.js"></script>
+    <script type="text/javascript" src="/mumble/forms/mumbleform.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/banviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
+    <script type="text/javascript">
+        Ext.onReady( function(){
+            Ext.QuickTips.init();
+            mainpanel = new Ext.Panel({
+                renderTo: document.body,
+                height:   600,
+                layout:   "border",
+                tbar: [ {
+                    text: gettext("back"),
+                    xtype: "button",
+                    handler: function(){
+                        location.href = "{% url mumble.views.mumbles %}";
+                    }
+                } ],
+                buttons: [
+                    {% if user.is_staff and ROSETTA_INSTALLED %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  gettext('Edit Translation'),
+                        url: '{% url rosetta-home %}',
+                    },
+                    {% endif %}
+                    {% if user.is_staff %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  gettext('Administration'),
+                        url: '{% url admin:mumble_mumble_change MumbleServer.id %}',
+                    },
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        new Ext.ux.ButtonLogout()
+                    {% else %}
+                        new Ext.ux.ButtonLogin()
+                    {% endif %}
+                ],
+                items: [{
+                    xtype: "mumblechannelviewer",
+                    region: "west",
+                    width: 350,
+                    split: true,
+                    enableDD: true,
+                    plugins: [
+                        new Ext.ux.MumbleUserEditor({
+                            serverid: {{MumbleServer.id}}
+                            }),
+                        new Ext.ux.MumbleChannelEditor()
+                        ],
+                    source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+                    imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
+                    listeners: {
+                        moveUser: function( tree, userdata, chandata ){
+                            Mumble.moveUser( {{MumbleServer.id}}, userdata.session, chandata.id );
+                        },
+                        moveChannel: function( tree, chandata, targetdata ){
+                            Mumble.moveChannel( {{MumbleServer.id}}, chandata.id, targetdata.id );
+                        }
+                    }
+                }, {
+                    xtype: "tabpanel",
+                    region: "center",
+                    activeTab: 0,
+                    items: [{
+                        title: gettext("Server info"),
+                        html:  renderserverinfos( {{ ServerDict|safe }} ),
+                    }, {
+                        title: gettext("Registration"),
+                        xtype: "{{ RegForm|lower }}",
+                        pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
+                        labelWidth: 150,
+                        baseParams: {serverid: {{MumbleServer.id}} },
+                    },
+                    {% if MumbleAccount %}
+                        {% if IsAdmin %}
+                        {
+                            title: gettext("Administration"),
+                            pk:    {{ MumbleServer.id }},
+                            labelWidth: 150,
+                            xtype: 'mumbleform',
+                        },
+                        {% endif %}
+                        {
+                            title: gettext("User texture"),
+                            layout: "border",
+                            items: [{
+                                region: "north",
+                                layout: "hbox",
+                                height: 200,
+                                items: [{
+                                    flex: 1,
+                                    height: 200,
+                                    title: gettext("Texture"),
+                                    html: String.format('<img src="{0}" alt="Avatar" />',
+                                      "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
+                                }, {
+                                    flex: 1,
+                                    height: 200,
+                                    title: gettext("Gravatar"),
+                                    html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
+                                }],
+                            }, {
+                                region: "center",
+                                xtype: "form",
+                                labelWidth: 150,
+                                fileUpload: true,
+                                url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                                items: [{
+                                    name:       "usegravatar",
+                                    fieldLabel: gettext("Use Gravatar"),
+                                    xtype:      "checkbox",
+                                }, {
+                                    name:       "texturefile",
+                                    fieldLabel: gettext("Upload Avatar"),
+                                    xtype:      "textfield",
+                                    inputType:  "file",
+                                }],
+                                buttons: [{
+                                    text:   gettext('Submit'),
+                                    handler: function(){ this.ownerCt.ownerCt.getForm().submit(); },
+                                }],
+                            }],
+                        },
+                        {% if IsAdmin %}
+                            {
+                                xtype: "userEditorPanel",
+                                server: {{ MumbleServer.id }}
+                            }, {
+                                xtype: 'logViewerPanel',
+                                server: {{ MumbleServer.id }}
+                            }, {
+                                xtype: 'banViewerPanel',
+                                server: {{ MumbleServer.id }}
+                            }
+                        {% endif %}
+                    {% endif %}
+                    ],
+                }],
+            });
+            function updateLayout(){
+                viewsize = {
+                    width:  Ext.lib.Dom.getViewWidth(),
+                    height: Ext.lib.Dom.getViewHeight()
+                };
+                mainpanel.setHeight( viewsize.height - 20 );
+                mainpanel.setWidth( viewsize.width - 40 );
+            }
+            updateLayout();
+            Ext.EventManager.onWindowResize(updateLayout);
+        } );
+    </script>
+    <style type="text/css">
+        body {
+            padding: 20px 20px 0 20px;
+        }
+    </style>
+{% endblock %}
