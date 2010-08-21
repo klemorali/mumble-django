@@ -2,6 +2,12 @@
 Mumble-Django changelog
 =======================
 
+Version 2.4beta2, 22 Aug 2010:
+------------------------------
+* Fix channel ordering in the channel viewer.
+* Implement moving users and channels via Drag&Drop in the channel viewer.
+* Implement kicking, banning, muting and deafening users.
+
 Version 2.4beta1, 10 Aug 2010:
 ------------------------------
 * Update from ExtJS 2.2 to 3.2.0.
