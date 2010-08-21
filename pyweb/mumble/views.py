@@ -129,7 +129,8 @@ def serverinfo( request, server ):
         'channel_cnt':   srv.channel_cnt,
         'uptime':        srv.uptime,
         'upsince':       unicode(srv.upsince),
-        'minurl':        reverse( mobile_show, args=(server,) )
+        'minurl':        reverse( mobile_show, args=(server,) ),
+        'detailsurl':    reverse( show,        args=(server,) ),
         }
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
