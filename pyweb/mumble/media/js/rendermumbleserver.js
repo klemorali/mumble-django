@@ -23,12 +23,12 @@ function renderserverinfos( server ){
     }
     buf.push( String.format( '<a href="{0}">{1}</a>', server.minurl, gettext( "Switch to minimal view" ) ) );
 
-    res = ['<div class="mumble-ext" id="serverstuffz">', '<ul>'];
+    res = ['<div class="mumble-ext" id="serverstuffz">', String.format( "<h2>{0}</h2><br />", server.name ), '<ul>'];
     for( var i = 0; i < buf.length; i++ )
         res.push( '<li>'+buf[i]+'</li>' );
     res.push( '</ul><br /><br />' );
     if( server.motd ){
-        res.push( String.format( '<b>{0}:</b><br />', gettext("Welcome message") ) );
+        res.push( String.format( '<h2>{0}:</h2>', gettext("Welcome message") ) );
         res.push( String.format( '<div style="padding: 10px">{0}</div>', server.motd ) );
     }
     res.push( '</div>' );
