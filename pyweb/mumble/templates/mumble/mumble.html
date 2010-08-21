@@ -35,14 +35,14 @@
                 height:   600,
                 layout:   "border",
                 tbar: [ {
-                    text: gettext("back"),
+                    text: gettext("Back to the server list"),
                     xtype: "button",
                     handler: function(){
                         location.href = "{% url mumble.views.mumbles %}";
                     }
                 } ],
                 buttons: [
-                    {% if user.is_staff and ROSETTA_INSTALLED %}
+                    {% if user.is_staff and "rosetta" in INSTALLED_APPS %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  gettext('Edit Translation'),
@@ -59,6 +59,13 @@
                     {% if user.is_authenticated %}
                         new Ext.ux.ButtonLogout()
                     {% else %}
+                        {% if 'registration' in INSTALLED_APPS %}
+                        {
+                            xtype: 'buttonIframeWindow',
+                            text:  gettext('Register'),
+                            url: '{% url registration.views.register %}',
+                        },
+                        {% endif %}
                         new Ext.ux.ButtonLogin()
                     {% endif %}
                 ],

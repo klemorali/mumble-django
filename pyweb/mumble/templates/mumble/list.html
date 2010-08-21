@@ -21,7 +21,7 @@
                 layout:   "border",
                 title:    gettext("Mumble Servers"),
                 buttons: [
-                    {% if user.is_staff and ROSETTA_INSTALLED %}
+                    {% if user.is_staff and "rosetta" in INSTALLED_APPS %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  gettext('Edit Translation'),
