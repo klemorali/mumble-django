@@ -204,18 +204,24 @@ def mobile_show( request, server ):
             'MumbleAccount':user,
         }, context_instance = RequestContext(request) )
 
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def hasTexture( request, server, userid ):
+    srv = get_object_or_404( Mumble,     id=int(server) )
+    if srv.hasUserTexture(int(userid)):
+        return {
+            'has': True,
+            'url': reverse( showTexture, kwargs={ 'server': server, 'userid': userid } )
+            }
+    else:
+        return { 'has': False, 'url': None }
 
 def showTexture( request, server, userid ):
-    """ Pack the given user's texture into an HttpResponse.
-
-        If userid is none, use the currently logged in User.
-    """
+    """ Pack the given user's texture into an HttpResponse. """
 
     srv  = get_object_or_404( Mumble,     id=int(server) )
-    user = get_object_or_404( MumbleUser, server=srv, id=int(userid) )
 
     try:
-        img  = user.getTexture()
+        img  = srv.getUserTexture(int(userid))
     except ValueError:
         raise Http404()
     else:
@@ -279,6 +285,20 @@ def kickUser( request, server, sessionid, reason, ban, duration ):
     if ban:
         srv.banUser( sessionid, reason, duration )
     srv.kickUser( sessionid, reason )
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def muteUser( request, server, sessionid, mute ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.muteUser(sessionid, mute)
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def deafenUser( request, server, sessionid, deaf ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.deafenUser(sessionid, deaf)
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):

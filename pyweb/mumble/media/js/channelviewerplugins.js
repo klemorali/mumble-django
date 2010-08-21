@@ -37,14 +37,30 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                         }],
                     }, {
                         title: gettext("Avatar"),
-                        html:  '<img src="http://www.gravatar.com/avatar/6a11052bfa1ae52aa63fc0001417158d.jpg?d=monsterid&s=80" />',
+                        scope: this,
+                        listeners: {
+                            afterrender: function( panel ){
+                                Mumble.hasTexture( this.scope.serverid, this.scope.userdata.userid, function(provider, response){
+                                    if( response.result.has ){
+                                        panel.el.dom.children[0].children[0].innerHTML = String.format(
+                                            '<img src="{0}" alt="avatar" />', response.result.url
+                                            );
+                                    }
+                                    else{
+                                        panel.el.dom.children[0].children[0].innerHTML =
+                                            gettext("This user does not have an Avatar.");
+                                    }
+                                } );
+                            }
+                        },
+                        html:  gettext("Loading..."),
                     }, {
                         title: gettext("Infos"),
                         html:  "<ul><li>admin: yes</li><li>registered: maybe</li></ul>",
                     }, {
                         xtype: "form",
                         border: false,
-                        title: gettext("Kick/Ban"),
+                        title: gettext("Administration"),
                         items: [{
                             xtype: "checkbox",
                             fieldLabel: gettext("Ban"),
@@ -71,6 +87,28 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                                 Mumble.kickUser(
                                     this.serverid, this.userdata.session, f.reason, (f.ban || false), parseInt(f.duration)
                                     );
+                            }
+                        }, {
+                            text: gettext("Mute"),
+                            enableToggle: true,
+                            scope: this,
+                            ref:   '../mutebutton',
+                            pressed: this.userdata.mute,
+                            disabled: this.userdata.deaf,
+                            toggleHandler: function(btn, state){
+                                Mumble.muteUser(this.serverid, this.userdata.session, state);
+                            }
+                        }, {
+                            text: gettext("Deafen"),
+                            enableToggle: true,
+                            scope: this,
+                            ref:   '../deafenbutton',
+                            pressed: this.userdata.deaf,
+                            toggleHandler: function(btn, state){
+                                Mumble.deafenUser(this.serverid, this.userdata.session, state);
+                                if( state )
+                                    btn.refOwner.mutebutton.toggle(true, true);
+                                btn.refOwner.mutebutton.setDisabled(state);
                             }
                         }],
                     }],

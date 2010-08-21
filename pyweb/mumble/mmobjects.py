@@ -310,8 +310,14 @@ class mmPlayer( object ):
         else:
             del pldata["address"]
 
-        if self.mumbleuser and self.mumbleuser.hasTexture():
-            pldata['x_texture'] = "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl
+        if self.channel.server.hasUserTexture(self.userid):
+            from views import showTexture
+            from django.core.urlresolvers import reverse
+            textureurl = reverse( showTexture, kwargs={ 'server': self.channel.server.id, 'userid': self.userid } )
+            pldata['x_texture'] = "http://" + Site.objects.get_current().domain + textureUrl
+
+        if self.mumbleuser and self.mumbleuser.gravatar:
+            pldata['x_gravatar'] = self.mumbleuser.gravatar
 
         return pldata
 
@@ -325,8 +331,14 @@ class mmPlayer( object ):
         else:
             me.set( "address", "" )
 
-        if self.mumbleuser and self.mumbleuser.hasTexture():
-            me.set( 'x_texture', "http://" + Site.objects.get_current().domain + self.mumbleuser.textureUrl )
+        if self.channel.server.hasUserTexture(self.userid):
+            from views import showTexture
+            from django.core.urlresolvers import reverse
+            textureurl = reverse( showTexture, kwargs={ 'server': self.channel.server.id, 'userid': self.userid } )
+            me.set( 'x_texture', "http://" + Site.objects.get_current().domain + textureUrl )
+
+        if self.mumbleuser and self.mumbleuser.gravatar:
+            me.set( 'x_gravatar', self.mumbleuser.gravatar )
 
     def asMvXml( self, parentnode ):
         """ Return an XML node for this player suitable for MumbleViewer-ng. """
