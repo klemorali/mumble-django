@@ -567,7 +567,22 @@ class Mumble( models.Model ):
         return self.ctl.muteUser( self.srvid, sessionid, mute )
 
     def deafenUser( self, sessionid, deafen=True ):
-        return self.ctl.moveUser( self.srvid, sessionid, deafen )
+        return self.ctl.deafenUser( self.srvid, sessionid, deafen )
+
+    def hasUserTexture( self, userid ):
+        """ Check if this user has a texture set. """
+        try:
+            self.getUserTexture( userid )
+        except ValueError:
+            return False
+        else:
+            return True
+
+    def getUserTexture( self, userid ):
+        return self.ctl.getTexture( self.srvid, userid )
+
+    def setUserTexture( self, userid, image ):
+        return self.ctl.setTexture( self.srvid, userid, image )
 
     def moveChannel( self, channelid, parentid ):
         return self.ctl.moveChannel( self.srvid, channelid, parentid )
@@ -713,11 +728,11 @@ class MumbleUser( models.Model ):
     # Texture handlers
     def getTexture( self ):
         """ Get the user texture as a PIL Image. """
-        return self.server.ctl.getTexture(self.server.srvid, self.mumbleid)
+        return self.server.getUserTexture( self.mumbleid )
 
     def setTexture( self, image ):
         """ Install the given image as the user's texture. """
-        self.server.ctl.setTexture(self.server.srvid, self.mumbleid, image)
+        self.server.setTexture( self.mumbleid, image )
 
     def setTextureFromUrl( self, url, transparency=None ):
         """ Retrieve the image at the given URL and set it as my texture. """
@@ -730,12 +745,7 @@ class MumbleUser( models.Model ):
 
     def hasTexture( self ):
         """ Check if this user has a texture set. """
-        try:
-            self.getTexture()
-        except ValueError:
-            return False
-        else:
-            return True
+        return self.server.hasUserTexture( self.mumbleid )
 
     def gravatarUrl( self, size=80 ):
         """ Get a Gravatar URL for my owner's email adress (if any), or using the User's cert hash.
