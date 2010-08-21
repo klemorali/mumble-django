@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
 """
 
-version = { 'major': 2, 'minor': 4, 'beta': 1 }
+version = { 'major': 2, 'minor': 4, 'beta': 2 }
 
 if version['beta']:
     version_str = "v%(major)d.%(minor)dbeta%(beta)d" % version
