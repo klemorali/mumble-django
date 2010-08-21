@@ -70,7 +70,7 @@ Ext.ux.MumbleChannelViewer = function( config ){
 
     Ext.applyIf( this, {
         title: gettext("Channel Viewer"),
-        refreshInterval: 10000,
+        refreshInterval: 30000,
         idleInterval: 2,
         autoScroll: true,
         enableDD:   false, // Users need to enable this explicitly
