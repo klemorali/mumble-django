@@ -571,6 +571,8 @@ class Mumble( models.Model ):
 
     def hasUserTexture( self, userid ):
         """ Check if this user has a texture set. """
+        if userid == -1:
+            return False
         try:
             self.getUserTexture( userid )
         except ValueError:
