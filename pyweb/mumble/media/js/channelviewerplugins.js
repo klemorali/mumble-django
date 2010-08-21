@@ -25,8 +25,16 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                     activeTab: 0,
                     border: false,
                     items: [{
-                        html: userdata.comment || gettext("No user comment set"),
+                        xtype: "form",
+                        border: false,
                         title: gettext("User comment"),
+                        items: [{
+                            xtype: "htmleditor",
+                            fieldLabel: 'x',
+                            hideLabel: true,
+                            name: "comment",
+                            value: userdata.comment,
+                        }],
                     }, {
                         title: gettext("Avatar"),
                         html:  '<img src="http://www.gravatar.com/avatar/6a11052bfa1ae52aa63fc0001417158d.jpg?d=monsterid&s=80" />',
@@ -111,8 +119,17 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                     xtype: "tabpanel",
                     activeTab: 0,
                     items: [{
-                        html: chandata.description || gettext("No channel description set"),
+                        xtype: "form",
+                        border: false,
                         title: gettext("Channel description"),
+                        defaults: { "anchor": "-20px" },
+                        items: [{
+                            xtype: "htmleditor",
+                            fieldLabel: 'x',
+                            hideLabel: true,
+                            name: "description",
+                            value: chandata.description,
+                        }],
                     }],
                 }],
                 width:  500,
