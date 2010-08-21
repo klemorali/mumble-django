@@ -314,7 +314,7 @@ class mmPlayer( object ):
             from views import showTexture
             from django.core.urlresolvers import reverse
             textureurl = reverse( showTexture, kwargs={ 'server': self.channel.server.id, 'userid': self.userid } )
-            pldata['x_texture'] = "http://" + Site.objects.get_current().domain + textureUrl
+            pldata['x_texture'] = "http://" + Site.objects.get_current().domain + textureurl
 
         if self.mumbleuser and self.mumbleuser.gravatar:
             pldata['x_gravatar'] = self.mumbleuser.gravatar
@@ -335,7 +335,7 @@ class mmPlayer( object ):
             from views import showTexture
             from django.core.urlresolvers import reverse
             textureurl = reverse( showTexture, kwargs={ 'server': self.channel.server.id, 'userid': self.userid } )
-            me.set( 'x_texture', "http://" + Site.objects.get_current().domain + textureUrl )
+            me.set( 'x_texture', "http://" + Site.objects.get_current().domain + textureurl )
 
         if self.mumbleuser and self.mumbleuser.gravatar:
             me.set( 'x_gravatar', self.mumbleuser.gravatar )
