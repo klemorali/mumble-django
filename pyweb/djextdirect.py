@@ -157,7 +157,7 @@ class Provider( object ):
         if clsname not in self.classes:
             self.classes[clsname] = {}
         self.classes[ clsname ][ method.__name__ ] = method
-        method.EXT_argnames = inspect.getargspec( method ).args[1:]
+        method.EXT_argnames = inspect.getargspec( method )[0][1:]
         method.EXT_len      = len( method.EXT_argnames )
         method.EXT_flags    = flags
         return method

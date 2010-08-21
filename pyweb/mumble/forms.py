@@ -97,7 +97,6 @@ class PropertyModelForm( ModelForm ):
             if fldname not in instfields:
                 setattr( inst, fldname, self.cleaned_data[fldname] )
 
-@EXT_FORMS_PROVIDER.register_form
 class MumbleForm( PropertyModelForm ):
     """ The Mumble Server admin form that allows to configure settings which do
         not necessarily have to be reserved to the server hoster.
@@ -146,6 +145,9 @@ class MumbleForm( PropertyModelForm ):
 
     def EXT_authorize( self, request, action ):
         return self.instance.isUserAdmin( request.user )
+
+EXT_FORMS_PROVIDER.register_form( MumbleForm )
+
 
 class MumbleAdminForm( MumbleForm ):
     """ A Mumble Server admin form intended to be used by the server hoster. """
@@ -200,7 +202,6 @@ class MumbleServerForm( ModelForm ):
     class Meta:
         model = MumbleServer
 
-@EXT_FORMS_PROVIDER.register_form
 class MumbleUserForm( ModelForm ):
     """ The user registration form used to register an account. """
 
@@ -263,7 +264,9 @@ class MumbleUserForm( ModelForm ):
         model   = MumbleUser
         fields  = ( 'name', 'password' )
 
-@EXT_FORMS_PROVIDER.register_form
+EXT_FORMS_PROVIDER.register_form( MumbleUserForm )
+
+
 class MumbleUserPasswordForm( MumbleUserForm ):
     """ The user registration form used to register an account on a private server in protected mode. """
 
@@ -295,7 +298,9 @@ class MumbleUserPasswordForm( MumbleUserForm ):
             del( self.cleaned_data['serverpw'] )
         return self.cleaned_data
 
-@EXT_FORMS_PROVIDER.register_form
+EXT_FORMS_PROVIDER.register_form( MumbleUserPasswordForm )
+
+
 class MumbleUserLinkForm( MumbleUserForm ):
     """ Special registration form to either register or link an account. """
 
@@ -368,6 +373,8 @@ class MumbleUserLinkForm( MumbleUserForm ):
         self.instance = m_user
 
         return self.cleaned_data
+
+EXT_FORMS_PROVIDER.register_form( MumbleUserLinkForm )
 
 
 class MumbleUserAdminForm( PropertyModelForm ):
