@@ -306,6 +306,18 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         (session, ismute, isdeaf, suppressed, selfMute, selfDeaf, channel) = srv.getPlayerState(dbus.UInt32(sessionid))
         srv.setPlayerState((session, ismute, deaf, suppressed, selfMute, selfDeaf, channel))
 
+    def addChannel( self, srvid, name, parentid ):
+        return self._getDbusServerObject(srvid).addChannel( name.encode( "UTF-8" ), parentid )
+
+    def removeChannel( self, srvid, channelid ):
+        return self._getDbusServerObject(srvid).removeChannel( channelid )
+
+    def renameChannel( self, srvid, channelid, name, description ):
+        srv = self._getDbusServerObject(srvid)
+        state = srv.getChannelState(channelid)
+        (chanid, oldname, parent, links) = srv.getChannelState(dbus.UInt32(channelid))
+        srv.setChannelState((chanid, name, parent, links))
+
     def moveChannel(self, srvid, channelid, parentid):
         srv = self._getDbusServerObject(srvid)
         (chanid, name, parent, links) = srv.getChannelState(dbus.UInt32(channelid))

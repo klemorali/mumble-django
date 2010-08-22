@@ -79,7 +79,9 @@
                         new Ext.ux.MumbleUserEditor({
                             serverid: {{MumbleServer.id}}
                             }),
-                        new Ext.ux.MumbleChannelEditor()
+                        new Ext.ux.MumbleChannelEditor({
+                            serverid: {{MumbleServer.id}}
+                            })
                         ],
                     source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
                     imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',

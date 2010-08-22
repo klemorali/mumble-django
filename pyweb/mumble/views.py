@@ -300,6 +300,27 @@ def deafenUser( request, server, sessionid, deaf ):
         raise Exception( 'Access denied' )
     srv.deafenUser(sessionid, deaf)
 
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def addChannel( request, server, name, parentid ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.addChannel(name, parentid)
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def removeChannel( request, server, channelid ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.removeChannel(channelid)
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def renameChannel( request, server, channelid, name, description ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.renameChannel(channelid, name, description)
+
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.
