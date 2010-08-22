@@ -198,7 +198,7 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                             handler: function(btn){
                                 Ext.Msg.confirm(
                                     gettext('Confirm channel deletion'),
-                                    gettext('Are you sure you want to delete channel x?'),
+                                    interpolate(gettext('Are you sure you want to delete channel %s?'), [this.chandata.name]),
                                     function(btn){
                                         if( btn == 'yes' ){
                                             Mumble.removeChannel( this.serverid, this.chandata.id );
