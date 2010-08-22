@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-04 20:28+0200\n"
-"PO-Revision-Date: 2010-08-04 23:34\n"
+"POT-Creation-Date: 2010-08-22 15:10+0200\n"
+"PO-Revision-Date: 2010-08-22 15:13\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,21 +19,132 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.5.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+#: media/js/banviewer.js:11
+msgid "Bans"
+msgstr "Banne"
+
+#: media/js/banviewer.js:13 media/js/logviewer.js:13
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: media/js/banviewer.js:20
+msgid "Duration"
+msgstr "Dauer"
+
+#: media/js/banviewer.js:24 media/js/channelviewerplugins.js:80
+msgid "Reason"
+msgstr "Begründung"
+
+#: media/js/banviewer.js:30 media/js/logviewer.js:45
+msgid "Refresh"
+msgstr "Aktualisieren"
+
 #: media/js/buttoniframewindow.js:30
 msgid "Open in new window"
 msgstr "In neuem Fenster öffnen"
 
-#: media/js/channelviewer.js:51
+#: media/js/channelviewer.js:6
+msgid "undefined"
+msgstr ""
+
+#: media/js/channelviewer.js:73
 msgid "Channel Viewer"
 msgstr "Serveransicht"
 
-#: media/js/channelviewer.js:56
+#: media/js/channelviewer.js:79 media/js/channelviewerplugins.js:57
 msgid "Loading..."
 msgstr "Lade..."
 
-#: media/js/channelviewer.js:64
+#: media/js/channelviewer.js:96
 msgid "Auto-Refresh"
 msgstr "Auto-Aktualisieren"
+
+#: media/js/channelviewerplugins.js:22
+msgid "User details"
+msgstr "Benutzerdetails"
+
+#: media/js/channelviewerplugins.js:31
+msgid "User comment"
+msgstr "Kommentar"
+
+#: media/js/channelviewerplugins.js:40
+msgid "Avatar"
+msgstr "Avatar"
+
+#: media/js/channelviewerplugins.js:52
+msgid "This user does not have an Avatar."
+msgstr "Dieser Benutzer hat keinen Avatar."
+
+#: media/js/channelviewerplugins.js:59
+msgid "Infos"
+msgstr "Infos"
+
+#: media/js/channelviewerplugins.js:64
+msgid "Administration"
+msgstr "Administration"
+
+#: media/js/channelviewerplugins.js:67
+msgid "Ban"
+msgstr "Bann"
+
+#: media/js/channelviewerplugins.js:71
+msgid "Ban duration"
+msgstr "Banndauer"
+
+#: media/js/channelviewerplugins.js:76
+msgid ""
+"Only if banning. Set to 0 for permanent ban, any other value for the ban "
+"duration in seconds."
+msgstr "Nur wenn du bannen möchtest. 0 für einen permanenten Bann, eine andre Zahl ist die Dauer in Sekunden."
+
+#: media/js/channelviewerplugins.js:85
+msgid "Kick"
+msgstr "Kicken"
+
+#: media/js/channelviewerplugins.js:93
+msgid "Mute"
+msgstr "Stummstellen"
+
+#: media/js/channelviewerplugins.js:103
+msgid "Deafen"
+msgstr "Taubstellen"
+
+#: media/js/channelviewerplugins.js:156
+msgid "Channel details"
+msgstr "Kanaldetails"
+
+#: media/js/channelviewerplugins.js:164
+msgid "Channel description"
+msgstr "Beschreibung"
+
+#: media/js/channelviewerplugins.js:180
+msgid "Add subchannel..."
+msgstr "Unterkanal hinzufügen..."
+
+#: media/js/channelviewerplugins.js:183
+msgid "Name"
+msgstr "Name"
+
+#: media/js/channelviewerplugins.js:183
+msgid "Please enter the channel name:"
+msgstr "Bitte gib den Kanalnamen ein:"
+
+#: media/js/channelviewerplugins.js:191
+msgid "Submit name/description"
+msgstr "Name/Beschreibung setzen"
+
+#: media/js/channelviewerplugins.js:197
+msgid "Delete channel"
+msgstr "Kanal löschen"
+
+#: media/js/channelviewerplugins.js:201
+msgid "Confirm channel deletion"
+msgstr "Löschen des Kanals bestätigen"
+
+#: media/js/channelviewerplugins.js:202
+#, perl-format
+msgid "Are you sure you want to delete channel %s?"
+msgstr "Bist du sicher dass du den Kanal %s löschen möchtest?"
 
 #: media/js/loginout_buttons.js:7
 msgid "Logout"
@@ -71,10 +182,6 @@ msgstr "Passwort"
 msgid "Log messages"
 msgstr "Log-Meldungen"
 
-#: media/js/logviewer.js:13
-msgid "Timestamp"
-msgstr "Zeitstempel"
-
 #: media/js/logviewer.js:20
 msgid "Log entry"
 msgstr "Log-Eintrag"
@@ -87,46 +194,44 @@ msgstr "Filter"
 msgid ""
 "Enter a string to filter the logs by and press Enter. To display all log "
 "entries, empty this field."
-msgstr "Gib einen Suchbegriff ein, mit dem die Log-Einträge gefiltert werden sollen, und drücke Enter. Um alle Einträge anzuzeigen, leere dieses Feld."
+msgstr ""
+"Gib einen Suchbegriff ein, mit dem die Log-Einträge gefiltert werden sollen, "
+"und drücke Enter. Um alle Einträge anzuzeigen, leere dieses Feld."
 
-#: media/js/logviewer.js:45
-msgid "Refresh"
-msgstr "Aktualisieren"
-
-#: media/js/rendermumbleserver.js:4
+#: media/js/rendermumbleserver.js:7
 msgid "Server Address"
 msgstr "Server-Adresse"
 
-#: media/js/rendermumbleserver.js:7
+#: media/js/rendermumbleserver.js:10
 msgid "Website"
 msgstr "Webseite"
 
-#: media/js/rendermumbleserver.js:11
+#: media/js/rendermumbleserver.js:14
 #, perl-format
 msgid "Currently, %s user is registered."
 msgid_plural "Currently, %s users are registered."
 msgstr[0] "Momentan ist %s Benutzer registriert."
 msgstr[1] "Momentan sind %s Benutzer registriert."
 
-#: media/js/rendermumbleserver.js:14
+#: media/js/rendermumbleserver.js:17
 #, perl-format
 msgid "Currently, %s user is online."
 msgid_plural "Currently, %s users are online."
 msgstr[0] "Momentan ist %s Benutzer online."
 msgstr[1] "Momentan sind %s Benutzer online."
 
-#: media/js/rendermumbleserver.js:17
+#: media/js/rendermumbleserver.js:20
 #, perl-format
 msgid "Currently, there is %s channel."
 msgid_plural "Currently, there are %s channels."
 msgstr[0] "Momentan gibt es %s Kanal."
 msgstr[1] "Momentan gibt es %s Kanäle."
 
-#: media/js/rendermumbleserver.js:22
+#: media/js/rendermumbleserver.js:25
 msgid "Switch to minimal view"
 msgstr "Auf die Minimalansicht umschalten"
 
-#: media/js/rendermumbleserver.js:28
+#: media/js/rendermumbleserver.js:32
 msgid "Welcome message"
 msgstr "Willkommensnachricht"
 
@@ -178,20 +283,11 @@ msgstr "Konnte nicht speichern."
 msgid "Resync with Murmur"
 msgstr "Aktualisieren"
 
-#~ msgid "Registration"
-#~ msgstr "Registrierung"
-
-#~ msgid "Administration"
-#~ msgstr "Administration"
-
 #~ msgid "User texture"
 #~ msgstr "Benutzertextur"
 
 #~ msgid "Texture"
 #~ msgstr "Textur"
-
-#~ msgid "Gravatar"
-#~ msgstr "Gravatar"
 
 #~ msgid "Use Gravatar"
 #~ msgstr "Benutze Gravatar"
