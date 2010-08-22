@@ -43,6 +43,7 @@ Ext.ux.MumbleUserNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         if( a.userdata.mute )            icons.push( "muted_server" );
         if( a.userdata.comment != "" )   icons.push( "comment_seen" );
         if( a.userdata.prioritySpeaker ) icons.push( "priority_speaker" );
+        if( a.userdata.recording )       icons.push( "recording" );
         var pos = 8;
         for( var i = 0; i < icons.length; i++ ){
             tpl.append( this.elNode, {'imageurl': a.imageurl, 'icon': icons[i], 'pos': pos} );
