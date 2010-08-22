@@ -56,7 +56,49 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                         html:  gettext("Loading..."),
                     }, {
                         title: gettext("Infos"),
-                        html:  "<ul><li>admin: yes</li><li>registered: maybe</li></ul>",
+                        xtype: "form",
+                        border: false,
+                        items: [{
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Authenticated"),
+                            name:  "a",
+                            checked: (this.userdata.userid != -1)
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Self-Deafened"),
+                            name:  "sd",
+                            checked: this.userdata.selfDeaf
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Deafened"),
+                            name:  "d",
+                            checked: this.userdata.deaf
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Self-Muted"),
+                            name:  "sm",
+                            checked: this.userdata.selfMute
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Muted"),
+                            name:  "m",
+                            checked: this.userdata.mute
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Suppressed"),
+                            name:  "s",
+                            checked: this.userdata.suppress
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Priority Speaker"),
+                            name:  "p",
+                            checked: this.userdata.prioritySpeaker
+                        }, {
+                            xtype: "checkbox",
+                            fieldLabel: gettext("Recording"),
+                            name:  "r",
+                            checked: this.userdata.recording
+                        }]
                     }, {
                         xtype: "form",
                         border: false,
