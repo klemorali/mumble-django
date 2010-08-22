@@ -586,6 +586,15 @@ class Mumble( models.Model ):
     def setUserTexture( self, userid, image ):
         return self.ctl.setTexture( self.srvid, userid, image )
 
+    def addChannel( self, name, parentid ):
+        return self.ctl.addChannel( self.srvid, name, parentid )
+
+    def removeChannel( self, channelid ):
+        return self.ctl.removeChannel( self.srvid, channelid )
+
+    def renameChannel( self, channelid, name, description ):
+        return self.ctl.renameChannel( self.srvid, channelid, name, description )
+
     def moveChannel( self, channelid, parentid ):
         return self.ctl.moveChannel( self.srvid, channelid, parentid )
 

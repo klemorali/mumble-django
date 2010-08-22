@@ -435,6 +435,21 @@ class MumbleCtlIce_118(MumbleCtlBase):
         return self._getIceServerObject(srvid).getLog( first, last )
 
     @protectDjangoErrPage
+    def addChannel( self, srvid, name, parentid ):
+        return self._getIceServerObject(srvid).addChannel( name.encode( "UTF-8" ), parentid )
+
+    @protectDjangoErrPage
+    def removeChannel( self, srvid, channelid ):
+        return self._getIceServerObject(srvid).removeChannel( channelid )
+
+    @protectDjangoErrPage
+    def renameChannel( self, srvid, channelid, name, description ):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getChannelState(channelid)
+        state.name = name.encode("UTF-8")
+        srv.setChannelState(state)
+
+    @protectDjangoErrPage
     def moveChannel(self, srvid, channelid, parentid):
         srv = self._getIceServerObject(srvid)
         state = srv.getChannelState(channelid)
@@ -601,6 +616,14 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
     @protectDjangoErrPage
     def kickUser(self, srvid, userid, reason=""):
         return self._getIceServerObject(srvid).kickUser( userid, reason.encode("UTF-8") )
+
+    @protectDjangoErrPage
+    def renameChannel( self, srvid, channelid, name, description ):
+        srv = self._getIceServerObject(srvid)
+        state = srv.getChannelState(channelid)
+        state.name = name.encode("UTF-8")
+        state.description = description.encode("UTF-8")
+        srv.setChannelState(state)
 
     @protectDjangoErrPage
     def getUptime(self, srvid):

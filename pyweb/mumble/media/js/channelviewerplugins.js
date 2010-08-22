@@ -150,6 +150,7 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
 
     activate: function( chandata ){
         if( !this.wnd ){
+            this.chandata = chandata;
             this.wnd = new Ext.Window({
                 title: this.windowTitle || gettext("Channel details"),
                 layout: 'fit',
@@ -162,12 +163,49 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                         title: gettext("Channel description"),
                         defaults: { "anchor": "-20px" },
                         items: [{
+                            xtype: "textfield",
+                            fieldLabel: "x",
+                            hideLabel: true,
+                            name:  "name",
+                            value: chandata.name
+                        }, {
                             xtype: "htmleditor",
                             fieldLabel: 'x',
                             hideLabel: true,
                             name: "description",
-                            value: chandata.description,
+                            value: chandata.description
                         }],
+                        fbar: [{
+                            text: gettext('Add subchannel...'),
+                            scope: this,
+                            handler: function(btn){
+                                Ext.Msg.prompt(gettext('Name'), gettext('Please enter the channel name:'), function(btn, text){
+                                    if (btn == 'ok'){
+                                        Mumble.addChannel( this.serverid, text, this.chandata.id );
+                                    }
+                                }, this);
+                            }
+                        }, {
+                            scope: this,
+                            text: gettext("Submit name/description"),
+                            handler: function(btn){
+                                f = btn.ownerCt.ownerCt.getForm().getValues();
+                                Mumble.renameChannel(this.serverid, this.chandata.id, f.name, f.description);
+                            }
+                        }, {
+                            text: gettext('Delete channel'),
+                            scope: this,
+                            handler: function(btn){
+                                Ext.Msg.confirm(
+                                    gettext('Confirm channel deletion'),
+                                    gettext('Are you sure you want to delete channel x?'),
+                                    function(btn){
+                                        if( btn == 'yes' ){
+                                            Mumble.removeChannel( this.serverid, this.chandata.id );
+                                        }
+                                    }, this);
+                            }
+                        }]
                     }],
                 }],
                 width:  500,
