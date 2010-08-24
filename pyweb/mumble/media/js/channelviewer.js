@@ -211,7 +211,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                             userdata: json.users[i],
                             imageurl: tree.imageurl
                         };
-                        if( json.users[i].idlesecs <= this.idleInterval )
+                        if( json.users[i].idlesecs <= tree.idleInterval )
                             child.icon = tree.imageurl+'/talking_on.png';
                         else
                             child.icon = tree.imageurl+'/talking_off.png';
