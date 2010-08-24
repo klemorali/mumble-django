@@ -323,6 +323,9 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         (chanid, name, parent, links) = srv.getChannelState(dbus.UInt32(channelid))
         srv.setChannelState((chanid, name, parentid, links))
 
+    def getUptime( self, srvid):
+        return 0
+
     @staticmethod
     def convertDbusTypeToNative(data):
         #i know dbus.* type is extends python native type.

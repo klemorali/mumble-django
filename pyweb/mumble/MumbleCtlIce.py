@@ -627,7 +627,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 
     @protectDjangoErrPage
     def getUptime(self, srvid):
-        return self._getIceServerObject(srvid).getUptime()
+        return 0
 
 
 class MumbleCtlIce_122(MumbleCtlIce_120):
@@ -641,6 +641,10 @@ class MumbleCtlIce_122(MumbleCtlIce_120):
         infile.save( buf, "PNG" )
         buf.seek(0)
         self._getIceServerObject(srvid).setTexture(mumbleid, buf.read())
+
+    @protectDjangoErrPage
+    def getUptime(self, srvid):
+        return self._getIceServerObject(srvid).getUptime()
 
 
 class MumbleCtlIce_123(MumbleCtlIce_120):
