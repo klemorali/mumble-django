@@ -221,6 +221,11 @@ class Mumble( models.Model ):
     bonjour = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
     autoboot= mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
 
+    def get_absolute_url( self ):
+        from views import show
+        from django.core.urlresolvers import reverse
+        return reverse( show, kwargs={ 'server': self.id } )
+
     def getBooted( self ):
         if self.id is not None:
             if self.server.online:
