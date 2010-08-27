@@ -7,8 +7,8 @@
 {% block body %}
 {% endblock %}
 {% block HeadTag %}
-    <script type="text/javascript" src="/jsi18n/"></script>
-    <script type="text/javascript" src="/mumble/api/api.js"></script>
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{{ settings.MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
