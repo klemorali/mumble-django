@@ -15,11 +15,11 @@
         }
     </style>
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/api.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/{{ RegForm|lower }}.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/mumbleform.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/TabScrollerMenu.js"></script>
-    <script type="text/javascript" src="{{ settings.MUMBLE_DJANGO_URL }}api/api.js"></script>
-    <script type="text/javascript" src="{{ settings.MUMBLE_DJANGO_URL }}forms/api.js"></script>
-    <script type="text/javascript" src="{{ settings.MUMBLE_DJANGO_URL }}forms/{{ RegForm|lower }}.js"></script>
-    <script type="text/javascript" src="{{ settings.MUMBLE_DJANGO_URL }}forms/mumbleform.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
     <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
