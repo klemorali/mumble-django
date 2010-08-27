@@ -261,7 +261,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'registration',
     'mumble',
 ]
 
@@ -281,5 +280,7 @@ modprobe( "rosetta" )
 
 # Check if django_extensions is available.
 modprobe( "django_extensions" )
+
+modprobe( 'registration' )
 
 modprobe( "django_evolution" )
