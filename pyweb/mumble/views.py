@@ -33,30 +33,13 @@ from models import Mumble, MumbleUser
 from forms  import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
 from forms  import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
 
-from djextdirect import Provider
+from djextdirect.provider import Provider
+from djextdirect.views    import login, logout
 
 EXT_DIRECT_PROVIDER = Provider()
 
-@EXT_DIRECT_PROVIDER.register_method( "Accounts" )
-def login( request, username, passwd ):
-    from django.contrib.auth import authenticate, login as djlogin
-    if request.user.is_authenticated():
-        return { 'success': True }
-    user = authenticate( username=username, password=passwd )
-    if user:
-        if user.is_active:
-            djlogin( request, user )
-            return { 'success': True }
-        else:
-            return { 'success': False, 'error': 'account disabled' }
-    else:
-        return { 'success': False, 'error': 'invalid credentials' }
-
-@EXT_DIRECT_PROVIDER.register_method( "Accounts" )
-def logout( request ):
-    from django.contrib.auth import logout as djlogout
-    djlogout( request )
-    return { 'success': True }
+EXT_DIRECT_PROVIDER._register_method( "Accounts", login  )
+EXT_DIRECT_PROVIDER._register_method( "Accounts", logout )
 
 def redir( request ):
     """ Redirect to the servers list. """
