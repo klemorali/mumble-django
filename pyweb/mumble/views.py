@@ -308,6 +308,20 @@ def renameChannel( request, server, channelid, name, description ):
         raise Exception( 'Access denied' )
     srv.renameChannel(channelid, name, description)
 
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def sendMessage( request, server, sessionid, message ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.sendMessage(sessionid, message)
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def sendMessageChannel( request, server, channelid, tree, message ):
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( 'Access denied' )
+    srv.sendMessageChannel(channelid, tree, message)
+
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
 def users( request, server ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.

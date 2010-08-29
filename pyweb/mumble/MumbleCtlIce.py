@@ -477,6 +477,14 @@ class MumbleCtlIce_118(MumbleCtlBase):
         state.deaf = deaf
         srv.setState(state)
 
+    @protectDjangoErrPage
+    def sendMessage(self, srvid, sessionid, message):
+        return self._getIceServerObject(srvid).sendMessage( sessionid, message.encode( "UTF-8" ) )
+
+    @protectDjangoErrPage
+    def sendMessageChannel(self, srvid, channelid, tree, message):
+        return self._getIceServerObject(srvid).sendMessageChannel( channelid, tree, message.encode( "UTF-8" ) )
+
 
 class MumbleCtlIce_120(MumbleCtlIce_118):
     @protectDjangoErrPage

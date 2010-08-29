@@ -574,6 +574,12 @@ class Mumble( models.Model ):
     def deafenUser( self, sessionid, deafen=True ):
         return self.ctl.deafenUser( self.srvid, sessionid, deafen )
 
+    def sendMessage( self, sessionid, message ):
+        return self.ctl.sendMessage( self.srvid, sessionid, message )
+
+    def sendMessageChannel( self, channelid, tree, message ):
+        return self.ctl.sendMessageChannel( self.srvid, channelid, tree, message )
+
     def hasUserTexture( self, userid ):
         """ Check if this user has a texture set. """
         if userid == -1:

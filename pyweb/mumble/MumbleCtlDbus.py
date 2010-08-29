@@ -307,7 +307,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         srv.setPlayerState((session, ismute, deaf, suppressed, selfMute, selfDeaf, channel))
 
     def addChannel( self, srvid, name, parentid ):
-        return self._getDbusServerObject(srvid).addChannel( name.encode( "UTF-8" ), parentid )
+        return self._getDbusServerObject(srvid).addChannel( name, parentid )
 
     def removeChannel( self, srvid, channelid ):
         return self._getDbusServerObject(srvid).removeChannel( channelid )
@@ -322,6 +322,12 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         srv = self._getDbusServerObject(srvid)
         (chanid, name, parent, links) = srv.getChannelState(dbus.UInt32(channelid))
         srv.setChannelState((chanid, name, parentid, links))
+
+    def sendMessage(self, srvid, sessionid, message):
+        return self._getDbusServerObject(srvid).sendMessage( dbus.UInt32(sessionid), message )
+
+    def sendMessageChannel(self, srvid, channelid, tree, message):
+        return self._getDbusServerObject(srvid).sendMessageChannel( dbus.UInt32(channelid), tree, message )
 
     def getUptime( self, srvid):
         return 0
