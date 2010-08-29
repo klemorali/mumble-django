@@ -92,33 +92,37 @@ def mumbles( request, mobile=False ):
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
 def servers( request ):
-    mms = Mumble.objects.all().order_by( "name" ).values( "id", "name" )
-
-    return [{ 'id': mm['id'], 'name': mm['name'] } for mm in mms]
+    mms = Mumble.objects.all().order_by( "name" )
+    return [{ 'id': mm.id, 'name': mm.name, 'booted': mm.booted } for mm in mms]
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
 def serverinfo( request, server ):
     srv = Mumble.objects.get( id=int(server) )
-    # users_regged users_online channel_cnt uptime upsince minurl
-    return {
-        'id':            srv.id,
-        'name':          srv.name,
-        'motd':          srv.motd,
-        'connecturl':    srv.connecturl,
-        'prettyversion': srv.prettyversion,
-        'url':           srv.url,
-        'users_regged':  srv.users_regged,
-        'users_online':  srv.users_online,
-        'channel_cnt':   srv.channel_cnt,
-        'uptime':        srv.uptime,
-        'upsince':       unicode(srv.upsince),
-        'minurl':        reverse( mobile_show, args=(server,) ),
-        'detailsurl':    reverse( show,        args=(server,) ),
-        }
-
-@EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
-def serverurl( request, server ):
-    return reverse( show, args=(int(server),) );
+    if srv.booted:
+        return {
+            'id':            srv.id,
+            'name':          srv.name,
+            'booted':        True,
+            'motd':          srv.motd,
+            'connecturl':    srv.connecturl,
+            'prettyversion': srv.prettyversion,
+            'url':           srv.url,
+            'users_regged':  srv.users_regged,
+            'users_online':  srv.users_online,
+            'channel_cnt':   srv.channel_cnt,
+            'uptime':        srv.uptime,
+            'upsince':       unicode(srv.upsince),
+            'minurl':        reverse( mobile_show, args=(server,) ),
+            'detailsurl':    reverse( show,        args=(server,) ),
+            }
+    else:
+        return{
+            'id':            srv.id,
+            'name':          srv.name,
+            'booted':        False,
+            'minurl':        reverse( mobile_show, args=(server,) ),
+            'detailsurl':    reverse( show,        args=(server,) ),
+            }
 
 def show( request, server ):
     """ Display the channel list for the given Server ID.

@@ -51,11 +51,16 @@
                     singleSelect: true,
                     store: new Ext.data.DirectStore({
                         directFn: MumbleList.servers,
-                        fields:   [ 'id', 'name' ],
+                        fields:   [ 'id', 'name', 'booted' ],
                         autoLoad: true,
                         listeners: {
                             load: function( store, records, objects ){
-                                mainpanel.serverlist.select(0);
+                                for( var i = 0; i < records.length; i++ ){
+                                    if( records[i].data.booted ){
+                                        mainpanel.serverlist.select(records[i]);
+                                        return;
+                                        }
+                                    }
                                 }
                             }
                         }),
@@ -66,16 +71,16 @@
                     }],
                     listeners: {
                         dblclick: function(listview){
-                            selectedstuff = listview.getSelectedRecords();
-                            MumbleList.serverurl( selectedstuff[0].data.id, function(provider, response){
-                                window.location.href = response.result;
-                                });
+                            location.href = mainpanel.selectedServer.detailsurl;
                         },
                         selectionchange: function(listview, nodes){
                             selectedstuff = listview.getSelectedRecords();
                             MumbleList.serverinfo( selectedstuff[0].data.id, function(provider, response){
                                 mainpanel.selectedServer = response.result;
-                                var info = renderserverinfos(response.result);
+                                if( response.result.booted )
+                                    var info = renderserverinfos(response.result);
+                                else
+                                    var info = gettext("This server is currently offline.");
                                 mainpanel.descrippanel.el.dom.children[1].children[0].innerHTML = info;
                             });
                         }
