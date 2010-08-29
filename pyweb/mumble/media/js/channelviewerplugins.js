@@ -153,6 +153,25 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                                 btn.refOwner.mutebutton.setDisabled(state);
                             }
                         }],
+                    }, {
+                        xtype: "form",
+                        border: false,
+                        title: gettext("Send message"),
+                        defaults: { "anchor": "-20px" },
+                        items: [{
+                            xtype: "htmleditor",
+                            fieldLabel: 'x',
+                            hideLabel: true,
+                            name: "message"
+                        }],
+                        fbar: [{
+                            scope: this,
+                            text: gettext("Send message"),
+                            handler: function(btn){
+                                f = btn.ownerCt.ownerCt.getForm().getValues();
+                                Mumble.sendMessage(this.serverid, this.userdata.session, f.message);
+                            }
+                        }]
                     }],
                 }],
                 width:  500,
@@ -246,6 +265,29 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                                             Mumble.removeChannel( this.serverid, this.chandata.id );
                                         }
                                     }, this);
+                            }
+                        }]
+                    }, {
+                        xtype: "form",
+                        border: false,
+                        title: gettext("Send message"),
+                        defaults: { "anchor": "-20px" },
+                        items: [{
+                            xtype: "checkbox",
+                            fieldLabel: gettext('Cascade to subchannels'),
+                            name: 'tree'
+                        }, {
+                            xtype: "htmleditor",
+                            fieldLabel: 'x',
+                            hideLabel: true,
+                            name: "message"
+                        }],
+                        fbar: [{
+                            scope: this,
+                            text: gettext("Send message"),
+                            handler: function(btn){
+                                f = btn.ownerCt.ownerCt.getForm().getValues();
+                                Mumble.sendMessageChannel(this.serverid, this.chandata.id, (f.tree || false), f.message);
                             }
                         }]
                     }],
