@@ -26,9 +26,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from mumble.models import MumbleServer, Mumble, MumbleUser
 
-from djextdirect   import Provider
+from djextdirect.formprovider import FormProvider
 
-EXT_FORMS_PROVIDER = Provider(name="Ext.app.MUMBLE_FORMS_API")
+EXT_FORMS_PROVIDER = FormProvider(name="Ext.app.MUMBLE_FORMS_API")
 
 class PropertyModelFormMeta( ModelFormMetaclass ):
     """ Metaclass that updates the property generated fields with the
@@ -157,8 +157,8 @@ class MumbleAdminForm( MumbleForm ):
     bwidth   = forms.IntegerField( required=False )
     sslcrt   = forms.CharField( required=False, widget=forms.Textarea )
     sslkey   = forms.CharField( required=False, widget=forms.Textarea )
-    booted   = forms.BooleanField( required=False )
-    autoboot = forms.BooleanField( required=False )
+    booted   = forms.BooleanField( required=False, initial=True )
+    autoboot = forms.BooleanField( required=False, initial=True )
     bonjour  = forms.BooleanField( required=False )
 
     class Meta:
