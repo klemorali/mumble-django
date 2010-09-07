@@ -121,7 +121,7 @@ MUNIN_CRITICAL = 0.95
 # The graph title.
 MUNIN_TITLE    = 'Mumble Users'
 # see <http://munin.projects.linpro.no/wiki/graph_category_list> for a list of valid categories.
-MUNIN_CATEGORY = 'network'
+MUNIN_CATEGORY = 'mumble'
 
 
 ###################################################################
