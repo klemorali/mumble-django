@@ -21,6 +21,23 @@ Ext.ux.ButtonLogout = Ext.extend(Ext.Button, {
     }
 });
 
+function handleLogin(){
+    Accounts.login(Ext.fly('login_field_username').getValue(), Ext.fly('login_field_password').getValue(),
+        function(provider, response){
+            if( response.result.success ){
+                window.location.reload();
+            }
+            else{
+                Ext.Msg.show({
+                    title: gettext("Login error"),
+                    msg:   gettext("Unable to log in."),
+                    icon:  Ext.MessageBox.ERROR,
+                    buttons: Ext.MessageBox.OK
+                    });
+            }
+        });
+}
+
 Ext.ux.ButtonLogin = Ext.extend(Ext.Button, {
     text: gettext('Login'),
     enableToggle: true,
@@ -33,39 +50,38 @@ Ext.ux.ButtonLogin = Ext.extend(Ext.Button, {
                 height: 130,
                 layout: 'fit',
                 items: {
+                    id: 'login_form',
                     layout: 'form',
                     border: false,
                     defaults: { anchor: '-20px' },
                     buttons: [{
                         text: gettext('Submit'),
-                        handler: function(){
-                            form = this.ownerCt.ownerCt.items.items;
-                            Accounts.login(form[0].getValue(), form[1].getValue(),
-                                function(provider, response){
-                                    if( response.result.success ){
-                                        window.location.reload();
-                                    }
-                                    else{
-                                        Ext.Msg.show({
-                                            title: gettext("Login error"),
-                                            msg:   gettext("Unable to log in."),
-                                            icon:  Ext.MessageBox.ERROR,
-                                            buttons: Ext.MessageBox.OK
-                                            });
-                                    }
-                                });
-                        }
+                        handler: handleLogin
                     }],
                     items: [{
+                        id: 'login_field_username',
                         xtype: "textfield",
                         width: 50,
                         fieldLabel: gettext("User name"),
-                        name: "username"
+                        name: "username",
+                        listeners: {
+                            specialkey: function( f, e ){
+                                if( e.getKey() == e.ENTER )
+                                    Ext.fly('login_field_password').focus();
+                            }
+                        }
                     }, {
+                        id: 'login_field_password',
                         xtype: 'textfield',
                         fieldLabel: gettext("Password"),
                         inputType: "password",
-                        name: "password"
+                        name: "password",
+                        listeners: {
+                            specialkey: function( f, e ){
+                                if( e.getKey() == e.ENTER )
+                                    handleLogin();
+                            }
+                        }
                     }],
                 },
             });
@@ -79,6 +95,7 @@ Ext.ux.ButtonLogin = Ext.extend(Ext.Button, {
                 mypos[0] + mysize.width - winsize.width,
                 mypos[1] - winsize.height
                 );
+            Ext.fly('login_field_username').focus();
         }
         else
             this.wnd.hide();
