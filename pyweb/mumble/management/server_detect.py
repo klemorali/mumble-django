@@ -163,8 +163,8 @@ def find_existing_instances( **kwargs ):
         elif v:
             print "This server is not running, can't sync players."
 
-    if v > 1:
-        print "Successfully finished Servers and Players detection."
+    print "Successfully finished Servers and Players detection."
+    print "To add more servers, run this command again."
     return True
 
 
