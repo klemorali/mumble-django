@@ -57,7 +57,11 @@
 # * Log messages:    yes
 # * Instance scope:  ALL
 
-import simplejson
+try:
+    import simplejson
+except ImportError:
+    import json as simplejson
+
 from django.conf        import settings
 from django.test        import TestCase
 from django.test.client import Client
