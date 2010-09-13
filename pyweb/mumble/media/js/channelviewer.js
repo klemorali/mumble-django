@@ -243,6 +243,9 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                 this.setRootNode( root );
             },
             failure: function( resp, opt ){
+                if( resp.isTimeout === true )
+                    // Ignore, happens from time to time
+                    return;
                 if( this.refreshInterval > 0 )
                     this.cbAutoRefresh.setValue(false);
                 Ext.Msg.show({
