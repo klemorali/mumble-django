@@ -687,9 +687,9 @@ class MumbleUser( models.Model ):
         if self.id is None:
             # This is a new user record, so Murmur doesn't know about it yet
             if len( ctl.getRegisteredPlayers( self.server.srvid, self.name ) ) > 0:
-                raise ValueError( _( "Another player already registered that name." ) )
+                raise ValueError( "Another player already registered that name." )
             if not self.password:
-                raise ValueError( _( "Cannot register player without a password!" ) )
+                raise ValueError( "Cannot register player without a password!" )
 
             self.mumbleid = ctl.registerPlayer( self.server.srvid, self.name, email, self.password )
 
