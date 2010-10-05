@@ -105,7 +105,7 @@ class Provider( object ):
         if flags is None:
             flags = {}
         self.classes[ clsname ][ method.__name__ ] = method
-        method.EXT_argnames = inspect.getargspec( method ).args[1:]
+        method.EXT_argnames = inspect.getargspec( method )[0][1:]
         method.EXT_len      = len( method.EXT_argnames )
         method.EXT_flags    = flags
         return method
@@ -158,7 +158,7 @@ class Provider( object ):
         except (MultiValueDictKeyError, KeyError), err:
             try:
                 rawjson = simplejson.loads( request.raw_post_data )
-            except simplejson.JSONDecodeError:
+            except getattr( simplejson, "JSONDecodeError", ValueError ):
                 return HttpResponse( simplejson.dumps({
                     'type':    'exception',
                     'message': 'malformed request',

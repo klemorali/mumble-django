@@ -15,7 +15,11 @@
  *  GNU General Public License for more details.
 """
 
-import simplejson
+try:
+    import simplejson
+except ImportError:
+    import json as simplejson
+
 import httplib
 from threading import Lock
 from urlparse import urljoin, urlparse
@@ -100,12 +104,15 @@ class Client(object):
         self.cookie  = cookie
 
         purl = urlparse( self.apiurl )
-        conn = httplib.HTTPConnection( purl.netloc )
+        conn = {
+            "http":  httplib.HTTPConnection,
+            "https": httplib.HTTPSConnection
+            }[purl.scheme.lower()]( purl.netloc )
         conn.putrequest( "GET", purl.path )
         conn.endheaders()
         resp = conn.getresponse()
-        conn.close()
         foundvars = lexjs( resp.read() )
+        conn.close()
 
         self.api = foundvars[apiname]
         self.routerurl = urljoin( self.apiurl, self.api["url"] )
@@ -137,16 +144,18 @@ class Client(object):
             })
 
         purl = urlparse( self.routerurl )
-        conn = httplib.HTTPConnection( purl.netloc )
+        conn = {
+            "http":  httplib.HTTPConnection,
+            "https": httplib.HTTPSConnection
+            }[purl.scheme.lower()]( purl.netloc )
         conn.putrequest( "POST", purl.path )
         conn.putheader( "Content-Type", "application/json" )
-        conn.putheader( "Content-Length", len(data) )
+        conn.putheader( "Content-Length", str(len(data)) )
         if self.cookie:
             conn.putheader( "Cookie", self.cookie )
         conn.endheaders()
         conn.send( data )
         resp = conn.getresponse()
-        conn.close()
 
         if resp.status != 200:
             raise RequestError( resp.status, resp.reason )
@@ -161,6 +170,7 @@ class Client(object):
         if cookie:
             self.cookie = cookie.split(';')[0]
 
+        conn.close()
         return respdata['result']
 
     def get_object( self, action ):
