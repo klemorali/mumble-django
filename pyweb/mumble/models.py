@@ -754,12 +754,15 @@ class MumbleUser( models.Model ):
 
     def setTexture( self, image ):
         """ Install the given image as the user's texture. """
-        self.server.setTexture( self.mumbleid, image )
+        self.server.setUserTexture( self.mumbleid, image )
 
     def setTextureFromUrl( self, url, transparency=None ):
         """ Retrieve the image at the given URL and set it as my texture. """
         img = Image.open( StringIO( urlopen( url ).read() ) )
         self.setTexture( img )
+
+    def setTextureFromGravatar( self ):
+        return self.setTextureFromUrl( self.gravatar )
 
     texture = property( getTexture, setTexture,
         doc="Get the texture as a PIL Image or set the Image as the texture."
