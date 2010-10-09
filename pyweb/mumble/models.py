@@ -215,11 +215,11 @@ class Mumble( models.Model ):
     textlen = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
     usersperchannel = mk_config_property( "usersperchannel",ugettext_noop("Users per channel"),  get_coerce=int )
 
-    obfsc   = mk_config_bool_property( "obfuscate",         ugettext_noop("IP Obfuscation") )
     certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
     html    = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
     bonjour = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
     autoboot= mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
+    rememchn= mk_config_bool_property( "rememberchannel",   ugettext_noop("Remember last channel") )
 
     def get_absolute_url( self ):
         from views import show
