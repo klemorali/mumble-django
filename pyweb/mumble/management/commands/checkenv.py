@@ -22,7 +22,7 @@ from django.contrib.auth.models  import User
 from django.contrib.sites.models import Site
 from django.conf                 import settings
 
-from mumble.models import Mumble
+from mumble.models import Mumble, MumbleServer
 
 
 class TestFailed( Exception ):
@@ -47,25 +47,10 @@ class Command( BaseCommand ):
         self.check_secret_key()
 
     def check_slice( self ):
-        print "Checking slice file...",
-        if settings.SLICE is None:
-            raise TestFailed( "You don't have set the SLICE variable in settings.py." )
-
-        if " " in settings.SLICE:
-            raise TestFailed( "You have a space char in your Slice path. This will confuse Ice, please check." )
-
-        if not settings.SLICE.endswith( ".ice" ):
-            raise TestFailed( "The slice file name MUST end with '.ice'." )
-
-        try:
-            fd = open( settings.SLICE, "rb" )
-            slice = fd.read()
-            fd.close()
-        except IOError, err:
-            raise TestFailed( "Failed opening the slice file: %s" % err )
-
-        import Ice
-        Ice.loadSlice( settings.SLICE )
+        print "Checking slice file for %d server instances..." % MumbleServer.objects.count(),
+        for serv in MumbleServer.objects.all():
+            if serv.method_ice:
+                serv.ctl
 
         print "[ OK ]"
 
@@ -78,19 +63,19 @@ class Command( BaseCommand ):
             print "not using sqlite [ OK ]"
 
         else:
-            statinfo = os.stat( settings.MUMBLE_DJANGO_ROOT )
+            for checkdir in ( settings.MUMBLE_DJANGO_ROOT, os.path.join( settings.MUMBLE_DJANGO_ROOT, "db" ) ):
+                statinfo = os.stat( checkdir )
 
-            if statinfo.st_uid == 0:
-                raise TestFailed(
-                    "The mumble-django root directory belongs to user root. This is "
-                    "most certainly not what you want because it will prevent your "
-                    "web server from being able to write to the database. Please check." )
+                if statinfo.st_uid == 0:
+                    raise TestFailed(
+                        "The directory '%s' belongs to user root. This is "
+                        "most certainly not what you want because it will prevent your "
+                        "web server from being able to write to the database. Please check." % checkdir )
 
-            elif not os.access( settings.MUMBLE_DJANGO_ROOT, os.W_OK ):
-                raise TestFailed( "The mumble-django root directory is not writable." )
+                elif not os.access( checkdir, os.W_OK ):
+                    raise TestFailed( "The directory '%s' is not writable." % checkdir )
 
-            else:
-                print "[ OK ]"
+            print "[ OK ]"
 
     def check_dbase( self ):
         print "Checking database access...",
@@ -191,7 +176,8 @@ class Command( BaseCommand ):
             raise TestFailed(
                 "Your SECRET_KEY setting matches one of the keys that were put in the settings.py "
                 "file shipped with Mumble-Django, which means your SECRET_KEY is all but secret. "
-                "You should change the setting, or run gen_secret_key.sh to do it for you."
+                "You should change the setting, or remove it altogether and allow the key to be "
+                "generated automatically."
                 )
         else:
             print "[ OK ]"
