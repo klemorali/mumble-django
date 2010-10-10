@@ -79,10 +79,12 @@
                     enableDD: true,
                     plugins: [
                         new Ext.ux.MumbleUserEditor({
-                            serverid: {{MumbleServer.id}}
+                            serverid: {{MumbleServer.id}},
+                            is_admin: {{ IsAdmin|lower }}
                             }),
                         new Ext.ux.MumbleChannelEditor({
-                            serverid: {{MumbleServer.id}}
+                            serverid: {{MumbleServer.id}},
+                            is_admin: {{ IsAdmin|lower }}
                             })
                         ],
                     source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
