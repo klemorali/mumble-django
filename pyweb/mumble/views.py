@@ -402,10 +402,10 @@ def update_avatar( request, userid ):
 
     textureform = MumbleTextureForm( request.POST, request.FILES )
     if textureform.is_valid():
-        if 'usegravatar' in textureform.cleaned_data and user.gravatar:
+        if textureform.cleaned_data['usegravatar'] and user.gravatar:
             user.setTextureFromUrl( user.gravatar )
-        elif 'texturefile' in request.FILES:
-            user.setTexture( Image.open( request.FILES['texturefile'] ) )
+        else:
+            user.setTexture( Image.open( textureform.cleaned_data['texturefile'] ) )
         return HttpResponse( "true", mimetype="text/html" )
 
     return HttpResponse( "false", mimetype="text/html" )
