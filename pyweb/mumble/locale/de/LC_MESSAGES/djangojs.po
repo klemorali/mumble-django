@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-22 15:10+0200\n"
-"PO-Revision-Date: 2010-10-10 16:52\n"
+"PO-Revision-Date: 2010-10-10 17:19\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: media/js/banviewer.js:11
 msgid "Bans"
-msgstr "Banne"
+msgstr "Banliste"
 
 #: media/js/banviewer.js:13 media/js/logviewer.js:13
 msgid "Timestamp"
