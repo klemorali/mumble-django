@@ -15,9 +15,10 @@ Ext.ux.UserEditorPanel = function( config ){
     ]);
 
   userAdminStore = new Ext.data.DirectStore({
-    baseParams: { server: this.server },
+    baseParams: { server: this.server, resync: false },
     directFn: MumbleUserAdmin.users,
     fields:   userRecord,
+    paramOrder: ['server', 'resync'],
     autoLoad: true,
     remoteSort: false
     });
@@ -131,10 +132,17 @@ Ext.ux.UserEditorPanel = function( config ){
           });
         }
       }, {
+        text:    gettext("Refresh"),
+        handler: function(){
+          userAdminStore.reload({
+            params: { 'resync': false }
+          });
+        }
+      }, {
         text:    gettext("Resync with Murmur"),
         handler: function(){
           userAdminStore.reload({
-            params: { 'resync': 'true' }
+            params: { 'resync': true }
           });
         }
       }],
