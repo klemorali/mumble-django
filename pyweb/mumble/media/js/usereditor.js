@@ -100,7 +100,7 @@ Ext.ux.UserEditorPanel = function( config ){
           } ) );
         }
       }, {
-      text:     gettext("Save"),
+        text:     gettext("Save"),
         scope: this,
         handler : function(){
           var data = [];
