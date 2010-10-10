@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-22 15:10+0200\n"
-"PO-Revision-Date: 2010-08-22 15:13\n"
+"PO-Revision-Date: 2010-10-10 16:52\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -281,7 +281,7 @@ msgstr "Konnte nicht speichern."
 
 #: media/js/usereditor.js:135
 msgid "Resync with Murmur"
-msgstr "Aktualisieren"
+msgstr "Aktualisieren (von Murmur)"
 
 #~ msgid "User texture"
 #~ msgstr "Benutzertextur"

@@ -327,7 +327,7 @@ def sendMessageChannel( request, server, channelid, tree, message ):
     srv.sendMessageChannel(channelid, tree, message)
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleUserAdmin" )
-def users( request, server ):
+def users( request, server, resync=False ):
     """ Create a list of MumbleUsers for a given server serialized as a JSON object.
 
         If the request has a "data" field, evaluate that and update the user records.
@@ -335,7 +335,7 @@ def users( request, server ):
 
     srv = get_object_or_404( Mumble, id=int(server) )
 
-    if "resync" in request.POST and request.POST['resync'] == "true":
+    if resync:
         srv.readUsersFromMurmur()
 
     if not srv.isUserAdmin( request.user ):
