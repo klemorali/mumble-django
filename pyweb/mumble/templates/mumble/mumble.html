@@ -163,7 +163,7 @@
                                                 var now = new Date();
                                                 var img = Ext.fly("img_avatar");
                                                 img.dom.src = String.format("{0}?_dc={1}",
-                                                    "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}?_dc=",
+                                                    "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}",
                                                     now.getTime()
                                                     );
                                                 }
