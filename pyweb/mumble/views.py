@@ -195,6 +195,16 @@ def mobile_show( request, server ):
             'MumbleAccount':user,
         }, context_instance = RequestContext(request) )
 
+def embed( request, server ):
+    """ Display the channel viewer for the given Server ID. """
+
+    srv = get_object_or_404( Mumble, id=server )
+
+    return render_to_response( 'mumble/embed.html', {
+            'MumbleServer': srv,
+            'MumbleActive': True,
+        }, context_instance = RequestContext(request) )
+
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def hasTexture( request, server, userid ):
     srv = get_object_or_404( Mumble,     id=int(server) )
