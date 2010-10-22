@@ -37,6 +37,8 @@ urlpatterns = patterns(
     ( r'mobile/(?P<server>\d+)/?$',          'mobile_show'     ),
     ( r'mobile/?$',                          'mobile_mumbles'  ),
 
+    ( r'embed/(?P<server>\d+)/?$',           'embed'            ),
+
     ( r'(?P<server>\d+).json',               'cvp_json'        ),
     ( r'(?P<server>\d+).xml',                'cvp_xml'         ),
 

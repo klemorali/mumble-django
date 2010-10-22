@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% comment %}
+    <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
+{% endcomment %}
+{% load mumble_extras %}
+{% load i18n %}
+{% block body %}
+{% endblock %}
+{% block PageTitle %}Mumble :: {{ MumbleServer.name }}{% endblock %}
+{% block HeadTag %}
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
+    <script type="text/javascript">
+        Ext.onReady( function(){
+            Ext.QuickTips.init();
+            mainpanel = new Ext.ux.MumbleChannelViewer({
+                renderTo: Ext.getBody(),
+                source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+                imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
+            });
+        } );
+    </script>
+    <style type="text/css">
+        body {
+            padding: 20px 20px 0 20px;
+        }
+    </style>
+{% endblock %}
