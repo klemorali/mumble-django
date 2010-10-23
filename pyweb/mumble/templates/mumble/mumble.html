@@ -115,15 +115,15 @@
                             labelWidth: 150,
                             baseParams: {serverid: {{MumbleServer.id}} },
                         },
-                        {% if MumbleAccount %}
-                            {% if IsAdmin %}
+                        {% if IsAdmin %}
                             {
                                 title: gettext("Administration"),
                                 pk:    {{ MumbleServer.id }},
                                 labelWidth: 150,
                                 xtype: 'mumbleform',
                             },
-                            {% endif %}
+                        {% endif %}
+                        {% if MumbleAccount %}
                             {
                                 title: gettext("User texture"),
                                 layout: "border",
@@ -176,18 +176,18 @@
                                     }],
                                 }],
                             },
-                            {% if IsAdmin %}
-                                {
-                                    xtype: "userEditorPanel",
-                                    server: {{ MumbleServer.id }}
-                                }, {
-                                    xtype: 'logViewerPanel',
-                                    server: {{ MumbleServer.id }}
-                                }, {
-                                    xtype: 'banViewerPanel',
-                                    server: {{ MumbleServer.id }}
-                                }
-                            {% endif %}
+                        {% endif %}
+                        {% if IsAdmin %}
+                            {
+                                xtype: "userEditorPanel",
+                                server: {{ MumbleServer.id }}
+                            }, {
+                                xtype: 'logViewerPanel',
+                                server: {{ MumbleServer.id }}
+                            }, {
+                                xtype: 'banViewerPanel',
+                                server: {{ MumbleServer.id }}
+                            }
                         {% endif %}
                     {% endif %}
                     ],
