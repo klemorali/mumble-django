@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+{% load i18n %}
+
+{% block Headline %}{% trans "Profile" %}{% endblock %}
+
+{% block Content %}
+<h2 class="profile">{% blocktrans with user|capfirst as username %}Profile of {{username}}{% endblocktrans %}</h2>
+<div class="profile">
+  <h4>Statistics</h4>
+  <ul>
+    {% if mumbleaccs %}
+      <li>{% trans "Mumble Accounts" %}:
+        <ul>
+        {% for mm in mumbleaccs %}
+          <li>
+            {{ mm.name }} on Server <a href="{% url mumble.views.show mm.server.id %}">{{ mm.server.name }}</a>
+          </li>
+        {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+<div class="profile">
+  <h4>{% trans "Account" %}</h4>
+  <ul>
+    <li>{% trans "Full Name" %}: {{ user.first_name }} {{ user.last_name }}</li>
+    <li>{% trans "e-mail address" %}: {{ user.email }}</li>
+    <li>{% trans "staff status" %}: {{ user.is_staff|yesno }}</li>
+    <li>{% trans "date joined" %}: {{ user.date_joined|date }} {{ user.date_joined|time }}</li>
+    <li>{% trans "last login" %}: {{ user.last_login|date }} {{ user.last_login|time }}</li>
+    <li><a href="{% url django.contrib.auth.views.password_change %}">{% trans "Change password" %}</a></li>
+    <li><a href="{% url django.contrib.auth.views.logout %}">{% trans "Log out" %}</a></li>
+  </ul>
+</div>
+{% endblock %}
+

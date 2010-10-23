@@ -1,0 +1,21 @@
+The primary author of mumble-django is Michael "Svedrin" Ziegler
+<diese-addy@funzt-halt.net>.
+
+The Dbus/ICE interface modules have been contributed by withgod
+<withgod@sourceforge.net>.
+
+
+Translation authors:
+
+* German            Michael Ziegler    <diese-addy@funzt-halt.net>
+* Croatian          Vid Marić          <vid_maric@yahoo.com>
+* Japanese          Withgod            <withgod@sourceforge.net>
+* Italian           Satinez            <info@satinez.net>
+* Polish            HuNt3r             <admin@serv4u.pl>
+* French            Antoine Bertin     <bertinantoine@neuf.fr>
+
+Others who have contributed to the application:
+
+* Thorvald "slicer" Natvig (helped a million with the Debian packaging)
+* Philipp "nethead" Wollermann (base path autodetection)
+* Nico Wollenzin (gave Mumble Commander its name)

@@ -1,0 +1,548 @@
+# German translation file for Mumble-Django.
+# 
+# Copyright © 2009-2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+# 
+# Mumble-Django is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This package is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Mumble-Django v0.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-04 20:58+0200\n"
+"PO-Revision-Date: 2010-08-04 23:35\n"
+"Last-Translator:   <diese-addy@funzt-halt.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.5.6\n"
+
+#: admin.py:35 admin.py:59
+msgid "Master is running"
+msgstr "Serverprozess läuft"
+
+#: admin.py:43
+msgid "Server version"
+msgstr "Serverversion"
+
+#: admin.py:67 models.py:189
+msgid "Server Address"
+msgstr "Serveradresse"
+
+#: admin.py:74 models.py:192
+msgid "Server Port"
+msgstr "Serverport"
+
+#: admin.py:79
+msgid "Instance is running"
+msgstr "Serverinstanz läuft"
+
+#: admin.py:89
+msgid "Registered users"
+msgstr "Registrierte Benutzer"
+
+#: admin.py:99
+msgid "Online users"
+msgstr "Benutzer online"
+
+#: admin.py:109
+msgid "Channel count"
+msgstr "Channels"
+
+#: admin.py:116
+msgid "Yes"
+msgstr "Ja"
+
+#: admin.py:118
+msgid "No"
+msgstr "Nein"
+
+#: admin.py:122
+msgid "Public"
+msgstr "Öffentlich"
+
+#: admin.py:140 models.py:686
+msgid "Admin on root channel"
+msgstr "Admin im Wurzelkanal"
+
+#: forms.py:112
+msgid "Password required to join. Leave empty for public servers."
+msgstr ""
+"Passwort was zum Verbinden benötigt wird. Lasse es leer, wenn der Server "
+"öffentlich sein soll."
+
+#: forms.py:115
+msgid "If on, IP adresses of the clients are not logged."
+msgstr ""
+"Wenn das an ist werden IP-Adressen der Clients nicht ins Log geschrieben."
+
+#: forms.py:174
+#, python-format
+msgid ""
+"Port number %(portno)d is not within the allowed range %(minrange)d - "
+"%(maxrange)d"
+msgstr "Portnummer %(portno)d liegt nicht in %(minrange)d - %(maxrange)d"
+
+#: forms.py:184
+msgid "Default config"
+msgstr "Standard-Einstellungen"
+
+#: forms.py:198 templates/mumble/offline.html:12
+msgid "This server is currently offline."
+msgstr "Dieser Server ist im Moment nicht erreichbar."
+
+#: forms.py:207
+msgid "Password"
+msgstr "Passwort"
+
+#: forms.py:244
+msgid "That name is forbidden by the server."
+msgstr "Dieser Name wird vom Server nicht erlaubt."
+
+#: forms.py:247 models.py:638
+msgid "Another player already registered that name."
+msgstr "Ein anderer Spieler hat sich unter diesem Namen bereits registriert."
+
+#: forms.py:255 forms.py:377 models.py:640
+msgid "Cannot register player without a password!"
+msgstr "Kann Account nicht ohne Passwort registrieren!"
+
+#: forms.py:267 models.py:206
+msgid "Server Password"
+msgstr "Serverpasswort"
+
+#: forms.py:268
+msgid ""
+"This server is private and protected mode is active. Please enter the server "
+"password."
+msgstr ""
+"Dieser Server ist privat und der Registrierungsschutz ist aktiv. Bitte gib "
+"das Serverpasswort ein."
+
+#: forms.py:284 forms.py:344
+msgid "The password you entered is incorrect."
+msgstr "Das eingegebene Passwort ist falsch"
+
+#: forms.py:299
+msgid "Link account"
+msgstr "Accounts verknüpfen"
+
+#: forms.py:300
+msgid ""
+"The account already exists and belongs to me, just link it instead of "
+"creating."
+msgstr ""
+"Dieser Account existiert bereits und gehört mir. Verknüpfe die Konten nur, "
+"anstatt ein neues zu erstellen."
+
+#: forms.py:325
+msgid "No such user found."
+msgstr "Benutzer nicht gefunden."
+
+#: forms.py:360
+msgid "That account belongs to someone else."
+msgstr "Dieser Account gehört jemand anderem."
+
+#: forms.py:363
+msgid "Linking Admin accounts is not allowed."
+msgstr "Admin-Accounts zu verknüpfen ist nicht erlaubt."
+
+#: forms.py:392
+msgid "Use my Gravatar as my Texture"
+msgstr "Gravatar als Textur verwenden"
+
+#: forms.py:393
+msgid "User Texture"
+msgstr "Benutzertextur"
+
+#: models.py:69
+msgid "DBus or ICE base"
+msgstr "DBus- oder ICE-String"
+
+#: models.py:70
+msgid ""
+"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
+"-p 6502' for Ice."
+msgstr ""
+"Beispiele: 'net.sourceforge.mumble.murmur' für DBus oder 'Meta:tcp -h "
+"127.0.0.1 -p 6502' für Ice."
+
+#: models.py:71
+msgid "Ice Secret"
+msgstr "Ice-Passwort"
+
+#: models.py:74 models.py:186
+msgid "Mumble Server"
+msgstr "Mumble-Server"
+
+#: models.py:75
+msgid "Mumble Servers"
+msgstr "Mumble-Server"
+
+#: models.py:187
+msgid "Server Name"
+msgstr "Servername"
+
+#: models.py:188
+msgid "Server ID"
+msgstr "Server-ID"
+
+#: models.py:190
+msgid ""
+"Hostname or IP address to bind to. You should use a hostname here, because "
+"it will appear on the global server list."
+msgstr ""
+"Hostname oder IP-Adresse unter der der Server erreichbar sein soll. Du "
+"solltest einen Hostname verwenden, da dieses Feld in der globalen "
+"Serverliste erscheint."
+
+#: models.py:193
+msgid "Port number to bind to. Leave empty to auto assign one."
+msgstr ""
+"Portnummer auf die gebunden werden soll. Lasse das Feld leer um automatisch "
+"eine zuzuweisen."
+
+#: models.py:194
+msgid "Server Display Address"
+msgstr "Angezeigte Adresse"
+
+#: models.py:195
+msgid ""
+"This field is only relevant if you are located behind a NAT, and names the "
+"Hostname or IP address to use in the Channel Viewer and for the global "
+"server list registration. If not given, the addr and port fields are used. "
+"If display and bind ports are equal, you can omit it here."
+msgstr ""
+"Dieses Feld ist nur relevant wenn der Server hinter einem NAT steht, und "
+"gibt dann den Hostnamen oder die IP-Adresse die im Channel-Viewer und für "
+"die Registrierung in der Serverliste benutzt werden soll. Ist dieses Feld "
+"leer, werden die Angaben Addresse und Port stattdessen benutzt. Wenn die "
+"Ports identisch sind, kannst du den Port hier weglassen."
+
+#: models.py:201
+msgid "Superuser Password"
+msgstr "SuperUser-Passwort"
+
+#: models.py:204
+msgid "Website URL"
+msgstr "URL der Webseite"
+
+#: models.py:205
+msgid "Welcome Message"
+msgstr "Willkommensnachricht"
+
+#: models.py:207
+msgid "Max. Users"
+msgstr "Max. Benutzer"
+
+#: models.py:208
+msgid "Bandwidth [Bps]"
+msgstr "Bandbreite [Bps]"
+
+#: models.py:209
+msgid "SSL Certificate"
+msgstr "SSL-Zertifikat"
+
+#: models.py:210
+msgid "SSL Key"
+msgstr "SSL-Schlüssel"
+
+#: models.py:211
+msgid "Player name regex"
+msgstr "Regex für Spielernamen"
+
+#: models.py:212
+msgid "Channel name regex"
+msgstr "Regex für Channelnamen"
+
+#: models.py:213
+msgid "Default channel"
+msgstr "Standardchannel"
+
+#: models.py:214
+msgid "Timeout"
+msgstr "Timeout"
+
+#: models.py:215
+msgid "Maximum length of text messages"
+msgstr "Maximale Länge von Textnachrichten"
+
+#: models.py:216
+msgid "Users per channel"
+msgstr "Max. Benutzer pro Kanal"
+
+#: models.py:218
+msgid "IP Obfuscation"
+msgstr "IP-Adressen anonymisieren"
+
+#: models.py:219
+msgid "Require Certificate"
+msgstr "SSL-Zertifikat erzwingen"
+
+#: models.py:220
+msgid "Allow HTML to be used in messages"
+msgstr "Erlaube HTML in Nachrichten"
+
+#: models.py:221
+msgid "Publish this server via Bonjour"
+msgstr "Server via Bonjour bekannt machen"
+
+#: models.py:222
+msgid "Boot Server when Murmur starts"
+msgstr "Instanz starten wenn Murmur startet"
+
+#: models.py:240 models.py:241
+msgid "Boot Server"
+msgstr "Server starten"
+
+#: models.py:250 models.py:596
+msgid "Server instance"
+msgstr "Serverinstanz"
+
+#: models.py:251
+msgid "Server instances"
+msgstr "Serverinstanzen"
+
+#: models.py:550 models.py:762
+msgid "This field must not be updated once the record has been saved."
+msgstr ""
+"Dieses Feld darf nicht mehr verändert werden, nachdem der Eintrag zum ersten "
+"Mal gespeichert wurde."
+
+#: models.py:593
+msgid "Mumble player_id"
+msgstr "ID des Spielers in Murmur"
+
+#: models.py:594
+msgid "User name and Login"
+msgstr "Benutzername und Login"
+
+#: models.py:595
+msgid "Login password"
+msgstr "Passwort"
+
+#: models.py:597
+msgid "Account owner"
+msgstr "Accountbesitzer"
+
+#: models.py:599
+msgid "The user's comment."
+msgstr "Benutzer-Kommentar"
+
+#: models.py:600
+msgid "The user's hash."
+msgstr "Signatur des Zertifikats"
+
+#: models.py:609
+msgid "User account"
+msgstr "Benutzerkonto"
+
+#: models.py:610
+msgid "User accounts"
+msgstr "Benutzerkonten"
+
+#: models.py:617
+#, python-format
+msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
+msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
+
+#: templates/mumble/player.html:9
+msgid "Authenticated"
+msgstr "Authentifiziert"
+
+#: templates/mumble/player.html:12
+msgid "Muted"
+msgstr "Stummgestellt"
+
+#: templates/mumble/player.html:15
+msgid "Suppressed"
+msgstr "Unterdrückt"
+
+#: templates/mumble/player.html:18
+msgid "Deafened"
+msgstr "Taubgestellt"
+
+#: templates/mumble/player.html:21
+msgid "Muted by self"
+msgstr "Selbst stummgestellt"
+
+#: templates/mumble/player.html:24
+msgid "Deafened by self"
+msgstr "Selbst taubgestellt"
+
+#: templates/mumble/player.html:27
+msgid "has a User Comment set"
+msgstr "hat einen Benutzer-Kommentar gesetzt"
+
+#~ msgid "No server instances have been configured yet."
+#~ msgstr "Es sind noch keine Serverinstanzen konfiguriert."
+
+#~ msgid ""
+#~ "\n"
+#~ "      <b>Hint:</b><br />\n"
+#~ "      This area is used to display additional information for each "
+#~ "channel and player, but requires JavaScript to be\n"
+#~ "      displayed correctly. You will not see the detail pages, but you can "
+#~ "use all links and forms\n"
+#~ "      that are displayed.\n"
+#~ "      "
+#~ msgstr ""
+#~ "\n"
+#~ "      <b>Hinweis:</b><br />\n"
+#~ "      Dieser Bereich wird genutzt um zusätzliche Informationen über jeden "
+#~ "Channel und Spieler anzuzeigen, erfordert aber JavaScript um\n"
+#~ "      richtig angezeigt zu werden. Du wirst zwar die Detailseiten nicht "
+#~ "sehen, kannst aber alle sichtbaren Formulare benutzen.\n"
+#~ "      "
+
+#~ msgid "Website"
+#~ msgstr "Webseite"
+
+#~ msgid "Minimal view"
+#~ msgstr "Minimalansicht"
+
+#~ msgid "Welcome message"
+#~ msgstr "Willkommensnachricht"
+
+#~ msgid "Server registration"
+#~ msgstr "Benutzerregistrierung"
+
+#~ msgid "You are registered on this server"
+#~ msgstr "Du bist auf diesem Server registriert"
+
+#~ msgid "You do not have an account on this server"
+#~ msgstr "Du bist auf diesem Server nicht registriert"
+
+#~ msgid ""
+#~ "\n"
+#~ "      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be "
+#~ "able to register an account on this Mumble server.</p>\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "      <p>Du musst <a href=\"%(login_url)s\">eingeloggt</a> sein um auf "
+#~ "diesem Mumble-Server einen Account registrieren zu können.</p>\n"
+#~ "    "
+
+#~ msgid ""
+#~ "\n"
+#~ "          Sorry, due to a bug in Murmur 1.2.2, displaying and setting the "
+#~ "Texture is disabled.\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "Entschuldigung, aufgrund eines Fehlers in Murmur 1.2.2 ist die "
+#~ "Texturanzeige sowie das Hochladen für diese Version deaktiviert."
+
+#~ msgid ""
+#~ "\n"
+#~ "            You can upload an image that you would like to use as your "
+#~ "user texture here.\n"
+#~ "          "
+#~ msgstr ""
+#~ "\n"
+#~ "Du kannst hier ein Bild hochladen, das als deine Benutzertextur angezeigt "
+#~ "werden soll."
+
+#~ msgid "Your current texture is"
+#~ msgstr "Deine momentane Textur ist diese"
+
+#~ msgid "You don't currently have a texture set"
+#~ msgstr "Du hast momentan keine Textur gesetzt"
+
+#~ msgid ""
+#~ "\n"
+#~ "              Hint: The texture image <b>needs</b> to be 600x60 in size. "
+#~ "If you upload an image with\n"
+#~ "              a different size, it will be resized accordingly.<br />\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "Hinweis: Das Texturbild <b>muss</b> die Größe 600x60 haben. Wenn du ein "
+#~ "Bild mit einer anderen Größe hochlädst, wird es automatisch zurecht "
+#~ "geschnitten.<br />"
+
+#~ msgid "Server administration"
+#~ msgstr "Server-Administration"
+
+#~ msgid "Player"
+#~ msgstr "Spieler"
+
+#~ msgid "Online since"
+#~ msgstr "Online seit"
+
+#~ msgid "Admin"
+#~ msgstr "Administrator"
+
+#~ msgid "IP Address"
+#~ msgstr "IP-Adresse"
+
+#~ msgid "User"
+#~ msgstr "Benutzer"
+
+#~ msgid "Full Name"
+#~ msgstr "Vollständiger Name"
+
+#~ msgid "Sign-up date"
+#~ msgstr "Datum der Anmeldung"
+
+#~ msgid "User Comment"
+#~ msgstr "Benutzer-Kommentar"
+
+#~ msgid "Kick user"
+#~ msgstr "Benutzer kicken"
+
+#~ msgid "Reason"
+#~ msgstr "Begründung"
+
+#~ msgid "Ban user"
+#~ msgstr "Benutzer bannen"
+
+#~ msgid "Channel"
+#~ msgstr "Kanal"
+
+#~ msgid "Channel ID"
+#~ msgstr "Kanal-ID"
+
+#~ msgid "Connect"
+#~ msgstr "Verbinden"
+
+#~ msgid "Channel description"
+#~ msgstr "Beschreibung des Kanals"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Server Info"
+#~ msgstr "Server-Infos"
+
+#~ msgid "Registration"
+#~ msgstr "Registrierung"
+
+#~ msgid "Administration"
+#~ msgstr "Administration"
+
+#~ msgid "User List"
+#~ msgstr "Benutzerliste"
+
+#~ msgid "name"
+#~ msgstr "Name"
+
+#~ msgid "Change password"
+#~ msgstr "Passwort ändern"
+
+#~ msgid "Add"
+#~ msgstr "Hinzufügen"
+
+#~ msgid "Save"
+#~ msgstr "Speichern"
+
+#~ msgid "Resync with Murmur"
+#~ msgstr "Liste neu laden"

@@ -1,0 +1,200 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-04 20:28+0200\n"
+"PO-Revision-Date: 2010-08-11 17:56\n"
+"Last-Translator:   <nocontents@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.5.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: media/js/buttoniframewindow.js:30
+msgid "Open in new window"
+msgstr "新規ウィンドウで開く"
+
+#: media/js/channelviewer.js:51
+msgid "Channel Viewer"
+msgstr "チャンネルビューワ"
+
+#: media/js/channelviewer.js:56
+msgid "Loading..."
+msgstr "ローディング..."
+
+#: media/js/channelviewer.js:64
+msgid "Auto-Refresh"
+msgstr "自動更新"
+
+#: media/js/loginout_buttons.js:7
+msgid "Logout"
+msgstr "ログアウト"
+
+#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:51
+msgid "Login error"
+msgstr "ログインエラー"
+
+#: media/js/loginout_buttons.js:16
+msgid "Unable to log out."
+msgstr "ログアウト失敗"
+
+#: media/js/loginout_buttons.js:26 media/js/loginout_buttons.js.py:31
+msgid "Login"
+msgstr "ログイン"
+
+#: media/js/loginout_buttons.js:41
+msgid "Submit"
+msgstr "送信"
+
+#: media/js/loginout_buttons.js:52
+msgid "Unable to log in."
+msgstr "ログイン失敗"
+
+#: media/js/loginout_buttons.js:63
+msgid "User name"
+msgstr "ユーザ名"
+
+#: media/js/loginout_buttons.js:67
+msgid "Password"
+msgstr "パスワード"
+
+#: media/js/logviewer.js:11
+msgid "Log messages"
+msgstr "ログメッセージ"
+
+#: media/js/logviewer.js:13
+msgid "Timestamp"
+msgstr "日付"
+
+#: media/js/logviewer.js:20
+msgid "Log entry"
+msgstr "ログエントリー"
+
+#: media/js/logviewer.js:25
+msgid "Filter"
+msgstr "フィルター"
+
+#: media/js/logviewer.js:33
+msgid ""
+"Enter a string to filter the logs by and press Enter. To display all log "
+"entries, empty this field."
+msgstr "入力文字列をフィルターとして利用できます。何も入れなければ、全てのログを表示できます。"
+
+#: media/js/logviewer.js:45
+msgid "Refresh"
+msgstr "更新"
+
+#: media/js/rendermumbleserver.js:4
+msgid "Server Address"
+msgstr "サーバアドレス"
+
+#: media/js/rendermumbleserver.js:7
+msgid "Website"
+msgstr "ウェブサイト"
+
+#: media/js/rendermumbleserver.js:11
+#, perl-format
+msgid "Currently, %s user is registered."
+msgid_plural "Currently, %s users are registered."
+msgstr[0] "ユーザ %s が登録されました"
+msgstr[1] "現在  %s 名のユーザが登録されています。"
+
+#: media/js/rendermumbleserver.js:14
+#, perl-format
+msgid "Currently, %s user is online."
+msgid_plural "Currently, %s users are online."
+msgstr[0] "現在 %s ユーザがオンラインになりました"
+msgstr[1] "現在 %s 名ユーザがオンラインです"
+
+#: media/js/rendermumbleserver.js:17
+#, perl-format
+msgid "Currently, there is %s channel."
+msgid_plural "Currently, there are %s channels."
+msgstr[0] "現在 %s チャンネル"
+msgstr[1] "現在 %s チャンネル登録されています"
+
+#: media/js/rendermumbleserver.js:22
+msgid "Switch to minimal view"
+msgstr "ミニビューに変更"
+
+#: media/js/rendermumbleserver.js:28
+msgid "Welcome message"
+msgstr "ウェルカムメッセージ"
+
+#: media/js/usereditor.js:27
+msgid "Admin on root channel"
+msgstr "管理者がRootチャンネルにいる"
+
+#: media/js/usereditor.js:33
+msgid "Delete"
+msgstr "削除"
+
+#: media/js/usereditor.js:53
+msgid "User List"
+msgstr "ユーザリスト"
+
+#: media/js/usereditor.js:58
+msgid "name"
+msgstr "名前"
+
+#: media/js/usereditor.js:65
+msgid "Account owner"
+msgstr "アカウント所有者"
+
+#: media/js/usereditor.js:77
+msgid "Change password"
+msgstr "パスワード変更"
+
+#: media/js/usereditor.js:91
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: media/js/usereditor.js:95
+msgid "New User"
+msgstr "新規ユーザ"
+
+#: media/js/usereditor.js:103
+msgid "Save"
+msgstr "保存"
+
+#: media/js/usereditor.js:126
+msgid "Submit error"
+msgstr "送信に失敗しました"
+
+#: media/js/usereditor.js:127
+msgid "Unable to save."
+msgstr "保存に失敗しました"
+
+#: media/js/usereditor.js:135
+msgid "Resync with Murmur"
+msgstr "Murmurと再同期"
+
+#~ msgid "Registration"
+#~ msgstr "Registrierung"
+
+#~ msgid "Administration"
+#~ msgstr "Administration"
+
+#~ msgid "User texture"
+#~ msgstr "Benutzertextur"
+
+#~ msgid "Texture"
+#~ msgstr "Textur"
+
+#~ msgid "Gravatar"
+#~ msgstr "Gravatar"
+
+#~ msgid "Use Gravatar"
+#~ msgstr "Benutze Gravatar"
+
+#~ msgid "Upload Avatar"
+#~ msgstr "Avatar hochladen"
