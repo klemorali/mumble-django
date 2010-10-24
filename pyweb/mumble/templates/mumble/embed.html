@@ -15,10 +15,22 @@
         Ext.onReady( function(){
             Ext.QuickTips.init();
             mainpanel = new Ext.ux.MumbleChannelViewer({
+                //title: "ohai",
                 renderTo: Ext.getBody(),
                 source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
                 imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
+                tbar: [],
             });
+            function updateLayout(){
+                viewsize = {
+                    width:  Ext.lib.Dom.getViewWidth(),
+                    height: Ext.lib.Dom.getViewHeight()
+                };
+                mainpanel.setHeight( viewsize.height );
+                mainpanel.setWidth(  viewsize.width  );
+            }
+            updateLayout();
+            Ext.EventManager.onWindowResize(updateLayout);
         } );
     </script>
 {% endblock %}
