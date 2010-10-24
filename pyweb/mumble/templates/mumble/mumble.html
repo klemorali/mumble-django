@@ -14,21 +14,21 @@
             background: transparent url({{ MUMBLE_MEDIA_PREFIX }}img/tab-scroller-menu.gif) no-repeat 0 0;
         }
     </style>
-    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
-    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/api.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/choicescombo.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/{{ RegForm|lower }}.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/forms/mumbleform.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/TabScrollerMenu.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/banviewer.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
-    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
+    <script src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
+    <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/api.js"></script>
+    <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/choicescombo.js"></script>
+    <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/{{ RegForm|lower }}.js"></script>
+    <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/mumbleform.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/TabScrollerMenu.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/banviewer.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
+    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
     <script type="text/javascript">
         Ext.onReady( function(){
             Ext.QuickTips.init();
@@ -48,14 +48,14 @@
                     {
                         xtype: 'buttonIframeWindow',
                         text:  gettext('Edit Translation'),
-                        url: '{% url rosetta-home %}',
+                        url: '{% url rosetta-home %}'
                     },
                     {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  gettext('Administration'),
-                        url: '{% url admin:mumble_mumble_change MumbleServer.id %}',
+                        url: '{% url admin:mumble_mumble_change MumbleServer.id %}'
                     },
                     {% endif %}
                     {% if user.is_authenticated %}
@@ -65,7 +65,7 @@
                         {
                             xtype: 'buttonIframeWindow',
                             text:  gettext('Register'),
-                            url: '{% url registration.views.register %}',
+                            url: '{% url registration.views.register %}'
                         },
                         {% endif %}
                         new Ext.ux.ButtonLogin()
@@ -105,22 +105,22 @@
                     plugins: [ new Ext.ux.TabScrollerMenu() ],
                     items: [{
                         title: gettext("Server info"),
-                        html:  renderserverinfos( {{ ServerDict|safe }} ),
-                    },
-                    {% if user.is_authenticated %}
+                        html:  renderserverinfos( {{ ServerDict|safe }} )
+                    }
+                    {% if user.is_authenticated %},
                         {
                             title: gettext("Registration"),
                             xtype: "{{ RegForm|lower }}",
                             pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
                             labelWidth: 150,
-                            baseParams: {serverid: {{MumbleServer.id}} },
+                            baseParams: {serverid: {{MumbleServer.id}} }
                         },
                         {% if IsAdmin %}
                             {
                                 title: gettext("Administration"),
                                 pk:    {{ MumbleServer.id }},
                                 labelWidth: 150,
-                                xtype: 'mumbleform',
+                                xtype: 'mumbleform'
                             },
                         {% endif %}
                         {% if MumbleAccount %}
@@ -136,13 +136,13 @@
                                         height: 200,
                                         title: gettext("Texture"),
                                         html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
-                                          "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}"),
+                                          "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}")
                                     }, {
                                         flex: 1,
                                         height: 200,
                                         title: gettext("Gravatar"),
-                                        html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}"),
-                                    }],
+                                        html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}")
+                                    }]
                                 }, {
                                     region: "center",
                                     xtype: "form",
@@ -152,12 +152,12 @@
                                     items: [{
                                         name:       "usegravatar",
                                         fieldLabel: gettext("Use Gravatar"),
-                                        xtype:      "checkbox",
+                                        xtype:      "checkbox"
                                     }, {
                                         name:       "texturefile",
                                         fieldLabel: gettext("Upload Avatar"),
                                         xtype:      "textfield",
-                                        inputType:  "file",
+                                        inputType:  "file"
                                     }],
                                     buttons: [{
                                         text:   gettext('Submit'),
@@ -172,9 +172,9 @@
                                                         );
                                                     }
                                                 });
-                                            },
-                                    }],
-                                }],
+                                            }
+                                    }]
+                                }]
                             },
                         {% endif %}
                         {% if IsAdmin %}
@@ -190,8 +190,8 @@
                             }
                         {% endif %}
                     {% endif %}
-                    ],
-                }],
+                    ]
+                }]
             });
             function updateLayout(){
                 viewsize = {
