@@ -635,7 +635,7 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
 
     @protectDjangoErrPage
     def getUptime(self, srvid):
-        return 0
+        return None
 
 
 class MumbleCtlIce_122(MumbleCtlIce_120):
@@ -652,7 +652,7 @@ class MumbleCtlIce_122(MumbleCtlIce_120):
 
     @protectDjangoErrPage
     def getUptime(self, srvid):
-        return self._getIceServerObject(srvid).getUptime()
+        return None #self._getIceServerObject(srvid).getUptime()
 
 
 class MumbleCtlIce_123(MumbleCtlIce_120):
