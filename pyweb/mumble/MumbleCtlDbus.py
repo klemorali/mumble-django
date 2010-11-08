@@ -330,7 +330,7 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         return self._getDbusServerObject(srvid).sendMessageChannel( dbus.UInt32(channelid), tree, message )
 
     def getUptime( self, srvid):
-        return 0
+        return None
 
     @staticmethod
     def convertDbusTypeToNative(data):

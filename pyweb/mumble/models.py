@@ -303,8 +303,13 @@ class Mumble( models.Model ):
                              doc="False if a password is needed to join this server." )
     uptime       = property( lambda self: self.ctl.getUptime(self.srvid),
                              doc="Number of seconds this instance has been running." )
-    upsince      = property( lambda self: datetime.datetime.fromtimestamp( float( time() - self.uptime ) ),
-                             doc="Datetime since when the server is running." )
+
+    @property
+    def upsince(self):
+        """Datetime since when the server is running."""
+        if self.uptime is not None:
+            return datetime.datetime.fromtimestamp( float( time() - self.uptime ) )
+        return None
 
     is_server  = True
     is_channel = False
