@@ -312,6 +312,12 @@ class MumbleCtlDbus_118(MumbleCtlBase):
     def removeChannel( self, srvid, channelid ):
         return self._getDbusServerObject(srvid).removeChannel( channelid )
 
+    def getLog( self, srvid, first=0, last=100 ):
+        return []
+
+    def getBans( self, srvid ):
+        return self._getDbusServerObject(srvid).getBans()
+
     def renameChannel( self, srvid, channelid, name, description ):
         srv = self._getDbusServerObject(srvid)
         state = srv.getChannelState(channelid)
