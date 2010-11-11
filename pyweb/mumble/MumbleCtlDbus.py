@@ -306,6 +306,10 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         (session, ismute, isdeaf, suppressed, selfMute, selfDeaf, channel) = srv.getPlayerState(dbus.UInt32(sessionid))
         srv.setPlayerState((session, ismute, deaf, suppressed, selfMute, selfDeaf, channel))
 
+    def kickUser(self, srvid, sessionid, reason):
+        srv = self._getDbusServerObject(srvid)
+        srv.kickPlayer(dbus.Int32(sessionid), reason )
+
     def addChannel( self, srvid, name, parentid ):
         return self._getDbusServerObject(srvid).addChannel( name, parentid )
 
