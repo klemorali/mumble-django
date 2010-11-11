@@ -482,6 +482,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
         srv.setState(state)
 
     @protectDjangoErrPage
+    def kickUser(self, srvid, userid, reason=""):
+        return self._getIceServerObject(srvid).kickPlayer( userid, reason.encode("UTF-8") )
+
+    @protectDjangoErrPage
     def sendMessage(self, srvid, sessionid, message):
         return self._getIceServerObject(srvid).sendMessage( sessionid, message.encode( "UTF-8" ) )
 
