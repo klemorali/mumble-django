@@ -224,6 +224,7 @@ class MumbleUserForm( ModelForm ):
         return True
 
     def EXT_validate( self, request ):
+        self.instance.owner = request.user
         if "serverid" in request.POST:
             try:
                 self.server = Mumble.objects.get( id=int(request.POST['serverid']) )
