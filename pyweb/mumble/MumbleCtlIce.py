@@ -431,6 +431,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
         return None
 
     @protectDjangoErrPage
+    def getBans( self, srvid ):
+        return self._getIceServerObject(srvid).getBans()
+
+    @protectDjangoErrPage
     def getLog( self, srvid, first=0, last=100 ):
         return self._getIceServerObject(srvid).getLog( first, last )
 
