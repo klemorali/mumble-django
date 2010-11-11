@@ -324,7 +324,7 @@ class MumbleCtlIce_118(MumbleCtlBase):
     @protectDjangoErrPage
     def setRegistration(self, srvid, mumbleid, name, email, password):
         import Murmur
-        user = Murmur.Player()
+        user = Murmur.RegisteredPlayer()
         user.playerid = mumbleid
         user.name     = name.encode( "UTF-8" )
         user.email    = email.encode( "UTF-8" )
