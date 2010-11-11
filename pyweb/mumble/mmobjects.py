@@ -306,7 +306,7 @@ class mmPlayer( object ):
         pldata = self.player_obj.__dict__.copy()
 
         if authed:
-            if "ipaddress" in self.player_obj:
+            if "ipaddress" in pldata:
                 pldata["x_addrstring"] = self.ipaddress
         elif "address" in pldata:
             del pldata["address"]
