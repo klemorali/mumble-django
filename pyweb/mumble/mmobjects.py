@@ -308,7 +308,7 @@ class mmPlayer( object ):
         if authed:
             if "ipaddress" in self.player_obj:
                 pldata["x_addrstring"] = self.ipaddress
-        else:
+        elif "address" in pldata:
             del pldata["address"]
 
         if self.channel.server.hasUserTexture(self.userid):
