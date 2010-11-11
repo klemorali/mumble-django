@@ -105,7 +105,13 @@
                     plugins: [ new Ext.ux.TabScrollerMenu() ],
                     items: [{
                         title: gettext("Server info"),
-                        html:  renderserverinfos( {{ ServerDict|safe }} )
+                        {% if QRAvailable %}
+                            html:  ('<img src="{% url mumble.views.qrcode MumbleServer.id %}" ' +
+                                    'style="float: right" alt="QR Code for embedded view"/>' +
+                                    renderserverinfos( {{ ServerDict|safe }} ))
+                        {% else %}
+                            html:  renderserverinfos( {{ ServerDict|safe }} )
+                        {% endif %}
                     }
                     {% if user.is_authenticated %},
                         {

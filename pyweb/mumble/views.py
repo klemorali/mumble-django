@@ -168,12 +168,20 @@ def show( request, server ):
         regformname = "MumbleUserForm"
         EXT_FORMS_PROVIDER.register_form( MumbleUserForm )
 
+    try:
+        import qrencode
+    except ImportError:
+        qravail = False
+    else:
+        qravail = True
+
     return render_to_response( 'mumble/mumble.html', {
             'MumbleServer': srv,
             'ServerDict':   simplejson.dumps(serverinfo(request, server)),
             'RegForm':      regformname,
             'MumbleActive': True,
             'MumbleAccount':user,
+            'QRAvailable':  qravail,
             'IsAdmin':      isAdmin,
         }, context_instance = RequestContext(request) )
 
@@ -226,6 +234,24 @@ def showTexture( request, server, userid ):
     except ValueError:
         raise Http404()
     else:
+        buf = StringIO()
+        img.save( buf, "PNG" )
+        return HttpResponse( buf.getvalue(), "image/png" )
+
+def qrcode( request, server ):
+    """ Show a QR Coce image that links to the server's embedded page. """
+
+    try:
+        import qrencode
+    except ImportError:
+        return HttpResponse( "oh noez" )
+    else:
+        from django.contrib.sites.models import Site
+        version, size, img = qrencode.encode_scaled( "%s://%s%s" % (
+            { False: "http", True: "https" }[request.is_secure()],
+            Site.objects.get_current().domain,
+            reverse( embed, kwargs={ 'server': server } )
+            ), 100 )
         buf = StringIO()
         img.save( buf, "PNG" )
         return HttpResponse( buf.getvalue(), "image/png" )
