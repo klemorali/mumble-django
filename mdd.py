@@ -7,6 +7,7 @@ import webbrowser, sys, os
 from django.core.servers.basehttp import run, AdminMediaHandler, WSGIServerException
 from django.core.handlers.wsgi import WSGIHandler
 from os.path import join, dirname, abspath, exists
+from optparse import OptionParser
 
 MUMBLE_DJANGO_ROOT = None
 
@@ -20,13 +21,18 @@ sys.path.append( join( MUMBLE_DJANGO_ROOT, 'pyweb' ) )
 
 if __name__ == "__main__":
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-    PORT = 8000
+    
+    # parse argv to options
+    OPARSER = OptionParser()
+    OPARSER.add_option("-i", "--ip", dest="addr", default="127.0.0.1")
+    OPARSER.add_option("-p", "--port", dest="port", type="int", default="8080")
+    (OPTIONS, ARGS) = OPARSER.parse_args()
 
     try:
         HANDLER = AdminMediaHandler(WSGIHandler(), '')
 
-        webbrowser.open('http://localhost:%s' % PORT)
-        run('0.0.0.0', PORT, HANDLER)
+        webbrowser.open('http://%s:%s' % (OPTIONS.addr, OPTIONS.port))
+        run(OPTIONS.addr, OPTIONS.port, HANDLER)
 
     except WSGIServerException, e:
         # Use helpful error messages instead of ugly tracebacks.
