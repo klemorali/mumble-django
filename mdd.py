@@ -1,7 +1,19 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-""" Run the embedded Django server and point the web browser to it. """
+"""
+ *  Copyright © 2010, Michael "Svedrin" Ziegler <diese-addy@funzt-halt.net>
+ *  Copyright © 2010, Harry "nodefab" Gabriel <rootdesign@gmail.com>
+ *
+ *  Mumble-Django is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This package is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+"""
 
 import webbrowser, sys, os
 from django.core.servers.basehttp import run, AdminMediaHandler, WSGIServerException
