@@ -251,7 +251,7 @@ def qrcode( request, server ):
             { False: "http", True: "https" }[request.is_secure()],
             Site.objects.get_current().domain,
             reverse( embed, kwargs={ 'server': server } )
-            ), 100 )
+            ), 82 )
         buf = StringIO()
         img.save( buf, "PNG" )
         return HttpResponse( buf.getvalue(), "image/png" )
