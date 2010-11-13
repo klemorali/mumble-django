@@ -15,12 +15,13 @@
 """
 
 from mercurial import hg
+from mercurial.discovery import findincoming
 
 def checkincoming( ui, repo, **kwargs ):
 	url = ui.config( 'paths', 'default' );
 	remote = hg.repository( ui, url );
 	
-	inc = repo.findincoming( remote );
+	inc = findincoming( repo, remote );
 	
 	if inc:
 		ui.status( 'Found %d incoming changesets.\n' % len(inc) );
