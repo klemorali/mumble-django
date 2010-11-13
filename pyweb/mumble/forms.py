@@ -361,6 +361,10 @@ class MumbleUserLinkForm( MumbleUserForm ):
         if 'linkacc' not in self.data or self.mumbleid <= 0:
             return self.cleaned_data
 
+        # Store the owner that EXT_validate told us
+        owner = self.instance.owner
+
+        # try to find a MumbleUser instance for the target user, if none create it
         try:
             m_user = MumbleUser.objects.get( server=self.server, mumbleid=self.mumbleid )
         except MumbleUser.DoesNotExist:
@@ -372,7 +376,10 @@ class MumbleUserLinkForm( MumbleUserForm ):
 
         if m_user.getAdmin() and not settings.ALLOW_ACCOUNT_LINKING_ADMINS:
             raise forms.ValidationError( _( "Linking Admin accounts is not allowed." ) )
+
+        # replace our instance with the mumbleuser found above and reinstate the owner
         self.instance = m_user
+        self.instance.owner = owner
 
         return self.cleaned_data
 
