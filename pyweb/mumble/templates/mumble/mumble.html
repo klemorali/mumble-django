@@ -37,7 +37,7 @@
                 height:   600,
                 layout:   "border",
                 tbar: [ {
-                    text: gettext("Back to the server list"),
+                    text: "{% trans "Back to the server list" %}",
                     xtype: "button",
                     handler: function(){
                         location.href = "{% url mumble.views.mumbles %}";
@@ -47,14 +47,14 @@
                     {% if user.is_staff and "rosetta" in INSTALLED_APPS %}
                     {
                         xtype: 'buttonIframeWindow',
-                        text:  gettext('Edit Translation'),
+                        text:  "{% trans 'Edit Translation' %}",
                         url: '{% url rosetta-home %}'
                     },
                     {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
-                        text:  gettext('Administration'),
+                        text:  "{% trans 'Administration' %}",
                         url: '{% url admin:mumble_mumble_change MumbleServer.id %}'
                     },
                     {% endif %}
@@ -64,7 +64,7 @@
                         {% if 'registration' in INSTALLED_APPS %}
                         {
                             xtype: 'buttonIframeWindow',
-                            text:  gettext('Register'),
+                            text:  "{% trans 'Register' %}",
                             url: '{% url registration.views.register %}'
                         },
                         {% endif %}
@@ -104,7 +104,7 @@
                     enableTabScroll: true,
                     plugins: [ new Ext.ux.TabScrollerMenu() ],
                     items: [{
-                        title: gettext("Server info"),
+                        title: "{% trans "Server info" %}",
                         {% if QRAvailable %}
                             html:  ('<img src="{% url mumble.views.qrcode MumbleServer.id %}" ' +
                                     'style="float: right" alt="QR Code for embedded view"/>' +
@@ -115,7 +115,7 @@
                     }
                     {% if user.is_authenticated %},
                         {
-                            title: gettext("Registration"),
+                            title: "{% trans "Registration" %}",
                             xtype: "{{ RegForm|lower }}",
                             pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
                             labelWidth: 150,
@@ -133,7 +133,7 @@
                                             id: 'content-anchor-tip',
                                             target: '{{ RegForm }}_submit',
                                             anchor: 'right',
-                                            html: gettext("Saved successfully."),
+                                            html: "{% trans "Saved successfully." %}",
                                             width: 150,
                                             autoHide: true,
                                             listeners: {
@@ -150,7 +150,7 @@
                         },
                         {% if IsAdmin %}
                             {
-                                title: gettext("Administration"),
+                                title: "{% trans "Administration" %}",
                                 pk:    {{ MumbleServer.id }},
                                 labelWidth: 150,
                                 xtype: 'mumbleform',
@@ -160,7 +160,7 @@
                                             id: 'content-anchor-tip',
                                             target: 'MumbleForm_submit',
                                             anchor: 'right',
-                                            html: gettext("Saved successfully."),
+                                            html: "{% trans "Saved successfully." %}",
                                             width: 150,
                                             autoHide: true,
                                             listeners: {
@@ -177,11 +177,9 @@
                         {% endif %}
                         {% if MumbleAccount %}
                             {
-                                title: gettext("User texture"),
+                                title: "{% trans "User texture" %}",
                                 {% if MumbleServer|mmversion_eq:"1.2.2" %}
-                                    html: gettext(
-                                        'Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is disabled.'
-                                        )
+                                    html: "{% trans 'Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is disabled.' %}"
                                 {% else %}
                                     layout: "border",
                                     items: [{
@@ -191,13 +189,13 @@
                                         items: [{
                                             flex: 1,
                                             height: 200,
-                                            title: gettext("Texture"),
+                                            title: "{% trans "Texture" %}",
                                             html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
                                               "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.mumbleid %}")
                                         }, {
                                             flex: 1,
                                             height: 200,
-                                            title: gettext("Gravatar"),
+                                            title: "{% trans "Gravatar" %}",
                                             html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}")
                                         }]
                                     }, {
@@ -208,16 +206,16 @@
                                         url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
                                         items: [{
                                             name:       "usegravatar",
-                                            fieldLabel: gettext("Use Gravatar"),
+                                            fieldLabel: "{% trans "Use Gravatar" %}",
                                             xtype:      "checkbox"
                                         }, {
                                             name:       "texturefile",
-                                            fieldLabel: gettext("Upload Avatar"),
+                                            fieldLabel: "{% trans "Upload Avatar" %}",
                                             xtype:      "textfield",
                                             inputType:  "file"
                                         }],
                                         buttons: [{
-                                            text:   gettext('Submit'),
+                                            text:   "{% trans 'Submit' %}",
                                             handler: function(){
                                                 this.ownerCt.ownerCt.getForm().submit({
                                                     success: function(form, action){
