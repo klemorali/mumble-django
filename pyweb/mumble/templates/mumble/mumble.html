@@ -117,6 +117,7 @@
                         {
                             title: "{% trans "Registration" %}",
                             xtype: "{{ RegForm|lower }}",
+                            submitButtonText: "{% trans 'Submit' %}",
                             pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
                             labelWidth: 150,
                             baseParams: {serverid: {{MumbleServer.id}} },
@@ -154,6 +155,7 @@
                                 pk:    {{ MumbleServer.id }},
                                 labelWidth: 150,
                                 xtype: 'mumbleform',
+                                submitButtonText: "{% trans 'Submit' %}",
                                 listeners: {
                                     submitSuccess: function( form, action ){
                                         form.savetip = new Ext.ToolTip({
