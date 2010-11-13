@@ -8,7 +8,7 @@ function renderserverinfos( server ){
     if( server.url ){
         buf.push( String.format( '{0}: <a href="{1}">{1}</a>', gettext("Website"), server.url ) );
     }
-    buf.push( interpolate( "This server is running Murmur version %s.", [server.prettyversion] ) );
+    buf.push( interpolate( gettext("This server is running Murmur version %s."), [server.prettyversion] ) );
     buf.push( interpolate(
         ngettext( "Currently, %s user is registered.", "Currently, %s users are registered.", server.users_regged ),
         [server.users_regged] ) );
@@ -19,7 +19,7 @@ function renderserverinfos( server ){
         ngettext( "Currently, there is %s channel.", "Currently, there are %s channels.", server.channel_cnt ),
         [server.channel_cnt] ) );
     if( server.uptime ){
-        buf.push( interpolate( "This server is running since %s.", [server.upsince] ) );
+        buf.push( interpolate( gettext("This server is running since %s."), [server.upsince] ) );
     }
     buf.push( String.format( '<a href="{0}">{1}</a>', server.minurl, gettext( "Switch to minimal view" ) ) );
 
