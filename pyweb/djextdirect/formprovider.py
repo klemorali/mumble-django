@@ -35,6 +35,22 @@ Ext.namespace('Ext.ux');
 Ext.ux.%(clsname)s = function( config ){
     Ext.apply( this, config );
 
+    Ext.applyIf( this, {
+        defaults: { "anchor": "-20px" },
+        paramsAsHash: true,
+        baseParams: {},
+        autoScroll: true,
+        submitButtonText: "Submit"
+        } );
+    Ext.applyIf( this, {
+        buttons: [{
+                text:    this.submitButtonText,
+                handler: this.submit,
+                id:      '%(clsname)s_submit',
+                scope:   this
+            }]
+        });
+
     var defaultconf = %(defaultconf)s;
 
     Ext.applyIf( this, defaultconf );
@@ -276,16 +292,6 @@ class FormProvider(Provider):
             'defaultconf':  '{'
                 'items:'    + simplejson.dumps(items, indent=4) + ','
                 'fileUpload: ' + simplejson.dumps(hasfiles) + ','
-                'defaults: { "anchor": "-20px" },'
-                'paramsAsHash: true,'
-                'baseParams: {},'
-                'autoScroll: true,'
-                """buttons: [{
-                        text:    "Submit",
-                        handler: this.submit,
-                        id:      '"""+clsname+"""_submit',
-                        scope:   this
-                    }]"""
                 '}',
             'apiconf': ('{'
                 'load:  '  + ("XD_%s.get"     % clsname) + ","
