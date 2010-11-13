@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-04 20:58+0200\n"
-"PO-Revision-Date: 2010-08-04 23:35\n"
+"POT-Creation-Date: 2010-11-13 16:26+0100\n"
+"PO-Revision-Date: 2010-11-13 16:26\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,97 +68,84 @@ msgstr "Nein"
 msgid "Public"
 msgstr "Öffentlich"
 
-#: admin.py:140 models.py:686
+#: admin.py:140 models.py:743
 msgid "Admin on root channel"
 msgstr "Admin im Wurzelkanal"
 
-#: forms.py:112
+#: forms.py:111
 msgid "Password required to join. Leave empty for public servers."
-msgstr ""
-"Passwort was zum Verbinden benötigt wird. Lasse es leer, wenn der Server "
-"öffentlich sein soll."
+msgstr "Passwort das zum Verbinden benötigt wird. Lasse es leer, wenn der Server öffentlich sein soll."
 
-#: forms.py:115
-msgid "If on, IP adresses of the clients are not logged."
-msgstr ""
-"Wenn das an ist werden IP-Adressen der Clients nicht ins Log geschrieben."
+#: forms.py:121
+msgid "Remember the channel users were in when they quit, and automatically move them to that channel when they join."
+msgstr "Speichert den Kanal in dem jemand zuletzt war als er den Server verlassen hat, und verschiebt sie wieder dorthin wenn sie wiederkommen."
 
-#: forms.py:174
+#: forms.py:177
 #, python-format
-msgid ""
-"Port number %(portno)d is not within the allowed range %(minrange)d - "
-"%(maxrange)d"
+msgid "Port number %(portno)d is not within the allowed range %(minrange)d - %(maxrange)d"
 msgstr "Portnummer %(portno)d liegt nicht in %(minrange)d - %(maxrange)d"
 
-#: forms.py:184
+#: forms.py:187
 msgid "Default config"
 msgstr "Standard-Einstellungen"
 
-#: forms.py:198 templates/mumble/offline.html:12
+#: forms.py:201 templates/mumble/list.html:83 templates/mumble/offline.html:12
 msgid "This server is currently offline."
 msgstr "Dieser Server ist im Moment nicht erreichbar."
 
-#: forms.py:207
+#: forms.py:209
 msgid "Password"
 msgstr "Passwort"
 
-#: forms.py:244
+#: forms.py:247
 msgid "That name is forbidden by the server."
 msgstr "Dieser Name wird vom Server nicht erlaubt."
 
-#: forms.py:247 models.py:638
+#: forms.py:250
 msgid "Another player already registered that name."
 msgstr "Ein anderer Spieler hat sich unter diesem Namen bereits registriert."
 
-#: forms.py:255 forms.py:377 models.py:640
+#: forms.py:258 forms.py:397
 msgid "Cannot register player without a password!"
 msgstr "Kann Account nicht ohne Passwort registrieren!"
 
-#: forms.py:267 models.py:206
+#: forms.py:276 models.py:206
 msgid "Server Password"
 msgstr "Serverpasswort"
 
-#: forms.py:268
-msgid ""
-"This server is private and protected mode is active. Please enter the server "
-"password."
-msgstr ""
-"Dieser Server ist privat und der Registrierungsschutz ist aktiv. Bitte gib "
-"das Serverpasswort ein."
+#: forms.py:277
+msgid "This server is private and protected mode is active. Please enter the server password."
+msgstr "Dieser Server ist privat und der Registrierungsschutz ist aktiv. Bitte gib das Serverpasswort ein."
 
-#: forms.py:284 forms.py:344
+#: forms.py:293 forms.py:355
 msgid "The password you entered is incorrect."
 msgstr "Das eingegebene Passwort ist falsch"
 
-#: forms.py:299
+#: forms.py:310
 msgid "Link account"
 msgstr "Accounts verknüpfen"
 
-#: forms.py:300
-msgid ""
-"The account already exists and belongs to me, just link it instead of "
-"creating."
-msgstr ""
-"Dieser Account existiert bereits und gehört mir. Verknüpfe die Konten nur, "
-"anstatt ein neues zu erstellen."
+#: forms.py:311
+msgid "The account already exists and belongs to me, just link it instead of creating."
+msgstr "Dieser Account existiert bereits und gehört mir. Verknüpfe die Konten nur, anstatt ein neues zu erstellen."
 
-#: forms.py:325
+#: forms.py:336
 msgid "No such user found."
 msgstr "Benutzer nicht gefunden."
 
-#: forms.py:360
+#: forms.py:375
 msgid "That account belongs to someone else."
 msgstr "Dieser Account gehört jemand anderem."
 
-#: forms.py:363
+#: forms.py:378
 msgid "Linking Admin accounts is not allowed."
 msgstr "Admin-Accounts zu verknüpfen ist nicht erlaubt."
 
-#: forms.py:392
+#: forms.py:412
 msgid "Use my Gravatar as my Texture"
 msgstr "Gravatar als Textur verwenden"
 
-#: forms.py:393
+#: forms.py:413
 msgid "User Texture"
 msgstr "Benutzertextur"
 
@@ -167,12 +154,8 @@ msgid "DBus or ICE base"
 msgstr "DBus- oder ICE-String"
 
 #: models.py:70
-msgid ""
-"Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 "
-"-p 6502' for Ice."
-msgstr ""
-"Beispiele: 'net.sourceforge.mumble.murmur' für DBus oder 'Meta:tcp -h "
-"127.0.0.1 -p 6502' für Ice."
+msgid "Examples: 'net.sourceforge.mumble.murmur' for DBus or 'Meta:tcp -h 127.0.0.1 -p 6502' for Ice."
+msgstr "Beispiele: 'net.sourceforge.mumble.murmur' für DBus oder 'Meta:tcp -h 127.0.0.1 -p 6502' für Ice."
 
 #: models.py:71
 msgid "Ice Secret"
@@ -182,7 +165,7 @@ msgstr "Ice-Passwort"
 msgid "Mumble Server"
 msgstr "Mumble-Server"
 
-#: models.py:75
+#: models.py:75 templates/mumble/list.html:22
 msgid "Mumble Servers"
 msgstr "Mumble-Server"
 
@@ -195,36 +178,20 @@ msgid "Server ID"
 msgstr "Server-ID"
 
 #: models.py:190
-msgid ""
-"Hostname or IP address to bind to. You should use a hostname here, because "
-"it will appear on the global server list."
-msgstr ""
-"Hostname oder IP-Adresse unter der der Server erreichbar sein soll. Du "
-"solltest einen Hostname verwenden, da dieses Feld in der globalen "
-"Serverliste erscheint."
+msgid "Hostname or IP address to bind to. You should use a hostname here, because it will appear on the global server list."
+msgstr "Hostname oder IP-Adresse unter der der Server erreichbar sein soll. Du solltest einen Hostname verwenden, da dieses Feld in der globalen Serverliste erscheint."
 
 #: models.py:193
 msgid "Port number to bind to. Leave empty to auto assign one."
-msgstr ""
-"Portnummer auf die gebunden werden soll. Lasse das Feld leer um automatisch "
-"eine zuzuweisen."
+msgstr "Portnummer auf die gebunden werden soll. Lasse das Feld leer um automatisch eine zuzuweisen."
 
 #: models.py:194
 msgid "Server Display Address"
 msgstr "Angezeigte Adresse"
 
 #: models.py:195
-msgid ""
-"This field is only relevant if you are located behind a NAT, and names the "
-"Hostname or IP address to use in the Channel Viewer and for the global "
-"server list registration. If not given, the addr and port fields are used. "
-"If display and bind ports are equal, you can omit it here."
-msgstr ""
-"Dieses Feld ist nur relevant wenn der Server hinter einem NAT steht, und "
-"gibt dann den Hostnamen oder die IP-Adresse die im Channel-Viewer und für "
-"die Registrierung in der Serverliste benutzt werden soll. Ist dieses Feld "
-"leer, werden die Angaben Addresse und Port stattdessen benutzt. Wenn die "
-"Ports identisch sind, kannst du den Port hier weglassen."
+msgid "This field is only relevant if you are located behind a NAT, and names the Hostname or IP address to use in the Channel Viewer and for the global server list registration. If not given, the addr and port fields are used. If display and bind ports are equal, you can omit it here."
+msgstr "Dieses Feld ist nur relevant wenn der Server hinter einem NAT steht, und gibt dann den Hostnamen oder die IP-Adresse die im Channel-Viewer und für die Registrierung in der Serverliste benutzt werden soll. Ist dieses Feld leer, werden die Angaben Addresse und Port stattdessen benutzt. Wenn die Ports identisch sind, kannst du den Port hier weglassen."
 
 #: models.py:201
 msgid "Superuser Password"
@@ -279,79 +246,154 @@ msgid "Users per channel"
 msgstr "Max. Benutzer pro Kanal"
 
 #: models.py:218
-msgid "IP Obfuscation"
-msgstr "IP-Adressen anonymisieren"
-
-#: models.py:219
 msgid "Require Certificate"
 msgstr "SSL-Zertifikat erzwingen"
 
-#: models.py:220
+#: models.py:219
 msgid "Allow HTML to be used in messages"
 msgstr "Erlaube HTML in Nachrichten"
 
-#: models.py:221
+#: models.py:220
 msgid "Publish this server via Bonjour"
 msgstr "Server via Bonjour bekannt machen"
 
-#: models.py:222
+#: models.py:221
 msgid "Boot Server when Murmur starts"
 msgstr "Instanz starten wenn Murmur startet"
 
-#: models.py:240 models.py:241
+#: models.py:222
+msgid "Remember last channel"
+msgstr "Letzten Kanal merken"
+
+#: models.py:245 models.py:246
 msgid "Boot Server"
 msgstr "Server starten"
 
-#: models.py:250 models.py:596
+#: models.py:255 models.py:653
 msgid "Server instance"
 msgstr "Serverinstanz"
 
-#: models.py:251
+#: models.py:256
 msgid "Server instances"
 msgstr "Serverinstanzen"
 
-#: models.py:550 models.py:762
+#: models.py:563 models.py:817
 msgid "This field must not be updated once the record has been saved."
-msgstr ""
-"Dieses Feld darf nicht mehr verändert werden, nachdem der Eintrag zum ersten "
-"Mal gespeichert wurde."
+msgstr "Dieses Feld darf nicht mehr verändert werden, nachdem der Eintrag zum ersten Mal gespeichert wurde."
 
-#: models.py:593
+#: models.py:650
 msgid "Mumble player_id"
 msgstr "ID des Spielers in Murmur"
 
-#: models.py:594
+#: models.py:651
 msgid "User name and Login"
 msgstr "Benutzername und Login"
 
-#: models.py:595
+#: models.py:652
 msgid "Login password"
 msgstr "Passwort"
 
-#: models.py:597
+#: models.py:654
 msgid "Account owner"
 msgstr "Accountbesitzer"
 
-#: models.py:599
+#: models.py:656
 msgid "The user's comment."
 msgstr "Benutzer-Kommentar"
 
-#: models.py:600
+#: models.py:657
 msgid "The user's hash."
 msgstr "Signatur des Zertifikats"
 
-#: models.py:609
+#: models.py:666
 msgid "User account"
 msgstr "Benutzerkonto"
 
-#: models.py:610
+#: models.py:667
 msgid "User accounts"
 msgstr "Benutzerkonten"
 
-#: models.py:617
+#: models.py:674
 #, python-format
 msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
 msgstr "Benutzeraccount %(mu)s auf %(srv)s mit Besitzer %(du)s"
+
+#: templates/mumble/list.html:27 templates/mumble/mumble.html:50
+msgid "Edit Translation"
+msgstr "Übersetzung bearbeiten"
+
+#: templates/mumble/list.html:34 templates/mumble/mumble.html:57
+#: templates/mumble/mumble.html.py:153
+msgid "Administration"
+msgstr "Administration"
+
+#: templates/mumble/list.html:46
+msgid "Available servers"
+msgstr "Verfügbare Server"
+
+#: templates/mumble/list.html:68
+msgid "Name"
+msgstr "Name"
+
+#: templates/mumble/list.html:91
+msgid "Server overview"
+msgstr "Server-Übersicht"
+
+#: templates/mumble/list.html:93
+msgid "Loading..."
+msgstr "Lade..."
+
+#: templates/mumble/list.html:95
+msgid "Server details"
+msgstr "Server-Details"
+
+#: templates/mumble/mumble.html:40
+msgid "Back to the server list"
+msgstr "Zurück zur Serverliste"
+
+#: templates/mumble/mumble.html:67
+msgid "Register"
+msgstr "Registrieren"
+
+#: templates/mumble/mumble.html:107
+msgid "Server info"
+msgstr "Server-Infos"
+
+#: templates/mumble/mumble.html:118
+msgid "Registration"
+msgstr "Registrierung"
+
+#: templates/mumble/mumble.html:136 templates/mumble/mumble.html.py:163
+msgid "Saved successfully."
+msgstr "Erfolgreich gespeichert."
+
+#: templates/mumble/mumble.html:180
+msgid "User texture"
+msgstr "Benutzertextur"
+
+#: templates/mumble/mumble.html:182
+msgid "Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is disabled."
+msgstr "Entschuldigung, aufgrund eines Fehlers in Murmur 1.2.2 ist die Texturanzeige sowie das Hochladen für diese Version deaktiviert."
+
+#: templates/mumble/mumble.html:192
+msgid "Texture"
+msgstr "Textur"
+
+#: templates/mumble/mumble.html:198
+msgid "Gravatar"
+msgstr "Gravatar"
+
+#: templates/mumble/mumble.html:209
+msgid "Use Gravatar"
+msgstr "Benutze Gravatar"
+
+#: templates/mumble/mumble.html:213
+msgid "Upload Avatar"
+msgstr "Lade Avatar hoch"
+
+#: templates/mumble/mumble.html:218
+msgid "Submit"
+msgstr "Speichern"
 
 #: templates/mumble/player.html:9
 msgid "Authenticated"
@@ -381,25 +423,27 @@ msgstr "Selbst taubgestellt"
 msgid "has a User Comment set"
 msgstr "hat einen Benutzer-Kommentar gesetzt"
 
+#~ msgid "If on, IP adresses of the clients are not logged."
+#~ msgstr "Wenn das an ist werden IP-Adressen der Clients nicht ins Log geschrieben."
+
+#~ msgid "IP Obfuscation"
+#~ msgstr "IP-Adressen anonymisieren"
+
 #~ msgid "No server instances have been configured yet."
 #~ msgstr "Es sind noch keine Serverinstanzen konfiguriert."
 
 #~ msgid ""
 #~ "\n"
 #~ "      <b>Hint:</b><br />\n"
-#~ "      This area is used to display additional information for each "
-#~ "channel and player, but requires JavaScript to be\n"
-#~ "      displayed correctly. You will not see the detail pages, but you can "
-#~ "use all links and forms\n"
+#~ "      This area is used to display additional information for each channel and player, but requires JavaScript to be\n"
+#~ "      displayed correctly. You will not see the detail pages, but you can use all links and forms\n"
 #~ "      that are displayed.\n"
 #~ "      "
 #~ msgstr ""
 #~ "\n"
 #~ "      <b>Hinweis:</b><br />\n"
-#~ "      Dieser Bereich wird genutzt um zusätzliche Informationen über jeden "
-#~ "Channel und Spieler anzuzeigen, erfordert aber JavaScript um\n"
-#~ "      richtig angezeigt zu werden. Du wirst zwar die Detailseiten nicht "
-#~ "sehen, kannst aber alle sichtbaren Formulare benutzen.\n"
+#~ "      Dieser Bereich wird genutzt um zusätzliche Informationen über jeden Channel und Spieler anzuzeigen, erfordert aber JavaScript um\n"
+#~ "      richtig angezeigt zu werden. Du wirst zwar die Detailseiten nicht sehen, kannst aber alle sichtbaren Formulare benutzen.\n"
 #~ "      "
 
 #~ msgid "Website"
@@ -422,34 +466,20 @@ msgstr "hat einen Benutzer-Kommentar gesetzt"
 
 #~ msgid ""
 #~ "\n"
-#~ "      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be "
-#~ "able to register an account on this Mumble server.</p>\n"
+#~ "      <p>You need to be <a href=\"%(login_url)s\">logged in</a> to be able to register an account on this Mumble server.</p>\n"
 #~ "    "
 #~ msgstr ""
 #~ "\n"
-#~ "      <p>Du musst <a href=\"%(login_url)s\">eingeloggt</a> sein um auf "
-#~ "diesem Mumble-Server einen Account registrieren zu können.</p>\n"
+#~ "      <p>Du musst <a href=\"%(login_url)s\">eingeloggt</a> sein um auf diesem Mumble-Server einen Account registrieren zu können.</p>\n"
 #~ "    "
 
 #~ msgid ""
 #~ "\n"
-#~ "          Sorry, due to a bug in Murmur 1.2.2, displaying and setting the "
-#~ "Texture is disabled.\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "Entschuldigung, aufgrund eines Fehlers in Murmur 1.2.2 ist die "
-#~ "Texturanzeige sowie das Hochladen für diese Version deaktiviert."
-
-#~ msgid ""
-#~ "\n"
-#~ "            You can upload an image that you would like to use as your "
-#~ "user texture here.\n"
+#~ "            You can upload an image that you would like to use as your user texture here.\n"
 #~ "          "
 #~ msgstr ""
 #~ "\n"
-#~ "Du kannst hier ein Bild hochladen, das als deine Benutzertextur angezeigt "
-#~ "werden soll."
+#~ "Du kannst hier ein Bild hochladen, das als deine Benutzertextur angezeigt werden soll."
 
 #~ msgid "Your current texture is"
 #~ msgstr "Deine momentane Textur ist diese"
@@ -459,15 +489,12 @@ msgstr "hat einen Benutzer-Kommentar gesetzt"
 
 #~ msgid ""
 #~ "\n"
-#~ "              Hint: The texture image <b>needs</b> to be 600x60 in size. "
-#~ "If you upload an image with\n"
+#~ "              Hint: The texture image <b>needs</b> to be 600x60 in size. If you upload an image with\n"
 #~ "              a different size, it will be resized accordingly.<br />\n"
 #~ "            "
 #~ msgstr ""
 #~ "\n"
-#~ "Hinweis: Das Texturbild <b>muss</b> die Größe 600x60 haben. Wenn du ein "
-#~ "Bild mit einer anderen Größe hochlädst, wird es automatisch zurecht "
-#~ "geschnitten.<br />"
+#~ "Hinweis: Das Texturbild <b>muss</b> die Größe 600x60 haben. Wenn du ein Bild mit einer anderen Größe hochlädst, wird es automatisch zurecht geschnitten.<br />"
 
 #~ msgid "Server administration"
 #~ msgstr "Server-Administration"
@@ -486,9 +513,6 @@ msgstr "hat einen Benutzer-Kommentar gesetzt"
 
 #~ msgid "User"
 #~ msgstr "Benutzer"
-
-#~ msgid "Full Name"
-#~ msgstr "Vollständiger Name"
 
 #~ msgid "Sign-up date"
 #~ msgstr "Datum der Anmeldung"
@@ -519,15 +543,6 @@ msgstr "hat einen Benutzer-Kommentar gesetzt"
 
 #~ msgid "Delete"
 #~ msgstr "Löschen"
-
-#~ msgid "Server Info"
-#~ msgstr "Server-Infos"
-
-#~ msgid "Registration"
-#~ msgstr "Registrierung"
-
-#~ msgid "Administration"
-#~ msgstr "Administration"
 
 #~ msgid "User List"
 #~ msgstr "Benutzerliste"
