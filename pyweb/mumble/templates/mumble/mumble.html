@@ -193,7 +193,7 @@
                                             height: 200,
                                             title: gettext("Texture"),
                                             html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
-                                              "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}")
+                                              "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.mumbleid %}")
                                         }, {
                                             flex: 1,
                                             height: 200,
@@ -224,7 +224,7 @@
                                                         var now = new Date();
                                                         var img = Ext.fly("img_avatar");
                                                         img.dom.src = String.format("{0}?_dc={1}",
-                                                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}",
+                                                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.mumbleid %}",
                                                             now.getTime()
                                                             );
                                                         }
