@@ -19,19 +19,19 @@
                 renderTo: document.body,
                 height:   600,
                 layout:   "border",
-                title:    gettext("Mumble Servers"),
+                title:    "{% trans 'Mumble Servers' %}",
                 buttons: [
                     {% if user.is_staff and "rosetta" in INSTALLED_APPS %}
                     {
                         xtype: 'buttonIframeWindow',
-                        text:  gettext('Edit Translation'),
+                        text:  "{% trans 'Edit Translation' %}",
                         url: '{% url rosetta-home %}',
                     },
                     {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
-                        text:  gettext('Administration'),
+                        text:  "{% trans 'Administration' %}",
                         url: '{% url admin:app_list "mumble" %}',
                     },
                     {% endif %}
@@ -43,7 +43,7 @@
                 ],
                 items: [{
                     xtype:  "listview",
-                    title:  gettext("Available servers"),
+                    title:  "{% trans 'Available servers' %}",
                     ref:    "serverlist",
                     region: "west",
                     width: 350,
@@ -65,7 +65,7 @@
                             }
                         }),
                     columns: [{
-                        header: gettext("Name"),
+                        header: "{% trans 'Name' %}",
                         dataIndex: "name",
                         width: 1.
                     }],
@@ -80,7 +80,7 @@
                                 if( response.result.booted )
                                     var info = renderserverinfos(response.result);
                                 else
-                                    var info = gettext("This server is currently offline.");
+                                    var info = "{% trans 'This server is currently offline.' %}";
                                 mainpanel.descrippanel.el.dom.children[1].children[0].innerHTML = info;
                             });
                         }
@@ -88,11 +88,11 @@
                 }, {
                     xtype:  "panel",
                     region: "center",
-                    title:  gettext("Server overview"),
+                    title:  "{% trans 'Server overview' %}",
                     ref:    'descrippanel',
-                    html:   gettext("Loading..."),
+                    html:   "{% trans 'Loading...' %}",
                     buttons: [{
-                        text: gettext('Server details'),
+                        text: "{% trans 'Server details' %}",
                         handler: function( button, state ){
                             location.href = mainpanel.selectedServer.detailsurl;
                         }
