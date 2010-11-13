@@ -154,6 +154,8 @@ Ext.ux.MumbleChannelViewer = function( config ){
 
     this.autoRefreshId = 0;
     this.setAutoRefresh();
+    if( this.refreshInterval == 0 )
+        this.refresh();
 }
 
 Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
