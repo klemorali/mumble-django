@@ -282,12 +282,14 @@ class MumbleCtlDbus_118(MumbleCtlBase):
         if not player:
             return -2
 
+        plid = player.values()[0].userid
+
         ok = MumbleCtlDbus_118.convertDbusTypeToNative(
-            self._getDbusServerObject(srvid).verifyPassword( dbus.Int32( player[0].userid ), password )
+            self._getDbusServerObject(srvid).verifyPassword( dbus.Int32( plid ), password )
             )
 
         if ok:
-            return player[0].userid
+            return plid
         else:
             return -1
 
