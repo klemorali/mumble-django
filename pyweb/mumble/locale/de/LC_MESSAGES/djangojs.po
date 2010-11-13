@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-22 15:10+0200\n"
-"PO-Revision-Date: 2010-10-10 17:19\n"
+"POT-Creation-Date: 2010-11-13 16:25+0100\n"
+"PO-Revision-Date: 2010-11-13 16:19\n"
 "Last-Translator:   <diese-addy@funzt-halt.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.5.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
@@ -31,11 +31,12 @@ msgstr "Zeitstempel"
 msgid "Duration"
 msgstr "Dauer"
 
-#: media/js/banviewer.js:24 media/js/channelviewerplugins.js:80
+#: media/js/banviewer.js:24 media/js/channelviewerplugins.js:126
 msgid "Reason"
 msgstr "Begründung"
 
 #: media/js/banviewer.js:30 media/js/logviewer.js:45
+#: media/js/usereditor.js:136
 msgid "Refresh"
 msgstr "Aktualisieren"
 
@@ -43,114 +44,157 @@ msgstr "Aktualisieren"
 msgid "Open in new window"
 msgstr "In neuem Fenster öffnen"
 
-#: media/js/channelviewer.js:6
+#: media/js/channelviewer.js:23
 msgid "undefined"
 msgstr ""
 
-#: media/js/channelviewer.js:73
+#: media/js/channelviewer.js:91
 msgid "Channel Viewer"
 msgstr "Serveransicht"
 
-#: media/js/channelviewer.js:79 media/js/channelviewerplugins.js:57
+#: media/js/channelviewer.js:97 media/js/channelviewerplugins.js:51
 msgid "Loading..."
 msgstr "Lade..."
 
-#: media/js/channelviewer.js:96
+#: media/js/channelviewer.js:114
 msgid "Auto-Refresh"
 msgstr "Auto-Aktualisieren"
 
-#: media/js/channelviewerplugins.js:22
-msgid "User details"
-msgstr "Benutzerdetails"
-
-#: media/js/channelviewerplugins.js:31
+#: media/js/channelviewerplugins.js:25
 msgid "User comment"
 msgstr "Kommentar"
 
-#: media/js/channelviewerplugins.js:40
+#: media/js/channelviewerplugins.js:34
 msgid "Avatar"
 msgstr "Avatar"
 
-#: media/js/channelviewerplugins.js:52
+#: media/js/channelviewerplugins.js:46
 msgid "This user does not have an Avatar."
 msgstr "Dieser Benutzer hat keinen Avatar."
 
-#: media/js/channelviewerplugins.js:59
+#: media/js/channelviewerplugins.js:53
 msgid "Infos"
 msgstr "Infos"
 
+#: media/js/channelviewerplugins.js:58
+msgid "Authenticated"
+msgstr "Authentifiziert"
+
 #: media/js/channelviewerplugins.js:64
+msgid "Self-Deafened"
+msgstr "Taubgestellt (selbst)"
+
+#: media/js/channelviewerplugins.js:70
+msgid "Deafened"
+msgstr "Taubgestellt"
+
+#: media/js/channelviewerplugins.js:76
+msgid "Self-Muted"
+msgstr "Stummgestellt (selbst)"
+
+#: media/js/channelviewerplugins.js:82
+msgid "Muted"
+msgstr "Stummgestellt"
+
+#: media/js/channelviewerplugins.js:88
+msgid "Suppressed"
+msgstr "Unterdrückt"
+
+#: media/js/channelviewerplugins.js:94
+msgid "Priority Speaker"
+msgstr "Priorisierter Sprecher"
+
+#: media/js/channelviewerplugins.js:100
+msgid "Recording"
+msgstr "Nimmt auf"
+
+#: media/js/channelviewerplugins.js:110
 msgid "Administration"
 msgstr "Administration"
 
-#: media/js/channelviewerplugins.js:67
+#: media/js/channelviewerplugins.js:113
 msgid "Ban"
 msgstr "Bann"
 
-#: media/js/channelviewerplugins.js:71
+#: media/js/channelviewerplugins.js:117
 msgid "Ban duration"
 msgstr "Banndauer"
 
-#: media/js/channelviewerplugins.js:76
+#: media/js/channelviewerplugins.js:122
 msgid ""
 "Only if banning. Set to 0 for permanent ban, any other value for the ban "
 "duration in seconds."
-msgstr "Nur wenn du bannen möchtest. 0 für einen permanenten Bann, eine andre Zahl ist die Dauer in Sekunden."
+msgstr ""
+"Nur wenn du bannen möchtest. 0 für einen permanenten Bann, eine andre Zahl "
+"ist die Dauer in Sekunden."
 
-#: media/js/channelviewerplugins.js:85
+#: media/js/channelviewerplugins.js:131
 msgid "Kick"
 msgstr "Kicken"
 
-#: media/js/channelviewerplugins.js:93
+#: media/js/channelviewerplugins.js:139
 msgid "Mute"
 msgstr "Stummstellen"
 
-#: media/js/channelviewerplugins.js:103
+#: media/js/channelviewerplugins.js:149
 msgid "Deafen"
 msgstr "Taubstellen"
 
-#: media/js/channelviewerplugins.js:156
-msgid "Channel details"
-msgstr "Kanaldetails"
+#: media/js/channelviewerplugins.js:164 media/js/channelviewerplugins.js:174
+#: media/js/channelviewerplugins.js:287 media/js/channelviewerplugins.js:301
+msgid "Send message"
+msgstr "Nachricht senden"
 
-#: media/js/channelviewerplugins.js:164
+#: media/js/channelviewerplugins.js:184
+msgid "User details"
+msgstr "Benutzerdetails"
+
+#: media/js/channelviewerplugins.js:234
 msgid "Channel description"
 msgstr "Beschreibung"
 
-#: media/js/channelviewerplugins.js:180
+#: media/js/channelviewerplugins.js:253
 msgid "Add subchannel..."
 msgstr "Unterkanal hinzufügen..."
 
-#: media/js/channelviewerplugins.js:183
+#: media/js/channelviewerplugins.js:256
 msgid "Name"
 msgstr "Name"
 
-#: media/js/channelviewerplugins.js:183
+#: media/js/channelviewerplugins.js:256
 msgid "Please enter the channel name:"
 msgstr "Bitte gib den Kanalnamen ein:"
 
-#: media/js/channelviewerplugins.js:191
+#: media/js/channelviewerplugins.js:264
 msgid "Submit name/description"
 msgstr "Name/Beschreibung setzen"
 
-#: media/js/channelviewerplugins.js:197
+#: media/js/channelviewerplugins.js:270
 msgid "Delete channel"
 msgstr "Kanal löschen"
 
-#: media/js/channelviewerplugins.js:201
+#: media/js/channelviewerplugins.js:274
 msgid "Confirm channel deletion"
 msgstr "Löschen des Kanals bestätigen"
 
-#: media/js/channelviewerplugins.js:202
+#: media/js/channelviewerplugins.js:275
 #, perl-format
 msgid "Are you sure you want to delete channel %s?"
 msgstr "Bist du sicher dass du den Kanal %s löschen möchtest?"
+
+#: media/js/channelviewerplugins.js:291
+msgid "Cascade to subchannels"
+msgstr "Auch an Unterkanäle"
+
+#: media/js/channelviewerplugins.js:311
+msgid "Channel details"
+msgstr "Kanaldetails"
 
 #: media/js/loginout_buttons.js:7
 msgid "Logout"
 msgstr "Abmelden"
 
-#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:51
+#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:33
 msgid "Login error"
 msgstr "Fehler bei der Anmeldung"
 
@@ -158,23 +202,23 @@ msgstr "Fehler bei der Anmeldung"
 msgid "Unable to log out."
 msgstr "Abmelden ist fehlgeschlagen."
 
-#: media/js/loginout_buttons.js:26 media/js/loginout_buttons.js.py:31
-msgid "Login"
-msgstr "Anmeldung"
-
-#: media/js/loginout_buttons.js:41
-msgid "Submit"
-msgstr "Absenden"
-
-#: media/js/loginout_buttons.js:52
+#: media/js/loginout_buttons.js:34
 msgid "Unable to log in."
 msgstr "Anmelden ist fehlgeschlagen."
 
-#: media/js/loginout_buttons.js:63
+#: media/js/loginout_buttons.js:43 media/js/loginout_buttons.js.py:48
+msgid "Login"
+msgstr "Anmeldung"
+
+#: media/js/loginout_buttons.js:59
+msgid "Submit"
+msgstr "Absenden"
+
+#: media/js/loginout_buttons.js:66
 msgid "User name"
 msgstr "Benutzername"
 
-#: media/js/loginout_buttons.js:67
+#: media/js/loginout_buttons.js:77
 msgid "Password"
 msgstr "Passwort"
 
@@ -206,6 +250,11 @@ msgstr "Server-Adresse"
 msgid "Website"
 msgstr "Webseite"
 
+#: media/js/rendermumbleserver.js:12
+#, perl-format
+msgid "This server is running Murmur version %s."
+msgstr "Dieser Server läuft auf Murmur-Version %s."
+
 #: media/js/rendermumbleserver.js:14
 #, perl-format
 msgid "Currently, %s user is registered."
@@ -227,6 +276,11 @@ msgid_plural "Currently, there are %s channels."
 msgstr[0] "Momentan gibt es %s Kanal."
 msgstr[1] "Momentan gibt es %s Kanäle."
 
+#: media/js/rendermumbleserver.js:23
+#, perl-format
+msgid "This server is running since %s."
+msgstr "Dieser Server läuft seit %s."
+
 #: media/js/rendermumbleserver.js:25
 msgid "Switch to minimal view"
 msgstr "Auf die Minimalansicht umschalten"
@@ -235,51 +289,51 @@ msgstr "Auf die Minimalansicht umschalten"
 msgid "Welcome message"
 msgstr "Willkommensnachricht"
 
-#: media/js/usereditor.js:27
+#: media/js/usereditor.js:28
 msgid "Admin on root channel"
 msgstr "Admin im Wurzelkanal"
 
-#: media/js/usereditor.js:33
+#: media/js/usereditor.js:34
 msgid "Delete"
 msgstr "Löschen"
 
-#: media/js/usereditor.js:53
+#: media/js/usereditor.js:54
 msgid "User List"
 msgstr "Benutzerliste"
 
-#: media/js/usereditor.js:58
+#: media/js/usereditor.js:59
 msgid "name"
 msgstr "Name"
 
-#: media/js/usereditor.js:65
+#: media/js/usereditor.js:66
 msgid "Account owner"
 msgstr "Accountbesitzer"
 
-#: media/js/usereditor.js:77
+#: media/js/usereditor.js:78
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: media/js/usereditor.js:91
+#: media/js/usereditor.js:92
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: media/js/usereditor.js:95
+#: media/js/usereditor.js:96
 msgid "New User"
 msgstr "Neuer Benutzer"
 
-#: media/js/usereditor.js:103
+#: media/js/usereditor.js:104
 msgid "Save"
 msgstr "Speichern"
 
-#: media/js/usereditor.js:126
+#: media/js/usereditor.js:127
 msgid "Submit error"
 msgstr "Fehler beim Absenden"
 
-#: media/js/usereditor.js:127
+#: media/js/usereditor.js:128
 msgid "Unable to save."
 msgstr "Konnte nicht speichern."
 
-#: media/js/usereditor.js:135
+#: media/js/usereditor.js:143
 msgid "Resync with Murmur"
 msgstr "Aktualisieren (von Murmur)"
 
