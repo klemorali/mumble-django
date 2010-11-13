@@ -50,6 +50,18 @@ Ext.ux.%(clsname)s = function( config ){
     if( typeof config.pk != "undefined" ){
         this.load();
     }
+
+    this.form.addEvents({
+        'submitSuccess': true,
+        'submitFailure': true
+    });
+
+    if( typeof config.listeners != "undefined" ){
+        if( typeof config.listeners.submitSuccess != "undefined" )
+            this.form.on("submitSuccess", config.listeners.submitSuccess);
+        if( typeof config.listeners.submitFailure != "undefined" )
+            this.form.on("submitFailure", config.listeners.submitFailure);
+    }
 }
 
 Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {
@@ -64,6 +76,10 @@ Ext.extend( Ext.ux.%(clsname)s, Ext.form.FormPanel, {
                     typeof action.result.errors['__all__'] != 'undefined' ){
                     Ext.Msg.alert( "Error", action.result.errors['__all__'] );
                 }
+                form.fireEvent("submitFailure", form, action);
+            },
+            success: function( form, action ){
+                form.fireEvent("submitSuccess", form, action);
             }
         });
     },
@@ -267,6 +283,7 @@ class FormProvider(Provider):
                 """buttons: [{
                         text:    "Submit",
                         handler: this.submit,
+                        id:      '"""+clsname+"""_submit',
                         scope:   this
                     }]"""
                 '}',

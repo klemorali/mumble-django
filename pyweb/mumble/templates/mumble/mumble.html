@@ -119,68 +119,120 @@
                             xtype: "{{ RegForm|lower }}",
                             pk: {% if MumbleAccount %}{{ MumbleAccount.id }}{% else %}-1{% endif %},
                             labelWidth: 150,
-                            baseParams: {serverid: {{MumbleServer.id}} }
+                            baseParams: {serverid: {{MumbleServer.id}} },
+                            {% if not MumbleAccount %}
+                                listeners: {
+                                    submitSuccess: function( form, action ){
+                                        window.location.reload();
+                                    }
+                                }
+                            {% else %}
+                                listeners: {
+                                    submitSuccess: function( form, action ){
+                                        form.savetip = new Ext.ToolTip({
+                                            id: 'content-anchor-tip',
+                                            target: '{{ RegForm }}_submit',
+                                            anchor: 'right',
+                                            html: gettext("Saved successfully."),
+                                            width: 150,
+                                            autoHide: true,
+                                            listeners: {
+                                                hide: function( ttip ){
+                                                    form.savetip.destroy();
+                                                    form.savetip = null;
+                                                }
+                                            }
+                                        });
+                                        form.savetip.show();
+                                    }
+                                }
+                            {% endif %}
                         },
                         {% if IsAdmin %}
                             {
                                 title: gettext("Administration"),
                                 pk:    {{ MumbleServer.id }},
                                 labelWidth: 150,
-                                xtype: 'mumbleform'
+                                xtype: 'mumbleform',
+                                listeners: {
+                                    submitSuccess: function( form, action ){
+                                        form.savetip = new Ext.ToolTip({
+                                            id: 'content-anchor-tip',
+                                            target: 'MumbleForm_submit',
+                                            anchor: 'right',
+                                            html: gettext("Saved successfully."),
+                                            width: 150,
+                                            autoHide: true,
+                                            listeners: {
+                                                hide: function( ttip ){
+                                                    form.savetip.destroy();
+                                                    form.savetip = null;
+                                                }
+                                            }
+                                        });
+                                        form.savetip.show();
+                                    }
+                                }
                             },
                         {% endif %}
                         {% if MumbleAccount %}
                             {
                                 title: gettext("User texture"),
-                                layout: "border",
-                                items: [{
-                                    region: "north",
-                                    layout: "hbox",
-                                    height: 200,
+                                {% if MumbleServer|mmversion_eq:"1.2.2" %}
+                                    html: gettext(
+                                        'Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is disabled.'
+                                        )
+                                {% else %}
+                                    layout: "border",
                                     items: [{
-                                        flex: 1,
+                                        region: "north",
+                                        layout: "hbox",
                                         height: 200,
-                                        title: gettext("Texture"),
-                                        html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
-                                          "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}")
+                                        items: [{
+                                            flex: 1,
+                                            height: 200,
+                                            title: gettext("Texture"),
+                                            html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
+                                              "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}")
+                                        }, {
+                                            flex: 1,
+                                            height: 200,
+                                            title: gettext("Gravatar"),
+                                            html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}")
+                                        }]
                                     }, {
-                                        flex: 1,
-                                        height: 200,
-                                        title: gettext("Gravatar"),
-                                        html: String.format('<img src="{0}" alt="grAvatar" />', "{{ MumbleAccount.gravatar }}")
-                                    }]
-                                }, {
-                                    region: "center",
-                                    xtype: "form",
-                                    labelWidth: 150,
-                                    fileUpload: true,
-                                    url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
-                                    items: [{
-                                        name:       "usegravatar",
-                                        fieldLabel: gettext("Use Gravatar"),
-                                        xtype:      "checkbox"
-                                    }, {
-                                        name:       "texturefile",
-                                        fieldLabel: gettext("Upload Avatar"),
-                                        xtype:      "textfield",
-                                        inputType:  "file"
-                                    }],
-                                    buttons: [{
-                                        text:   gettext('Submit'),
-                                        handler: function(){
-                                            this.ownerCt.ownerCt.getForm().submit({
-                                                success: function(form, action){
-                                                    var now = new Date();
-                                                    var img = Ext.fly("img_avatar");
-                                                    img.dom.src = String.format("{0}?_dc={1}",
-                                                        "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}",
-                                                        now.getTime()
-                                                        );
-                                                    }
-                                                });
+                                        region: "center",
+                                        xtype: "form",
+                                        labelWidth: 150,
+                                        fileUpload: true,
+                                        url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                                        items: [{
+                                            name:       "usegravatar",
+                                            fieldLabel: gettext("Use Gravatar"),
+                                            xtype:      "checkbox"
+                                        }, {
+                                            name:       "texturefile",
+                                            fieldLabel: gettext("Upload Avatar"),
+                                            xtype:      "textfield",
+                                            inputType:  "file"
+                                        }],
+                                        buttons: [{
+                                            text:   gettext('Submit'),
+                                            handler: function(){
+                                                this.ownerCt.ownerCt.getForm().submit({
+                                                    success: function(form, action){
+                                                        var now = new Date();
+                                                        var img = Ext.fly("img_avatar");
+                                                        img.dom.src = String.format("{0}?_dc={1}",
+                                                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.id %}",
+                                                            now.getTime()
+                                                            );
+                                                        }
+                                                    });
                                             }
+                                        }]
                                     }]
-                                }]
+                                {% endif %}
                             },
                         {% endif %}
                         {% if IsAdmin %}
