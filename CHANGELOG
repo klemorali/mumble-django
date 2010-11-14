@@ -2,6 +2,16 @@
 Mumble-Django changelog
 =======================
 
+Version 2.4, 14 Nov 2010:
+------------------------------
+* Add a view for a page that displays the channel viewer only.
+* Add a QRCode that links to aforementioned channel viewer page.
+* Fix Internet Explorer incompatibilites.
+* Various Bug fixes with different Murmur versions and access methods.
+* Fix the channel viewer not being loaded if refreshInterval is 0.
+* Add confirmation messages when forms have been saved.
+* Language update.
+
 Version 2.4beta3, 10 Oct 2010:
 ------------------------------
 * Add channel functions: add/delete/change name, description.
