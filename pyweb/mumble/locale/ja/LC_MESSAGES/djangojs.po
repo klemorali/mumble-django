@@ -9,32 +9,31 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-13 16:25+0100\n"
-"PO-Revision-Date: 2010-08-11 17:56\n"
-"Last-Translator:   <nocontents@gmail.com>\n"
+"PO-Revision-Date: 2010-11-14 00:58\n"
+"Last-Translator:   <noname@withgod.jp>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.5.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: media/js/banviewer.js:11
 msgid "Bans"
-msgstr ""
+msgstr "バン"
 
 #: media/js/banviewer.js:13 media/js/logviewer.js:13
 msgid "Timestamp"
 msgstr "日付"
 
 #: media/js/banviewer.js:20
-#, fuzzy
 msgid "Duration"
 msgstr "Registrierung"
 
 #: media/js/banviewer.js:24 media/js/channelviewerplugins.js:126
 msgid "Reason"
-msgstr ""
+msgstr "理由"
 
 #: media/js/banviewer.js:30 media/js/logviewer.js:45
 #: media/js/usereditor.js:136
@@ -47,7 +46,7 @@ msgstr "新規ウィンドウで開く"
 
 #: media/js/channelviewer.js:23
 msgid "undefined"
-msgstr ""
+msgstr "未定義"
 
 #: media/js/channelviewer.js:91
 msgid "Channel Viewer"
@@ -62,22 +61,20 @@ msgid "Auto-Refresh"
 msgstr "自動更新"
 
 #: media/js/channelviewerplugins.js:25
-#, fuzzy
 msgid "User comment"
-msgstr "ユーザ名"
+msgstr "ユーザコメント"
 
 #: media/js/channelviewerplugins.js:34
-#, fuzzy
 msgid "Avatar"
-msgstr "Gravatar"
+msgstr "アバター"
 
 #: media/js/channelviewerplugins.js:46
 msgid "This user does not have an Avatar."
-msgstr ""
+msgstr "このユーザはアバターを登録していません"
 
 #: media/js/channelviewerplugins.js:53
 msgid "Infos"
-msgstr ""
+msgstr "情報"
 
 #: media/js/channelviewerplugins.js:58
 msgid "Authenticated"
@@ -85,19 +82,19 @@ msgstr ""
 
 #: media/js/channelviewerplugins.js:64
 msgid "Self-Deafened"
-msgstr ""
+msgstr "自分で聴取禁止"
 
 #: media/js/channelviewerplugins.js:70
 msgid "Deafened"
-msgstr ""
+msgstr "聴取禁止"
 
 #: media/js/channelviewerplugins.js:76
 msgid "Self-Muted"
-msgstr ""
+msgstr "自分で発言禁止"
 
 #: media/js/channelviewerplugins.js:82
 msgid "Muted"
-msgstr ""
+msgstr "発言禁止"
 
 #: media/js/channelviewerplugins.js:88
 msgid "Suppressed"
@@ -105,11 +102,11 @@ msgstr ""
 
 #: media/js/channelviewerplugins.js:94
 msgid "Priority Speaker"
-msgstr ""
+msgstr "発言順序"
 
 #: media/js/channelviewerplugins.js:100
 msgid "Recording"
-msgstr ""
+msgstr "記録"
 
 #: media/js/channelviewerplugins.js:110
 msgid "Administration"
@@ -117,25 +114,25 @@ msgstr "Administration"
 
 #: media/js/channelviewerplugins.js:113
 msgid "Ban"
-msgstr ""
+msgstr "バン"
 
 #: media/js/channelviewerplugins.js:117
 msgid "Ban duration"
-msgstr ""
+msgstr "バン期間"
 
 #: media/js/channelviewerplugins.js:122
 msgid ""
 "Only if banning. Set to 0 for permanent ban, any other value for the ban "
 "duration in seconds."
-msgstr ""
+msgstr "バンする秒数を指定してください、0を指定した場合はずっとバンされます"
 
 #: media/js/channelviewerplugins.js:131
 msgid "Kick"
-msgstr ""
+msgstr "キック"
 
 #: media/js/channelviewerplugins.js:139
 msgid "Mute"
-msgstr ""
+msgstr "ミュート"
 
 #: media/js/channelviewerplugins.js:149
 msgid "Deafen"
@@ -143,58 +140,53 @@ msgstr ""
 
 #: media/js/channelviewerplugins.js:164 media/js/channelviewerplugins.js:174
 #: media/js/channelviewerplugins.js:287 media/js/channelviewerplugins.js:301
-#, fuzzy
 msgid "Send message"
-msgstr "ログメッセージ"
+msgstr "メッセージ送信"
 
 #: media/js/channelviewerplugins.js:184
-#, fuzzy
 msgid "User details"
-msgstr "ユーザリスト"
+msgstr "ユーザ詳細"
 
 #: media/js/channelviewerplugins.js:234
-#, fuzzy
 msgid "Channel description"
-msgstr "チャンネルビューワ"
+msgstr "チャンネル説明"
 
 #: media/js/channelviewerplugins.js:253
 msgid "Add subchannel..."
-msgstr ""
+msgstr "サブチャンネルを追加"
 
 #: media/js/channelviewerplugins.js:256
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: media/js/channelviewerplugins.js:256
 msgid "Please enter the channel name:"
-msgstr ""
+msgstr "チャンネル名を入力してください"
 
 #: media/js/channelviewerplugins.js:264
 msgid "Submit name/description"
-msgstr ""
+msgstr "名前/詳細 を送信"
 
 #: media/js/channelviewerplugins.js:270
-#, fuzzy
 msgid "Delete channel"
-msgstr "削除"
+msgstr "チャンネル削除"
 
 #: media/js/channelviewerplugins.js:274
 msgid "Confirm channel deletion"
-msgstr ""
+msgstr "削除確認"
 
 #: media/js/channelviewerplugins.js:275
 #, perl-format
 msgid "Are you sure you want to delete channel %s?"
-msgstr ""
+msgstr "本当に %s チャンネルを削除して良いですか？"
 
 #: media/js/channelviewerplugins.js:291
 msgid "Cascade to subchannels"
 msgstr ""
 
 #: media/js/channelviewerplugins.js:311
-#, fuzzy
 msgid "Channel details"
-msgstr "チャンネルビューワ"
+msgstr "シャンネル詳細"
 
 #: media/js/loginout_buttons.js:7
 msgid "Logout"
@@ -259,7 +251,7 @@ msgstr "ウェブサイト"
 #: media/js/rendermumbleserver.js:12
 #, perl-format
 msgid "This server is running Murmur version %s."
-msgstr ""
+msgstr "本サーバは Murmur バージョン %s で稼動しています"
 
 #: media/js/rendermumbleserver.js:14
 #, perl-format
@@ -285,7 +277,7 @@ msgstr[1] "現在 %s チャンネル登録されています"
 #: media/js/rendermumbleserver.js:23
 #, perl-format
 msgid "This server is running since %s."
-msgstr ""
+msgstr "本サーバは %s から稼動しています"
 
 #: media/js/rendermumbleserver.js:25
 msgid "Switch to minimal view"

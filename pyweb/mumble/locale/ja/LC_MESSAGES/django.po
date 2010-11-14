@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: Mumble-Django v0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-13 16:26+0100\n"
-"PO-Revision-Date: 2010-08-11 17:57\n"
-"Last-Translator:   <nocontents@gmail.com>\n"
+"PO-Revision-Date: 2010-11-14 00:56\n"
+"Last-Translator:   <noname@withgod.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid ""
 "Remember the channel users were in when they quit, and automatically move "
 "them to that channel when they join."
-msgstr ""
+msgstr "本オプションを有効にすると、再接続時に切断したときのチャンネルに戻ります。"
 
 #: forms.py:177
 #, python-format
@@ -102,9 +102,8 @@ msgid "This server is currently offline."
 msgstr "このサーバーは現在停止中です。"
 
 #: forms.py:209
-#, fuzzy
 msgid "Password"
-msgstr "サーバパスワード"
+msgstr "パスワード"
 
 #: forms.py:247
 msgid "That name is forbidden by the server."
@@ -294,9 +293,8 @@ msgid "Boot Server when Murmur starts"
 msgstr "Murmur起動時にサーバを起動します"
 
 #: models.py:222
-#, fuzzy
 msgid "Remember last channel"
-msgstr "デフォルトチャンネル"
+msgstr "最後のチャンネルを覚える"
 
 #: models.py:245 models.py:246
 msgid "Boot Server"
@@ -352,9 +350,8 @@ msgid "Mumble user %(mu)s on %(srv)s owned by Django user %(du)s"
 msgstr "マンブルユーザ %(mu)s は %(srv)s のDjangoユーザ %(du)s です"
 
 #: templates/mumble/list.html:27 templates/mumble/mumble.html:50
-#, fuzzy
 msgid "Edit Translation"
-msgstr "管理"
+msgstr "翻訳を管理"
 
 #: templates/mumble/list.html:34 templates/mumble/mumble.html:57
 #: templates/mumble/mumble.html.py:153
@@ -362,40 +359,34 @@ msgid "Administration"
 msgstr "管理"
 
 #: templates/mumble/list.html:46
-#, fuzzy
 msgid "Available servers"
-msgstr "マンブルユーザID"
+msgstr "有効なサーバ"
 
 #: templates/mumble/list.html:68
-#, fuzzy
 msgid "Name"
 msgstr "名前"
 
 #: templates/mumble/list.html:91
-#, fuzzy
 msgid "Server overview"
-msgstr "サーババージョン"
+msgstr "サーバ概要"
 
 #: templates/mumble/list.html:93
 msgid "Loading..."
-msgstr ""
+msgstr "ローディング..."
 
 #: templates/mumble/list.html:95
-#, fuzzy
 msgid "Server details"
-msgstr "サーバアドレス"
+msgstr "サーバ詳細"
 
 #: templates/mumble/mumble.html:40
 msgid "Back to the server list"
-msgstr ""
+msgstr "サーバ一覧に戻る"
 
 #: templates/mumble/mumble.html:67
-#, fuzzy
 msgid "Register"
 msgstr "登録"
 
 #: templates/mumble/mumble.html:107
-#, fuzzy
 msgid "Server info"
 msgstr "サーバ情報"
 
@@ -405,42 +396,39 @@ msgstr "登録"
 
 #: templates/mumble/mumble.html:136 templates/mumble/mumble.html.py:163
 msgid "Saved successfully."
-msgstr ""
+msgstr "保存しました"
 
 #: templates/mumble/mumble.html:180
-#, fuzzy
 msgid "User texture"
 msgstr "ユーザ画像"
 
 #: templates/mumble/mumble.html:182
-#, fuzzy
 msgid ""
 "Sorry, due to a bug in Murmur 1.2.2, displaying and setting the Texture is "
 "disabled."
 msgstr ""
-"\n"
+"すいません\n"
 "1.2.2 ではユーザ画像の表示がバグってるため、ユーザ画像表示は無効です。"
 
 #: templates/mumble/mumble.html:192
-#, fuzzy
 msgid "Texture"
 msgstr "ユーザ画像"
 
 #: templates/mumble/mumble.html:198
 msgid "Gravatar"
-msgstr ""
+msgstr "Gravatar"
 
 #: templates/mumble/mumble.html:209
 msgid "Use Gravatar"
-msgstr ""
+msgstr "Gravatarを使う"
 
 #: templates/mumble/mumble.html:213
 msgid "Upload Avatar"
-msgstr ""
+msgstr "アバターを更新"
 
 #: templates/mumble/mumble.html:218
 msgid "Submit"
-msgstr ""
+msgstr "送信"
 
 #: templates/mumble/player.html:9
 msgid "Authenticated"
