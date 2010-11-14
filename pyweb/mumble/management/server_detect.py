@@ -52,8 +52,11 @@ def find_existing_instances( **kwargs ):
     triedEnviron = False
     online = False
     while not online:
+        env_icesecret = None
         if not triedEnviron and 'MURMUR_CONNSTR' in os.environ:
             dbusName = os.environ['MURMUR_CONNSTR']
+            if 'MURMUR_ICESECRET' in os.environ:
+                env_icesecret = os.environ['MURMUR_ICESECRET']
             triedEnviron = True
             if v > 1:
                 print "Trying environment setting", dbusName
@@ -80,7 +83,10 @@ def find_existing_instances( **kwargs ):
         elif dbusName == "2":
             dbusName = "Meta:tcp -h 127.0.0.1 -p 6502"
 
-        icesecret = getpass.getpass("Please enter the Ice secret (if any): ")
+        if env_icesecret is None:
+            icesecret = getpass.getpass("Please enter the Ice secret (if any): ")
+        else:
+            icesecret = env_icesecret
 
         try:
             ctl = MumbleCtlBase.newInstance( dbusName, settings.SLICE, icesecret )
