@@ -174,10 +174,7 @@ class Mumble( models.Model ):
         All configurable settings are represented by a field in this model. To change the
         settings, just update the appropriate field and call the save() method.
 
-        To set up a new server instance, instanciate this Model. The first field you should
-        define is the "dbus" field, which tells the connector subsystem how to connect to
-        the Murmurd master process. Set this to the appropriate DBus service name or the
-        Ice proxy string.
+        To set up a new server instance, instanciate and save this Model.
 
         When an instance of this model is deleted, the according server instance will be
         deleted as well.
