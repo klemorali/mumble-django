@@ -112,7 +112,8 @@ def find_existing_instances( **kwargs ):
         meta.save()
 
     for id in servIDs:
-        unseen_ids.remove(id)
+        if id in unseen_ids:
+            unseen_ids.remove(id)
         if v > 1:
             print "Checking Murmur instance with id %d." % id
         # first check that the server has not yet been inserted into the DB
