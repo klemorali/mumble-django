@@ -163,6 +163,7 @@ class MumbleUserAdmin(admin.ModelAdmin):
     list_display   = [ 'name', 'server', 'owner', 'mumbleid', 'get_acl_admin' ]
     list_filter    = [ 'server' ]
     search_fields  = [ 'owner__username', 'name' ]
+    actions        = [ 'set_texture_from_gravatar' ]
     ordering       = [ 'owner__username' ]
 
     form = MumbleUserAdminForm
@@ -174,6 +175,12 @@ class MumbleUserAdmin(admin.ModelAdmin):
 
     get_acl_admin.short_description = _('Admin on root channel')
     get_acl_admin.boolean = True
+
+    def set_texture_from_gravatar( self, request, queryset ):
+        for mu in queryset:
+            mm.setTextureFromGravatar()
+
+    set_texture_from_gravatar.short_description = _( "Set Gravatar as Texture" )
 
 
 admin.site.register( MumbleServer, MumbleServerAdmin )
