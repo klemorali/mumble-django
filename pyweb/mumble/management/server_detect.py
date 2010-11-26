@@ -20,7 +20,7 @@ import os, getpass
 from django.db      import DatabaseError
 from django.conf    import settings
 
-from mumble.models  import MumbleServer, Mumble
+from mumble.models  import MumbleServer, Mumble, signals
 from mumble.mctl    import MumbleCtlBase
 
 
@@ -101,6 +101,7 @@ def find_existing_instances( **kwargs ):
                 print "Successfully connected to Murmur via connection string %s, using %s." % ( dbusName, ctl.method )
 
     servIDs   = ctl.getAllServers()
+    unseen_ids = [rec["srvid"] for rec in Mumble.objects.values( "srvid" )]
 
     try:
         meta = MumbleServer.objects.get( dbus=dbusName )
@@ -111,6 +112,7 @@ def find_existing_instances( **kwargs ):
         meta.save()
 
     for id in servIDs:
+        unseen_ids.remove(id)
         if v > 1:
             print "Checking Murmur instance with id %d." % id
         # first check that the server has not yet been inserted into the DB
@@ -168,6 +170,16 @@ def find_existing_instances( **kwargs ):
             instance.readUsersFromMurmur( verbose=v )
         elif v:
             print "This server is not running, can't sync players."
+
+    signals.pre_delete.disconnect( Mumble.pre_delete_listener, sender=Mumble )
+
+    for srvid in unseen_ids:
+        mm = Mumble.objects.get( srvid=srvid )
+        if v:
+            print 'Found stale Mumble instance "%s".' % mm.name
+        mm.delete()
+
+    signals.pre_delete.connect( Mumble.pre_delete_listener, sender=Mumble )
 
     print "Successfully finished Servers and Players detection."
     print "To add more servers, run this command again."
