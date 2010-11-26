@@ -43,6 +43,7 @@ class MumbleServerAdmin(admin.ModelAdmin):
     get_murmur_version.short_description = _("Server version")
 
 
+
 class MumbleAdmin(admin.ModelAdmin):
     """ Specification for the "Server administration" admin section. """
 
@@ -51,6 +52,7 @@ class MumbleAdmin(admin.ModelAdmin):
     list_filter    = [ 'addr', 'server' ]
     search_fields  = [ 'name', 'addr', 'port' ]
     ordering       = [ 'name' ]
+    actions        = [ 'start', 'stop', 'restart', 'enable_autoboot', 'disable_autoboot' ]
     form           = MumbleAdminForm
 
     def get_murmur_online( self, obj ):
@@ -120,6 +122,39 @@ class MumbleAdmin(admin.ModelAdmin):
             return '-'
 
     get_is_public.short_description = _( 'Public' )
+
+    def start(self, request, queryset):
+        for mm in queryset:
+            mm.setBooted(True)
+
+    start.short_description = _( "Start server instance" )
+
+    def stop(self, request, queryset):
+        for mm in queryset:
+            mm.setBooted(False)
+
+    stop.short_description = _( "Stop server instance" )
+
+    def restart(self, request, queryset):
+        for mm in queryset:
+            mm.setBooted(False)
+            mm.setBooted(True)
+
+    restart.short_description = _( "Restart server instance" )
+
+    def enable_autoboot(self, request, queryset):
+        for mm in queryset:
+            mm.autoboot = True
+
+    enable_autoboot.short_description = _( "Enable autoboot" )
+
+    def disable_autoboot(self, request, queryset):
+        for mm in queryset:
+            mm.autoboot = False
+
+    disable_autoboot.short_description = _( "Disable autoboot" )
+
+
 
 
 class MumbleUserAdmin(admin.ModelAdmin):
