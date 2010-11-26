@@ -356,7 +356,7 @@ class Mumble( models.Model ):
             raise SystemError( "This murmur instance is not currently running, can't sync." )
 
         players = self.ctl.getRegisteredPlayers(self.srvid)
-        known_ids = [rec["mumbleid"]
+        unseen_ids = [rec["mumbleid"]
             for rec in MumbleUser.objects.filter( server=self ).values( "mumbleid" )
             ]
 
@@ -366,11 +366,11 @@ class Mumble( models.Model ):
             if playerdata.userid == 0: # Skip SuperUsers
                 continue
             if verbose > 1:
-                print "Checking Player with id %d." % playerdata.userid
+                print "Checking User with id %d." % playerdata.userid
 
-            if playerdata.userid not in known_ids:
+            if playerdata.userid not in unseen_ids:
                 if verbose:
-                    print 'Found new Player "%s".' % playerdata.name
+                    print 'Found new User "%s".' % playerdata.name
 
                 playerinstance = MumbleUser(
                     mumbleid = playerdata.userid,
@@ -382,12 +382,22 @@ class Mumble( models.Model ):
 
             else:
                 if verbose > 1:
-                    print "Player '%s' is already known." % playerdata.name
+                    print "User '%s' is already known." % playerdata.name
+                unseen_ids.remove(playerdata.userid)
                 playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid )
                 playerinstance.name = playerdata.name
 
             playerinstance.save( dontConfigureMurmur=True )
 
+        signals.pre_delete.disconnect( MumbleUser.pre_delete_listener, sender=MumbleUser )
+
+        for uid in unseen_ids:
+            mu = MumbleUser.objects.get( mumbleid=uid )
+            if verbose:
+                print 'Found stale MumbleUser "%s".' % mu.name
+            mu.delete()
+
+        signals.pre_delete.connect( MumbleUser.pre_delete_listener, sender=MumbleUser )
 
     def isUserAdmin( self, user ):
         """ Determine if the given user is an admin on this server. """
