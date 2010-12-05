@@ -37,7 +37,10 @@ def loadSlice( slicefile ):
     if hasattr( Ice, "getSliceDir" ):
         icepath = Ice.getSliceDir()
     else:
-        icepath = None
+        from django.conf import settings
+        icepath = settings.SLICEDIR
+        if not exists( join( icepath, "Ice", "SliceChecksumDict.ice" ) ):
+            icepath = None
 
     if not icepath:
         # last resort, let's hope to christ this works (won't for >=1.2.3)

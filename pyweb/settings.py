@@ -22,7 +22,15 @@
 ## The slice to use for communication over ZeroC Ice.          ##
 ## This must be set to the path to the Murmur.ice file that    ##
 ## resides in your Murmur directory.                           ##
+## Not used on recent Murmur versions, because the slice file  ##
+## can be retrieved from Murmur directly.                      ##
 SLICE = '/usr/share/slice/Murmur.ice'                          ##
+##                                                             ##
+## The include dir to pass to Ice. Set this to a path in which ##
+## $SLICEDIR/Ice/SliceChecksumDict.ice exists.                 ##
+## Not used on recent Ice versions, because the SLICEDIR can   ##
+## be retrieved from Ice directly.                             ##
+SLICEDIR = '/usr/share/slice'                                  ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
