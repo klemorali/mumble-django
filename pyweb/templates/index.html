@@ -11,8 +11,13 @@
     <link rel="stylesheet"    type="text/css"  href="{{ MUMBLE_MEDIA_PREFIX }}css/style.css"  />
     <link rel="shortcut icon" type="image/png" href="{{ MUMBLE_MEDIA_PREFIX }}img/mumble.16x16.png" />
 
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base-debug.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all-debug.js"></script>
+    {% if debug %}
+      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base-debug.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all-debug.js"></script>
+    {% else %}
+      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all.js"></script>
+    {% endif %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/checkcolumn.js"></script>
 
     {% block HeadTag %}

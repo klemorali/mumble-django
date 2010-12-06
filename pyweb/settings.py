@@ -16,6 +16,7 @@
  *  GNU General Public License for more details.
 """
 
+
 #################################################################
 #################################################################
 ##                                                             ##
@@ -70,6 +71,8 @@ ADMINS = (
 # Show debug information on errors?
 # If you want to file a bug report, please enable this option.
 DEBUG = True
+# These IPs will be delivered the debug templates if DEBUG == True.
+INTERNAL_IPS = ['127.0.0.1']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
