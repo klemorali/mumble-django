@@ -11,17 +11,28 @@ Ext.ux.BanViewerPanel = function( config ){
         colModel: new Ext.grid.ColumnModel([{
                 header: gettext('Timestamp'),
                 dataIndex: 'start',
-                width: 100,
+                width: 150,
                 renderer: function( value ){
                     return new Date(value*1000).format( "Y-m-d H:i:s" );
                 }
+            }, {
+                header: gettext('Address'),
+                width: 250,
+                dataIndex: 'addrstr',
+                renderer:  function( value, meta, record, rowIdx, colIdx, store ){
+                    return value + "/" + record.data['bits'];
+                }
+            }, {
+                header: gettext('User name'),
+                width: 150,
+                dataIndex: 'name'
             }, {
                 header: gettext('Duration'),
                 width: 100,
                 dataIndex: 'duration'
             }, {
                 header: gettext('Reason'),
-                width: 500,
+                width: 300,
                 dataIndex: 'reason'
             }]),
         bbar: [{
@@ -36,7 +47,7 @@ Ext.ux.BanViewerPanel = function( config ){
             directFn: Mumble.bans,
             paramOrder: ['server'],
             root: 'data',
-            fields: ['start', 'address', 'bits', 'duration', 'reason'],
+            fields: ['start', 'address', 'bits', 'duration', 'reason', 'addrstr', 'name'],
             autoLoad: true,
             remoteSort: false
             }),

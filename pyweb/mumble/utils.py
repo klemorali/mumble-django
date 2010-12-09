@@ -15,6 +15,19 @@
  *  GNU General Public License for more details.
 """
 
+import re
+
+def iptostring(addr):
+    """ Get the client's IPv4 or IPv6 address, in a pretty format. """
+    if max( addr[:10] ) == 0 and addr[10:12] == (255, 255):
+        return "%d.%d.%d.%d" % tuple( addr[12:] )
+    ip6addr = [(hi << 8 | lo) for (hi, lo) in zip(addr[0::2], addr[1::2])]
+    # colon-separated string:
+    ipstr = ':'.join([ ("%x" % part) for part in ip6addr ])
+    # 0:0:0 -> ::
+    return re.sub( "((^|:)(0:){2,})", '::', ipstr, 1 )
+
+
 class ObjectInfo( object ):
     """ Wraps arbitrary information to be easily accessed. """
 
