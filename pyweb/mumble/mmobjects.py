@@ -25,6 +25,7 @@ from django.contrib.sites.models import Site
 from django.utils.http import urlquote
 from django.conf import settings
 
+from mumble.utils import iptostring
 
 def cmp_channels( left, rite ):
     """ Compare two channels, first by position, and if that equals, by name. """
@@ -277,14 +278,7 @@ class mmPlayer( object ):
 
     def getIpAsString( self ):
         """ Get the client's IPv4 or IPv6 address, in a pretty format. """
-        addr = self.player_obj.address
-        if max( addr[:10] ) == 0 and addr[10:12] == (255, 255):
-            return "%d.%d.%d.%d" % tuple( addr[12:] )
-        ip6addr = [(hi << 8 | lo) for (hi, lo) in zip(addr[0::2], addr[1::2])]
-        # colon-separated string:
-        ipstr = ':'.join([ ("%x" % part) for part in ip6addr ])
-        # 0:0:0 -> ::
-        return re.sub( "((^|:)(0:){2,})", '::', ipstr, 1 )
+        return iptostring(self.player_obj.address)
 
     ipaddress = property( getIpAsString )
     fqdn      = property( lambda self: socket.getfqdn( self.ipaddress ),
@@ -305,11 +299,11 @@ class mmPlayer( object ):
     def asDict( self, authed=False ):
         pldata = self.player_obj.__dict__.copy()
 
-        if authed:
-            if "ipaddress" in pldata:
+        if "address" in pldata:
+            if authed:
                 pldata["x_addrstring"] = self.ipaddress
-        elif "address" in pldata:
-            del pldata["address"]
+            else:
+                del pldata["address"]
 
         if self.channel.server.hasUserTexture(self.userid):
             from views import showTexture

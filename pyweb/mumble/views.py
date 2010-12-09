@@ -36,6 +36,7 @@ from django.views.decorators.csrf   import csrf_exempt
 from models import Mumble, MumbleUser
 from forms  import MumbleForm, MumbleUserForm, MumbleUserPasswordForm
 from forms  import MumbleUserLinkForm, MumbleTextureForm, MumbleKickForm
+from utils  import iptostring
 
 from djextdirect.provider import Provider
 from djextdirect.views    import login, logout
@@ -280,13 +281,14 @@ def log( request, server, start, limit, filter ):
 
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def bans( request, server ):
-    """ Retrieve log messages. """
+    """ Retrieve bans. """
     srv = get_object_or_404( Mumble, id=int(server) )
     if not srv.isUserAdmin( request.user ):
         raise Exception( "Access denied" )
     return { 'data': [
             { 'start': ent.start, 'address': ent.address, 'bits': ent.bits,
-              'duration': ent.duration, 'reason': ent.reason }
+              'duration': ent.duration, 'reason': ent.reason, 'name': ent.name,
+              'addrstr': iptostring(ent.address) }
             for ent in srv.getBans()
         ], 'success': True }
 
