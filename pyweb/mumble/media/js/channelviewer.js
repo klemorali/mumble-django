@@ -194,6 +194,7 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                     icon: this.imageurl+'/mumble.16x16.png',
                     children: [],
                     chandata: respdata.root,
+                    uiProvider: Ext.ux.MumbleChannelNodeUI,
                     imageurl: this.imageurl
                 };
                 tree = this;
