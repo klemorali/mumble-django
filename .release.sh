@@ -55,7 +55,9 @@ echo "New version will be tagged ${VERSIONSTR}. If this is correct, hit enter to
 read
 
 hg commit "${BASEDIR}/CHANGELOG" -m "Releasing ${VERSIONSTR}."
-hg tag "${VERSIONSTR}"
+TIPREV=`hg id -i`
+hg tag -r "$TIPREV" "${VERSIONSTR}"
+hg tag -f -r "$TIPREV" "stable"
 hg push
 
 echo "You successfully released ${VERSIONSTR}!"
