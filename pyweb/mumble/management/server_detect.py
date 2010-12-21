@@ -62,8 +62,9 @@ def find_existing_instances( **kwargs ):
                 print "Trying environment setting", dbusName
         else:
             print "--- Murmur connection info ---"
-            print "  1) DBus -- net.sourceforge.mumble.murmur  (Murmur <= 1.1.8)"
+            print "  1) DBus -- net.sourceforge.mumble.murmur  (Murmur 1.1.8 or older)"
             print "  2) ICE  -- Meta:tcp -h 127.0.0.1 -p 6502  (Recommended)"
+            print
             print "Enter 1 or 2 for the defaults above, nothing to skip Server detection,"
             print "and if the defaults do not fit your needs, enter the correct string."
             print "Whether to use DBus or Ice will be detected automatically from the"
