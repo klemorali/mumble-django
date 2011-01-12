@@ -293,6 +293,18 @@ def bans( request, server ):
         ], 'success': True }
 
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
+def removeBan( request, server, bandata ):
+    """ Retrieve bans. """
+    srv = get_object_or_404( Mumble, id=int(server) )
+    if not srv.isUserAdmin( request.user ):
+        raise Exception( "Access denied" )
+    if "addrstr" in bandata:
+        del bandata["addrstr"]
+    bandata["address"] = tuple(bandata["address"])
+    return srv.removeBan( **bandata )
+
+
+@EXT_DIRECT_PROVIDER.register_method( "Mumble" )
 def moveUser( request, server, sessionid, channelid ):
     srv = get_object_or_404( Mumble, id=int(server) )
     if not srv.isUserAdmin( request.user ):

@@ -317,6 +317,9 @@ class Mumble( models.Model ):
     def getBans( self ):
         return self.ctl.getBans( self.srvid )
 
+    def removeBan( self, **kwargs ):
+        return self.ctl.removeBan( self.srvid, **kwargs )
+
     def getConf( self, field ):
         return self.ctl.getConf( self.srvid, field )
 
