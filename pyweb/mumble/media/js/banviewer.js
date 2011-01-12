@@ -36,12 +36,23 @@ Ext.ux.BanViewerPanel = function( config ){
                 dataIndex: 'reason'
             }]),
         bbar: [{
-            iconCls: 'x-tbar-loading',
-            tooltip: gettext('Refresh'),
-            handler: function(){
-                this.ownerCt.ownerCt.store.reload();
-            }
-        }],
+                iconCls: 'x-tbar-loading',
+                tooltip: gettext('Refresh'),
+                handler: function(){
+                    this.ownerCt.ownerCt.store.reload();
+                }
+            }, {
+                text: gettext('Delete'),
+                handler: function(){
+                    var grid = this.ownerCt.ownerCt;
+                    var mdl = grid.getSelectionModel();
+                    if( mdl.hasSelection() ){
+                        Mumble.removeBan(this.ownerCt.ownerCt.server, mdl.selection.record.data, function(){
+                            grid.store.reload();
+                        });
+                    }
+                }
+            }],
         store: new Ext.data.DirectStore({
             baseParams: {'server': this.server},
             directFn: Mumble.bans,

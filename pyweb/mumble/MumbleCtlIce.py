@@ -633,6 +633,15 @@ class MumbleCtlIce_120(MumbleCtlIce_118):
         return self.setBans(srvid, srvbans)
 
     @protectDjangoErrPage
+    def removeBan(self, srvid, **kwargs):
+        return self.setBans(srvid, [
+            # keep all bans which don't match exactly the one we're looking for
+            ban for ban in self.getBans(srvid)
+            # if one of those attr checks fails (-> False), min() is False -> keep the thing
+            if not min([ getattr(ban, kw) == kwargs[kw] for kw in kwargs ])
+            ])
+
+    @protectDjangoErrPage
     def kickUser(self, srvid, userid, reason=""):
         return self._getIceServerObject(srvid).kickUser( userid, reason.encode("UTF-8") )
 
