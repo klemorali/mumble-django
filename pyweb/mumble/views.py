@@ -301,7 +301,10 @@ def removeBan( request, server, bandata ):
     if "addrstr" in bandata:
         del bandata["addrstr"]
     bandata["address"] = tuple(bandata["address"])
-    return srv.removeBan( **bandata )
+    cleanargs = {}
+    for kw in bandata:
+        cleanargs[str(kw)] = bandata[kw]
+    return srv.removeBan( **cleanargs )
 
 
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
