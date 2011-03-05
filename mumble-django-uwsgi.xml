@@ -1,0 +1,11 @@
+<!--
+  XML snippet to be used with uWSGI.
+  Rename or copy mumble-django.wsgi to mumble-django_wsgi.py to allow it
+  to be imported properly, and be sure to set the <pythonpath /> variable
+  to the directory where Mumble-Django is installed.
+-->
+<uwsgi>
+  <socket>127.0.0.1:3031</socket>
+  <pythonpath>/srv/mumble-django</pythonpath>
+  <module>mumble-django_wsgi</module>
+</uwsgi>
