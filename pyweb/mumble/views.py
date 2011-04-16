@@ -112,6 +112,7 @@ def serverinfo( request, server ):
             'connecturl':    srv.connecturl,
             'prettyversion': srv.prettyversion,
             'url':           srv.url,
+            'users':         (srv.users or srv.server.getDefaultConf()['users']),
             'users_regged':  srv.users_regged,
             'users_online':  srv.users_online,
             'channel_cnt':   srv.channel_cnt,
