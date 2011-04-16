@@ -613,12 +613,18 @@ class Mumble( models.Model ):
         return self.ctl.setTexture( self.srvid, userid, image )
 
     def addChannel( self, name, parentid ):
+        regex = (self.channel or self.server.getDefaultConf()['channelname'])
+        if regex and not re.match( regex, name ):
+            raise NameError(_("That name is forbidden by the server."))
         return self.ctl.addChannel( self.srvid, name, parentid )
 
     def removeChannel( self, channelid ):
         return self.ctl.removeChannel( self.srvid, channelid )
 
     def renameChannel( self, channelid, name, description ):
+        regex = (self.channel or self.server.getDefaultConf()['channelname'])
+        if regex and not re.match( regex, name ):
+            raise NameError(_("That name is forbidden by the server."))
         return self.ctl.renameChannel( self.srvid, channelid, name, description )
 
     def moveChannel( self, channelid, parentid ):
