@@ -88,6 +88,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
 
     prop = Ice.createProperties([])
     prop.setProperty("Ice.ImplicitContext", "Shared")
+    prop.setProperty("Ice.MessageSizeMax",  "65535")
 
     idd = Ice.InitializationData()
     idd.properties = prop
