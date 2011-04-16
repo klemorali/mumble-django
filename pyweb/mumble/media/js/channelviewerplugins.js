@@ -22,6 +22,7 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                     xtype: "form",
                     border: false,
                     title: gettext("User comment"),
+                    layout: 'fit',
                     items: [{
                         xtype: "htmleditor",
                         fieldLabel: 'x',
@@ -161,7 +162,7 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                     xtype: "form",
                     border: false,
                     title: gettext("Send message"),
-                    defaults: { "anchor": "-20px" },
+                    layout: 'fit',
                     items: [{
                         xtype: "htmleditor",
                         fieldLabel: 'x',
@@ -190,6 +191,7 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                 title: this.windowTitle || gettext("User details"),
                 layout: 'fit',
                 items: {
+                    viewConfig:  { forceFit:  true },
                     xtype: "tabpanel",
                     activeTab: 0,
                     border: false,
