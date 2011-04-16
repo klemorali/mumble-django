@@ -16,6 +16,9 @@ function renderserverinfos( server ){
         ngettext( "Currently, %s user is online.", "Currently, %s users are online.", server.users_online ),
         [server.users_online] ) );
     buf.push( interpolate(
+        gettext("This server has %s slots, %s of which are free."), [server.users, (server.users - server.users_online)]
+        ) );
+    buf.push( interpolate(
         ngettext( "Currently, there is %s channel.", "Currently, there are %s channels.", server.channel_cnt ),
         [server.channel_cnt] ) );
     if( server.uptime ){
