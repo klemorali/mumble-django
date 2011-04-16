@@ -254,7 +254,11 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                         handler: function(btn){
                             Ext.Msg.prompt(gettext('Name'), gettext('Please enter the channel name:'), function(btn, text){
                                 if (btn == 'ok'){
-                                    Mumble.addChannel( this.serverid, text, this.chandata.id );
+                                    Mumble.addChannel( this.serverid, text, this.chandata.id, function(provider, response){
+                                        if( response.type == "exception" ){
+                                            Ext.Msg.alert( gettext("Error"), response.message );
+                                        }
+                                    });
                                 }
                             }, this);
                         }
@@ -263,7 +267,11 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                         text: gettext("Submit name/description"),
                         handler: function(btn){
                             f = btn.ownerCt.ownerCt.getForm().getValues();
-                            Mumble.renameChannel(this.serverid, this.chandata.id, f.name, f.description);
+                            Mumble.renameChannel(this.serverid, this.chandata.id, f.name, f.description, function(provider, response){
+                                if( response.type == "exception" ){
+                                    Ext.Msg.alert( gettext("Error"), response.message );
+                                }
+                            });
                         }
                     }, {
                         text: gettext('Delete channel'),
