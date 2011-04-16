@@ -279,8 +279,12 @@ class Mumble( models.Model ):
         else:
             self.ctl.setConf( self.srvid, 'port', '' )
 
-        if self.netloc:
-            self.ctl.setConf( self.srvid, 'registerhostname', self.netloc )
+        if self.display:
+            # if self.display contains a port, we're screwed here...
+            self.ctl.setConf( self.srvid, 'registerhostname', self.display )
+        elif self.addr:
+            # If Murmur binds to multiple addresses, use the first
+            self.ctl.setConf( self.srvid, 'registerhostname', self.addr.split(" ")[0] )
         else:
             self.ctl.setConf( self.srvid, 'registerhostname', '' )
 
