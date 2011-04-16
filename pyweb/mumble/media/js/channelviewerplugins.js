@@ -173,7 +173,14 @@ Ext.ux.MumbleUserEditor = Ext.extend( Ext.Component, {
                         text: gettext("Send message"),
                         handler: function(btn){
                             f = btn.ownerCt.ownerCt.getForm().getValues();
-                            Mumble.sendMessage(this.serverid, this.userdata.session, f.message);
+                            Mumble.sendMessage(this.serverid, this.userdata.session, f.message, function(provider, response){
+                                if( response.type == "exception" ){
+                                    Ext.Msg.alert( gettext("Error"), response.message );
+                                }
+                                else{
+                                    Ext.Msg.alert( gettext("Success"), gettext("Message sent successfully.") );
+                                }
+                            });
                         }
                     }]
                 });
@@ -308,7 +315,14 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                         text: gettext("Send message"),
                         handler: function(btn){
                             f = btn.ownerCt.ownerCt.getForm().getValues();
-                            Mumble.sendMessageChannel(this.serverid, this.chandata.id, (f.tree || false), f.message);
+                            Mumble.sendMessageChannel(this.serverid, this.chandata.id, (f.tree || false), f.message, function(provider, response){
+                                if( response.type == "exception" ){
+                                    Ext.Msg.alert( gettext("Error"), response.message );
+                                }
+                                else{
+                                    Ext.Msg.alert( gettext("Success"), gettext("Message sent successfully.") );
+                                }
+                            });
                         }
                     }]
                 });
