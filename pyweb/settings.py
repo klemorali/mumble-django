@@ -157,12 +157,16 @@ elif MUMBLE_DJANGO_URL[-1] != '/':
 
 # Database settings for Mumble-Django's database. These do NOT need to point
 # to Murmur's database, Mumble-Django should use its own!
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = join( MUMBLE_DJANGO_ROOT, 'db', 'mumble-django.db3' )
-DATABASE_USER = ''
-DATABASE_PASSWORD = ''
-DATABASE_HOST = ''
-DATABASE_PORT = ''
+DATABASES = {
+    'default': {
+        'ENGINE':   'django.db.backends.sqlite3',
+        'NAME':     join( MUMBLE_DJANGO_ROOT, 'db', 'mumble-django.db3' ),
+        'USER':     '',
+        'PASSWORD': '',
+        'HOST':     '',
+        'PORT':     '',
+        }
+    }
 
 # Email settings. only change if the defaults don't work
 #EMAIL_HOST = "localhost"
