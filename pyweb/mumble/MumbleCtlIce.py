@@ -179,7 +179,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
         elif murmurversion[2] == 2:
             return MumbleCtlIce_122( connstring, meta )
 
-        elif murmurversion[2] == 3:
+        elif murmurversion[2] >= 3:
             return MumbleCtlIce_123( connstring, meta )
 
     raise NotImplementedError( "No ctl object available for Murmur version %d.%d.%d" % tuple(murmurversion) )
