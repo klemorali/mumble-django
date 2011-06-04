@@ -81,6 +81,8 @@ def mobile_mumbles( request ):
 def mumbles( request, mobile=False ):
     """ Display a list of all configured Mumble servers, or redirect if only one configured. """
     mms = Mumble.objects.all().order_by( "name" )
+    if settings.HIDE_OFFLINE_SERVERS:
+        mms = filter(lambda srv: srv.booted, mms)
 
     if len(mms) == 1:
         return HttpResponseRedirect( reverse(
@@ -99,6 +101,8 @@ def mumbles( request, mobile=False ):
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
 def servers( request ):
     mms = Mumble.objects.all().order_by( "name" )
+    if settings.HIDE_OFFLINE_SERVERS:
+        mms = filter(lambda srv: srv.booted, mms)
     return [{ 'id': mm.id, 'name': mm.name, 'booted': mm.booted } for mm in mms]
 
 @EXT_DIRECT_PROVIDER.register_method( "MumbleList" )
