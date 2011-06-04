@@ -48,7 +48,8 @@ EXT_DIRECT_PROVIDER._register_method( "Accounts", logout )
 
 def redir( request ):
     """ Redirect to the servers list. """
-    if request.META['HTTP_USER_AGENT'].startswith( 'BlackBerry' ) or \
+    if 'HTTP_USER_AGENT' in request.META and (
+      request.META['HTTP_USER_AGENT'].startswith( 'BlackBerry' ) or \
       "Opera Mobi" in request.META['HTTP_USER_AGENT'] or \
       "Opera Mini" in request.META['HTTP_USER_AGENT'] or \
       "Windows CE" in request.META['HTTP_USER_AGENT'] or \
@@ -67,7 +68,7 @@ def redir( request ):
       "J-Phone"    in request.META['HTTP_USER_AGENT'] or \
       "IEMobile"   in request.META['HTTP_USER_AGENT'] or \
       "iPod"       in request.META['HTTP_USER_AGENT'] or \
-      "iPhone"     in request.META['HTTP_USER_AGENT']:
+      "iPhone"     in request.META['HTTP_USER_AGENT'] ):
         return HttpResponseRedirect( reverse( mobile_mumbles ) )
     else:
         return HttpResponseRedirect( reverse( mumbles ) )
