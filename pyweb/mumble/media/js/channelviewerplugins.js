@@ -241,17 +241,20 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                 border: false,
                 title: gettext("Channel description"),
                 defaults: { "anchor": "-20px" },
+                layout: 'border',
                 items: [{
                     xtype: "textfield",
                     fieldLabel: "x",
                     hideLabel: true,
                     name:  "name",
+                    region: "north",
                     value: chandata.name
                 }, {
                     xtype: "htmleditor",
                     fieldLabel: 'x',
                     hideLabel: true,
                     name: "description",
+                    region: "center",
                     value: chandata.description
                 }],
             }];
@@ -317,14 +320,16 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
                         text: gettext("Send message"),
                         handler: function(btn){
                             f = btn.ownerCt.ownerCt.getForm().getValues();
-                            Mumble.sendMessageChannel(this.serverid, this.chandata.id, (f.tree || false), f.message, function(provider, response){
-                                if( response.type == "exception" ){
-                                    Ext.Msg.alert( gettext("Error"), response.message );
-                                }
-                                else{
-                                    Ext.Msg.alert( gettext("Success"), gettext("Message sent successfully.") );
-                                }
-                            });
+                            Mumble.sendMessageChannel(this.serverid, this.chandata.id,
+                                (f.tree || false), f.message,
+                                function(provider, response){
+                                    if( response.type == "exception" ){
+                                        Ext.Msg.alert( gettext("Error"), response.message );
+                                    }
+                                    else{
+                                        Ext.Msg.alert( gettext("Success"), gettext("Message sent successfully.") );
+                                    }
+                                });
                         }
                     }]
                 });
