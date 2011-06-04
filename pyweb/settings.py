@@ -134,6 +134,8 @@ MUNIN_TITLE    = 'Mumble Users'
 # see <http://munin.projects.linpro.no/wiki/graph_category_list> for a list of valid categories.
 MUNIN_CATEGORY = 'mumble'
 
+# Set to True if you do not wish offline servers to appear in the server list.
+HIDE_OFFLINE_SERVERS=False
 
 ###################################################################
 ##                                                               ##
