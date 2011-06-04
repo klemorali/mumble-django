@@ -297,5 +297,3 @@ modprobe( "rosetta" )
 modprobe( "django_extensions" )
 
 modprobe( 'registration' )
-
-modprobe( "django_evolution" )
