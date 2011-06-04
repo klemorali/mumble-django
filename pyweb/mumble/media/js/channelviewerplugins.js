@@ -331,7 +331,9 @@ Ext.ux.MumbleChannelEditor = Ext.extend( Ext.Component, {
             }
 
             this.wnd = new Ext.Window({
-                title: this.windowTitle || gettext("Channel details"),
+                title: this.windowTitle || ( this.is_admin
+                    ? interpolate( gettext("Channel %s (%s)"), [chandata.name, chandata.id] )
+                    : interpolate( gettext("Channel %s"),      [chandata.name] ) ),
                 layout: 'fit',
                 items: [{
                     xtype: "tabpanel",
