@@ -120,6 +120,9 @@ class MumbleForm( PropertyModelForm ):
     rememchn= forms.BooleanField( required=False, help_text=_(
         "Remember the channel users were in when they quit, and automatically move them to "
         "that channel when they join.") )
+    sgversion= forms.CharField( required=False )
+    sgpositional = forms.BooleanField( required=False )
+    sgptt    = forms.BooleanField( required=False )
 
     def __init__( self, *args, **kwargs ):
         PropertyModelForm.__init__( self, *args, **kwargs )

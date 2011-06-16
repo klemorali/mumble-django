@@ -211,7 +211,7 @@ class Mumble( models.Model ):
     timeout = mk_config_property( "timeout",                ugettext_noop("Timeout"),            get_coerce=int )
     textlen = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
     usersperchannel = mk_config_property( "usersperchannel",ugettext_noop("Users per channel"),  get_coerce=int )
-    sgversion = mk_config_property( "suggestversion",       ugettext_noop("Version to suggest to upgrade to") )
+    sgversion = mk_config_property( "suggestversion",       ugettext_noop("Version to recommend") )
 
     certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
     html    = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
