@@ -28,6 +28,7 @@ from django.contrib.auth.models import User
 from django.db                  import models
 from django.db.models           import signals
 from django.conf                import settings
+from django.utils.encoding      import smart_str
 
 from mumble.mmobjects import mmChannel, mmPlayer
 from mumble.mctl      import MumbleCtlBase
@@ -380,7 +381,7 @@ class Mumble( models.Model ):
 
             if playerdata.userid not in unseen_ids:
                 if verbose:
-                    print 'Found new User "%s".' % playerdata.name
+                    print 'Found new User "%s".' % smart_str(playerdata.name)
 
                 playerinstance = MumbleUser(
                     mumbleid = playerdata.userid,
@@ -392,7 +393,7 @@ class Mumble( models.Model ):
 
             else:
                 if verbose > 1:
-                    print "User '%s' is already known." % playerdata.name
+                    print "User '%s' is already known." % smart_str(playerdata.name)
                 unseen_ids.remove(playerdata.userid)
                 playerinstance = MumbleUser.objects.get( server=self, mumbleid=playerdata.userid )
                 playerinstance.name = playerdata.name
