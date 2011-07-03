@@ -16,6 +16,7 @@
 """
 
 import os
+from os.path import dirname
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models  import User
@@ -59,11 +60,11 @@ class Command( BaseCommand ):
         if not os.path.exists( settings.MUMBLE_DJANGO_ROOT ):
             raise TestFailed( "The mumble-django root directory does not exist." )
 
-        elif settings.DATABASE_ENGINE != "sqlite3":
+        elif "sqlite3" not in settings.DATABASES["default"]["ENGINE"]:
             print "not using sqlite [ OK ]"
 
         else:
-            for checkdir in ( settings.MUMBLE_DJANGO_ROOT, os.path.join( settings.MUMBLE_DJANGO_ROOT, "db" ) ):
+            for checkdir in ( settings.MUMBLE_DJANGO_ROOT, dirname(settings.DATABASES["default"]["NAME"]) ):
                 statinfo = os.stat( checkdir )
 
                 if statinfo.st_uid == 0:
@@ -79,12 +80,12 @@ class Command( BaseCommand ):
 
     def check_dbase( self ):
         print "Checking database access...",
-        if settings.DATABASE_ENGINE == "sqlite3":
-            if not os.path.exists( settings.DATABASE_NAME ):
+        if "sqlite3" in settings.DATABASES["default"]["ENGINE"]:
+            if not os.path.exists( settings.DATABASES["default"]["NAME"] ):
                 raise TestFailed( "database does not exist. Have you run syncdb yet?" )
 
             else:
-                statinfo = os.stat( settings.DATABASE_NAME )
+                statinfo = os.stat( settings.DATABASES["default"]["NAME"] )
 
                 if statinfo.st_uid == 0:
                     raise TestFailed(
@@ -92,7 +93,7 @@ class Command( BaseCommand ):
                         "you want because it will prevent your web server from being able "
                         "to write to it. Please check." )
 
-                elif not os.access( settings.DATABASE_NAME, os.W_OK ):
+                elif not os.access( settings.DATABASES["default"]["NAME"], os.W_OK ):
                     raise TestFailed( "database file is not writable." )
 
                 else:
