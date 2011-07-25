@@ -20,6 +20,8 @@ try:
 except ImportError:
     import json as simplejson
 
+import re
+
 from StringIO     import StringIO
 from PIL          import Image
 
@@ -45,6 +47,12 @@ EXT_DIRECT_PROVIDER = Provider()
 
 EXT_DIRECT_PROVIDER._register_method( "Accounts", login  )
 EXT_DIRECT_PROVIDER._register_method( "Accounts", logout )
+
+
+def validate_jsonp_callback(callback):
+    if not re.match( "^[a-zA-Z][\w.]+$", callback ):
+        raise Http404("Illegal characters in callback")
+
 
 def redir( request ):
     """ Redirect to the servers list. """
@@ -514,6 +522,7 @@ def mmng_tree( request, server ):
 
     if "callback" in request.GET:
         prefix = request.GET["callback"]
+        validate_jsonp_callback(prefix)
     else:
         prefix = ""
 
@@ -550,6 +559,7 @@ def cvp_json( request, server ):
     json = simplejson.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
 
     if "callback" in request.GET:
+        validate_jsonp_callback(request.GET["callback"])
         ret = "%s(%s)" % ( request.GET["callback"], json )
     else:
         ret = json
@@ -585,6 +595,7 @@ def mumbleviewer_tree_json( request, server ):
 
     if "jsonp_callback" in request.GET:
         prefix = request.GET["jsonp_callback"]
+        validate_jsonp_callback(prefix)
     else:
         prefix = ""
 
