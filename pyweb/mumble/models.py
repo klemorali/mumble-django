@@ -168,6 +168,86 @@ class MumbleServer( models.Model ):
     prettyversion = property( lambda self: '.'.join( map( str, self.version[:3] ) ),
         doc="Pretty-Printed version" )
 
+    def save( self, run_detection=True, verbosity=0, *args, **kwargs ):
+        ret = models.Model.save( self, *args, **kwargs )
+        if not run_detection:
+            return ret
+
+        servIDs   = self.ctl.getAllServers()
+        unseen_ids = [rec["srvid"] for rec in Mumble.objects.values( "srvid" )]
+
+        for id in servIDs:
+            if id in unseen_ids:
+                unseen_ids.remove(id)
+            if verbosity > 1:
+                print "Checking Murmur instance with id %d." % id
+            # first check that the server has not yet been inserted into the DB
+            try:
+                instance = Mumble.objects.get( server=self, srvid=id )
+            except Mumble.DoesNotExist:
+                if verbosity:
+                    print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName )
+
+                # now create a model for the record set (configureFromMurmur will save() it).
+                instance = Mumble( server=self, srvid=id )
+            else:
+                if verbosity:
+                    print "Syncing Murmur instance %d: '%s'... " % ( instance.id, instance.name )
+
+            try:
+                instance.configureFromMurmur()
+            except DatabaseError, err:
+                try:
+                    # Find instances with the same address/port
+                    dup = Mumble.objects.get( addr=instance.addr, port=instance.port )
+                except Mumble.DoesNotExist:
+                    # None exist - this must've been something else.
+                    if verbosity:
+                        print "Server ID / Name: %d / %s" % ( instance.srvid, instance.name )
+                    raise err
+                else:
+                    if verbosity:
+                        print "ERROR: There is already another server instance registered"
+                        print "       on the same address and port."
+                        print "        -------------"
+                        print "        New Server ID:", instance.srvid,
+                        print "      New Server Name:", instance.name
+                        print "              Address:", instance.addr
+                        print "                 Port:", instance.port
+                        print "    Connection string:", instance.server.dbus
+                        print "        -------------"
+                        print "  Duplicate Server ID:", dup.srvid,
+                        print "Duplicate Server Name:", dup.name
+                        print "              Address:", dup.addr
+                        print "                 Port:", dup.port
+                        print "    Connection string:", dup.server.dbus
+                    raise err
+            except Exception, err:
+                if verbosity:
+                    print "Server ID / Name: %d / %s" % ( instance.srvid, instance.name )
+                raise err
+
+            # Now search for players on this server that have not yet been registered
+            if instance.booted:
+                if verbosity > 1:
+                    print "Looking for registered Players on Server id %d." % id
+                instance.readUsersFromMurmur( verbose=verbosity )
+            elif verbosity:
+                print "This server is not running, can't sync players."
+
+        signals.pre_delete.disconnect( Mumble.pre_delete_listener, sender=Mumble )
+
+        for srvid in unseen_ids:
+            mm = Mumble.objects.get( srvid=srvid )
+            if verbosity:
+                print 'Found stale Mumble instance "%s".' % mm.name
+            mm.delete()
+
+        signals.pre_delete.connect( Mumble.pre_delete_listener, sender=Mumble )
+
+        return ret
+
+
 
 class Mumble( models.Model ):
     """ Represents a Murmur server instance.
