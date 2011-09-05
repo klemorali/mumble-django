@@ -16,9 +16,9 @@
 """
 
 try:
-	import simplejson
+    import simplejson
 except ImportError:
-	import json as simplejson
+    import json as simplejson
 import inspect
 import functools
 import traceback
@@ -29,7 +29,6 @@ from django.conf import settings
 from django.conf.urls.defaults import patterns
 from django.core.urlresolvers  import reverse
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.decorators.csrf import csrf_exempt
 
 def getname( cls_or_name ):
     """ If cls_or_name is not a string, return its __name__. """
@@ -113,7 +112,6 @@ class Provider( object ):
         method.EXT_flags    = flags
         return method
 
-    @csrf_exempt
     def get_api( self, request ):
         """ Introspect the methods and get a JSON description of this API. """
         actdict = {}
@@ -134,11 +132,17 @@ class Provider( object ):
             }))]
 
         if self.autoadd:
+            lines.append(
+                """Ext.Ajax.on("beforerequest", function(conn, options){"""
+                """    if( !options.headers )"""
+                """        options.headers = {};"""
+                """    options.headers["X-CSRFToken"] = Ext.util.Cookies.get("csrftoken");"""
+                """});"""
+                )
             lines.append( "Ext.Direct.addProvider( %s );" % self.name )
 
         return HttpResponse( "\n".join( lines ), mimetype="text/javascript" )
 
-    @csrf_exempt
     def request( self, request ):
         """ Implements the Router part of the Ext.Direct specification.
 
