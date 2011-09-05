@@ -2,6 +2,24 @@
 Mumble-Django changelog
 =======================
 
+Version 2.5, 05 Sep 2011:
+------------------------------
+* Add start,stop,restart,{en,dis}able_autoboot admin actions
+* Add admin action to set the users avatar to their gravatar
+* Check for stale mumble instances/users when syncing and remove them from
+  the database.
+* Add SLICEDIR config option to set the slice include dir if it can't be
+  discovered (debian Lenny).
+* Add removing bans.
+* Add ozon's uWSGI example config.
+* Check channel names against the allowed channel names regex when renaming.
+* Fix the size of the description and message field for the user detail window.
+* Add support for Mumble 1.2.4.
+* Display the channel ID to admins in the channel window's title.
+* Add a setting to hide offline servers from the servers list.
+* Add support for suggest{version,positional,pushtotalk} server settings.
+* Validate the jsonp callback name to prevent xss attacks.
+
 Version 2.4, 14 Nov 2010:
 ------------------------------
 * Add a view for a page that displays the channel viewer only.
