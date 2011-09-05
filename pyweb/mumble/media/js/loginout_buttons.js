@@ -95,7 +95,9 @@ Ext.ux.ButtonLogin = Ext.extend(Ext.Button, {
                 mypos[0] + mysize.width - winsize.width,
                 mypos[1] - winsize.height
                 );
-            Ext.fly('login_field_username').focus();
+            (function(){
+                Ext.fly('login_field_username').focus();
+            }).defer(250);
         }
         else
             this.wnd.hide();
