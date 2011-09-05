@@ -16,9 +16,10 @@
 """
 
 try:
-	import simplejson
+    import simplejson
 except ImportError:
-	import json as simplejson
+    import json as simplejson
+
 import functools
 
 from django      import forms
@@ -270,7 +271,6 @@ class FormProvider(Provider):
             elif isinstance( field.widget, forms.Textarea ):
                 extfld.update({
                     "xtype": "textarea",
-                    "grow":  True,
                     })
             elif isinstance( field.widget, forms.PasswordInput ):
                 extfld.update({
