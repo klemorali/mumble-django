@@ -112,8 +112,7 @@ class Provider( object ):
         method.EXT_flags    = flags
         return method
 
-    def get_api( self, request ):
-        """ Introspect the methods and get a JSON description of this API. """
+    def build_api_dict( self ):
         actdict = {}
         for clsname in self.classes:
             actdict[clsname] = []
@@ -125,10 +124,24 @@ class Provider( object ):
                 methinfo.update( self.classes[clsname][methodname].EXT_flags )
                 actdict[clsname].append( methinfo )
 
+        return actdict
+
+    def get_api_plain( self, request ):
+        """ Introspect the methods and get a JSON description of only the API. """
+        return HttpResponse( simplejson.dumps({
+            "url":     reverse( self.request ),
+            "type":    "remoting",
+            "actions": self.build_api_dict()
+            }), mimetype="application/json" )
+
+    def get_api( self, request ):
+        """ Introspect the methods and get a javascript description of the API
+            that is meant to be embedded directly into the web site.
+        """
         lines = ["%s = %s;" % ( self.name, simplejson.dumps({
             "url":     reverse( self.request ),
             "type":    "remoting",
-            "actions": actdict
+            "actions": self.build_api_dict()
             }))]
 
         if self.autoadd:
@@ -171,7 +184,7 @@ class Provider( object ):
                     'message': 'malformed request',
                     'where':   unicode(err),
                     "tid":     None, # dunno
-                    }), mimetype="text/javascript" )
+                    }), mimetype="application/json" )
             else:
                 return self.process_normal_request( request, rawjson )
         else:
@@ -267,9 +280,9 @@ class Provider( object ):
                     })
 
         if len(responses) == 1:
-            return HttpResponse( simplejson.dumps( responses[0] ), mimetype="text/javascript" )
+            return HttpResponse( simplejson.dumps( responses[0] ), mimetype="application/json" )
         else:
-            return HttpResponse( simplejson.dumps( responses ),    mimetype="text/javascript" )
+            return HttpResponse( simplejson.dumps( responses ),    mimetype="application/json" )
 
     def process_form_request( self, request, reqinfo ):
         """ Router for POST requests that submit form data and/or file uploads. """
@@ -325,16 +338,17 @@ class Provider( object ):
         if reqinfo['upload'] == "true":
             return HttpResponse(
                 "<html><body><textarea>%s</textarea></body></html>" % simplejson.dumps(response),
-                mimetype="text/javascript"
+                mimetype="application/json"
                 )
         else:
-            return HttpResponse( simplejson.dumps( response ), mimetype="text/javascript" )
+            return HttpResponse( simplejson.dumps( response ), mimetype="application/json" )
 
     def get_urls(self):
         """ Return the URL patterns. """
         pat =  patterns('',
-            (r'api.js$',  self.get_api ),
-            (r'router/?', self.request ),
+            (r'api.json$', self.get_api_plain ),
+            (r'api.js$',   self.get_api ),
+            (r'router/?',  self.request ),
             )
         return pat
 
