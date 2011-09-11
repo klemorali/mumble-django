@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # kate: space-indent on; indent-width 4; replace-tabs on;
 
 """
@@ -186,7 +185,7 @@ class MumbleServer( models.Model ):
                 instance = Mumble.objects.get( server=self, srvid=id )
             except Mumble.DoesNotExist:
                 if verbosity:
-                    print "Found new Murmur instance %d on bus '%s'... " % ( id, dbusName )
+                    print "Found new Murmur instance %d on bus '%s'... " % ( id, self.dbus )
 
                 # now create a model for the record set (configureFromMurmur will save() it).
                 instance = Mumble( server=self, srvid=id )
