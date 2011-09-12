@@ -271,6 +271,7 @@ class FormProvider(Provider):
             elif isinstance( field.widget, forms.Textarea ):
                 extfld.update({
                     "xtype": "textarea",
+                    "grow":  True
                     })
             elif isinstance( field.widget, forms.PasswordInput ):
                 extfld.update({
