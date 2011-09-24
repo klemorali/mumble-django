@@ -26,6 +26,7 @@ from django      import forms
 from django.http import HttpResponse, Http404
 from django.conf.urls.defaults import url
 from django.utils.safestring import mark_safe
+from django.core.serializers.json import DjangoJSONEncoder
 
 from provider import Provider
 
