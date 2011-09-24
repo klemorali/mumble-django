@@ -29,6 +29,8 @@ from django.conf import settings
 from django.conf.urls.defaults import patterns
 from django.core.urlresolvers  import reverse
 from django.utils.datastructures import MultiValueDictKeyError
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 def getname( cls_or_name ):
     """ If cls_or_name is not a string, return its __name__. """
@@ -132,17 +134,18 @@ class Provider( object ):
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": self.build_api_dict()
-            }), mimetype="application/json" )
+            }, cls=DjangoJSONEncoder), mimetype="application/json" )
 
     def get_api( self, request ):
         """ Introspect the methods and get a javascript description of the API
             that is meant to be embedded directly into the web site.
         """
+        request.META["CSRF_COOKIE_USED"] = True
         lines = ["%s = %s;" % ( self.name, simplejson.dumps({
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": self.build_api_dict()
-            }))]
+            }, cls=DjangoJSONEncoder))]
 
         if self.autoadd:
             lines.append(
@@ -162,6 +165,7 @@ class Provider( object ):
             It handles decoding requests, calling the appropriate function (if
             found) and encoding the response / exceptions.
         """
+        request.META["CSRF_COOKIE_USED"] = True
         # First try to use request.POST, if that doesn't work check for req.raw_post_data.
         # The other way round this might make more sense because the case that uses
         # raw_post_data is way more common, but accessing request.POST after raw_post_data
@@ -184,7 +188,7 @@ class Provider( object ):
                     'message': 'malformed request',
                     'where':   unicode(err),
                     "tid":     None, # dunno
-                    }), mimetype="application/json" )
+                    }, cls=DjangoJSONEncoder), mimetype="application/json" )
             else:
                 return self.process_normal_request( request, rawjson )
         else:
@@ -280,9 +284,9 @@ class Provider( object ):
                     })
 
         if len(responses) == 1:
-            return HttpResponse( simplejson.dumps( responses[0] ), mimetype="application/json" )
+            return HttpResponse( simplejson.dumps( responses[0], cls=DjangoJSONEncoder ), mimetype="application/json" )
         else:
-            return HttpResponse( simplejson.dumps( responses ),    mimetype="application/json" )
+            return HttpResponse( simplejson.dumps( responses, cls=DjangoJSONEncoder ),    mimetype="application/json" )
 
     def process_form_request( self, request, reqinfo ):
         """ Router for POST requests that submit form data and/or file uploads. """
@@ -337,11 +341,11 @@ class Provider( object ):
 
         if reqinfo['upload'] == "true":
             return HttpResponse(
-                "<html><body><textarea>%s</textarea></body></html>" % simplejson.dumps(response),
+                "<html><body><textarea>%s</textarea></body></html>" % simplejson.dumps(response, cls=DjangoJSONEncoder),
                 mimetype="application/json"
                 )
         else:
-            return HttpResponse( simplejson.dumps( response ), mimetype="application/json" )
+            return HttpResponse( simplejson.dumps( response, cls=DjangoJSONEncoder ), mimetype="application/json" )
 
     def get_urls(self):
         """ Return the URL patterns. """
