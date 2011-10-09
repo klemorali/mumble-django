@@ -2,7 +2,7 @@
 Mumble-Django changelog
 =======================
 
-Version 2.5, 05 Sep 2011:
+Version 2.5, 09 Okt 2011:
 ------------------------------
 * Add start,stop,restart,{en,dis}able_autoboot admin actions
 * Add admin action to set the users avatar to their gravatar
@@ -19,6 +19,8 @@ Version 2.5, 05 Sep 2011:
 * Add a setting to hide offline servers from the servers list.
 * Add support for suggest{version,positional,pushtotalk} server settings.
 * Validate the jsonp callback name to prevent xss attacks.
+* Change the server instance detection to run whenever a MumbleServer is saved.
+* Correctly focus the username field in the login window.
 
 Version 2.4, 14 Nov 2010:
 ------------------------------
