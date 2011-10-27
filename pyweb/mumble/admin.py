@@ -178,7 +178,7 @@ class MumbleUserAdmin(admin.ModelAdmin):
 
     def set_texture_from_gravatar( self, request, queryset ):
         for mu in queryset:
-            mm.setTextureFromGravatar()
+            mu.setTextureFromGravatar()
 
     set_texture_from_gravatar.short_description = _( "Set Gravatar as Texture" )
 
