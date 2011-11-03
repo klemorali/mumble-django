@@ -234,6 +234,10 @@ class MumbleCtlIce_118(MumbleCtlBase):
         return self._getIceServerObject(srvid).getChannels()
 
     @protectDjangoErrPage
+    def getTree(self, srvid):
+        return self._getIceServerObject(srvid).getTree()
+
+    @protectDjangoErrPage
     def getPlayers(self, srvid):
         users = self._getIceServerObject(srvid).getPlayers()
 
