@@ -76,7 +76,10 @@ app.debug = options.debug
 
 
 def getUser(user):
-    return dict(user)
+    fields = ["channel", "deaf", "mute", "name", "selfDeaf", "selfMute",
+        "session", "suppress", "userid", "idlesecs", "recording", "comment",
+        "prioritySpeaker"]
+    return dict(zip(fields, [getattr(user, field) for field in fields]))
 
 def getChannel(channel):
     fields = ["id", "name", "parent", "links", "description", "temporary", "position"]
