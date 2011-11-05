@@ -56,6 +56,16 @@ parser.add_option( "-d", "--debug",
     help="Enable error debugging",
     default=False, action="store_true" )
 
+parser.add_option( "-H", "--host",
+    help="The IP to bind to. Default is '127.0.0.1'.",
+    default="127.0.0.1"
+    )
+
+parser.add_option( "-p", "--port", type="int",
+    help="The port number to bind to. Default is 5000.",
+    default=5000
+    )
+
 options, progargs = parser.parse_args()
 
 if options.connstring is None:
@@ -72,8 +82,6 @@ ctl = MumbleCtlBase.newInstance( options.connstring, options.slice, options.ices
 
 
 app = Flask(__name__)
-app.debug = options.debug
-
 
 def getUser(user):
     fields = ["channel", "deaf", "mute", "name", "selfDeaf", "selfMute",
@@ -106,4 +114,4 @@ def getServers():
     return jsonify(servers=ctl.getBootedServers())
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=options.host, port=options.port, debug=options.debug)
