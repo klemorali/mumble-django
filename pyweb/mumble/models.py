@@ -483,7 +483,7 @@ class Mumble( models.Model ):
         signals.pre_delete.disconnect( MumbleUser.pre_delete_listener, sender=MumbleUser )
 
         for uid in unseen_ids:
-            mu = MumbleUser.objects.get( mumbleid=uid )
+            mu = MumbleUser.objects.get( server=self, mumbleid=uid )
             if verbose:
                 print 'Found stale MumbleUser "%s".' % mu.name
             mu.delete()
