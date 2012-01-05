@@ -137,6 +137,9 @@ MUNIN_CATEGORY = 'mumble'
 # Set to True if you do not wish offline servers to appear in the server list.
 HIDE_OFFLINE_SERVERS=False
 
+# True to display users above channels in the channel viewer.
+USERS_ABOVE_CHANNELS=False
+
 ###################################################################
 ##                                                               ##
 ##  The following settings normally do not require changes, and  ##

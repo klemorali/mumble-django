@@ -17,6 +17,9 @@
             mainpanel = new Ext.ux.MumbleChannelViewer({
                 //title: "ohai",
                 renderTo: Ext.getBody(),
+                {% if UsersAboveChannels %}
+                    usersAboveChannels: true,
+                {% endif %}
                 source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
                 imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
                 tbar: [],

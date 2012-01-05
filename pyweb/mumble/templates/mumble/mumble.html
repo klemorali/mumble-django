@@ -76,6 +76,9 @@
                     region: "west",
                     width: 350,
                     split: true,
+                    {% if UsersAboveChannels %}
+                        usersAboveChannels: true,
+                    {% endif %}
                     enableDD: true,
                     plugins: [
                         new Ext.ux.MumbleUserEditor({
