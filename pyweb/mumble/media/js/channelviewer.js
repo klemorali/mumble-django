@@ -90,6 +90,7 @@ Ext.ux.MumbleChannelViewer = function( config ){
         title: gettext("Channel Viewer"),
         refreshInterval: 30000,
         idleInterval: 2,
+        usersAboveChannels: false,
         autoScroll: true,
         enableDD:   false, // Users need to enable this explicitly
         root: {
@@ -200,43 +201,55 @@ Ext.extend( Ext.ux.MumbleChannelViewer, Ext.tree.TreePanel, {
                 tree = this;
                 function populateNode( node, json ){
                     var subchan_users = 0;
-                    json.channels.sort(cmp_channels);
-                    for( var i = 0; i < json.channels.length; i++ ){
-                        var child = {
-                            text: json.channels[i].name,
-                            id:   ("channel_" + json.channels[i].id),
-                            nodeType: 'async',
-                            allowDrag: true,
-                            allowDrop: true,
-                            draggable: true,
-                            icon: tree.imageurl+'/channel.png',
-                            children: [],
-                            uiProvider: Ext.ux.MumbleChannelNodeUI,
-                            chandata: json.channels[i],
-                            imageurl: tree.imageurl
-                        };
-                        node.children.push( child );
-                        subchan_users += populateNode( child, json.channels[i] );
+                    var popChannels = function(){
+                        json.channels.sort(cmp_channels);
+                        for( var i = 0; i < json.channels.length; i++ ){
+                            var child = {
+                                text: json.channels[i].name,
+                                id:   ("channel_" + json.channels[i].id),
+                                nodeType: 'async',
+                                allowDrag: true,
+                                allowDrop: true,
+                                draggable: true,
+                                icon: tree.imageurl+'/channel.png',
+                                children: [],
+                                uiProvider: Ext.ux.MumbleChannelNodeUI,
+                                chandata: json.channels[i],
+                                imageurl: tree.imageurl
+                            };
+                            node.children.push( child );
+                            subchan_users += populateNode( child, json.channels[i] );
+                        }
                     }
-                    json.users.sort(cmp_names);
-                    for( var i = 0; i < json.users.length; i++ ){
-                        var child = {
-                            text: json.users[i].name,
-                            id:   ("user_" + json.users[i].session),
-                            nodeType: 'async',
-                            leaf: true,
-                            allowDrag: true,
-                            draggable: true,
-                            uiProvider: Ext.ux.MumbleUserNodeUI,
-                            userdata: json.users[i],
-                            imageurl: tree.imageurl
-                        };
-                        if( json.users[i].idlesecs <= tree.idleInterval )
-                            child.icon = tree.imageurl+'/talking_on.png';
-                        else
-                            child.icon = tree.imageurl+'/talking_off.png';
-                        node.leaf = false;
-                        node.children.push( child );
+                    var popUsers = function(){
+                        json.users.sort(cmp_names);
+                        for( var i = 0; i < json.users.length; i++ ){
+                            var child = {
+                                text: json.users[i].name,
+                                id:   ("user_" + json.users[i].session),
+                                nodeType: 'async',
+                                leaf: true,
+                                allowDrag: true,
+                                draggable: true,
+                                uiProvider: Ext.ux.MumbleUserNodeUI,
+                                userdata: json.users[i],
+                                imageurl: tree.imageurl
+                            };
+                            if( json.users[i].idlesecs <= tree.idleInterval )
+                                child.icon = tree.imageurl+'/talking_on.png';
+                            else
+                                child.icon = tree.imageurl+'/talking_off.png';
+                            node.leaf = false;
+                            node.children.push( child );
+                        }
+                    }
+                    if( tree.usersAboveChannels ){
+                        popUsers();
+                        popChannels();
+                    }
+                    else{
+                        popChannels();
+                        popUsers();
                     }
                     if( json.id == 0 || json.users.length > 0 || subchan_users )
                         node.expanded = true;
