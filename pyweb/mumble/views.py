@@ -198,6 +198,7 @@ def show( request, server ):
             'MumbleAccount':user,
             'QRAvailable':  qravail,
             'IsAdmin':      isAdmin,
+            'UsersAboveChannels': settings.USERS_ABOVE_CHANNELS
         }, context_instance = RequestContext(request) )
 
 def mobile_show( request, server ):
@@ -226,6 +227,7 @@ def embed( request, server ):
     return render_to_response( 'mumble/embed.html', {
             'MumbleServer': srv,
             'MumbleActive': True,
+            'UsersAboveChannels': settings.USERS_ABOVE_CHANNELS
         }, context_instance = RequestContext(request) )
 
 @EXT_DIRECT_PROVIDER.register_method( "Mumble" )
