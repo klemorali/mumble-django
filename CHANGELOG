@@ -2,6 +2,14 @@
 Mumble-Django changelog
 =======================
 
+Version 2.6, 31 Mar 2012:
+------------------------------
+* Add a CVP provider for the Flask framework (for the lulz).
+* Support Django 1.4.
+* Filter MumbleUsers by the current servers when detecting stale accounts.
+* Add usersAboveChannels config option to the channel viewer.
+* Update djextdirect to 0.7.
+
 Version 2.5, 09 Okt 2011:
 ------------------------------
 * Add start,stop,restart,{en,dis}able_autoboot admin actions
