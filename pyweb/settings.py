@@ -196,6 +196,8 @@ MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
 # URL that handles the media served from MEDIA_ROOT.
 MEDIA_URL = MUMBLE_DJANGO_URL + 'static/'
 
+STATIC_URL  = MEDIA_URL
+STATIC_ROOT = MEDIA_ROOT
 
 ## URL to static files of the currently active theme
 THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
