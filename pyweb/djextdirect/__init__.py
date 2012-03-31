@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-VERSION = ( 0, 5 )
+VERSION = ( 0, 7 )
 
 VERSIONSTR = "v%d.%d" % VERSION
 

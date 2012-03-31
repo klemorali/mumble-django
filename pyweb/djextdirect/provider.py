@@ -186,7 +186,7 @@ class Provider( object ):
                 return HttpResponse( simplejson.dumps({
                     'type':    'exception',
                     'message': 'malformed request',
-                    'where':   unicode(err),
+                    'where':   err.message,
                     "tid":     None, # dunno
                     }, cls=DjangoJSONEncoder), mimetype="application/json" )
             else:
@@ -267,7 +267,7 @@ class Provider( object ):
                     }
                 if settings.DEBUG:
                     traceback.print_exc( file=stderr )
-                    errinfo['message'] = unicode(err)
+                    errinfo['message'] = err.message
                     errinfo['where']   = traceback.format_exc()
                 else:
                     errinfo['message'] = 'The socket packet pocket has an error to report.'
@@ -323,7 +323,7 @@ class Provider( object ):
                     }
                 if settings.DEBUG:
                     traceback.print_exc( file=stderr )
-                    errinfo['message'] = unicode(err)
+                    errinfo['message'] = err.message
                     errinfo['where']   = traceback.format_exc()
                 else:
                     errinfo['message'] = 'The socket packet pocket has an error to report.'
