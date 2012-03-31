@@ -2,6 +2,10 @@
 Mumble-Django changelog
 =======================
 
+Version 2.7, 31 Mar 2012:
+------------------------------
+* Add STATIC_URL/STATIC_ROOT settings.
+
 Version 2.6, 31 Mar 2012:
 ------------------------------
 * Add a CVP provider for the Flask framework (for the lulz).
