@@ -28,11 +28,11 @@ from update_schema    import update_schema
 from server_detect    import find_existing_instances
 
 
-if settings.DATABASE_ENGINE == "sqlite3":
+if settings.DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
     # Move the DB to the db subdirectory if necessary.
     oldpath = join( settings.MUMBLE_DJANGO_ROOT, "mumble-django.db3" )
-    if not exists( settings.DATABASE_NAME ) and exists( oldpath ):
-        move( oldpath, settings.DATABASE_NAME )
+    if not exists( settings.DATABASES["default"]["NAME"] ) and exists( oldpath ):
+        move( oldpath, settings.DATABASES["default"]["NAME"] )
 
 
 cursor = connection.cursor()
@@ -47,9 +47,9 @@ else:
     uptodate = True
 
 if not uptodate:
-    if settings.DATABASE_ENGINE == "sqlite3":
+    if settings.DATABASE["default"]["ENGINE"] == "django.db.backends.sqlite3":
         # backup the db before the conversion.
-        copy( settings.DATABASE_NAME, settings.DATABASE_NAME+".bak" )
+        copy( settings.DATABASES["default"]["NAME"], settings.DATABASES["default"]["NAME"]+".bak" )
     signals.post_syncdb.connect( update_schema, sender=models )
 else:
     signals.post_syncdb.connect( find_existing_instances, sender=models )
