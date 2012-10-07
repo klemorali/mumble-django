@@ -22,7 +22,7 @@ from django        import forms
 from django.conf   import settings
 from django.forms  import Form, ModelForm
 from django.forms.models import ModelFormMetaclass
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from mumble.models import MumbleServer, Mumble, MumbleUser
 
@@ -125,8 +125,8 @@ class MumbleForm( PropertyModelForm ):
         "Remember the channel users were in when they quit, and automatically move them to "
         "that channel when they join.") )
     suggestversion      = forms.CharField( required=False )
-    suggestpositional   = forms.BooleanField( required=False )
-    suggestpushtotalk   = forms.BooleanField( required=False )
+    suggestpositional   = forms.ChoiceField( required=False, choices=( ('', ugettext('No suggestion')), ('true', ugettext('Suggest on')), ('false', ugettext('Suggest off')) ) )
+    suggestpushtotalk   = forms.ChoiceField( required=False, choices=( ('', ugettext('No suggestion')), ('true', ugettext('Suggest on')), ('false', ugettext('Suggest off')) ) )
     opusthreshold       = forms.IntegerField( required=False, initial=100, help_text=_(
         "Force Opus-Codec if this percentage of clients support it. Enter without % character.") )
     registerlocation    = forms.CharField( required=False, help_text=_(
