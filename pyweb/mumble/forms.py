@@ -117,7 +117,8 @@ class MumbleForm( PropertyModelForm ):
 
     certrequired        = forms.BooleanField( required=False )
     textmessagelength   = forms.IntegerField( required=False )
-    imglen = forms.IntegerField( required=False, help_text=_("In case of messages containing Base64 encoded images this overrides textmessagelength.") )
+    imagemessagelength  = forms.IntegerField( required=False, help_text=_(
+        "In case of messages containing Base64 encoded images this overrides textmessagelength.") )
     allowhtml           = forms.BooleanField( required=False )
     rememberchannel     = forms.BooleanField( required=False, help_text=_(
         "Remember the channel users were in when they quit, and automatically move them to "
@@ -125,14 +126,18 @@ class MumbleForm( PropertyModelForm ):
     suggestversion      = forms.CharField( required=False )
     suggestpositional   = forms.BooleanField( required=False )
     suggestpushtotalk   = forms.BooleanField( required=False )
-    opusthres = forms.IntegerField( required=False, initial=100, help_text=_("Force Opus-Codec if this percentage of clients support it. Enter without % character.") )
-    reghostname = forms.CharField( required=False, help_text=_("Server hostname (domain name) that is used to connect to the server from the server list. This must be a A or AAAA record.") )
-    regpasswd = forms.CharField( required=False, help_text=_("Password used to register the server in the server list") )
-    regloc = forms.CharField( required=False, help_text=_("Location of the server as ISO_3166-1 country code. In order to work you must have a strong server certificate. Additionally the C= field of the used server certificate must have the same country code OR the used tld in registerhostname must contain the same location code FIXME schoen machen.") )
-    allowping = forms.BooleanField( required=False, initial=True, help_text=_("Allow ping packets from the server (to show usercount and slots in the server browser). This must not be disabled if the server should be listed in the serverlist.") )
-    sendversion = forms.BooleanField( required=False, initial=True, help_text=_("Allow server to send system version to the client.") )
-    
-    
+    opusthreshold       = forms.IntegerField( required=False, initial=100, help_text=_(
+        "Force Opus-Codec if this percentage of clients support it. Enter without % character.") )
+    registerlocation    = forms.CharField( required=False, help_text=_(
+        "Location of the server as ISO_3166-1 country code. In order for this to work, you must have "
+        "a strong server certificate that carries the same country code. Alternatively, the TLD "
+        "specified in the Display Address field must contain the same location code.") )
+    allowping           = forms.BooleanField( required=False, initial=True, help_text=_(
+        "Allow ping packets from the server (to show usercount and slots in the server browser). "
+        "This is required for the server to be listed in the server list.") )
+    sendversion         = forms.BooleanField( required=False, initial=True, help_text=_(
+        "Allow server to send system version to the client.") )
+
 
     def __init__( self, *args, **kwargs ):
         PropertyModelForm.__init__( self, *args, **kwargs )
@@ -167,13 +172,13 @@ class MumbleAdminForm( MumbleForm ):
     """ A Mumble Server admin form intended to be used by the server hoster. """
 
     users    = forms.IntegerField( required=False )
-    usersperchannel = forms.IntegerField( required=False )
-    channestlim = forms.IntegerField( required=False, help_text=_("Limit channel nesting to this level.") )
+    usersperchannel     = forms.IntegerField( required=False )
+    channelnestinglimit = forms.IntegerField( required=False, help_text=_("Limit channel nesting to this level.") )
     bwidth   = forms.IntegerField( required=False )
-    sslca = forms.CharField( required=False, widget=forms.Textarea, help_text=_("Can be a path or the file content in PEM format.") )
+    sslca    = forms.CharField( required=False, widget=forms.Textarea, help_text=_("Can be a path or the file content in PEM format.") )
     sslcrt   = forms.CharField( required=False, widget=forms.Textarea )
     sslkey   = forms.CharField( required=False, widget=forms.Textarea )
-    sslpass = forms.CharField( required=False, help_text=_("Key passphrase of the SSL certificate, if any.") )    
+    sslpassphrase       = forms.CharField( required=False, help_text=_("Passphrase of the SSL Key file, if any.") )
     booted   = forms.BooleanField( required=False, initial=True )
     autoboot = forms.BooleanField( required=False, initial=True )
     bonjour  = forms.BooleanField( required=False )
