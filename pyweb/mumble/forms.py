@@ -160,7 +160,7 @@ class MumbleForm( PropertyModelForm ):
 
     class Meta:
         model   = Mumble
-        fields  = ['name']
+        fields  = ['name', 'display']
 
     def EXT_authorize( self, request, action ):
         return self.instance.isUserAdmin( request.user )
