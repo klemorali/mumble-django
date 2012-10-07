@@ -290,17 +290,18 @@ class Mumble( models.Model ):
     channel = mk_config_property( "channelname",            ugettext_noop("Channel name regex") )
     defchan = mk_config_property( "defaultchannel",         ugettext_noop("Default channel"),    get_coerce=int )
     timeout = mk_config_property( "timeout",                ugettext_noop("Timeout"),            get_coerce=int )
-    textlen = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
-    usersperchannel = mk_config_property( "usersperchannel",ugettext_noop("Users per channel"),  get_coerce=int )
-    sgversion = mk_config_property( "suggestversion",       ugettext_noop("Version to recommend") )
 
-    certreq = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
-    html    = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
-    bonjour = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
-    autoboot= mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
-    rememchn= mk_config_bool_property( "rememberchannel",   ugettext_noop("Remember last channel") )
-    sgpositional= mk_config_bool_property( "suggestpositional", ugettext_noop("Suggest to use positional audio") )
-    sgptt   = mk_config_bool_property( "suggestpushtotalk", ugettext_noop("Suggest to use Push-To-Talk") )
+    textmessagelength   = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
+    usersperchannel     = mk_config_property( "usersperchannel",        ugettext_noop("Users per channel"),  get_coerce=int )
+    suggestversion      = mk_config_property( "suggestversion",         ugettext_noop("Version to recommend") )
+
+    certrequired        = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
+    allowhtml           = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
+    bonjour             = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
+    autoboot            = mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
+    rememberchannel     = mk_config_bool_property( "rememberchannel",   ugettext_noop("Remember last channel") )
+    suggestpositional   = mk_config_bool_property( "suggestpositional", ugettext_noop("Suggest to use positional audio") )
+    suggestpushtotalk   = mk_config_bool_property( "suggestpushtotalk", ugettext_noop("Suggest to use Push-To-Talk") )
 
     def get_absolute_url( self ):
         from views import show

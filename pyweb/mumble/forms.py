@@ -114,15 +114,16 @@ class MumbleForm( PropertyModelForm ):
     channel = forms.CharField( required=False )
     defchan = forms.TypedChoiceField( choices=(), coerce=int, required=False )
     timeout = forms.IntegerField( required=False )
-    certreq = forms.BooleanField( required=False )
-    textlen = forms.IntegerField( required=False )
-    html    = forms.BooleanField( required=False )
-    rememchn= forms.BooleanField( required=False, help_text=_(
+
+    certrequired        = forms.BooleanField( required=False )
+    textmessagelength   = forms.IntegerField( required=False )
+    allowhtml           = forms.BooleanField( required=False )
+    rememberchannel     = forms.BooleanField( required=False, help_text=_(
         "Remember the channel users were in when they quit, and automatically move them to "
         "that channel when they join.") )
-    sgversion= forms.CharField( required=False )
-    sgpositional = forms.BooleanField( required=False )
-    sgptt    = forms.BooleanField( required=False )
+    suggestversion      = forms.CharField( required=False )
+    suggestpositional   = forms.BooleanField( required=False )
+    suggestpushtotalk   = forms.BooleanField( required=False )
 
     def __init__( self, *args, **kwargs ):
         PropertyModelForm.__init__( self, *args, **kwargs )
