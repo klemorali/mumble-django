@@ -31,7 +31,7 @@ SLICE = '/usr/share/slice/Murmur.ice'                          ##
 ## $SLICEDIR/Ice/SliceChecksumDict.ice exists.                 ##
 ## Not used on recent Ice versions, because the SLICEDIR can   ##
 ## be retrieved from Ice directly.                             ##
-SLICEDIR = '/usr/share/slice'                                  ##
+SLICEDIR = '/usr/share/Ice/slice'                              ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
