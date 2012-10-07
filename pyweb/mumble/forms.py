@@ -135,7 +135,7 @@ class MumbleForm( PropertyModelForm ):
         "specified in the Display Address field must contain the same location code.") )
     registerpassword    = forms.CharField( required=False, help_text=_(
         "Password used for the server list registration. Required for the server to be listed in the server list. "
-        "Note that you will never need to enter this password anywhere. It is solely used by Murmur to update the registration.")
+        "Note that you will never need to enter this password anywhere. It is solely used by Murmur to update the registration.") )
     allowping           = forms.BooleanField( required=False, initial=True, help_text=_(
         "Allow ping packets from the server (to show usercount and slots in the server browser). "
         "Required for the server to be listed in the server list.") )
