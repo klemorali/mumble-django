@@ -300,6 +300,7 @@ class Mumble( models.Model ):
     opusthreshold       = mk_config_property( "opusthreshold",          ugettext_noop("Opusthreshold") )
     channelnestinglimit = mk_config_property( "channelnestinglimit",    ugettext_noop("Channel nesting limit") )
     registerlocation    = mk_config_property( "registerlocation",       ugettext_noop("Server location") )
+    registerpassword    = mk_config_property( "registerpassword",       ugettext_noop("Registration password") )
 
     certrequired        = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
     allowhtml           = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
