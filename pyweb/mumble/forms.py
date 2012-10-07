@@ -114,16 +114,17 @@ class MumbleForm( PropertyModelForm ):
     channel = forms.CharField( required=False )
     defchan = forms.TypedChoiceField( choices=(), coerce=int, required=False )
     timeout = forms.IntegerField( required=False )
-    certreq = forms.BooleanField( required=False )
-    textlen = forms.IntegerField( required=False )
+
+    certrequired        = forms.BooleanField( required=False )
+    textmessagelength   = forms.IntegerField( required=False )
     imglen = forms.IntegerField( required=False, help_text=_("In case of messages containing Base64 encoded images this overrides textmessagelength.") )
-    html    = forms.BooleanField( required=False )
-    rememchn= forms.BooleanField( required=False, help_text=_(
+    allowhtml           = forms.BooleanField( required=False )
+    rememberchannel     = forms.BooleanField( required=False, help_text=_(
         "Remember the channel users were in when they quit, and automatically move them to "
         "that channel when they join.") )
-    sgversion= forms.CharField( required=False )
-    sgpositional = forms.BooleanField( required=False )
-    sgptt    = forms.BooleanField( required=False )
+    suggestversion      = forms.CharField( required=False )
+    suggestpositional   = forms.BooleanField( required=False )
+    suggestpushtotalk   = forms.BooleanField( required=False )
     opusthres = forms.IntegerField( required=False, initial=100, help_text=_("Force Opus-Codec if this percentage of clients support it. Enter without % character.") )
     reghostname = forms.CharField( required=False, help_text=_("Server hostname (domain name) that is used to connect to the server from the server list. This must be a A or AAAA record.") )
     regpasswd = forms.CharField( required=False, help_text=_("Password used to register the server in the server list") )
