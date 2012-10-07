@@ -295,6 +295,8 @@ class Mumble( models.Model ):
     imagemessagelength  = mk_config_property( "imagemessagelength",     ugettext_noop("Maximum length of text messages containing images") )
     usersperchannel     = mk_config_property( "usersperchannel",        ugettext_noop("Users per channel"),  get_coerce=int )
     suggestversion      = mk_config_property( "suggestversion",         ugettext_noop("Version to recommend") )
+    suggestpositional   = mk_config_property( "suggestpositional",      ugettext_noop("Suggest to use positional audio") )
+    suggestpushtotalk   = mk_config_property( "suggestpushtotalk",      ugettext_noop("Suggest to use Push-To-Talk") )
     sslca               = mk_config_property( "sslca",                  ugettext_noop("CA Certificate") )
     sslpassphrase       = mk_config_property( "sslpassphrase",          ugettext_noop("Key passphrase") )
     opusthreshold       = mk_config_property( "opusthreshold",          ugettext_noop("Opusthreshold") )
@@ -307,8 +309,6 @@ class Mumble( models.Model ):
     bonjour             = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
     autoboot            = mk_config_bool_property( "boot",              ugettext_noop("Boot Server when Murmur starts") )
     rememberchannel     = mk_config_bool_property( "rememberchannel",   ugettext_noop("Remember last channel") )
-    suggestpositional   = mk_config_bool_property( "suggestpositional", ugettext_noop("Suggest to use positional audio") )
-    suggestpushtotalk   = mk_config_bool_property( "suggestpushtotalk", ugettext_noop("Suggest to use Push-To-Talk") )
     allowping           = mk_config_bool_property( "allowping",         ugettext_noop("Allow ping packets") )
     sendversion         = mk_config_bool_property( "sendversion",       ugettext_noop("Allow to send system version") )
 
