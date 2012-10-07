@@ -1,0 +1,8 @@
+These fixtures are only used for testing purposes and may be ignored for a
+standard installation of mumble-django.
+
+They can be created from a running database using the following command:
+./manage.py dumpdata --indent=2 mumble auth > mumble/fixtures/testdb.json
+
+The provided mumble-server.db3 file is a Murmur database that can be used
+together with the provided fixtures to run the tests.

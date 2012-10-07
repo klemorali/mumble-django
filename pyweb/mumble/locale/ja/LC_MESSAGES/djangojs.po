@@ -1,0 +1,348 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-13 16:25+0100\n"
+"PO-Revision-Date: 2010-11-14 00:58\n"
+"Last-Translator:   <noname@withgod.jp>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.5.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: media/js/banviewer.js:11
+msgid "Bans"
+msgstr "バン"
+
+#: media/js/banviewer.js:13 media/js/logviewer.js:13
+msgid "Timestamp"
+msgstr "日付"
+
+#: media/js/banviewer.js:20
+msgid "Duration"
+msgstr "Registrierung"
+
+#: media/js/banviewer.js:24 media/js/channelviewerplugins.js:126
+msgid "Reason"
+msgstr "理由"
+
+#: media/js/banviewer.js:30 media/js/logviewer.js:45
+#: media/js/usereditor.js:136
+msgid "Refresh"
+msgstr "更新"
+
+#: media/js/buttoniframewindow.js:30
+msgid "Open in new window"
+msgstr "新規ウィンドウで開く"
+
+#: media/js/channelviewer.js:23
+msgid "undefined"
+msgstr "未定義"
+
+#: media/js/channelviewer.js:91
+msgid "Channel Viewer"
+msgstr "チャンネルビューワ"
+
+#: media/js/channelviewer.js:97 media/js/channelviewerplugins.js:51
+msgid "Loading..."
+msgstr "ローディング..."
+
+#: media/js/channelviewer.js:114
+msgid "Auto-Refresh"
+msgstr "自動更新"
+
+#: media/js/channelviewerplugins.js:25
+msgid "User comment"
+msgstr "ユーザコメント"
+
+#: media/js/channelviewerplugins.js:34
+msgid "Avatar"
+msgstr "アバター"
+
+#: media/js/channelviewerplugins.js:46
+msgid "This user does not have an Avatar."
+msgstr "このユーザはアバターを登録していません"
+
+#: media/js/channelviewerplugins.js:53
+msgid "Infos"
+msgstr "情報"
+
+#: media/js/channelviewerplugins.js:58
+msgid "Authenticated"
+msgstr ""
+
+#: media/js/channelviewerplugins.js:64
+msgid "Self-Deafened"
+msgstr "自分で聴取禁止"
+
+#: media/js/channelviewerplugins.js:70
+msgid "Deafened"
+msgstr "聴取禁止"
+
+#: media/js/channelviewerplugins.js:76
+msgid "Self-Muted"
+msgstr "自分で発言禁止"
+
+#: media/js/channelviewerplugins.js:82
+msgid "Muted"
+msgstr "発言禁止"
+
+#: media/js/channelviewerplugins.js:88
+msgid "Suppressed"
+msgstr ""
+
+#: media/js/channelviewerplugins.js:94
+msgid "Priority Speaker"
+msgstr "発言順序"
+
+#: media/js/channelviewerplugins.js:100
+msgid "Recording"
+msgstr "記録"
+
+#: media/js/channelviewerplugins.js:110
+msgid "Administration"
+msgstr "Administration"
+
+#: media/js/channelviewerplugins.js:113
+msgid "Ban"
+msgstr "バン"
+
+#: media/js/channelviewerplugins.js:117
+msgid "Ban duration"
+msgstr "バン期間"
+
+#: media/js/channelviewerplugins.js:122
+msgid ""
+"Only if banning. Set to 0 for permanent ban, any other value for the ban "
+"duration in seconds."
+msgstr "バンする秒数を指定してください、0を指定した場合はずっとバンされます"
+
+#: media/js/channelviewerplugins.js:131
+msgid "Kick"
+msgstr "キック"
+
+#: media/js/channelviewerplugins.js:139
+msgid "Mute"
+msgstr "ミュート"
+
+#: media/js/channelviewerplugins.js:149
+msgid "Deafen"
+msgstr ""
+
+#: media/js/channelviewerplugins.js:164 media/js/channelviewerplugins.js:174
+#: media/js/channelviewerplugins.js:287 media/js/channelviewerplugins.js:301
+msgid "Send message"
+msgstr "メッセージ送信"
+
+#: media/js/channelviewerplugins.js:184
+msgid "User details"
+msgstr "ユーザ詳細"
+
+#: media/js/channelviewerplugins.js:234
+msgid "Channel description"
+msgstr "チャンネル説明"
+
+#: media/js/channelviewerplugins.js:253
+msgid "Add subchannel..."
+msgstr "サブチャンネルを追加"
+
+#: media/js/channelviewerplugins.js:256
+msgid "Name"
+msgstr "名前"
+
+#: media/js/channelviewerplugins.js:256
+msgid "Please enter the channel name:"
+msgstr "チャンネル名を入力してください"
+
+#: media/js/channelviewerplugins.js:264
+msgid "Submit name/description"
+msgstr "名前/詳細 を送信"
+
+#: media/js/channelviewerplugins.js:270
+msgid "Delete channel"
+msgstr "チャンネル削除"
+
+#: media/js/channelviewerplugins.js:274
+msgid "Confirm channel deletion"
+msgstr "削除確認"
+
+#: media/js/channelviewerplugins.js:275
+#, perl-format
+msgid "Are you sure you want to delete channel %s?"
+msgstr "本当に %s チャンネルを削除して良いですか？"
+
+#: media/js/channelviewerplugins.js:291
+msgid "Cascade to subchannels"
+msgstr ""
+
+#: media/js/channelviewerplugins.js:311
+msgid "Channel details"
+msgstr "シャンネル詳細"
+
+#: media/js/loginout_buttons.js:7
+msgid "Logout"
+msgstr "ログアウト"
+
+#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:33
+msgid "Login error"
+msgstr "ログインエラー"
+
+#: media/js/loginout_buttons.js:16
+msgid "Unable to log out."
+msgstr "ログアウト失敗"
+
+#: media/js/loginout_buttons.js:34
+msgid "Unable to log in."
+msgstr "ログイン失敗"
+
+#: media/js/loginout_buttons.js:43 media/js/loginout_buttons.js.py:48
+msgid "Login"
+msgstr "ログイン"
+
+#: media/js/loginout_buttons.js:59
+msgid "Submit"
+msgstr "送信"
+
+#: media/js/loginout_buttons.js:66
+msgid "User name"
+msgstr "ユーザ名"
+
+#: media/js/loginout_buttons.js:77
+msgid "Password"
+msgstr "パスワード"
+
+#: media/js/logviewer.js:11
+msgid "Log messages"
+msgstr "ログメッセージ"
+
+#: media/js/logviewer.js:20
+msgid "Log entry"
+msgstr "ログエントリー"
+
+#: media/js/logviewer.js:25
+msgid "Filter"
+msgstr "フィルター"
+
+#: media/js/logviewer.js:33
+msgid ""
+"Enter a string to filter the logs by and press Enter. To display all log "
+"entries, empty this field."
+msgstr ""
+"入力文字列をフィルターとして利用できます。何も入れなければ、全てのログを表示"
+"できます。"
+
+#: media/js/rendermumbleserver.js:7
+msgid "Server Address"
+msgstr "サーバアドレス"
+
+#: media/js/rendermumbleserver.js:10
+msgid "Website"
+msgstr "ウェブサイト"
+
+#: media/js/rendermumbleserver.js:12
+#, perl-format
+msgid "This server is running Murmur version %s."
+msgstr "本サーバは Murmur バージョン %s で稼動しています"
+
+#: media/js/rendermumbleserver.js:14
+#, perl-format
+msgid "Currently, %s user is registered."
+msgid_plural "Currently, %s users are registered."
+msgstr[0] "ユーザ %s が登録されました"
+msgstr[1] "現在  %s 名のユーザが登録されています。"
+
+#: media/js/rendermumbleserver.js:17
+#, perl-format
+msgid "Currently, %s user is online."
+msgid_plural "Currently, %s users are online."
+msgstr[0] "現在 %s ユーザがオンラインになりました"
+msgstr[1] "現在 %s 名ユーザがオンラインです"
+
+#: media/js/rendermumbleserver.js:20
+#, perl-format
+msgid "Currently, there is %s channel."
+msgid_plural "Currently, there are %s channels."
+msgstr[0] "現在 %s チャンネル"
+msgstr[1] "現在 %s チャンネル登録されています"
+
+#: media/js/rendermumbleserver.js:23
+#, perl-format
+msgid "This server is running since %s."
+msgstr "本サーバは %s から稼動しています"
+
+#: media/js/rendermumbleserver.js:25
+msgid "Switch to minimal view"
+msgstr "ミニビューに変更"
+
+#: media/js/rendermumbleserver.js:32
+msgid "Welcome message"
+msgstr "ウェルカムメッセージ"
+
+#: media/js/usereditor.js:28
+msgid "Admin on root channel"
+msgstr "管理者がRootチャンネルにいる"
+
+#: media/js/usereditor.js:34
+msgid "Delete"
+msgstr "削除"
+
+#: media/js/usereditor.js:54
+msgid "User List"
+msgstr "ユーザリスト"
+
+#: media/js/usereditor.js:59
+msgid "name"
+msgstr "名前"
+
+#: media/js/usereditor.js:66
+msgid "Account owner"
+msgstr "アカウント所有者"
+
+#: media/js/usereditor.js:78
+msgid "Change password"
+msgstr "パスワード変更"
+
+#: media/js/usereditor.js:92
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: media/js/usereditor.js:96
+msgid "New User"
+msgstr "新規ユーザ"
+
+#: media/js/usereditor.js:104
+msgid "Save"
+msgstr "保存"
+
+#: media/js/usereditor.js:127
+msgid "Submit error"
+msgstr "送信に失敗しました"
+
+#: media/js/usereditor.js:128
+msgid "Unable to save."
+msgstr "保存に失敗しました"
+
+#: media/js/usereditor.js:143
+msgid "Resync with Murmur"
+msgstr "Murmurと再同期"
+
+#~ msgid "User texture"
+#~ msgstr "Benutzertextur"
+
+#~ msgid "Texture"
+#~ msgstr "Textur"
+
+#~ msgid "Use Gravatar"
+#~ msgstr "Benutze Gravatar"
+
+#~ msgid "Upload Avatar"
+#~ msgstr "Avatar hochladen"

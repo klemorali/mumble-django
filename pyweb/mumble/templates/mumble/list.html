@@ -1,0 +1,119 @@
+{% extends "index.html" %}
+{% comment %}
+    <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
+{% endcomment %}
+{% load mumble_extras %}
+{% load i18n %}
+{% block body %}
+{% endblock %}
+{% block HeadTag %}
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
+    <script type="text/javascript" src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
+    <script type="text/javascript">
+        Ext.onReady( function(){
+            Ext.QuickTips.init();
+            mainpanel = new Ext.Panel({
+                renderTo: document.body,
+                height:   600,
+                layout:   "border",
+                title:    "{% trans 'Mumble Servers' %}",
+                buttons: [
+                    {% if user.is_staff and "rosetta" in INSTALLED_APPS %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  "{% trans 'Edit Translation' %}",
+                        url: '{% url rosetta-home %}',
+                    },
+                    {% endif %}
+                    {% if user.is_staff %}
+                    {
+                        xtype: 'buttonIframeWindow',
+                        text:  "{% trans 'Administration' %}",
+                        url: '{% url admin:app_list "mumble" %}',
+                    },
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        new Ext.ux.ButtonLogout()
+                    {% else %}
+                        new Ext.ux.ButtonLogin()
+                    {% endif %}
+                ],
+                items: [{
+                    xtype:  "listview",
+                    title:  "{% trans 'Available servers' %}",
+                    ref:    "serverlist",
+                    region: "west",
+                    width: 350,
+                    split: true,
+                    singleSelect: true,
+                    store: new Ext.data.DirectStore({
+                        directFn: MumbleList.servers,
+                        fields:   [ 'id', 'name', 'booted' ],
+                        autoLoad: true,
+                        listeners: {
+                            load: function( store, records, objects ){
+                                for( var i = 0; i < records.length; i++ ){
+                                    if( records[i].data.booted ){
+                                        mainpanel.serverlist.select(records[i]);
+                                        return;
+                                        }
+                                    }
+                                }
+                            }
+                        }),
+                    columns: [{
+                        header: "{% trans 'Name' %}",
+                        dataIndex: "name",
+                        width: 1.
+                    }],
+                    listeners: {
+                        dblclick: function(listview){
+                            location.href = mainpanel.selectedServer.detailsurl;
+                        },
+                        selectionchange: function(listview, nodes){
+                            selectedstuff = listview.getSelectedRecords();
+                            MumbleList.serverinfo( selectedstuff[0].data.id, function(provider, response){
+                                mainpanel.selectedServer = response.result;
+                                if( response.result.booted )
+                                    var info = renderserverinfos(response.result);
+                                else
+                                    var info = "{% trans 'This server is currently offline.' %}";
+                                mainpanel.descrippanel.el.dom.children[1].children[0].innerHTML = info;
+                            });
+                        }
+                    },
+                }, {
+                    xtype:  "panel",
+                    region: "center",
+                    title:  "{% trans 'Server overview' %}",
+                    ref:    'descrippanel',
+                    html:   "{% trans 'Loading...' %}",
+                    buttons: [{
+                        text: "{% trans 'Server details' %}",
+                        handler: function( button, state ){
+                            location.href = mainpanel.selectedServer.detailsurl;
+                        }
+                    }]
+                }],
+            });
+            function updateLayout(){
+                viewsize = {
+                    width:  Ext.lib.Dom.getViewWidth(),
+                    height: Ext.lib.Dom.getViewHeight()
+                };
+                mainpanel.setHeight( viewsize.height - 20 );
+                mainpanel.setWidth( viewsize.width - 40 );
+            }
+            updateLayout();
+            Ext.EventManager.onWindowResize(updateLayout);
+        } );
+    </script>
+    <style type="text/css">
+        body {
+            padding: 20px 20px 0 20px;
+        }
+    </style>
+{% endblock %}
