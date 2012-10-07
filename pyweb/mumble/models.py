@@ -292,9 +292,15 @@ class Mumble( models.Model ):
     timeout = mk_config_property( "timeout",                ugettext_noop("Timeout"),            get_coerce=int )
 
     textmessagelength   = mk_config_property( "textmessagelength",      ugettext_noop("Maximum length of text messages") )
-    imglen = mk_config_property( "imagemessagelength",      ugettext_noop("Maximum length of text messages containing images") )
+    imagemessagelength  = mk_config_property( "imagemessagelength",     ugettext_noop("Maximum length of text messages containing images") )
     usersperchannel     = mk_config_property( "usersperchannel",        ugettext_noop("Users per channel"),  get_coerce=int )
     suggestversion      = mk_config_property( "suggestversion",         ugettext_noop("Version to recommend") )
+    sslca               = mk_config_property( "sslca",                  ugettext_noop("CA Certificate") )
+    sslpassphrase       = mk_config_property( "sslpassphrase",          ugettext_noop("Key passphrase") )
+    opusthreshold       = mk_config_property( "opusthreshold",          ugettext_noop("Opusthreshold") )
+    channelnestinglimit = mk_config_property( "channelnestinglimit",    ugettext_noop("Channel nesting limit") )
+    registerlocation    = mk_config_property( "registerlocation",       ugettext_noop("Server location") )
+
     certrequired        = mk_config_bool_property( "certrequired",      ugettext_noop("Require Certificate") )
     allowhtml           = mk_config_bool_property( "allowhtml",         ugettext_noop("Allow HTML to be used in messages") )
     bonjour             = mk_config_bool_property( "bonjour",           ugettext_noop("Publish this server via Bonjour") )
@@ -302,15 +308,8 @@ class Mumble( models.Model ):
     rememberchannel     = mk_config_bool_property( "rememberchannel",   ugettext_noop("Remember last channel") )
     suggestpositional   = mk_config_bool_property( "suggestpositional", ugettext_noop("Suggest to use positional audio") )
     suggestpushtotalk   = mk_config_bool_property( "suggestpushtotalk", ugettext_noop("Suggest to use Push-To-Talk") )
-    sgversion  = mk_config_bool_property( "suggestversion", ugettext_noop("Suggest to use version") )
-    opusthres = mk_config_bool_property( "opusthreshold", ugettext_noop("Opusthreshold") )
-    channestlim = mk_config_bool_property( "channelnestinglimit", ugettext_noop("Channel nesting limit") )
-    regpasswd = mk_config_bool_property( "registerpassword", ugettext_noop("Registerpassword") )
-    regloc = mk_config_bool_property( "registerlocation", ugettext_noop("Serverlocation") )
-    allowping = mk_config_bool_property( "allowping", ugettext_noop("Allow ping packets") ) 
-    sendversion= mk_config_property( "sendversion",       ugettext_noop("Allow to send system version") )
-    sslca = mk_config_property( "sslca",      ugettext_noop("CA-Certificate") )
-    sslpass = mk_config_property( "sslpassphrase",      ugettext_noop("Key passphrase") )
+    allowping           = mk_config_bool_property( "allowping",         ugettext_noop("Allow ping packets") )
+    sendversion         = mk_config_bool_property( "sendversion",       ugettext_noop("Allow to send system version") )
 
 
     def get_absolute_url( self ):
