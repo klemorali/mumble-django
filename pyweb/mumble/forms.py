@@ -105,10 +105,11 @@ class MumbleForm( PropertyModelForm ):
         where everything can be configured freely.
     """
 
-    url     = forms.CharField( required=False )
+    url     = forms.CharField( required=False, help_text=_(
+        "Website URL. Required for the server to be listed in the server list."))
     motd    = forms.CharField( required=False, widget=forms.Textarea )
     passwd  = forms.CharField( required=False, help_text=_(
-        "Password required to join. Leave empty for public servers.") )
+        "Password required to join. Leave empty for public servers. Private servers cannot be listed in the server list.") )
     supw    = forms.CharField( required=False, widget=forms.PasswordInput )
     player  = forms.CharField( required=False )
     channel = forms.CharField( required=False )
@@ -132,9 +133,12 @@ class MumbleForm( PropertyModelForm ):
         "Location of the server as ISO_3166-1 country code. In order for this to work, you must have "
         "a strong server certificate that carries the same country code. Alternatively, the TLD "
         "specified in the Display Address field must contain the same location code.") )
+    registerpassword    = forms.CharField( required=False, help_text=_(
+        "Password used for the server list registration. Required for the server to be listed in the server list. "
+        "Note that you will never need to enter this password anywhere. It is solely used by Murmur to update the registration.")
     allowping           = forms.BooleanField( required=False, initial=True, help_text=_(
         "Allow ping packets from the server (to show usercount and slots in the server browser). "
-        "This is required for the server to be listed in the server list.") )
+        "Required for the server to be listed in the server list.") )
     sendversion         = forms.BooleanField( required=False, initial=True, help_text=_(
         "Allow server to send system version to the client.") )
 
