@@ -31,7 +31,7 @@ SLICE = '/usr/share/slice/Murmur.ice'                          ##
 ## $SLICEDIR/Ice/SliceChecksumDict.ice exists.                 ##
 ## Not used on recent Ice versions, because the SLICEDIR can   ##
 ## be retrieved from Ice directly.                             ##
-SLICEDIR = '/usr/share/slice'                                  ##
+SLICEDIR = '/usr/share/Ice/slice'                              ##
 ##                                                             ##
 #################################################################
 ##                                                             ##
@@ -243,6 +243,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware'
 )
 
 ROOT_URLCONF = 'pyweb.urls'
