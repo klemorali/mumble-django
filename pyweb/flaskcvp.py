@@ -25,58 +25,65 @@ from mumble.mctl import MumbleCtlBase
 
 DEFAULT_CONNSTRING = 'Meta:tcp -h 127.0.0.1 -p 6502'
 DEFAULT_SLICEFILE  = '/usr/share/slice/Murmur.ice'
+DEFAULT_ICESECRET  = None
 
-parser = OptionParser("""Usage: %prog [options]
+if __name__ == '__main__':
+    parser = OptionParser("""Usage: %prog [options]
 
 This is a minimalistic implementation of a Channel Viewer Protocol provider
 using the Flask Python framework and Mumble-Django's MCTL connection library.
 """)
 
-parser.add_option( "-c", "--connstring",
-    help="connection string to use. Default is '%s'." % DEFAULT_CONNSTRING,
-    default=None
-    )
+    parser.add_option( "-c", "--connstring",
+        help="connection string to use. Default is '%s'." % DEFAULT_CONNSTRING,
+        default=None
+        )
 
-parser.add_option( "-i", "--icesecret",
-    help="Ice secret to use in the connection. Also see --asksecret.",
-    default=None
-    )
+    parser.add_option( "-i", "--icesecret",
+        help="Ice secret to use in the connection. Also see --asksecret.",
+        default=DEFAULT_ICESECRET
+        )
 
-parser.add_option( "-a", "--asksecret",
-    help="Ask for the Ice secret on the shell instead of taking it from the command line.",
-    action="store_true", default=False
-    )
+    parser.add_option( "-a", "--asksecret",
+        help="Ask for the Ice secret on the shell instead of taking it from the command line.",
+        action="store_true", default=False
+        )
 
-parser.add_option( "-s", "--slice",
-    help="path to the slice file. Default is '%s'." % DEFAULT_SLICEFILE,
-    default=None
-    )
+    parser.add_option( "-s", "--slice",
+        help="path to the slice file. Default is '%s'." % DEFAULT_SLICEFILE,
+        default=None
+        )
 
-parser.add_option( "-d", "--debug", 
-    help="Enable error debugging",
-    default=False, action="store_true" )
+    parser.add_option( "-d", "--debug", 
+        help="Enable error debugging",
+        default=False, action="store_true" )
 
-parser.add_option( "-H", "--host",
-    help="The IP to bind to. Default is '127.0.0.1'.",
-    default="127.0.0.1"
-    )
+    parser.add_option( "-H", "--host",
+        help="The IP to bind to. Default is '127.0.0.1'.",
+        default="127.0.0.1"
+        )
 
-parser.add_option( "-p", "--port", type="int",
-    help="The port number to bind to. Default is 5000.",
-    default=5000
-    )
+    parser.add_option( "-p", "--port", type="int",
+        help="The port number to bind to. Default is 5000.",
+        default=5000
+        )
 
-options, progargs = parser.parse_args()
+    options, progargs = parser.parse_args()
 
-if options.connstring is None:
-    options.connstring = DEFAULT_CONNSTRING
+    if options.connstring is None:
+        options.connstring = DEFAULT_CONNSTRING
 
-if options.slice is None:
-    options.slice = DEFAULT_SLICEFILE
+    if options.slice is None:
+        options.slice = DEFAULT_SLICEFILE
 
-if options.asksecret or options.icesecret == '':
-    options.icesecret = getpass.getpass( "Ice secret: " )
+    if options.asksecret:
+        options.icesecret = getpass.getpass( "Ice secret: " )
 
+else:
+    class options:
+        connstring = DEFAULT_CONNSTRING
+        slice      = DEFAULT_SLICEFILE
+        icesecret  = DEFAULT_ICESECRET
 
 ctl = MumbleCtlBase.newInstance( options.connstring, options.slice, options.icesecret )
 
