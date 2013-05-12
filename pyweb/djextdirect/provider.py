@@ -15,10 +15,8 @@
  *  GNU General Public License for more details.
 """
 
-try:
-    import simplejson
-except ImportError:
-    import json as simplejson
+import json as json
+
 import inspect
 import functools
 import traceback
@@ -130,7 +128,7 @@ class Provider( object ):
 
     def get_api_plain( self, request ):
         """ Introspect the methods and get a JSON description of only the API. """
-        return HttpResponse( simplejson.dumps({
+        return HttpResponse( json.dumps({
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": self.build_api_dict()
@@ -141,7 +139,7 @@ class Provider( object ):
             that is meant to be embedded directly into the web site.
         """
         request.META["CSRF_COOKIE_USED"] = True
-        lines = ["%s = %s;" % ( self.name, simplejson.dumps({
+        lines = ["%s = %s;" % ( self.name, json.dumps({
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": self.build_api_dict()
@@ -181,9 +179,9 @@ class Provider( object ):
             }
         except (MultiValueDictKeyError, KeyError), err:
             try:
-                rawjson = simplejson.loads( request.raw_post_data )
-            except getattr( simplejson, "JSONDecodeError", ValueError ):
-                return HttpResponse( simplejson.dumps({
+                rawjson = json.loads( request.raw_post_data )
+            except getattr( json, "JSONDecodeError", ValueError ):
+                return HttpResponse( json.dumps({
                     'type':    'exception',
                     'message': 'malformed request',
                     'where':   err.message,
@@ -284,9 +282,9 @@ class Provider( object ):
                     })
 
         if len(responses) == 1:
-            return HttpResponse( simplejson.dumps( responses[0], cls=DjangoJSONEncoder ), mimetype="application/json" )
+            return HttpResponse( json.dumps( responses[0], cls=DjangoJSONEncoder ), mimetype="application/json" )
         else:
-            return HttpResponse( simplejson.dumps( responses, cls=DjangoJSONEncoder ),    mimetype="application/json" )
+            return HttpResponse( json.dumps( responses, cls=DjangoJSONEncoder ),    mimetype="application/json" )
 
     def process_form_request( self, request, reqinfo ):
         """ Router for POST requests that submit form data and/or file uploads. """
@@ -341,11 +339,11 @@ class Provider( object ):
 
         if reqinfo['upload'] == "true":
             return HttpResponse(
-                "<html><body><textarea>%s</textarea></body></html>" % simplejson.dumps(response, cls=DjangoJSONEncoder),
+                "<html><body><textarea>%s</textarea></body></html>" % json.dumps(response, cls=DjangoJSONEncoder),
                 mimetype="application/json"
                 )
         else:
-            return HttpResponse( simplejson.dumps( response, cls=DjangoJSONEncoder ), mimetype="application/json" )
+            return HttpResponse( json.dumps( response, cls=DjangoJSONEncoder ), mimetype="application/json" )
 
     def get_urls(self):
         """ Return the URL patterns. """
