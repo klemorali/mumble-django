@@ -15,8 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-import json as json
-
+import json
 import inspect
 import functools
 import traceback
