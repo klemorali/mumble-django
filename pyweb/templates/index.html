@@ -30,33 +30,33 @@
       <div id="headpanel">
         <div id="headlinks">
           {% if user.is_authenticated %}
-            <a href="{% url django.contrib.auth.views.logout %}">{% trans "Log out" %}</a> |
+            <a href="{% url 'django.contrib.auth.views.logout' %}">{% trans "Log out" %}</a> |
           {% else %}
-            <a href="{% url django.contrib.auth.views.login %}">{% trans "Log in" %}</a> |
+            <a href="{% url 'django.contrib.auth.views.login' %}">{% trans "Log in" %}</a> |
           {% endif %}
           {% if user.is_staff %}
-            <a href="{% url admin:index %}" target="_blank">{% trans "Administration" %}</a> |
+            <a href="{% url 'admin:index' %}" target="_blank">{% trans "Administration" %}</a> |
             {% if "rosetta" in INSTALLED_APPS %}
-              <a href="{% url rosetta.views.home %}" target="_blank">{% trans "Edit translations" %}</a> |
+              <a href="{% url 'rosetta.views.home' %}" target="_blank">{% trans "Edit translations" %}</a> |
             {% endif %}
           {% endif %}
-          <a href="{% url views.imprint %}">{% trans "Imprint" %}</a>
+          <a href="{% url 'views.imprint' %}">{% trans "Imprint" %}</a>
         </div>
         <h2>{% block Headline %}{% endblock %}</h2>
       </div>
       <!-- navi -->
       <div id="navipanel">
         <ul id="navilinks">
-          <li><a href="{% url mumble.views.redir %}">{% trans "Home" %}</a></li>
+          <li><a href="{% url 'mumble.views.redir' %}">{% trans "Home" %}</a></li>
           {% if MumbleActive %}
             <li><b>Mumble</b></li>
           {% else %}
-            <li><a href="{% url mumble.views.mumbles %}">Mumble</a></li>
+            <li><a href="{% url 'mumble.views.mumbles' %}">Mumble</a></li>
           {% endif %}
           {% if ProfileActive %}
             <li><b>Profile</b></li>
           {% else %}
-            <li><a href="{% url views.profile %}">{% trans "Profile" %}</a></li>
+            <li><a href="{% url 'views.profile' %}">{% trans "Profile" %}</a></li>
           {% endif %}
         </ul>
       </div>
