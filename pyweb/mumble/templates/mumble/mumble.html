@@ -14,7 +14,7 @@
             background: transparent url({{ MUMBLE_MEDIA_PREFIX }}img/tab-scroller-menu.gif) no-repeat 0 0;
         }
     </style>
-    <script src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/api.js"></script>
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/choicescombo.js"></script>
@@ -40,7 +40,7 @@
                     text: "{% trans "Back to the server list" %}",
                     xtype: "button",
                     handler: function(){
-                        location.href = "{% url mumble.views.mumbles %}";
+                        location.href = "{% url 'mumble.views.mumbles' %}";
                     }
                 } ],
                 buttons: [
@@ -48,14 +48,14 @@
                     {
                         xtype: 'buttonIframeWindow',
                         text:  "{% trans 'Edit Translation' %}",
-                        url: '{% url rosetta-home %}'
+                        url: '{% url "rosetta-home" %}'
                     },
                     {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  "{% trans 'Administration' %}",
-                        url: '{% url admin:mumble_mumble_change MumbleServer.id %}'
+                        url: '{% url "admin:mumble_mumble_change" MumbleServer.id %}'
                     },
                     {% endif %}
                     {% if user.is_authenticated %}
@@ -65,7 +65,7 @@
                         {
                             xtype: 'buttonIframeWindow',
                             text:  "{% trans 'Register' %}",
-                            url: '{% url registration.views.register %}'
+                            url: '{% url "registration.views.register" %}'
                         },
                         {% endif %}
                         new Ext.ux.ButtonLogin()
@@ -90,7 +90,7 @@
                             is_admin: {{ IsAdmin|lower }}
                             })
                         ],
-                    source_url: "{% url mumble.views.cvp_json MumbleServer.id %}",
+                    source_url: "{% url 'mumble.views.cvp_json' MumbleServer.id %}",
                     imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
                     listeners: {
                         moveUser: function( tree, userdata, chandata ){
@@ -109,7 +109,7 @@
                     items: [{
                         title: "{% trans "Server info" %}",
                         {% if QRAvailable %}
-                            html:  ('<img src="{% url mumble.views.qrcode MumbleServer.id %}" ' +
+                            html:  ('<img src="{% url "mumble.views.qrcode" MumbleServer.id %}" ' +
                                     'style="float: right" alt="QR Code for embedded view"/>' +
                                     renderserverinfos( {{ ServerDict|safe }} ))
                         {% else %}
@@ -196,7 +196,7 @@
                                             height: 200,
                                             title: "{% trans "Texture" %}",
                                             html: String.format('<img src="{0}" alt="Avatar" id="img_avatar" />',
-                                              "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.mumbleid %}")
+                                              "{% url 'mumble.views.showTexture' MumbleServer.id MumbleAccount.mumbleid %}")
                                         }, {
                                             flex: 1,
                                             height: 200,
@@ -208,7 +208,7 @@
                                         xtype: "form",
                                         labelWidth: 150,
                                         fileUpload: true,
-                                        url: "{% url mumble.views.update_avatar MumbleAccount.id %}",
+                                        url: "{% url 'mumble.views.update_avatar' MumbleAccount.id %}",
                                         items: [{
                                             name:       "usegravatar",
                                             fieldLabel: "{% trans "Use Gravatar" %}",
@@ -227,7 +227,7 @@
                                                         var now = new Date();
                                                         var img = Ext.fly("img_avatar");
                                                         img.dom.src = String.format("{0}?_dc={1}",
-                                                            "{% url mumble.views.showTexture MumbleServer.id MumbleAccount.mumbleid %}",
+                                                            "{% url 'mumble.views.showTexture' MumbleServer.id MumbleAccount.mumbleid %}",
                                                             now.getTime()
                                                             );
                                                         }
