@@ -2,6 +2,16 @@
 Mumble-Django changelog
 =======================
 
+Version 2.8, 12 May 2013:
+------------------------------
+* Add MessageMiddleware which is needed for the Admin system.
+* Adapt Apache configs for Django 1.4.
+* Add template for django-registration 0.8.
+* Add a bunch of new config variables (kudos to Natenom).
+* Include display address field in the server admin form.
+* Rework flaskcvp.py in a way that it'll actually run under Apache.
+* Convert {%url%} syntax for Django 1.5.
+
 Version 2.7, 31 Mar 2012:
 ------------------------------
 * Add STATIC_URL/STATIC_ROOT settings.
