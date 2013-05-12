@@ -39,16 +39,20 @@ urlpatterns = patterns('',
 
     (r'^accounts/profile/', 'views.profile' ),
     (r'^accounts/imprint/', 'views.imprint' ),
-    (r'^accounts/',         include('registration.urls') ),
 
     (r'^mumble/',           include('mumble.urls')),
 
     # Uncomment the next line to enable the admin:
     (r'^admin/',            admin.site.urls),
-    
+
     (r'^i18n/',             include('django.conf.urls.i18n')),
      (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
+
+if "registration" in settings.INSTALLED_APPS:
+    urlpatterns += patterns( '',
+        (r'^accounts/',         include('registration.urls') ),
+    )
 
 if "rosetta" in settings.INSTALLED_APPS:
     urlpatterns += patterns( '',
