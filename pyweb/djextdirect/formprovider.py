@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-import json as json
+import json
 
 import functools
 
@@ -56,13 +56,6 @@ Ext.ux.%(clsname)s = function( config ){
     this.initialConfig = defaultconf;
 
     this.api = %(apiconf)s;
-
-    for( var i = 0; i < this.items.length; i++ ){
-        if( this.items[i].xtype == "choicescombo" ){
-            this.items[i].pk = config.pk;
-            this.items[i].api = this.api;
-        }
-    }
 
     Ext.ux.%(clsname)s.superclass.constructor.call( this );
 
@@ -130,26 +123,25 @@ Ext.ux.ChoicesCombo = function( config ){
         });
 
     this.triggerAction = 'all';
-
     this.store = new Ext.data.DirectStore({
-        baseParams: {'pk': this.pk, 'field': this.name},
-        directFn: this.api.choices,
+        baseParams: {'pk': this.ownerCt.pk, 'field': this.name},
+        directFn: this.ownerCt.api.choices,
         paramOrder: ['pk', 'field'],
         reader: new Ext.data.JsonReader({
             successProperty: 'success',
             idProperty: this.valueField,
             root: 'data',
             fields: [this.valueField, this.displayField]
-        })
-    });
+        }),
+        autoLoad: true
+        });
 
     Ext.ux.ChoicesCombo.superclass.constructor.call( this );
-    this.store.load();
-};
+    };
 
 Ext.extend( Ext.ux.ChoicesCombo, Ext.form.ComboBox, {
 
-});
+    });
 
 Ext.reg( 'choicescombo', Ext.ux.ChoicesCombo );
 """
