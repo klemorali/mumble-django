@@ -25,8 +25,7 @@ def mumble_version(request):
 
 def mumble_media_prefix(request):
     from django.conf import settings
-    return { 'MUMBLE_MEDIA_PREFIX': settings.MUMBLE_MEDIA_PREFIX,
-             'MUMBLE_DJANGO_URL':   settings.MUMBLE_DJANGO_URL}
+    return { 'MUMBLE_DJANGO_URL':   settings.MUMBLE_DJANGO_URL}
 
 def theme_url(request):
     from django.conf import settings

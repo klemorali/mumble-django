@@ -11,7 +11,7 @@ Configured Mumble Servers
   <ul>
   {% for mumble in MumbleObjects %}
     {% if mumble.booted %}
-      <li><a href="{% url mumble.views.mobile_show mumble.id %}">{{ mumble.name }}</a></li>
+      <li><a href="{% url 'mumble.views.mobile_show' mumble.id %}">{{ mumble.name }}</a></li>
     {% else %}
       <li>{{ mumble.name }} (offline)</li>
     {% endif %}

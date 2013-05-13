@@ -189,22 +189,19 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+USE_L10N = True
 
-# Absolute path to the directory that holds media.
-MEDIA_ROOT = join( MUMBLE_DJANGO_ROOT, 'htdocs' )
+STATIC_URL = MUMBLE_DJANGO_URL + 'static/'
 
-# URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = MUMBLE_DJANGO_URL + 'static/'
-
-STATIC_URL  = MEDIA_URL
-STATIC_ROOT = MEDIA_ROOT
+STATICFILES_DIRS = (
+    join( MUMBLE_DJANGO_ROOT, 'htdocs' ),
+)
 
 ## URL to static files of the currently active theme
 THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
 
 # URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'media/'
-MUMBLE_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'mumble/media/'
+ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'static/admin/'
 
 # URL to the login view
 LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
@@ -282,7 +279,11 @@ CONVERSIONSQL_ROOT = join( MUMBLE_DJANGO_ROOT, "pyweb", "mumble", "conversionsql
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.contenttypes',
+    'django.contrib.messages',
+    'django.contrib.markup',
+    'django.contrib.staticfiles',
     'django.contrib.sessions',
     'django.contrib.sites',
     'mumble',
@@ -305,4 +306,4 @@ modprobe( "rosetta" )
 # Check if django_extensions is available.
 modprobe( "django_extensions" )
 
-modprobe( 'registration' )
+#modprobe( 'registration' )
