@@ -57,10 +57,7 @@
 # * Log messages:    yes
 # * Instance scope:  ALL
 
-try:
-    import simplejson
-except ImportError:
-    import json as simplejson
+import json
 
 from django.conf        import settings
 from django.test        import TestCase
@@ -91,7 +88,7 @@ class ExtDirectFormTestMixin(object):
 
     def formGet( self, data=[] ):
         rawr = self.cl.post( self.api_baseurl+'/router',
-            data=simplejson.dumps({
+            data=json.dumps({
                 'tid':    self.tid,
                 'action': ('XD_%s' % self.formname),
                 'method': 'get',
@@ -100,7 +97,7 @@ class ExtDirectFormTestMixin(object):
                 }),
             content_type='application/json' )
         self.tid += 1
-        response = simplejson.loads(rawr.content)
+        response = json.loads(rawr.content)
         if response['type'] == "exception":
             raise Exception( response["message"] )
         self.assert_( "result" in response )
@@ -117,7 +114,7 @@ class ExtDirectFormTestMixin(object):
         self.tid += 1
         postdata.update( data )
         rawr = self.cl.post( self.api_baseurl+'/router', data=postdata )
-        response = simplejson.loads(rawr.content)
+        response = json.loads(rawr.content)
         if response['type'] == "exception":
             raise Exception( response["message"] )
         self.assert_( "result" in response )

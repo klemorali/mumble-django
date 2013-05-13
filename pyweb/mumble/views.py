@@ -15,11 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-try:
-    import simplejson
-except ImportError:
-    import json as simplejson
-
+import json
 import re
 
 from StringIO     import StringIO
@@ -192,7 +188,7 @@ def show( request, server ):
 
     return render_to_response( 'mumble/mumble.html', {
             'MumbleServer': srv,
-            'ServerDict':   simplejson.dumps(serverinfo(request, server)),
+            'ServerDict':   json.dumps(serverinfo(request, server)),
             'RegForm':      regformname,
             'MumbleActive': True,
             'MumbleAccount':user,
@@ -529,7 +525,7 @@ def mmng_tree( request, server ):
         prefix = ""
 
     return HttpResponse(
-        prefix + "(" + simplejson.dumps( { 'channels': chanlist, 'users': userlist } ) + ")",
+        prefix + "(" + json.dumps( { 'channels': chanlist, 'users': userlist } ) + ")",
         mimetype='text/javascript'
         )
 
@@ -558,7 +554,7 @@ def cvp_json( request, server ):
         See <http://mumble.sourceforge.net/Channel_Viewer_Protocol>
     """
     srv = get_object_or_404( Mumble, id=int(server) )
-    json = simplejson.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
+    json = json.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
 
     if "callback" in request.GET:
         validate_jsonp_callback(request.GET["callback"])
@@ -602,6 +598,6 @@ def mumbleviewer_tree_json( request, server ):
         prefix = ""
 
     return HttpResponse(
-        prefix + "(" + simplejson.dumps( srv.asMvJson() ) + ")",
+        prefix + "(" + json.dumps( srv.asMvJson() ) + ")",
         mimetype='text/javascript'
         )
