@@ -15,11 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-try:
-    import simplejson
-except ImportError:
-    import json as simplejson
-
+import json
 import httplib
 from threading import Lock
 from urlparse import urljoin, urlparse
@@ -49,7 +45,7 @@ def lexjs(javascript):
         elif state == ST_ASSIGN:
             if   char == ';':
                 state = ST_NAME
-                foundvars[name] = simplejson.loads(buf)
+                foundvars[name] = json.loads(buf)
                 name = ""
                 buf  = ""
             else:
@@ -135,7 +131,7 @@ class Client(object):
     def call( self, action, method, *args ):
         """ Make a call to Ext.Direct. """
         reqtid = self.tid
-        data=simplejson.dumps({
+        data=json.dumps({
             'tid':    reqtid,
             'action': action,
             'method': method,
@@ -160,7 +156,7 @@ class Client(object):
         if resp.status != 200:
             raise RequestError( resp.status, resp.reason )
 
-        respdata = simplejson.loads( resp.read() )
+        respdata = json.loads( resp.read() )
         if respdata['type'] == 'exception':
             raise ReturnedError( respdata['message'], respdata['where'] )
         if respdata['tid'] != reqtid:
