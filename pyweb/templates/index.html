@@ -1,24 +1,25 @@
 {% load i18n %}
+{% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>{% block PageTitle %}Mumble Administration{% endblock %}</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/ext-3.2.0/resources/css/ext-all.css" />
-    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/style.css" />
-    <link rel="stylesheet"    type="text/css"  href="{{ MEDIA_URL }}/templatestyle.css" />
-    <link rel="stylesheet"    type="text/css"  href="{{ MUMBLE_MEDIA_PREFIX }}css/style.css"  />
-    <link rel="shortcut icon" type="image/png" href="{{ MUMBLE_MEDIA_PREFIX }}img/mumble.16x16.png" />
+    <link rel="stylesheet"    type="text/css"  href="{% static 'ext-3.2.0/resources/css/ext-all.css' %}" />
+    <link rel="stylesheet"    type="text/css"  href="{% static 'style.css' %}" />
+    <link rel="stylesheet"    type="text/css"  href="{% static 'templatestyle.css' %}" />
+    <link rel="stylesheet"    type="text/css"  href="{% static 'mumble/css/style.css' %}"  />
+    <link rel="shortcut icon" type="image/png" href="{% static 'mumble/img/mumble.16x16.png' %}" />
 
     {% if debug %}
-      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base-debug.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all-debug.js"></script>
+      <script type="text/javascript" src="{% static 'ext-3.2.0/adapter/ext/ext-base-debug.js' %}"></script>
+      <script type="text/javascript" src="{% static 'ext-3.2.0/ext-all-debug.js' %}"></script>
     {% else %}
-      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/adapter/ext/ext-base.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}/ext-3.2.0/ext-all.js"></script>
+      <script type="text/javascript" src="{% static 'ext-3.2.0/adapter/ext/ext-base.js' %}"></script>
+      <script type="text/javascript" src="{% static 'ext-3.2.0/ext-all.js' %}"></script>
     {% endif %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}/checkcolumn.js"></script>
+    <script type="text/javascript" src="{% static 'checkcolumn.js' %}"></script>
 
     {% block HeadTag %}
     {% endblock %}

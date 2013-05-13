@@ -2,8 +2,9 @@
   <!-- kate: space-indent on; indent-width 2; replace-tabs on; -->
 {% endcomment %}
 {% load mumble_extras %}
+{% load staticfiles %}
 <div style="margin-left: 20px;">
-  <img src="{{MUMBLE_MEDIA_PREFIX}}/img/mumble.16x16.png" alt="server" />
+  <img src="{% static 'mumble/img/mumble.16x16.png' %}" alt="server" />
   <a class="mumble" id="link_server" href="{{ Server|chanurl:MumbleAccount }}">{{ Server.name|trunc:30 }}</a>
 </div>
 {% for sub in Server.rootchan.subchans %}

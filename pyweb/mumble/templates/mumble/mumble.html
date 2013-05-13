@@ -1,4 +1,5 @@
 {% extends "index.html" %}
+{% load staticfiles %}
 {% comment %}
     <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
 {% endcomment %}
@@ -8,10 +9,10 @@
 {% endblock %}
 {% block PageTitle %}Mumble :: {{ MumbleServer.name }}{% endblock %}
 {% block HeadTag %}
-    <link rel="stylesheet"    type="text/css"  href="{{ MUMBLE_MEDIA_PREFIX }}css/tab-scroller-menu.css" />
+    <link rel="stylesheet"    type="text/css"  href="{% static 'mumble/css/tab-scroller-menu.css' %}" />
     <style  type="text/css">
         .x-tab-tabmenu-right {
-            background: transparent url({{ MUMBLE_MEDIA_PREFIX }}img/tab-scroller-menu.gif) no-repeat 0 0;
+            background: transparent url({% static 'mumble/img/tab-scroller-menu.gif' %}) no-repeat 0 0;
         }
     </style>
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
@@ -20,15 +21,15 @@
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/choicescombo.js"></script>
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/{{ RegForm|lower }}.js"></script>
     <script src="{{ MUMBLE_DJANGO_URL }}mumble/forms/mumbleform.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/TabScrollerMenu.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewer.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/channelviewerplugins.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/rendermumbleserver.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/usereditor.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/logviewer.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/banviewer.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/buttoniframewindow.js"></script>
-    <script src="{{ MUMBLE_MEDIA_PREFIX }}js/loginout_buttons.js"></script>
+    <script src="{% static 'mumble/js/TabScrollerMenu.js' %}"></script>
+    <script src="{% static 'mumble/js/channelviewer.js' %}"></script>
+    <script src="{% static 'mumble/js/channelviewerplugins.js' %}"></script>
+    <script src="{% static 'mumble/js/rendermumbleserver.js' %}"></script>
+    <script src="{% static 'mumble/js/usereditor.js' %}"></script>
+    <script src="{% static 'mumble/js/logviewer.js' %}"></script>
+    <script src="{% static 'mumble/js/banviewer.js' %}"></script>
+    <script src="{% static 'mumble/js/buttoniframewindow.js' %}"></script>
+    <script src="{% static 'mumble/js/loginout_buttons.js' %}"></script>
     <script type="text/javascript">
         Ext.onReady( function(){
             Ext.QuickTips.init();
@@ -91,7 +92,7 @@
                             })
                         ],
                     source_url: "{% url 'mumble.views.cvp_json' MumbleServer.id %}",
-                    imageurl: '{{MUMBLE_MEDIA_PREFIX}}/img',
+                    imageurl: '{% static "mumble/img" %}',
                     listeners: {
                         moveUser: function( tree, userdata, chandata ){
                             Mumble.moveUser( {{MumbleServer.id}}, userdata.session, chandata.id );

@@ -38,22 +38,16 @@ def chanview( obj, user = None ):
         return render_to_string( 'mumble/server.html',  {
             'Server':  obj,
             'MumbleAccount': user,
-            'MEDIA_URL': settings.MEDIA_URL,
-            'MUMBLE_MEDIA_PREFIX': settings.MUMBLE_MEDIA_PREFIX,
             } )
     elif obj.is_channel:
         return render_to_string( 'mumble/channel.html', {
             'Channel': obj,
             'MumbleAccount': user,
-            'MEDIA_URL': settings.MEDIA_URL,
-            'MUMBLE_MEDIA_PREFIX': settings.MUMBLE_MEDIA_PREFIX,
             } )
     elif obj.is_player:
         return render_to_string( 'mumble/player.html',  {
             'Player':  obj,
             'MumbleAccount': user,
-            'MEDIA_URL': settings.MEDIA_URL,
-            'MUMBLE_MEDIA_PREFIX': settings.MUMBLE_MEDIA_PREFIX,
             } )
 
 

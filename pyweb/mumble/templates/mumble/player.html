@@ -2,37 +2,38 @@
   <!-- kate: space-indent on; indent-width 2; replace-tabs on; -->
 {% endcomment %}
 {% load mumble_extras %}
+{% load staticfiles %}
 {% load i18n %}
-<div class="mumble" style="background-image: url( {{MUMBLE_MEDIA_PREFIX}}/img/linie_v.png )">
+<div class="mumble" style="background-image: url( {% static 'mumble/img/linie_v.png' %} )">
   <span class="mumble">
     {% if Player.isAuthed %}
-    <img src="{{MUMBLE_MEDIA_PREFIX}}/img/authenticated.png" alt="authed" title="{% trans "Authenticated" %}" />
+    <img src="{% static 'mumble/img/authenticated.png' %}" alt="authed" title="{% trans "Authenticated" %}" />
     {% endif %}
     {% if Player.mute %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/muted_server.png" alt="muted" title="{% trans "Muted" %}" />
+      <img src="{% static 'mumble/img/muted_server.png' %}" alt="muted" title="{% trans "Muted" %}" />
     {% endif %}
     {% if Player.suppress %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/muted_suppressed.png" alt="muted" title="{% trans "Suppressed" %}" />
+      <img src="{% static 'mumble/img/muted_suppressed.png' %}" alt="muted" title="{% trans "Suppressed" %}" />
     {% endif %}
     {% if Player.deaf %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/deafened_server.png" alt="deafened" title="{% trans "Deafened" %}" />
+      <img src="{% static 'mumble/img/deafened_server.png' %}" alt="deafened" title="{% trans "Deafened" %}" />
     {% endif %}
     {% if Player.selfMute %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/muted_self.png" alt="self-muted" title="{% trans "Muted by self" %}" />
+      <img src="{% static 'mumble/img/muted_self.png' %}" alt="self-muted" title="{% trans "Muted by self" %}" />
     {% endif %}
     {% if Player.selfDeaf %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/deafened_self.png" alt="self-deafened" title="{% trans "Deafened by self" %}" />
+      <img src="{% static 'mumble/img/deafened_self.png' %}" alt="self-deafened" title="{% trans "Deafened by self" %}" />
     {% endif %}
     {% if Player.hasComment %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/comment.png" alt="has comment" title="{% trans "has a User Comment set" %}" />
+      <img src="{% static 'mumble/img/comment.png' %}" alt="has comment" title="{% trans "has a User Comment set" %}" />
     {% endif %}
   </span>
   <span>
-    <img src="{{MUMBLE_MEDIA_PREFIX}}/img/knoten_v.png" alt="" />
+    <img src="{% static 'mumble/img/knoten_v.png' %}" alt="" />
     {% if Player.isTalking %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/talking_on.png" alt="Player" />
+      <img src="{% static 'mumble/img/talking_on.png' %}" alt="Player" />
     {% else %}
-      <img src="{{MUMBLE_MEDIA_PREFIX}}/img/talking_off.png" alt="Player" />
+      <img src="{% static 'mumble/img/talking_off.png' %}" alt="Player" />
     {% endif %}
     <a id="link_{{ Player.id }}" class="mumble" href="#" title="{{ Player.name }}">{{ Player.name|trunc:30 }}</a>
   </span>
