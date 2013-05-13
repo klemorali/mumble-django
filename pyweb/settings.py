@@ -200,9 +200,6 @@ STATICFILES_DIRS = (
 ## URL to static files of the currently active theme
 THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
 
-# URL prefix for admin media -- CSS, JavaScript and images.
-ADMIN_MEDIA_PREFIX = MUMBLE_DJANGO_URL + 'static/admin/'
-
 # URL to the login view
 LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
 LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile'
