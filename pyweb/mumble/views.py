@@ -554,13 +554,11 @@ def cvp_json( request, server ):
         See <http://mumble.sourceforge.net/Channel_Viewer_Protocol>
     """
     srv = get_object_or_404( Mumble, id=int(server) )
-    json = json.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
+    ret = json.dumps( srv.asDict( cvp_checkauth( request, srv ) ) )
 
     if "callback" in request.GET:
         validate_jsonp_callback(request.GET["callback"])
-        ret = "%s(%s)" % ( request.GET["callback"], json )
-    else:
-        ret = json
+        ret = "%s(%s)" % ( request.GET["callback"], ret )
 
     return HttpResponse( ret, mimetype='application/json' )
 
