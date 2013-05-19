@@ -2,6 +2,12 @@
 Mumble-Django changelog
 =======================
 
+Version 2.9, 19 May 2013:
+------------------------------
+* Refactor /media directoy and URLs to django.contrib.staticfiles.
+* Move from simplejson to json.
+* Remove obsolete ADMIN_MEDIA_PREFIX.
+
 Version 2.8, 12 May 2013:
 ------------------------------
 * Add MessageMiddleware which is needed for the Admin system.
