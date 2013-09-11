@@ -303,4 +303,4 @@ modprobe( "rosetta" )
 # Check if django_extensions is available.
 modprobe( "django_extensions" )
 
-#modprobe( 'registration' )
+modprobe( 'registration' )
