@@ -201,8 +201,8 @@ STATICFILES_DIRS = (
 THEME_URL = '%sstatic/themes/%s/' % ( MUMBLE_DJANGO_URL, THEME )
 
 # URL to the login view
-LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login'
-LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile'
+LOGIN_URL = MUMBLE_DJANGO_URL + 'accounts/login/'
+LOGIN_REDIRECT_URL = MUMBLE_DJANGO_URL + 'accounts/profile/'
 
 
 # Automatically generate a .secret.txt file containing the SECRET_KEY.
