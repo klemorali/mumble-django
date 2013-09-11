@@ -8,7 +8,7 @@
 {% block body %}
 {% endblock %}
 {% block HeadTag %}
-    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script type="text/javascript" src="{{ MUMBLE_DJANGO_URL }}mumble/api/api.js"></script>
     <script type="text/javascript" src="{% static 'mumble/js/rendermumbleserver.js' %}"></script>
     <script type="text/javascript" src="{% static 'mumble/js/buttoniframewindow.js' %}"></script>
@@ -26,14 +26,14 @@
                     {
                         xtype: 'buttonIframeWindow',
                         text:  "{% trans 'Edit Translation' %}",
-                        url: '{% url rosetta-home %}',
+                        url: '{% url "rosetta-home" %}',
                     },
                     {% endif %}
                     {% if user.is_staff %}
                     {
                         xtype: 'buttonIframeWindow',
                         text:  "{% trans 'Administration' %}",
-                        url: '{% url admin:app_list "mumble" %}',
+                        url: '{% url "admin:app_list" "mumble" %}',
                     },
                     {% endif %}
                     {% if user.is_authenticated %}
