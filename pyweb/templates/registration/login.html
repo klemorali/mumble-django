@@ -29,7 +29,7 @@
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 <ul>
-  <li>No Login? You can <a href="{% url 'registration.views.register' %}">sign up!</a></li>
+  <li>No Login? You can <a href="{% url 'registration_register' %}">sign up!</a></li>
   <li>Forgot the password? You can <a href="{% url 'django.contrib.auth.views.password_reset' %}">reset it!</a></li>
 </ul>
 {% endblock %}
