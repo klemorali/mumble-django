@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls import patterns, include
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -51,7 +51,7 @@ urlpatterns = patterns('',
 
 if "registration" in settings.INSTALLED_APPS:
     urlpatterns += patterns( '',
-        (r'^accounts/',         include('registration.urls') ),
+        (r'^accounts/',         include('registration.backends.default.urls') ),
     )
 
 if "rosetta" in settings.INSTALLED_APPS:
