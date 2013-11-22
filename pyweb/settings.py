@@ -240,7 +240,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware'
 )
 
-ROOT_URLCONF = 'pyweb.urls'
+ROOT_URLCONF = 'urls'
 
 if THEME:
 	TEMPLATE_DIRS = [ join( MUMBLE_DJANGO_ROOT, 'themes', THEME ) ]
@@ -279,7 +279,6 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'django.contrib.contenttypes',
     'django.contrib.messages',
-    'django.contrib.markup',
     'django.contrib.staticfiles',
     'django.contrib.sessions',
     'django.contrib.sites',
