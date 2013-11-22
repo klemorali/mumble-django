@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
 """
 
-from django.conf.urls.defaults import url, patterns, include
+from django.conf.urls import url, patterns, include
 from django.conf import settings
 
 from views import EXT_DIRECT_PROVIDER
