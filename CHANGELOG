@@ -2,6 +2,12 @@
 Mumble-Django changelog
 =======================
 
+Version 2.10, 25 Nov 2013:
+------------------------------
+* Fix a few URL tags that weren't Django 1.5 compatible.
+* Re-enable Django-Registration.
+* Fix imports for Django 1.6 compatibility.
+
 Version 2.9, 19 May 2013:
 ------------------------------
 * Refactor /media directoy and URLs to django.contrib.staticfiles.
