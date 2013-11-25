@@ -23,7 +23,7 @@ from sys import stderr
 
 from django.http import HttpResponse
 from django.conf import settings
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 from django.core.urlresolvers  import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.serializers.json import DjangoJSONEncoder
@@ -163,10 +163,10 @@ class Provider( object ):
             found) and encoding the response / exceptions.
         """
         request.META["CSRF_COOKIE_USED"] = True
-        # First try to use request.POST, if that doesn't work check for req.raw_post_data.
+        # First try to use request.POST, if that doesn't work check for req.body.
         # The other way round this might make more sense because the case that uses
-        # raw_post_data is way more common, but accessing request.POST after raw_post_data
-        # causes issues with Django's test client while accessing raw_post_data after
+        # body is way more common, but accessing request.POST after body
+        # causes issues with Django's test client while accessing body after
         # request.POST does not.
         try:
             jsoninfo = {
@@ -178,7 +178,7 @@ class Provider( object ):
             }
         except (MultiValueDictKeyError, KeyError), err:
             try:
-                rawjson = json.loads( request.raw_post_data )
+                rawjson = json.loads( request.body )
             except getattr( json, "JSONDecodeError", ValueError ):
                 return HttpResponse( json.dumps({
                     'type':    'exception',
