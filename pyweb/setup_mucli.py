@@ -18,7 +18,7 @@
 from distutils.core import setup
 
 setup(name='mucli',
-      version="2.10",
+      version="2.11",
       description="Murmur Command Line Interface using Mumble-Django's connectors",
       author="Michael Ziegler",
       author_email='diese-addy@funzt-halt.net',
