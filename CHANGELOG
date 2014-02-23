@@ -2,6 +2,10 @@
 Mumble-Django changelog
 =======================
 
+Version 2.11, 23 Feb 2014:
+------------------------------
+* Remove expressinstall.swf from the package.
+
 Version 2.10, 25 Nov 2013:
 ------------------------------
 * Fix a few URL tags that weren't Django 1.5 compatible.
