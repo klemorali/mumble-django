@@ -63,11 +63,6 @@ MUMBLE_DJANGO_ROOT = None                                      ##
 #################################################################
 #################################################################
 
-# Who will receive emails on errors?
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-)
-
 # Show debug information on errors?
 # If you want to file a bug report, please enable this option.
 DEBUG = True
@@ -151,6 +146,8 @@ from os.path import join, dirname, abspath, exists
 if not MUMBLE_DJANGO_ROOT or not exists( MUMBLE_DJANGO_ROOT ):
     MUMBLE_DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 
+BASE_DIR = MUMBLE_DJANGO_ROOT
+
 # Default mumble port. If your server runs under this port, it will not be
 # included in the links in the Channel Viewer.
 MUMBLE_DEFAULT_PORT = 64738
@@ -181,8 +178,6 @@ DATABASES = {
 #EMAIL_USE_TLS = True
 
 TEMPLATE_DEBUG = DEBUG
-
-MANAGERS = ADMINS
 
 SITE_ID = 1
 
@@ -223,13 +218,6 @@ except NameError:
         except IOError:
             Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
 
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
