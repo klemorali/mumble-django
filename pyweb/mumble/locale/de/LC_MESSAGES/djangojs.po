@@ -8,130 +8,150 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-04 12:28+0200\n"
-"PO-Revision-Date: 2011-06-04 12:29\n"
-"Last-Translator:   <diese-addy@funzt-halt.net>\n"
+"POT-Creation-Date: 2014-09-02 14:19+0200\n"
+"PO-Revision-Date: 2014-09-02 14:29+0100\n"
+"Last-Translator:   <de@de.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Translated-Using: django-rosetta 0.6.0\n"
+"X-Translated-Using: django-rosetta 0.7.2\n"
 
-#: media/js/banviewer.js:11
+#: static/mumble/js/banviewer.js:10
 msgid "Bans"
 msgstr "Banliste"
 
-#: media/js/banviewer.js:13 media/js/logviewer.js:13
+#: static/mumble/js/banviewer.js:12 static/mumble/js/logviewer.js:12
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: media/js/banviewer.js:20
+#: static/mumble/js/banviewer.js:19
 msgid "Address"
 msgstr "Adresse"
 
-#: media/js/banviewer.js:27 media/js/loginout_buttons.js:66
+#: static/mumble/js/banviewer.js:26 static/mumble/js/loginout_buttons.js:65
 msgid "User name"
 msgstr "Benutzername"
 
-#: media/js/banviewer.js:31
+#: static/mumble/js/banviewer.js:30
 msgid "Duration"
 msgstr "Dauer"
 
-#: media/js/banviewer.js:35 media/js/channelviewerplugins.js:127
+#: static/mumble/js/banviewer.js:34
+#: static/mumble/js/channelviewerplugins.js:126
 msgid "Reason"
 msgstr "Begründung"
 
-#: media/js/banviewer.js:41 media/js/logviewer.js:45
-#: media/js/usereditor.js:136
+#: static/mumble/js/banviewer.js:40 static/mumble/js/channelviewer.js:143
+#: static/mumble/js/logviewer.js:44 static/mumble/js/usereditor.js:135
 msgid "Refresh"
 msgstr "Aktualisieren"
 
-#: media/js/banviewer.js:46 media/js/usereditor.js:34
+#: static/mumble/js/banviewer.js:45 static/mumble/js/usereditor.js:33
 msgid "Delete"
 msgstr "Löschen"
 
-#: media/js/buttoniframewindow.js:30
+#: static/mumble/js/buttoniframewindow.js:29
 msgid "Open in new window"
 msgstr "In neuem Fenster öffnen"
 
-#: media/js/channelviewer.js:23
-msgid "undefined"
-msgstr ""
-
-#: media/js/channelviewer.js:91
+#: static/mumble/js/channelviewer.js:90
 msgid "Channel Viewer"
 msgstr "Serveransicht"
 
-#: media/js/channelviewer.js:97 media/js/channelviewerplugins.js:52
+#: static/mumble/js/channelviewer.js:97
+#: static/mumble/js/channelviewerplugins.js:51
 msgid "Loading..."
 msgstr "Lade..."
 
-#: media/js/channelviewer.js:114
+#: static/mumble/js/channelviewer.js:114
 msgid "Auto-Refresh"
 msgstr "Auto-Aktualisieren"
 
-#: media/js/channelviewerplugins.js:25
+#: static/mumble/js/channelviewer.js:131
+msgid ""
+"Enter the interval in seconds in which the channel viewer should refresh and"
+" hit Enter."
+msgstr ""
+"Gib das Aktualisierungsintervall des Channel-Viewers ein und drücke Enter."
+
+#: static/mumble/js/channelviewer.js:141
+msgid "Seconds"
+msgstr "Sekunden"
+
+#: static/mumble/js/channelviewer.js:270
+msgid "Update error"
+msgstr "Aktualisierungsfehler"
+
+#: static/mumble/js/channelviewer.js:271
+msgid ""
+"Querying the server failed, so the channel viewer has not been updated."
+msgstr ""
+"Der Server konnte nicht abgefragt werden, daher wurde der Channel-Viewer "
+"nicht aktualisiert."
+
+#: static/mumble/js/channelviewerplugins.js:24
 msgid "User comment"
 msgstr "Kommentar"
 
-#: media/js/channelviewerplugins.js:35
+#: static/mumble/js/channelviewerplugins.js:34
 msgid "Avatar"
 msgstr "Avatar"
 
-#: media/js/channelviewerplugins.js:47
+#: static/mumble/js/channelviewerplugins.js:46
 msgid "This user does not have an Avatar."
 msgstr "Dieser Benutzer hat keinen Avatar."
 
-#: media/js/channelviewerplugins.js:54
+#: static/mumble/js/channelviewerplugins.js:53
 msgid "Infos"
 msgstr "Infos"
 
-#: media/js/channelviewerplugins.js:59
+#: static/mumble/js/channelviewerplugins.js:58
 msgid "Authenticated"
 msgstr "Authentifiziert"
 
-#: media/js/channelviewerplugins.js:65
+#: static/mumble/js/channelviewerplugins.js:64
 msgid "Self-Deafened"
 msgstr "Taubgestellt (selbst)"
 
-#: media/js/channelviewerplugins.js:71
+#: static/mumble/js/channelviewerplugins.js:70
 msgid "Deafened"
 msgstr "Taubgestellt"
 
-#: media/js/channelviewerplugins.js:77
+#: static/mumble/js/channelviewerplugins.js:76
 msgid "Self-Muted"
 msgstr "Stummgestellt (selbst)"
 
-#: media/js/channelviewerplugins.js:83
+#: static/mumble/js/channelviewerplugins.js:82
 msgid "Muted"
 msgstr "Stummgestellt"
 
-#: media/js/channelviewerplugins.js:89
+#: static/mumble/js/channelviewerplugins.js:88
 msgid "Suppressed"
 msgstr "Unterdrückt"
 
-#: media/js/channelviewerplugins.js:95
+#: static/mumble/js/channelviewerplugins.js:94
 msgid "Priority Speaker"
 msgstr "Priorisierter Sprecher"
 
-#: media/js/channelviewerplugins.js:101
+#: static/mumble/js/channelviewerplugins.js:100
 msgid "Recording"
 msgstr "Nimmt auf"
 
-#: media/js/channelviewerplugins.js:111
+#: static/mumble/js/channelviewerplugins.js:110
 msgid "Administration"
 msgstr "Administration"
 
-#: media/js/channelviewerplugins.js:114
+#: static/mumble/js/channelviewerplugins.js:113
 msgid "Ban"
 msgstr "Bann"
 
-#: media/js/channelviewerplugins.js:118
+#: static/mumble/js/channelviewerplugins.js:117
 msgid "Ban duration"
 msgstr "Banndauer"
 
-#: media/js/channelviewerplugins.js:123
+#: static/mumble/js/channelviewerplugins.js:122
 msgid ""
 "Only if banning. Set to 0 for permanent ban, any other value for the ban "
 "duration in seconds."
@@ -139,118 +159,136 @@ msgstr ""
 "Nur wenn du bannen möchtest. 0 für einen permanenten Bann, eine andre Zahl "
 "ist die Dauer in Sekunden."
 
-#: media/js/channelviewerplugins.js:132
+#: static/mumble/js/channelviewerplugins.js:131
 msgid "Kick"
 msgstr "Kicken"
 
-#: media/js/channelviewerplugins.js:140
+#: static/mumble/js/channelviewerplugins.js:139
 msgid "Mute"
 msgstr "Stummstellen"
 
-#: media/js/channelviewerplugins.js:150
+#: static/mumble/js/channelviewerplugins.js:149
 msgid "Deafen"
 msgstr "Taubstellen"
 
-#: media/js/channelviewerplugins.js:165 media/js/channelviewerplugins.js:175
-#: media/js/channelviewerplugins.js:304 media/js/channelviewerplugins.js:318
+#: static/mumble/js/channelviewerplugins.js:164
+#: static/mumble/js/channelviewerplugins.js:174
+#: static/mumble/js/channelviewerplugins.js:306
+#: static/mumble/js/channelviewerplugins.js:320
 msgid "Send message"
 msgstr "Nachricht senden"
 
-#: media/js/channelviewerplugins.js:180 media/js/channelviewerplugins.js:269
-#: media/js/channelviewerplugins.js:282 media/js/channelviewerplugins.js:323
+#: static/mumble/js/channelviewerplugins.js:179
+#: static/mumble/js/channelviewerplugins.js:271
+#: static/mumble/js/channelviewerplugins.js:284
+#: static/mumble/js/channelviewerplugins.js:327
 msgid "Error"
 msgstr "Fehler"
 
-#: media/js/channelviewerplugins.js:183 media/js/channelviewerplugins.js:326
+#: static/mumble/js/channelviewerplugins.js:182
+#: static/mumble/js/channelviewerplugins.js:330
 msgid "Success"
 msgstr "Erfolg"
 
-#: media/js/channelviewerplugins.js:183 media/js/channelviewerplugins.js:326
+#: static/mumble/js/channelviewerplugins.js:182
+#: static/mumble/js/channelviewerplugins.js:330
 msgid "Message sent successfully."
 msgstr "Nachricht erfolgreich gesendet."
 
-#: media/js/channelviewerplugins.js:192
+#: static/mumble/js/channelviewerplugins.js:191
 msgid "User details"
 msgstr "Benutzerdetails"
 
-#: media/js/channelviewerplugins.js:243
+#: static/mumble/js/channelviewerplugins.js:242
 msgid "Channel description"
 msgstr "Beschreibung"
 
-#: media/js/channelviewerplugins.js:262
+#: static/mumble/js/channelviewerplugins.js:264
 msgid "Add subchannel..."
 msgstr "Unterkanal hinzufügen..."
 
-#: media/js/channelviewerplugins.js:265
+#: static/mumble/js/channelviewerplugins.js:267
 msgid "Name"
 msgstr "Name"
 
-#: media/js/channelviewerplugins.js:265
+#: static/mumble/js/channelviewerplugins.js:267
 msgid "Please enter the channel name:"
 msgstr "Bitte gib den Kanalnamen ein:"
 
-#: media/js/channelviewerplugins.js:277
+#: static/mumble/js/channelviewerplugins.js:279
 msgid "Submit name/description"
 msgstr "Name/Beschreibung setzen"
 
-#: media/js/channelviewerplugins.js:287
+#: static/mumble/js/channelviewerplugins.js:289
 msgid "Delete channel"
 msgstr "Kanal löschen"
 
-#: media/js/channelviewerplugins.js:291
+#: static/mumble/js/channelviewerplugins.js:293
 msgid "Confirm channel deletion"
 msgstr "Löschen des Kanals bestätigen"
 
-#: media/js/channelviewerplugins.js:292
-#, perl-format
+#: static/mumble/js/channelviewerplugins.js:294
+#, c-format
 msgid "Are you sure you want to delete channel %s?"
 msgstr "Bist du sicher dass du den Kanal %s löschen möchtest?"
 
-#: media/js/channelviewerplugins.js:308
+#: static/mumble/js/channelviewerplugins.js:310
 msgid "Cascade to subchannels"
 msgstr "Auch an Unterkanäle"
 
-#: media/js/loginout_buttons.js:7
+#: static/mumble/js/channelviewerplugins.js:340
+#, c-format
+msgid "Channel %s (%s)"
+msgstr "Kanal %s (%s)"
+
+#: static/mumble/js/channelviewerplugins.js:341
+#, c-format
+msgid "Channel %s"
+msgstr "Kanal %s"
+
+#: static/mumble/js/loginout_buttons.js:6
 msgid "Logout"
 msgstr "Abmelden"
 
-#: media/js/loginout_buttons.js:15 media/js/loginout_buttons.js.py:33
+#: static/mumble/js/loginout_buttons.js:14
+#: static/mumble/js/loginout_buttons.js:32
 msgid "Login error"
 msgstr "Fehler bei der Anmeldung"
 
-#: media/js/loginout_buttons.js:16
+#: static/mumble/js/loginout_buttons.js:15
 msgid "Unable to log out."
 msgstr "Abmelden ist fehlgeschlagen."
 
-#: media/js/loginout_buttons.js:34
+#: static/mumble/js/loginout_buttons.js:33
 msgid "Unable to log in."
 msgstr "Anmelden ist fehlgeschlagen."
 
-#: media/js/loginout_buttons.js:43 media/js/loginout_buttons.js.py:48
+#: static/mumble/js/loginout_buttons.js:42
+#: static/mumble/js/loginout_buttons.js:47
 msgid "Login"
 msgstr "Anmeldung"
 
-#: media/js/loginout_buttons.js:59
+#: static/mumble/js/loginout_buttons.js:58
 msgid "Submit"
 msgstr "Absenden"
 
-#: media/js/loginout_buttons.js:77
+#: static/mumble/js/loginout_buttons.js:76
 msgid "Password"
 msgstr "Passwort"
 
-#: media/js/logviewer.js:11
+#: static/mumble/js/logviewer.js:10
 msgid "Log messages"
 msgstr "Log-Meldungen"
 
-#: media/js/logviewer.js:20
+#: static/mumble/js/logviewer.js:19
 msgid "Log entry"
 msgstr "Log-Eintrag"
 
-#: media/js/logviewer.js:25
+#: static/mumble/js/logviewer.js:24
 msgid "Filter"
 msgstr "Filter"
 
-#: media/js/logviewer.js:33
+#: static/mumble/js/logviewer.js:32
 msgid ""
 "Enter a string to filter the logs by and press Enter. To display all log "
 "entries, empty this field."
@@ -258,107 +296,101 @@ msgstr ""
 "Gib einen Suchbegriff ein, mit dem die Log-Einträge gefiltert werden sollen,"
 " und drücke Enter. Um alle Einträge anzuzeigen, leere dieses Feld."
 
-#: media/js/rendermumbleserver.js:7
+#: static/mumble/js/rendermumbleserver.js:6
 msgid "Server Address"
 msgstr "Server-Adresse"
 
-#: media/js/rendermumbleserver.js:10
+#: static/mumble/js/rendermumbleserver.js:9
 msgid "Website"
 msgstr "Webseite"
 
-#: media/js/rendermumbleserver.js:12
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:11
+#, c-format
 msgid "This server is running Murmur version %s."
 msgstr "Dieser Server läuft auf Murmur-Version %s."
 
-#: media/js/rendermumbleserver.js:14
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:13
+#, c-format
 msgid "Currently, %s user is registered."
 msgid_plural "Currently, %s users are registered."
 msgstr[0] "Momentan ist %s Benutzer registriert."
 msgstr[1] "Momentan sind %s Benutzer registriert."
 
-#: media/js/rendermumbleserver.js:17
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:16
+#, c-format
 msgid "Currently, %s user is online."
 msgid_plural "Currently, %s users are online."
 msgstr[0] "Momentan ist %s Benutzer online."
 msgstr[1] "Momentan sind %s Benutzer online."
 
-#: media/js/rendermumbleserver.js:20
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:19
+#, c-format
 msgid "This server has %s slots, %s of which are free."
 msgstr "Dieser Server hat %s Slots, von denen %s frei sind."
 
-#: media/js/rendermumbleserver.js:23
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:22
+#, c-format
 msgid "Currently, there is %s channel."
 msgid_plural "Currently, there are %s channels."
 msgstr[0] "Momentan gibt es %s Kanal."
 msgstr[1] "Momentan gibt es %s Kanäle."
 
-#: media/js/rendermumbleserver.js:26
-#, perl-format
+#: static/mumble/js/rendermumbleserver.js:25
+#, c-format
 msgid "This server is running since %s."
 msgstr "Dieser Server läuft seit %s."
 
-#: media/js/rendermumbleserver.js:28
+#: static/mumble/js/rendermumbleserver.js:27
 msgid "Switch to minimal view"
 msgstr "Auf die Minimalansicht umschalten"
 
-#: media/js/rendermumbleserver.js:35
+#: static/mumble/js/rendermumbleserver.js:34
 msgid "Welcome message"
 msgstr "Willkommensnachricht"
 
-#: media/js/usereditor.js:28
+#: static/mumble/js/usereditor.js:27
 msgid "Admin on root channel"
 msgstr "Admin im Wurzelkanal"
 
-#: media/js/usereditor.js:54
+#: static/mumble/js/usereditor.js:53
 msgid "User List"
 msgstr "Benutzerliste"
 
-#: media/js/usereditor.js:59
+#: static/mumble/js/usereditor.js:58
 msgid "name"
 msgstr "Name"
 
-#: media/js/usereditor.js:66
+#: static/mumble/js/usereditor.js:65
 msgid "Account owner"
 msgstr "Accountbesitzer"
 
-#: media/js/usereditor.js:78
+#: static/mumble/js/usereditor.js:77
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: media/js/usereditor.js:92
+#: static/mumble/js/usereditor.js:91
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: media/js/usereditor.js:96
+#: static/mumble/js/usereditor.js:95
 msgid "New User"
 msgstr "Neuer Benutzer"
 
-#: media/js/usereditor.js:104
+#: static/mumble/js/usereditor.js:103
 msgid "Save"
 msgstr "Speichern"
 
-#: media/js/usereditor.js:127
+#: static/mumble/js/usereditor.js:126
 msgid "Submit error"
 msgstr "Fehler beim Absenden"
 
-#: media/js/usereditor.js:128
+#: static/mumble/js/usereditor.js:127
 msgid "Unable to save."
 msgstr "Konnte nicht speichern."
 
-#: media/js/usereditor.js:143
+#: static/mumble/js/usereditor.js:142
 msgid "Resync with Murmur"
 msgstr "Aktualisieren (von Murmur)"
-
-msgid "Channel %s (%s)"
-msgstr "Kanal %s (%s)"
-
-msgid "Channel %s"
-msgstr "Kanal %s"
 
 #~ msgid "User texture"
 #~ msgstr "Benutzertextur"
