@@ -189,8 +189,7 @@ class MumbleAdminForm( MumbleForm ):
 
 
     class Meta:
-        fields  = None
-        exclude = None
+        fields = "__all__"
 
     def clean_port( self ):
         """ Check if the port number is valid. """
@@ -227,6 +226,7 @@ class MumbleServerForm( ModelForm ):
                 self.fields["defaultconf"].initial = _("This server is currently offline.")
 
     class Meta:
+        fields = "__all__"
         model = MumbleServer
 
 class MumbleUserForm( ModelForm ):
@@ -425,6 +425,7 @@ class MumbleUserAdminForm( PropertyModelForm ):
 
     class Meta:
         model   = MumbleUser
+        fields  = "__all__"
 
 
 class MumbleKickForm( Form ):
