@@ -463,7 +463,7 @@ def update_avatar( request, userid ):
     try:
         user = MumbleUser.objects.get( id=userid )
     except MumbleUser.DoesNotExist:
-        return HttpResponse( "false", mimetype="text/html" )
+        return HttpResponse( "false", content_type="text/html" )
 
     textureform = MumbleTextureForm( request.POST, request.FILES )
     if textureform.is_valid():
@@ -471,9 +471,9 @@ def update_avatar( request, userid ):
             user.setTextureFromUrl( user.gravatar )
         else:
             user.setTexture( Image.open( textureform.cleaned_data['texturefile'] ) )
-        return HttpResponse( "true", mimetype="text/html" )
+        return HttpResponse( "true", content_type="text/html" )
 
-    return HttpResponse( "false", mimetype="text/html" )
+    return HttpResponse( "false", content_type="text/html" )
 
 def mmng_tree( request, server ):
     """ Return a JSON representation of the channel tree suitable for
@@ -526,7 +526,7 @@ def mmng_tree( request, server ):
 
     return HttpResponse(
         prefix + "(" + json.dumps( { 'channels': chanlist, 'users': userlist } ) + ")",
-        mimetype='text/javascript'
+        content_type='text/javascript'
         )
 
 
@@ -560,7 +560,7 @@ def cvp_json( request, server ):
         validate_jsonp_callback(request.GET["callback"])
         ret = "%s(%s)" % ( request.GET["callback"], ret )
 
-    return HttpResponse( ret, mimetype='application/json' )
+    return HttpResponse( ret, content_type='application/json' )
 
 def cvp_xml( request, server ):
     """ XML reference implementation for the Channel Viewer Protocol.
@@ -572,7 +572,7 @@ def cvp_xml( request, server ):
     return HttpResponse(
         '<?xml version="1.0" encoding="UTF-8" ?>'+\
         xml_to_string( srv.asXml( cvp_checkauth( request, srv ) ), encoding='utf-8' ),
-        mimetype='text/xml'
+        content_type='text/xml'
         )
 
 
@@ -582,7 +582,7 @@ def mumbleviewer_tree_xml( request, server ):
     srv = get_object_or_404( Mumble, id=int(server) )
     return HttpResponse(
         xml_to_string( srv.asMvXml(), encoding='utf-8' ),
-        mimetype='text/xml'
+        content_type='text/xml'
         )
 
 def mumbleviewer_tree_json( request, server ):
@@ -597,5 +597,5 @@ def mumbleviewer_tree_json( request, server ):
 
     return HttpResponse(
         prefix + "(" + json.dumps( srv.asMvJson() ) + ")",
-        mimetype='text/javascript'
+        content_type='text/javascript'
         )
