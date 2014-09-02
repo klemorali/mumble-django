@@ -178,7 +178,7 @@ class FormProvider(Provider):
         self.forms    = {}
 
     def get_choices_combo_src( self, request ):
-        return HttpResponse( EXT_DYNAMICCHOICES_COMBO, mimetype="text/javascript" )
+        return HttpResponse( EXT_DYNAMICCHOICES_COMBO, content_type="text/javascript" )
 
     def register_form( self, formclass ):
         """ Register a Django Form class. """
@@ -300,7 +300,7 @@ class FormProvider(Provider):
                 "}"),
             }
 
-        return HttpResponse( mark_safe( clscode ), mimetype="text/javascript" )
+        return HttpResponse( mark_safe( clscode ), content_type="text/javascript" )
 
     def get_field_choices( self, formname, request, pk, field ):
         """ Create a bound instance of the form and return choices from the given field. """

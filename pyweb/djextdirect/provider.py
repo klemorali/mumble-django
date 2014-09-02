@@ -131,7 +131,7 @@ class Provider( object ):
             "url":     reverse( self.request ),
             "type":    "remoting",
             "actions": self.build_api_dict()
-            }, cls=DjangoJSONEncoder), mimetype="application/json" )
+            }, cls=DjangoJSONEncoder), content_type="application/json" )
 
     def get_api( self, request ):
         """ Introspect the methods and get a javascript description of the API
@@ -154,7 +154,7 @@ class Provider( object ):
                 )
             lines.append( "Ext.Direct.addProvider( %s );" % self.name )
 
-        return HttpResponse( "\n".join( lines ), mimetype="text/javascript" )
+        return HttpResponse( "\n".join( lines ), content_type="text/javascript" )
 
     def request( self, request ):
         """ Implements the Router part of the Ext.Direct specification.
@@ -185,7 +185,7 @@ class Provider( object ):
                     'message': 'malformed request',
                     'where':   err.message,
                     "tid":     None, # dunno
-                    }, cls=DjangoJSONEncoder), mimetype="application/json" )
+                    }, cls=DjangoJSONEncoder), content_type="application/json" )
             else:
                 return self.process_normal_request( request, rawjson )
         else:
@@ -281,9 +281,9 @@ class Provider( object ):
                     })
 
         if len(responses) == 1:
-            return HttpResponse( json.dumps( responses[0], cls=DjangoJSONEncoder ), mimetype="application/json" )
+            return HttpResponse( json.dumps( responses[0], cls=DjangoJSONEncoder ), content_type="application/json" )
         else:
-            return HttpResponse( json.dumps( responses, cls=DjangoJSONEncoder ),    mimetype="application/json" )
+            return HttpResponse( json.dumps( responses, cls=DjangoJSONEncoder ),    content_type="application/json" )
 
     def process_form_request( self, request, reqinfo ):
         """ Router for POST requests that submit form data and/or file uploads. """
@@ -339,10 +339,10 @@ class Provider( object ):
         if reqinfo['upload'] == "true":
             return HttpResponse(
                 "<html><body><textarea>%s</textarea></body></html>" % json.dumps(response, cls=DjangoJSONEncoder),
-                mimetype="application/json"
+                content_type="application/json"
                 )
         else:
-            return HttpResponse( json.dumps( response, cls=DjangoJSONEncoder ), mimetype="application/json" )
+            return HttpResponse( json.dumps( response, cls=DjangoJSONEncoder ), content_type="application/json" )
 
     def get_urls(self):
         """ Return the URL patterns. """
