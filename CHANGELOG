@@ -5,6 +5,8 @@ Mumble-Django changelog
 Version 2.12, 04 Sep 2014:
 ------------------------------
 * Update for Django 1.7 compatibility.
+* Remove outdated unit tests.
+* Add basic Ice unit tests.
 
 Version 2.11, 23 Feb 2014:
 ------------------------------
