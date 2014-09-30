@@ -2,6 +2,10 @@
 Mumble-Django changelog
 =======================
 
+Version 2.13, 30 Sep 2014:
+------------------------------
+* Update the WSGI script for Django 1.7.
+
 Version 2.12, 04 Sep 2014:
 ------------------------------
 * Update for Django 1.7 compatibility.
